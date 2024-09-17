@@ -1,10 +1,10 @@
 import './App.css';
-import GameNavigation from './components/GameNavigation';
+import GameToolBar from './components/GameToolBar';
 
 function App() {
   return (
     <div className="App">
-      <GameNavigation />
+      <GameToolBar />
     </div>
   );
 }
