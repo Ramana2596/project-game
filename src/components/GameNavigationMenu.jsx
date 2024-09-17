@@ -16,7 +16,7 @@ export default function TemporaryDrawer({ openState, toggleDrawer }) {
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
           {formList.map((formListObj) => (
-              <ListItem disablePadding component={Link} to={formListObj.routePath}>
+              <ListItem sx={{color: 'black'}} disablePadding component={Link} to={formListObj.routePath}>
                 <ListItemButton>
                   <ListItemText primary={formListObj.displayText} />
                 </ListItemButton>
