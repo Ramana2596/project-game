@@ -47,31 +47,31 @@ export default function GameMaster() {
             <form onSubmit={onGameMasterFormSubmit}>
                 <Grid sx={{ margin: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField id="gameTitle" label="Game Title" variant="outlined" value={gameMasterFormData.gameTitle} onChange={onGMstFormControlChange} />
+                        <TextField required id="gameTitle" label="Game Title" variant="outlined" value={gameMasterFormData.gameTitle} onChange={onGMstFormControlChange} />
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField id="gameShortTitle" label="Game Short Title" variant="outlined" value={gameMasterFormData.gameShortTitle} onChange={onGMstFormControlChange} />
+                        <TextField required id="gameShortTitle" label="Game Short Title" variant="outlined" value={gameMasterFormData.gameShortTitle} onChange={onGMstFormControlChange} />
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField id="gameObjective" label="Game Objective" variant="outlined" value={gameMasterFormData.gameObjective} onChange={onGMstFormControlChange} />
+                        <TextField required id="gameObjective" label="Game Objective" variant="outlined" value={gameMasterFormData.gameObjective} onChange={onGMstFormControlChange} />
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField id="discipline" label="Discipline" variant="outlined" value={gameMasterFormData.discipline} onChange={onGMstFormControlChange} />
+                        <TextField required id="discipline" label="Discipline" variant="outlined" value={gameMasterFormData.discipline} onChange={onGMstFormControlChange} />
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField id="subject" label="Subject" variant="outlined" value={gameMasterFormData.subject} onChange={onGMstFormControlChange} />
+                        <TextField required id="subject" label="Subject" variant="outlined" value={gameMasterFormData.subject} onChange={onGMstFormControlChange} />
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField id="faculty" label="Faculty" variant="outlined" value={gameMasterFormData.faculty} onChange={onGMstFormControlChange} />
+                        <TextField required id="faculty" label="Faculty" variant="outlined" value={gameMasterFormData.faculty} onChange={onGMstFormControlChange} />
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField id="durationHours" label="Duration Hours" variant="outlined" value={gameMasterFormData.durationHours} onChange={onGMstFormControlChange} />
+                        <TextField type="number" required id="durationHours" label="Duration Hours" variant="outlined" value={gameMasterFormData.durationHours} onChange={onGMstFormControlChange} />
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField id="maxSeats" label="Max Seats" variant="outlined" value={gameMasterFormData.maxSeats} onChange={onGMstFormControlChange} />
+                        <TextField type="number" required id="maxSeats" label="Max Seats" variant="outlined" value={gameMasterFormData.maxSeats} onChange={onGMstFormControlChange} />
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField id="maxSessions" label="Max Sessions" variant="outlined" value={gameMasterFormData.maxSessions} onChange={onGMstFormControlChange} />
+                        <TextField type="number" required id="maxSessions" label="Max Sessions" variant="outlined" value={gameMasterFormData.maxSessions} onChange={onGMstFormControlChange} />
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} justifyContent="center" alignItems="center">
