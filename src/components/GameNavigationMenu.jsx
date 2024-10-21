@@ -5,11 +5,14 @@ import GameBatch from './GameBatch';
 import { Divider, Drawer, List, ListItemButton, ListItem, ListItemText } from '@mui/material';
 import { Link } from "react-router-dom";
 import GameSession from './GameSession';
+import GameDashboard from './GameDashboard';
 
 
 export default function TemporaryDrawer({ openState, toggleDrawer }) {
 
-  const formList = [{ displayText: 'Game Master', routePath: '/', routeElement: <GameMaster/> },
+  const formList = [
+    { displayText: 'Game Dashboard', routePath: '/', routeElement: <GameDashboard/> },  
+  { displayText: 'Game Master', routePath: '/gameMaster', routeElement: <GameMaster/> },
   { displayText: 'Game Batch', routePath: '/gameBatch', routeElement: <GameBatch/> },
   { displayText: 'Game Session', routePath: '/gameSession', routeElement: <GameSession/> }
   ];
