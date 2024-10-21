@@ -6,6 +6,8 @@ import GameNavigationMenu from './GameNavigationMenu';
 import GameMaster from './GameMaster';
 import GameBatch from './GameBatch';
 import { Routes, Route } from "react-router-dom";
+import GameSession from "./GameSession";
+import GameDashboard from "./GameDashboard";
 
 export default function BasicTabs() {
   const [open, setOpen] = useState(false);
@@ -35,8 +37,10 @@ export default function BasicTabs() {
       </AppBar>
       <GameNavigationMenu openState={open} toggleDrawer={toggleDrawer} />
       <Routes>
-        <Route path="/" element={<GameMaster />} />
+        <Route path="/" element={<GameDashboard />} />
+        <Route path="/gameMaster" element={<GameMaster />} />
         <Route path="/gameBatch" element={<GameBatch />} />
+        <Route path="/gameSession" element={<GameSession />} />
       </Routes>
     </Box>
   );
