@@ -15,7 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-export default function Login() {
+export default function SignIn() {
   const [open, setOpen] = React.useState(true);
 
   const defaultLoginObj = {
