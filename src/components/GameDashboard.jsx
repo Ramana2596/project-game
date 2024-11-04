@@ -39,7 +39,7 @@ function GameDashboard() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:4000/api/data');
+        const response = await fetch('https://f710-2405-201-e004-b0e1-30b1-f68c-6ea7-4114.ngrok-free.app/api/data');
         if (!response.ok) {
           throw new Error('Some Error occurred');
         }
