@@ -71,16 +71,15 @@ function GameDashboard() {
           <TableHead>
             <TableRow>
               <StyledTableCell>Game_Id</StyledTableCell>
-              <StyledTableCell align="right">Cost_Norm_Id</StyledTableCell>
-              <StyledTableCell align="right">Cost_Norm_Category</StyledTableCell>
-              <StyledTableCell align="right">Cost_Norm_Description</StyledTableCell>
-              <StyledTableCell align="right">UOM</StyledTableCell>
-              <StyledTableCell align="right">Apply_On</StyledTableCell>
-              <StyledTableCell align="right">Created_By</StyledTableCell>
-              <StyledTableCell align="right">Created_On</StyledTableCell>
-              <StyledTableCell align="right">Fixed_Cost</StyledTableCell>
-              <StyledTableCell align="right">Modified_By</StyledTableCell>
-              <StyledTableCell align="right">Modified_On</StyledTableCell>
+              <StyledTableCell align="right">Game_Title</StyledTableCell>
+              <StyledTableCell align="right">Game_Short_Title</StyledTableCell>
+              <StyledTableCell align="right">Game_Objective</StyledTableCell>
+              <StyledTableCell align="right">Discipline</StyledTableCell>
+              <StyledTableCell align="right">Subject</StyledTableCell>
+              <StyledTableCell align="right">Faculty</StyledTableCell>
+              <StyledTableCell align="right">Duration_Hours</StyledTableCell>
+              <StyledTableCell align="right">Max_Seats</StyledTableCell>
+              <StyledTableCell align="right">Max_Sessions</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -89,16 +88,15 @@ function GameDashboard() {
                 <StyledTableCell component="th" scope="row">
                   {row.Game_Id}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.Cost_Norm_Id}</StyledTableCell>
-                <StyledTableCell align="right">{row.Cost_Norm_Category}</StyledTableCell>
-                <StyledTableCell align="right">{row.Cost_Norm_Description}</StyledTableCell>
-                <StyledTableCell align="right">{row.UOM}</StyledTableCell>
-                <StyledTableCell align="right">{row.Apply_On}</StyledTableCell>
-                <StyledTableCell align="right">{row.Created_By}</StyledTableCell>
-                <StyledTableCell align="right">{row.Created_On}</StyledTableCell>
-              <StyledTableCell align="right">{row.Fixed_Cost}</StyledTableCell>
-              <StyledTableCell align="right">{row.Modified_By}</StyledTableCell>
-              <StyledTableCell align="right">{row.Modified_On}</StyledTableCell>
+                <StyledTableCell align="right">{row.Game_Title}</StyledTableCell>
+                <StyledTableCell align="right">{row.Game_Short_Title}</StyledTableCell>
+                <StyledTableCell align="right">{row.Game_Objective}</StyledTableCell>
+                <StyledTableCell align="right">{row.Discipline}</StyledTableCell>
+                <StyledTableCell align="right">{row.Subject}</StyledTableCell>
+                <StyledTableCell align="right">{row.Faculty}</StyledTableCell>
+                <StyledTableCell align="right">{row.Duration_Hours}</StyledTableCell>
+              <StyledTableCell align="right">{row.Max_Seats}</StyledTableCell>
+              <StyledTableCell align="right">{row.Max_Sessions}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
