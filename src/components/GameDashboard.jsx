@@ -40,7 +40,7 @@ function GameDashboard() {
     async function fetchData() {
       try {
         const response = await fetch(
-          'https://8d41-2405-201-e004-b0e1-30b1-f68c-6ea7-4114.ngrok-free.app/api/data',
+          'https://loving-humpback-monthly.ngrok-free.app/api/data',
         {
           headers: {
             'ngrok-skip-browser-warning': 'true'
