@@ -37,7 +37,7 @@ export default function BasicTabs() {
       </AppBar>
       <GameNavigationMenu openState={open} toggleDrawer={toggleDrawer} />
       <Routes>
-        <Route path="/" element={<GameDashboard />} />
+        <Route path="/gameDashboard" element={<GameDashboard />} />
         <Route path="/gameMaster" element={<GameMaster />} />
         <Route path="/gameBatch" element={<GameBatch />} />
         <Route path="/gameSession" element={<GameSession />} />

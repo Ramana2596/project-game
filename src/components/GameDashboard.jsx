@@ -41,11 +41,11 @@ function GameDashboard() {
       try {
         const response = await fetch(
           'https://loving-humpback-monthly.ngrok-free.app/api/data',
-        {
-          headers: {
-            'ngrok-skip-browser-warning': 'true'
-          }
-        });
+          {
+            headers: {
+              'ngrok-skip-browser-warning': 'true'
+            }
+          });
         if (!response.ok) {
           throw new Error('Some Error occurred');
         }
@@ -95,8 +95,8 @@ function GameDashboard() {
                 <StyledTableCell align="right">{row.Subject}</StyledTableCell>
                 <StyledTableCell align="right">{row.Faculty}</StyledTableCell>
                 <StyledTableCell align="right">{row.Duration_Hours}</StyledTableCell>
-              <StyledTableCell align="right">{row.Max_Seats}</StyledTableCell>
-              <StyledTableCell align="right">{row.Max_Sessions}</StyledTableCell>
+                <StyledTableCell align="right">{row.Max_Seats}</StyledTableCell>
+                <StyledTableCell align="right">{row.Max_Sessions}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
