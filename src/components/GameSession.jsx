@@ -11,7 +11,7 @@ export default function GameSession() {
 
     const [productionMonthValue, setValue] = useState(null);
     const [sessionDateValue, setPlanToDateValue] = useState(null);
-    
+
 
     const initialGameSessionFormData = {
         gameId: '1',
@@ -58,7 +58,7 @@ export default function GameSession() {
         GameSessionFormData.productionMonth = productionMonthValue ? productionMonthValue.format() : null;
         GameSessionFormData.sessionDate = sessionDateValue ? sessionDateValue.format() : null;
     }
-    
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <form onSubmit={onGameSessionFormSubmit}>
@@ -71,12 +71,12 @@ export default function GameSession() {
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker defaultValue={dayjs('2022-04-17')} name="productionMonth" label="Plan from Date" value={productionMonthValue} onChange={setValue}/>
+                            <DatePicker defaultValue={dayjs('2022-04-17')} name="productionMonth" label="Plan from Date" value={productionMonthValue} onChange={setValue} />
                         </LocalizationProvider>
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker defaultValue={dayjs('2022-04-17')} name="sessionDate" label="Plan To Date" value={sessionDateValue} onChange={setPlanToDateValue}/>
+                            <DatePicker defaultValue={dayjs('2022-04-17')} name="sessionDate" label="Plan To Date" value={sessionDateValue} onChange={setPlanToDateValue} />
                         </LocalizationProvider>
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>

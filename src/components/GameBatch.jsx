@@ -12,7 +12,7 @@ export default function GameBatch() {
     const [planFromDateValue, setValue] = useState(null);
     const [planToDateValue, setPlanToDateValue] = useState(null);
     const [batchStartDateValue, setBatchStartDate] = useState(null);
-    
+
 
     const initialGameBatchFormData = {
         gameId: '1',
@@ -67,7 +67,7 @@ export default function GameBatch() {
         GameBatchFormData.planToDate = planToDateValue ? planToDateValue.format() : null;
         GameBatchFormData.batchStartDate = batchStartDateValue ? batchStartDateValue.format() : null;
     }
-    
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <form onSubmit={onGameBatchFormSubmit}>
@@ -103,12 +103,12 @@ export default function GameBatch() {
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker defaultValue={dayjs('2022-04-17')} name="planFromDate" label="Plan from Date" value={planFromDateValue} onChange={setValue}/>
+                            <DatePicker defaultValue={dayjs('2022-04-17')} name="planFromDate" label="Plan from Date" value={planFromDateValue} onChange={setValue} />
                         </LocalizationProvider>
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker defaultValue={dayjs('2022-04-17')} name="planToDate" label="Plan To Date" value={planToDateValue} onChange={setPlanToDateValue}/>
+                            <DatePicker defaultValue={dayjs('2022-04-17')} name="planToDate" label="Plan To Date" value={planToDateValue} onChange={setPlanToDateValue} />
                         </LocalizationProvider>
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
@@ -179,7 +179,7 @@ export default function GameBatch() {
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker defaultValue={dayjs('2022-04-17')} name="batchStartDate" label="Batch Start Date" value={batchStartDateValue} onChange={setBatchStartDate}/>
+                            <DatePicker defaultValue={dayjs('2022-04-17')} name="batchStartDate" label="Batch Start Date" value={batchStartDateValue} onChange={setBatchStartDate} />
                         </LocalizationProvider>
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
