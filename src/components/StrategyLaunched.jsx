@@ -2,26 +2,30 @@ import { TextField, Box, InputLabel, MenuItem, FormControl, Select } from "@mui/
 import Grid from '@mui/material/Grid2';
 import { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import dayjs from 'dayjs';
+import GenericTable from "./shared/components/GenericTable";
 
 export default function StrategyLaunched() {
     const [gameBatchData, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [launchDateValue, setValue] = useState(null);
+    const [strategyLaunchErr, setStartegyLaunchErr] = useState(false);
+    const [strategyLaunchTableData, setStrategyLaunchTableData] = useState(null);
+    const [shouldFetchStratechLaunch, setShouldFetchStrategyLaunch] = useState(false);
+    // const [launchDateValue, setValue] = useState(null);
 
     const initialStrategyLaunchedFormData = {
         gameId: '',
         gameBatch: '',
-        strategySetNo: '',
-        approvedBy: '',
-        launchDate: ''
+        strategySetNo: ''
     };
 
     const [strategyLaunchedFormData, setFormData] = useState(initialStrategyLaunchedFormData);
+
+    const tableHeading = ['Strategy', 'Benefit', 'Budget', 'Invest date', 'Outcome', 'From Month', 'Duration', 'Norm Percent', 'Loss Percent']
 
     useEffect(() => {
         async function fetchData() {
@@ -48,6 +52,32 @@ export default function StrategyLaunched() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (shouldFetchStratechLaunch) {
+            async function fetchStrategyLauncData() {
+                try {
+                    const tableDataRes = await fetch(
+                        `https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?gameId='OpsMgt'&gameBatch=1&strategySetNo=2`,
+                        {
+                            headers: {
+                                'ngrok-skip-browser-warning': 'true'
+                            }
+                        });
+                    if (!tableDataRes.ok) {
+                        throw new Error('Some Error occurred');
+                    }
+
+                    const result = await tableDataRes.json();
+                    setStrategyLaunchTableData(result);
+                } catch (err) {
+                    setStartegyLaunchErr(true);
+                }
+            }
+            fetchStrategyLauncData();
+            setShouldFetchStrategyLaunch(false);
+        }
+    }, [shouldFetchStratechLaunch]);
+
     if (loading) return (<div>...Loading</div>);
     if (error) return (<div>...Error</div>);
 
@@ -67,19 +97,23 @@ export default function StrategyLaunched() {
 
     const strategFormUpdate = () => {
         return new Promise(resolve => {
-            console.log(strategyLaunchedFormData);
             setTimeout(resolve, 1000);
         });
     }
 
     const strategyFormSubmit = (event) => {
         event.preventDefault();
-        strategyLaunchedFormData.launchDate = launchDateValue ? launchDateValue.format() : null;
+        // strategyLaunchedFormData.launchDate = launchDateValue ? launchDateValue.format() : null;
         strategFormUpdate();
+        setShouldFetchStrategyLaunch(true);
     };
 
     const strategyFormReset = () => {
         setFormData({ ...initialStrategyLaunchedFormData });
+    }
+
+    const updateTableData = () => {
+
     }
 
     return (
@@ -122,14 +156,6 @@ export default function StrategyLaunched() {
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
                         <TextField required id="strategySetNo" type="number" label="Strategy Set No" variant="outlined" value={strategyLaunchedFormData.strategySetNo} onChange={onStrategyFormControlUpdate} />
                     </Grid>
-                    <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField required id="approvedBy" label="Approved By" variant="outlined" value={strategyLaunchedFormData.approvedBy} onChange={onStrategyFormControlUpdate} />
-                    </Grid>
-                    <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker defaultValue={dayjs('2022-04-17')} name="launchDate" label="Launch Date" value={launchDateValue} onChange={setValue} />
-                        </LocalizationProvider>
-                    </Grid>
                 </Grid>
                 <Grid container spacing={2} justifyContent="center" alignItems="center">
                     <Button color="white" type="reset" variant="contained" onClick={strategyFormReset}>
@@ -140,6 +166,7 @@ export default function StrategyLaunched() {
                     </Button>
                 </Grid>
             </form>
+            <GenericTable inputTableHeadings={tableHeading} inputTableData={strategyLaunchTableData} ifNoData={strategyLaunchErr}></GenericTable>
         </Box>
     );
 }
