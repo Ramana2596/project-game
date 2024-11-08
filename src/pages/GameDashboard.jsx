@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Box } from "@mui/material";
-import GenericTable from './shared/components/GenericTable';
+import GenericTable from '../components/GenericTable';
 
 function GameDashboard() {
   const [tableData, setData] = useState(null);
@@ -38,8 +38,8 @@ function GameDashboard() {
   if (loading) return (<div>...Loading</div>);
   if (error) return (<div>...Error</div>);
 
-  return (    
-      <GenericTable inputTableHeadings={tableHeadings} inputTableData={tableData}></GenericTable>
+  return (
+    <GenericTable inputTableHeadings={tableHeadings} inputTableData={tableData}></GenericTable>
   );
 }
 
