@@ -84,7 +84,7 @@ export default function StrategyLaunched() {
                                     onChange={onStrategyFormControlUpdate}
                                 >
                                     {gameIdData?.map((mapObj) =>
-                                        <MenuItem value={mapObj.Game_Id}>{mapObj.Game_Id}</MenuItem>
+                                        <MenuItem value={mapObj.Game_Id}>{mapObj.Game_Title}</MenuItem>
                                     )}
                                 </Select>
                             </FormControl>
