@@ -13,10 +13,6 @@ export default function StrategyLaunched() {
     const [shouldFetchStratechLaunch, setShouldFetchStrategyLaunch] = useState(false);
     const [shouldFetchGameBatch, setShouldFetchGameBatch] = useState(false);
     const [shouldFetchStrategySet, setShouldFetchStrategySet] = useState(false);
-    let { apiResponse: gameIdData, apiFailureErrorRes: gameBatchFailureRes, isLoading: gameBatchIsLoading } = FetchDataFromApi('https://loving-humpback-monthly.ngrok-free.app/api/data', true);
-    const { apiResponse: strategyLaunchedRes, apiFailureErrorRes: strategyLaunchedFailureRes, isLoading: strategyLaunchedIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?type=launchData&gameId='OpsMgt'&gameBatch=1&strategySetNo=2`, shouldFetchStratechLaunch);
-    let { apiResponse: gameBatchData, apiFailureErrorRes: gameBatchDataFailureRes, isLoading: gameBatchDataIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?type=getGameBatch&gameId='OpsMgt'`, shouldFetchGameBatch);
-    let { apiResponse: getStrategySetNoData, apiFailureErrorRes: getStrategySetNoDataFailed, isLoading: getStrategySetNoDataIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?type=getStrategySet&gameId='OpsMgt'`, shouldFetchStrategySet);
 
     const initialStrategyLaunchedFormData = {
         gameId: '',
@@ -26,12 +22,18 @@ export default function StrategyLaunched() {
 
     const [strategyLaunchedFormData, setFormData] = useState(initialStrategyLaunchedFormData);
 
-    const tableHeading = ['Strategy', 'Benefit', 'Budget', 'Invest date', 'Outcome', 'From Month', 'Duration', 'Norm Percent', 'Loss Percent']
+    const tableHeading = ['Strategy', 'Benefit', 'Choice Group', 'Currency', 'Budget', 'Invest date', 'Outcome', 'From Month', 'Duration', 'Norm %', 'Loss %'];
+
+    let { apiResponse: gameIdData, apiFailureErrorRes: gameBatchFailureRes, isLoading: gameBatchIsLoading } = FetchDataFromApi('https://loving-humpback-monthly.ngrok-free.app/api/data', true);
+    const { apiResponse: strategyLaunchedRes, apiFailureErrorRes: strategyLaunchedFailureRes, isLoading: strategyLaunchedIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?type=launchData&gameId='${strategyLaunchedFormData?.gameId}'&gameBatch=${strategyLaunchedFormData?.gameBatch}&strategySetNo=${strategyLaunchedFormData?.strategySetNo}`, shouldFetchStratechLaunch);
+    let { apiResponse: gameBatchData, apiFailureErrorRes: gameBatchDataFailureRes, isLoading: gameBatchDataIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?type=getGameBatch&gameId='OpsMgt'`, shouldFetchGameBatch);
+    let { apiResponse: getStrategySetNoData, apiFailureErrorRes: getStrategySetNoDataFailed, isLoading: getStrategySetNoDataIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?type=getStrategySet&gameId='OpsMgt'`, shouldFetchStrategySet);
 
     if (gameBatchIsLoading) return (<div>...Loading</div>);
     if (gameBatchFailureRes) return (<div>{gameBatchFailureRes}</div>);
 
     const onStrategyFormControlUpdate = (event) => {
+        setShouldFetchStrategyLaunch(false);
         if (event.currentTarget) {
             setFormData({
                 ...strategyLaunchedFormData,
