@@ -1,7 +1,7 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import GameToolBar from './components/GameToolBar';
-import SignIn from './components/SignIn/SignIn';
+import GameToolBar from './pages/GameToolBar';
+import SignIn from './pages/SignIn/SignIn';
 
 function App() {
 
