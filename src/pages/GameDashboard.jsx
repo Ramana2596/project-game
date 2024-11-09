@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Box } from "@mui/material";
+// import { Box } from "@mui/material";
 import GenericTable from '../components/GenericTable';
 
 function GameDashboard() {

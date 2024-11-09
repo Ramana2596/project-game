@@ -11,8 +11,12 @@ import FetchDataFromApi from "../hooks/fetchData";
 
 export default function StrategyLaunched() {
     const [shouldFetchStratechLaunch, setShouldFetchStrategyLaunch] = useState(false);
-    const { apiResponse: gameBatchResponse, apiFailureErrorRes: gameBatchFailureRes, isLoading: gameBatchIsLoading } = FetchDataFromApi('https://loving-humpback-monthly.ngrok-free.app/api/data', true);
-    const { apiResponse: strategyLaunchedRes, apiFailureErrorRes: strategyLaunchedFailureRes, isLoading: strategyLaunchedIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?gameId='OpsMgt'&gameBatch=1&strategySetNo=2`, shouldFetchStratechLaunch);
+    const [shouldFetchGameBatch, setShouldFetchGameBatch] = useState(false);
+    const [shouldFetchStrategySet, setShouldFetchStrategySet] = useState(false);
+    let { apiResponse: gameIdData, apiFailureErrorRes: gameBatchFailureRes, isLoading: gameBatchIsLoading } = FetchDataFromApi('https://loving-humpback-monthly.ngrok-free.app/api/data', true);
+    const { apiResponse: strategyLaunchedRes, apiFailureErrorRes: strategyLaunchedFailureRes, isLoading: strategyLaunchedIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?type=launchData&gameId='OpsMgt'&gameBatch=1&strategySetNo=2`, shouldFetchStratechLaunch);
+    let { apiResponse: gameBatchData, apiFailureErrorRes: gameBatchDataFailureRes, isLoading: gameBatchDataIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?type=getGameBatch&gameId='OpsMgt'`, shouldFetchGameBatch);
+    let { apiResponse: getStrategySetNoData, apiFailureErrorRes: getStrategySetNoDataFailed, isLoading: getStrategySetNoDataIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getStrategySetData?type=getStrategySet&gameId='OpsMgt'`, shouldFetchStrategySet);
 
     const initialStrategyLaunchedFormData = {
         gameId: '',
@@ -38,6 +42,10 @@ export default function StrategyLaunched() {
                 ...strategyLaunchedFormData,
                 [event.target.name]: event.target.value,
             });
+            if (event.target.name === 'gameId') {
+                setShouldFetchStrategySet(true);
+                setShouldFetchGameBatch(true);
+            }
         }
     };
 
@@ -73,7 +81,7 @@ export default function StrategyLaunched() {
                                     label="Game Id *"
                                     onChange={onStrategyFormControlUpdate}
                                 >
-                                    {gameBatchResponse?.map((mapObj) =>
+                                    {gameIdData?.map((mapObj) =>
                                         <MenuItem value={mapObj.Game_Id}>{mapObj.Game_Id}</MenuItem>
                                     )}
                                 </Select>
@@ -90,12 +98,32 @@ export default function StrategyLaunched() {
                                 value={strategyLaunchedFormData.gameBatch}
                                 label="Game Batch *"
                                 onChange={onStrategyFormControlUpdate}>
-                                <MenuItem value="test">Test</MenuItem>
+                                {
+                                    gameBatchData?.map((mapObj) =>
+                                        <MenuItem value={mapObj.Game_Batch}>{mapObj.Game_Batch}</MenuItem>
+                                    )
+                                }
                             </Select>
                         </FormControl>
                     </Grid>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-                        <TextField required id="strategySetNo" type="number" label="Strategy Set No" variant="outlined" value={strategyLaunchedFormData.strategySetNo} onChange={onStrategyFormControlUpdate} />
+                        <Grid size={{ xs: 2, sm: 4, md: 4 }}>
+                            <FormControl required sx={{ flexGrow: 1, width: '100%', maxWidth: 220 }}>
+                                <InputLabel id="strategySetNo">Strategy Set No</InputLabel>
+                                <Select
+                                    labelId="strategySetNo"
+                                    id="strategySetNo"
+                                    name="strategySetNo"
+                                    value={strategyLaunchedFormData.strategySetNo}
+                                    label="Strategy Set No *"
+                                    onChange={onStrategyFormControlUpdate}
+                                >
+                                    {getStrategySetNoData?.map((mapObj) =>
+                                        <MenuItem value={mapObj.Strategy_Set_No}>{mapObj.Strategy_Set_No}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} justifyContent="center" alignItems="center">
