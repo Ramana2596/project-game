@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import GameSession from './GameSession';
 import GameDashboard from './GameDashboard';
 import StrategyLaunched from './StrategyLaunched';
+import StrategyPlan from './StrategyPlan';
 
 
 export default function TemporaryDrawer({ openState, toggleDrawer }) {
@@ -16,7 +17,8 @@ export default function TemporaryDrawer({ openState, toggleDrawer }) {
     { displayText: 'Game Master', routePath: '/operationGame/gameMaster', routeElement: <GameMaster /> },
     { displayText: 'Game Batch', routePath: '/operationGame/gameBatch', routeElement: <GameBatch /> },
     { displayText: 'Game Session', routePath: '/operationGame/gameSession', routeElement: <GameSession /> },
-    { displayText: 'Strategy Launched', routePath: '/operationGame/strategyLaunched', routeElement: <StrategyLaunched /> }
+    { displayText: 'Strategy Launched', routePath: '/operationGame/strategyLaunched', routeElement: <StrategyLaunched /> },
+    { displayText: 'Strategy Plan', routePath: '/operationGame/strategyPlan', routeElement: <StrategyPlan /> }
   ];
 
   const DrawerList = (

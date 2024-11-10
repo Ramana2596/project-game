@@ -9,6 +9,7 @@ import { Routes, Route } from "react-router-dom";
 import GameSession from "./GameSession";
 import GameDashboard from "./GameDashboard";
 import StrategyLaunched from './StrategyLaunched';
+import StrategyPlan from "./StrategyPlan";
 
 export default function BasicTabs() {
   const [open, setOpen] = useState(false);
@@ -43,6 +44,7 @@ export default function BasicTabs() {
         <Route path="/gameBatch" element={<GameBatch />} />
         <Route path="/gameSession" element={<GameSession />} />
         <Route path="/strategyLaunched" element={<StrategyLaunched />} />
+        <Route path="/strategyPlan" element={<StrategyPlan />} />
       </Routes>
     </Box>
   );
