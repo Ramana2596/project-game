@@ -68,9 +68,9 @@ export default function StrategyPlanApproval() {
                 </Grid>
             </form>
             {
-                isStrategyPlanEdit ? 
-                <EditableTable inputTableHeadings={tableHeading} editableTableData={gameIdData}></EditableTable> :
-                <GenericTable inputTableHeadings={tableHeading} inputTableData={gameIdData} ifNoData={false}></GenericTable>
+                isStrategyPlanEdit ?
+                    <EditableTable inputTableHeadings={tableHeading} editableTableData={gameIdData}></EditableTable> :
+                    <GenericTable inputTableHeadings={tableHeading} inputTableData={gameIdData} ifNoData={false} isAnEditableTable={true}></GenericTable>
             }
         </Box>
     );

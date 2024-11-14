@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -30,10 +31,24 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function GenericTable({ inputTableHeadings, inputTableData, ifNoData }) {
+function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditableTable }) {
     let tableValueSet = inputTableData?.map((tableDataObj) => {
         return Object.values(tableDataObj);
     });
+
+    let cellValueType = inputTableData?.map((tableObj) => {
+        const transFormedItem = {};
+        Object.keys(tableObj).forEach((key) => {
+            transFormedItem[key] = {
+                value: tableObj[key],
+                inputType: key === 'Game_Id' ? 'checkbox' : 'readOnly'
+            }
+        });
+        return transFormedItem;
+    });
+
+    console.log(cellValueType);
+
 
     if (ifNoData) {
         return (
@@ -56,6 +71,41 @@ function GenericTable({ inputTableHeadings, inputTableData, ifNoData }) {
                 </TableContainer>
             </Box>
         );
+    } else if (isAnEditableTable) {
+        return (
+            <Box margin={10} sx={{ flexGrow: 1 }}>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 500 }} aria-label="customized table">
+                        <TableHead>
+                            <TableRow>
+                                {inputTableHeadings?.map(headingString => {
+                                    return (<StyledTableCell align="right">
+                                        {headingString}
+                                    </StyledTableCell>)
+                                })}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                cellValueType?.map((valueSet) => {
+                                    return (<StyledTableRow align="right">
+                                        {
+                                            Object.keys(valueSet).map((key) => {
+                                                return (<StyledTableCell align="right">
+                                                    {valueSet[key]?.inputType === 'checkbox' ? <DoneAllIcon /> : valueSet[key]?.value}
+                                                </StyledTableCell>)
+                                            })
+                                        }
+                                    </StyledTableRow>)
+                                })
+
+                            }
+
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Box>
+        );
     } else {
         return (
             <Box margin={10} sx={{ flexGrow: 1 }}>
@@ -72,12 +122,12 @@ function GenericTable({ inputTableHeadings, inputTableData, ifNoData }) {
                         </TableHead>
                         <TableBody>
                             {
-                                tableValueSet?.map((valueSet) => {
+                                inputTableData?.map((valueObj) => {
                                     return (<StyledTableRow align="right">
                                         {
-                                            valueSet?.map((value) => {
+                                            Object.keys(valueObj).map((key) => {
                                                 return (<StyledTableCell align="right">
-                                                    {value}
+                                                    {valueObj[key]}
                                                 </StyledTableCell>)
                                             })
                                         }
