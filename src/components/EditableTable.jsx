@@ -32,19 +32,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function EditableTable({ inputTableHeadings, editableTableData }) {
+function EditableTable({ editableTableData }) {
     const transformDataToEditableTableData = (editableTableData, inputType = 'text') => {
         return editableTableData?.map(item => {
             const transformedItem = {};
             Object.keys(item).forEach(key => {
                 transformedItem[key] = {
                     value: item[key],
-                    inputType: key === 'Game_Id' ? 'checkbox' : inputType
+                    inputType: key === 'Decision' ? 'checkbox' : inputType
                 };
             });
             return transformedItem;
         });
     };
+
+    const inputTableHeadings = Object.keys(editableTableData[0]);
 
     const tableData = transformDataToEditableTableData(editableTableData, 'readOnly');
 
