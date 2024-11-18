@@ -8,12 +8,14 @@ import GameSession from './GameSession';
 import GameDashboard from './GameDashboard';
 import StrategyLaunched from './StrategyLaunched';
 import StrategyPlan from './StrategyPlanApproval';
+import UserAccessManagement from './UserAccessManagement/UserAccessManagement';
 
 
 export default function TemporaryDrawer({ openState, toggleDrawer }) {
 
   const formList = [
     { displayText: 'Game Dashboard', routePath: '/operationGame/gameDashboard', routeElement: <GameDashboard /> },
+    { displayText: 'User Accesss Management', routePath: '/operationGame/userAccessManagement', routeElement: <UserAccessManagement /> },
     { displayText: 'Game Master', routePath: '/operationGame/gameMaster', routeElement: <GameMaster /> },
     { displayText: 'Game Batch', routePath: '/operationGame/gameBatch', routeElement: <GameBatch /> },
     { displayText: 'Game Session', routePath: '/operationGame/gameSession', routeElement: <GameSession /> },

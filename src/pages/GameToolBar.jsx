@@ -10,6 +10,7 @@ import GameSession from "./GameSession";
 import GameDashboard from "./GameDashboard";
 import StrategyLaunched from './StrategyLaunched';
 import StrategyPlanApproval from "./StrategyPlanApproval";
+import UserAccessManagement from "./UserAccessManagement/UserAccessManagement";
 
 export default function BasicTabs() {
   const [open, setOpen] = useState(false);
@@ -45,6 +46,7 @@ export default function BasicTabs() {
         <Route path="/gameSession" element={<GameSession />} />
         <Route path="/strategyLaunched" element={<StrategyLaunched />} />
         <Route path="/strategyPlanApproval" element={<StrategyPlanApproval />} />
+        <Route path="/userAccessManagement" element={<UserAccessManagement />}/>
       </Routes>
     </Box>
   );

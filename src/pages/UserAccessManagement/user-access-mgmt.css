@@ -1,0 +1,14 @@
+.user-access-content-container {
+    display: flex;
+    margin: 10px;
+    flex-direction: column;
+}
+
+
+.user-details-container {
+    display: flex;
+    /* flex-wrap: wrap; */
+    align-content: space-between;
+    align-self: stretch;
+    flex-basis: 100%;
+}
