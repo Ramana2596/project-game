@@ -10,6 +10,7 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { useState } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -32,76 +33,92 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function EditableTable({ inputTableHeadings, editableTableData }) {
-    const transformDataToEditableTableData = (editableTableData, inputType = 'text') => {
-        return editableTableData?.map(item => {
-            const transformedItem = {};
-            Object.keys(item).forEach(key => {
-                transformedItem[key] = {
-                    value: item[key],
-                    inputType: key === 'Game_Id' ? 'checkbox' : inputType
-                };
+function EditableTable({ editableTableData, onCheckboxChange }) {
+    const [checkedItems, setCheckedItems] = useState({});
+
+    if (editableTableData && editableTableData.length > 0) {
+
+        const transformDataToEditableTableData = (editableTableData, inputType = 'text') => {
+            return editableTableData?.map(item => {
+                const transformedItem = {};
+                Object.keys(item).forEach(key => {
+                    transformedItem[key] = {
+                        value: item[key],
+                        inputType: key === 'Decision' ? 'checkbox' : inputType
+                    };
+                });
+                return transformedItem;
             });
-            return transformedItem;
+        };
+
+        const inputTableHeadings = Object.keys(editableTableData[0]);
+
+        const tableData = transformDataToEditableTableData(editableTableData, 'readOnly');
+
+        // Extract values
+        const valueStringArr = tableData.map(item => {
+            const values = [];
+            Object.keys(item).forEach(key => {
+                values.push(item[key].value);
+            });
+            return values;
         });
-    };
 
-    const tableData = transformDataToEditableTableData(editableTableData, 'readOnly');
-
-    // Extract values
-    const valueStringArr = tableData.map(item => {
-        const values = [];
-        Object.keys(item).forEach(key => {
-            values.push(item[key].value);
+        // Extract input types
+        const inputTypeArr = tableData.map(item => {
+            const inputTypes = [];
+            Object.keys(item).forEach(key => {
+                inputTypes.push(item[key].inputType);
+            });
+            return inputTypes;
         });
-        return values;
-    });
 
-    // Extract input types
-    const inputTypeArr = tableData.map(item => {
-        const inputTypes = [];
-        Object.keys(item).forEach(key => {
-            inputTypes.push(item[key].inputType);
-        });
-        return inputTypes;
-    });
+        const handleCheckboxChange = (event, id) => {
+            setCheckedItems({ ...checkedItems, id: id, value: event.target.checked, });
+            onCheckboxChange(id, event.target.checked);
+        };
 
-    return (
-        <Box margin={10} sx={{ flexGrow: 1 }}>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 500 }} aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            {inputTableHeadings.map((headingString, index) => (
-                                <StyledTableCell key={index} align="right">
-                                    {headingString}
-                                </StyledTableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            valueStringArr?.map((valueObj, parentIndex) =>
-                                <StyledTableRow align="right">
-                                    {
-                                        valueObj?.map((value, index) =>
-                                            <StyledTableCell align="right">
-                                                {
-                                                    inputTypeArr[parentIndex][index] !== 'readOnly' ? <FormControlLabel
-                                                        control={<Checkbox />}
-                                                    /> : value
-                                                }
-                                            </StyledTableCell>
-                                        )
-                                    }
-                                </StyledTableRow>
-                            )
-                        }
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Box>
-    );
+        return (
+            <Box margin={10} sx={{ flexGrow: 1 }}>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 500 }} aria-label="customized table">
+                        <TableHead>
+                            <TableRow>
+                                {inputTableHeadings.map((headingString, index) => (
+                                    <StyledTableCell key={index} align="right">
+                                        {headingString}
+                                    </StyledTableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                valueStringArr?.map((valueObj, parentIndex) =>
+                                    <StyledTableRow align="right">
+                                        {
+                                            valueObj?.map((value, index) =>
+                                                <StyledTableCell align="right">
+                                                    {
+                                                        inputTypeArr[parentIndex][index] !== 'readOnly' ? <FormControlLabel
+                                                            control={<Checkbox
+                                                                checked={value}
+                                                                onChange={(event) => handleCheckboxChange(event, editableTableData[parentIndex].Strategy_Id)}
+                                                            />}
+                                                        /> : value
+                                                    }
+                                                </StyledTableCell>
+                                            )
+                                        }
+                                    </StyledTableRow>
+                                )
+                            }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Box>
+        );
+    }
+
 }
 
 export default EditableTable;
