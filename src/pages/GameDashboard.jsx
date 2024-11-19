@@ -10,6 +10,8 @@ function GameDashboard() {
 
   const tableHeadings = ['Game_Id', 'Game_Title', 'Game_Short_Title', 'Game_Objective', 'Discipline', 'Subject', 'Faculty', 'Duration_Hours', 'Max_Seats', 'Max_Sessions'];
 
+  // let { apiResponse: gameIdData, apiFailureErrorRes: gameBatchFailureRes, isLoading: gameBatchIsLoading } = FetchDataFromApi('https://loving-humpback-monthly.ngrok-free.app/api/data', true);
+
   useEffect(() => {
     async function fetchData() {
       try {
