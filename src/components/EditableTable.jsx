@@ -33,7 +33,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function EditableTable({ editableTableData, onCheckboxChange }) {
+function EditableTable({ editableTableData, onCheckboxChange, hiddenColumns }) {
     const [checkedItems, setCheckedItems] = useState({});
 
     if (editableTableData && editableTableData.length > 0) {
@@ -55,24 +55,6 @@ function EditableTable({ editableTableData, onCheckboxChange }) {
 
         const tableData = transformDataToEditableTableData(editableTableData, 'readOnly');
 
-        // Extract values
-        const valueStringArr = tableData.map(item => {
-            const values = [];
-            Object.keys(item).forEach(key => {
-                values.push(item[key].value);
-            });
-            return values;
-        });
-
-        // Extract input types
-        const inputTypeArr = tableData.map(item => {
-            const inputTypes = [];
-            Object.keys(item).forEach(key => {
-                inputTypes.push(item[key].inputType);
-            });
-            return inputTypes;
-        });
-
         const handleCheckboxChange = (event, id) => {
             setCheckedItems({ ...checkedItems, id: id, value: event.target.checked, });
             onCheckboxChange(id, event.target.checked);
@@ -84,33 +66,37 @@ function EditableTable({ editableTableData, onCheckboxChange }) {
                     <Table sx={{ minWidth: 500 }} aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                {inputTableHeadings.map((headingString, index) => (
-                                    <StyledTableCell key={index} align="right">
-                                        {headingString}
-                                    </StyledTableCell>
-                                ))}
+                                {inputTableHeadings.map((headingString, index) => {
+                                    if (!hiddenColumns.includes(headingString)) {
+                                        return (<StyledTableCell key={index} align="center">
+                                            {headingString}
+                                        </StyledTableCell>)
+                                    }
+                                }
+                                )}
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {
-                                valueStringArr?.map((valueObj, parentIndex) =>
-                                    <StyledTableRow align="right">
+                                tableData?.map((valueObj) => {
+                                    return (<StyledTableRow align="right">
                                         {
-                                            valueObj?.map((value, index) =>
-                                                <StyledTableCell align="right">
-                                                    {
-                                                        inputTypeArr[parentIndex][index] !== 'readOnly' ? <FormControlLabel
-                                                            control={<Checkbox
-                                                                checked={value}
-                                                                onChange={(event) => handleCheckboxChange(event, editableTableData[parentIndex].Strategy_Id)}
-                                                            />}
-                                                        /> : value
-                                                    }
-                                                </StyledTableCell>
-                                            )
+                                            Object.keys(valueObj).map((key) => {
+                                                if (!hiddenColumns.includes(key)) {
+                                                    const cellClass = valueObj[key]?.value?.length > 13 ? 'large-cell' : '';
+                                                    return valueObj[key].inputType === 'readOnly' ? (<StyledTableCell className={cellClass} align="center">
+                                                        {valueObj[key].value}
+                                                    </StyledTableCell>) : (<FormControlLabel
+                                                        control={<Checkbox
+                                                            checked={valueObj[key].value}
+                                                            onChange={(event) => handleCheckboxChange(event, valueObj.Strategy_Id.value)}
+                                                        />}
+                                                    />)
+                                                }
+                                            })
                                         }
-                                    </StyledTableRow>
-                                )
+                                    </StyledTableRow>)
+                                })
                             }
                         </TableBody>
                     </Table>

@@ -47,7 +47,6 @@ function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditab
         return transFormedItem;
     });
 
-    console.log(cellValueType);
 
 
     if (ifNoData) {

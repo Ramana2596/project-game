@@ -74,7 +74,7 @@ export default function StrategyPlanApproval() {
                 </Grid>
             </form>
             {
-                <EditableTable editableTableData={editableTableData} onCheckboxChange={handleCheckboxChange}></EditableTable>
+                <EditableTable editableTableData={editableTableData} onCheckboxChange={handleCheckboxChange} hiddenColumns={['Strategy_Id', 'Strategy_Set_No']}></EditableTable>
             }
         </Box>
     );
