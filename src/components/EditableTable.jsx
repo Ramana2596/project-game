@@ -68,7 +68,7 @@ function EditableTable({ editableTableData, onCheckboxChange, hiddenColumns }) {
                             <TableRow>
                                 {inputTableHeadings.map((headingString, index) => {
                                     if (!hiddenColumns.includes(headingString)) {
-                                        return (<StyledTableCell key={index} align="right">
+                                        return (<StyledTableCell key={index} align="center">
                                             {headingString}
                                         </StyledTableCell>)
                                     }
@@ -83,14 +83,15 @@ function EditableTable({ editableTableData, onCheckboxChange, hiddenColumns }) {
                                         {
                                             Object.keys(valueObj).map((key) => {
                                                 if (!hiddenColumns.includes(key)) {
-                                                    return valueObj[key].inputType === 'readOnly' ? (<StyledTableCell align="right">
+                                                    const cellClass = valueObj[key]?.value?.length > 13 ? 'large-cell' : '';
+                                                    return valueObj[key].inputType === 'readOnly' ? (<StyledTableCell className={cellClass} align="center">
                                                         {valueObj[key].value}
                                                     </StyledTableCell>) : (<FormControlLabel
-                                                            control={<Checkbox
-                                                                checked={valueObj[key].value}
-                                                                onChange={(event) => handleCheckboxChange(event, valueObj.Strategy_Id.value)}
-                                                            />}
-                                                        />)
+                                                        control={<Checkbox
+                                                            checked={valueObj[key].value}
+                                                            onChange={(event) => handleCheckboxChange(event, valueObj.Strategy_Id.value)}
+                                                        />}
+                                                    />)
                                                 }
                                             })
                                         }

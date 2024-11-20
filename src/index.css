@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.large-cell {
+  min-width: 200px; /* Adjust as needed */
+}
