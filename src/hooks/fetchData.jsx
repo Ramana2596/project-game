@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
 
-function FetchDataFromApi(apiUrl, shouldTrigger) {
+function FetchDataFromApi(apiEndpoint, shouldTrigger, queryParams = null) {
+    const apiBaseUrl = 'https://loving-humpback-monthly.ngrok-free.app';
     const [apiResponse, setApiResponse] = useState(null);
     const [apiFailureErrorRes, setApiFailureRes] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    let queryString = queryParams ? new URLSearchParams(queryParams).toString() : queryParams;
+    let apiUrl = '';
+    if (queryString) {
+        apiUrl = apiBaseUrl + apiEndpoint + '?' + queryString;
+    } else {
+        apiUrl = apiBaseUrl + apiEndpoint;
+    }
 
     useEffect(() => {
         async function makeApiCall() {
@@ -28,7 +36,7 @@ function FetchDataFromApi(apiUrl, shouldTrigger) {
         if (shouldTrigger) {
             makeApiCall();
         }
-    }, [apiUrl, shouldTrigger]);
+    }, [shouldTrigger]);
 
     return { apiResponse, apiFailureErrorRes, isLoading };
 }

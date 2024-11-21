@@ -7,14 +7,16 @@ import FetchDataFromApi from "../hooks/fetchData";
 
 export default function MarketFactorInfo() {
     const [shouldFetchMarketFactorInfo, setShouldFetchMarketFactorInfo] = useState(false);
+    const [getMarketFactorInfoParam, setGetMarketInfoParam] = useState(null);
     let selectedGameBatch = null;
 
-    let { apiResponse: gameData, apiFailureErrorRes: gameDataFailiureRes, isLoading: gameDataIsLoading } = FetchDataFromApi('https://loving-humpback-monthly.ngrok-free.app/api/data', true);
-    let { apiResponse: marketFactorInfo, apiFailureErrorRes: marketFactorInfoFailedRes, isLoading: marketFactorInfoIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getMarketFactorInfo'`, shouldFetchMarketFactorInfo);
+
+    let { apiResponse: gameData, apiFailureErrorRes: gameDataFailiureRes, isLoading: gameDataIsLoading } = FetchDataFromApi('/api/data', true);
+    let { apiResponse: marketFactorInfo, apiFailureErrorRes: marketFactorInfoFailedRes, isLoading: marketFactorInfoIsLoading } = FetchDataFromApi(`/api/getMarketFactorInfo`, shouldFetchMarketFactorInfo, getMarketFactorInfoParam);
 
     let tableHeading = [];
 
-    if (gameDataIsLoading || marketFactorInfoIsLoading) return (<div>...Loading</div>);
+    if (gameDataIsLoading) return (<div>...Loading</div>);
     if (gameDataFailiureRes) return (<div>{gameDataFailiureRes}</div>);
 
     const onMarketFactorInfoFormUpddate = (event) => {
@@ -28,6 +30,10 @@ export default function MarketFactorInfo() {
 
     const marketFormInfoSumbit = (event) => {
         event.preventDefault();
+        setGetMarketInfoParam({
+            gameId: 'OpsMgt',
+            gameBatch: selectedGameBatch
+        });
         setShouldFetchMarketFactorInfo(true);
     };
 
