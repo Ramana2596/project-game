@@ -43,7 +43,7 @@ export default function StrategyLaunched() {
     let { apiResponse: getStrategySetNoData,
         apiFailureErrorRes: getStrategySetNoDataFailed,
         isLoading: getStrategySetNoDataIsLoading } = FetchDataFromApi(`/api/getStrategySetData`, shouldFetchStrategySet, {
-            "type": "getGameBatch",
+            "type": "getStrategySet",
             "gameId": "'OpsMgt'"
         });
 
@@ -88,6 +88,9 @@ export default function StrategyLaunched() {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <form onSubmit={strategyFormSubmit}>
+                <Grid container spacing={2} justifyContent="center" alignItems="center">
+                    <h1>Strategy Launched</h1>
+                </Grid>
                 <Grid sx={{ margin: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
                         <Grid size={{ xs: 2, sm: 4, md: 4 }}>

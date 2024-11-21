@@ -8,13 +8,23 @@ import FetchDataFromApi from "../hooks/fetchData";
 export default function MarketFactorInfo() {
     const [shouldFetchMarketFactorInfo, setShouldFetchMarketFactorInfo] = useState(false);
     const [getMarketFactorInfoParam, setGetMarketInfoParam] = useState(null);
-    let selectedGameBatch = null;
+    const [selectedGameBatch, setSelectedBatch] = useState(null);
 
 
-    let { apiResponse: gameData, apiFailureErrorRes: gameDataFailiureRes, isLoading: gameDataIsLoading } = FetchDataFromApi('/api/data', true);
-    let { apiResponse: marketFactorInfo, apiFailureErrorRes: marketFactorInfoFailedRes, isLoading: marketFactorInfoIsLoading } = FetchDataFromApi(`/api/getMarketFactorInfo`, shouldFetchMarketFactorInfo, getMarketFactorInfoParam);
-
-    let tableHeading = [];
+    let { apiResponse: gameData,
+        apiFailureErrorRes: gameDataFailiureRes,
+        isLoading: gameDataIsLoading } = FetchDataFromApi('/api/data', true);
+    let { apiResponse: marketFactorInfo,
+        apiFailureErrorRes: marketFactorInfoFailedRes,
+        isLoading: marketFactorInfoIsLoading } = FetchDataFromApi(`/api/getMarketFactorInfo`, shouldFetchMarketFactorInfo, getMarketFactorInfoParam);
+    let { apiResponse: gameBatchData,
+        apiFailureErrorRes: gameBatchDataFailureRes,
+        isLoading: gameBatchDataIsLoading } = FetchDataFromApi(`/api/getStrategySetData`, true, {
+            "type": "getGameBatch",
+            "gameId": "'OpsMgt'"
+        }
+        );
+    let tableHeading = ['Period', 'Category', 'Part', 'Description', 'Quantity', 'Market_Info', 'Unit_Price', 'Currency', 'Price_Info'];
 
     if (gameDataIsLoading) return (<div>...Loading</div>);
     if (gameDataFailiureRes) return (<div>{gameDataFailiureRes}</div>);
@@ -22,9 +32,9 @@ export default function MarketFactorInfo() {
     const onMarketFactorInfoFormUpddate = (event) => {
         setShouldFetchMarketFactorInfo(false);
         if (event.currentTarget) {
-            selectedGameBatch = event.currentTarget.value;
+            setSelectedBatch(event.currentTarget.value);
         } else if (event.target) {
-            selectedGameBatch = event.target.value;
+            setSelectedBatch(event.target.value);
         }
     };
 
@@ -40,6 +50,9 @@ export default function MarketFactorInfo() {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <form onSubmit={marketFormInfoSumbit}>
+                <Grid container spacing={2} justifyContent="center" alignItems="center">
+                    <h1>Market Factor Info</h1>
+                </Grid>
                 <Grid sx={{ margin: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
                         <FormControl required sx={{ flexGrow: 1, width: '100%', maxWidth: 220 }}>
@@ -48,11 +61,11 @@ export default function MarketFactorInfo() {
                                 labelId="gameBatch"
                                 id="gameBatchRequired"
                                 name="gameBatch"
-                                value={selectedGameBatch}
                                 label="Game Batch *"
+                                value={selectedGameBatch}
                                 onChange={onMarketFactorInfoFormUpddate}>
                                 {
-                                    gameData?.map((mapObj) =>
+                                    gameBatchData?.map((mapObj) =>
                                         <MenuItem value={mapObj.Game_Batch}>{mapObj.Game_Batch}</MenuItem>
                                     )
                                 }
