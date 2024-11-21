@@ -13,8 +13,18 @@ export default function StrategyPlanApproval() {
     let [editableTableData, setEditableTableData] = useState([]);
 
 
-    let { apiResponse: gameIdData, apiFailureErrorRes: gameBatchFailureRes, isLoading: gameBatchIsLoading } = FetchDataFromApi('https://loving-humpback-monthly.ngrok-free.app/api/getStrategyPlan?type=getStrategyPlan&gameId=OpsMgt&gameBatch=1&gameTeam=ALPHA', true);
-    let { apiResponse: updateStrategyPlanAppr, apiFailureErrorRes: updateStrategyPlanFailureRes, isLoading: updateStrategyPlanIsLoading } = UpdateApiCall(strategyPlanRequestBody, `https://loving-humpback-monthly.ngrok-free.app/api/updateStrategyPlan`, shouldUpdateStrategyPlan);
+    let { apiResponse: gameIdData,
+        apiFailureErrorRes: gameBatchFailureRes,
+        isLoading: gameBatchIsLoading } = FetchDataFromApi('/api/getStrategyPlan', true, {
+            "type": "getStrategyPlan",
+            "gameId": "OpsMgt",
+            "gameBatch": "1",
+            "gameTeam": "ALPHA"
+        }
+        );
+    let { apiResponse: updateStrategyPlanAppr,
+        apiFailureErrorRes: updateStrategyPlanFailureRes,
+        isLoading: updateStrategyPlanIsLoading } = UpdateApiCall(strategyPlanRequestBody, `/api/updateStrategyPlan`, shouldUpdateStrategyPlan);
 
     useEffect(() => {
         if (gameIdData) {
