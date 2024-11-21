@@ -12,10 +12,10 @@ export default function MarketFactorInfo() {
     let { apiResponse: gameData, apiFailureErrorRes: gameDataFailiureRes, isLoading: gameDataIsLoading } = FetchDataFromApi('https://loving-humpback-monthly.ngrok-free.app/api/data', true);
     let { apiResponse: marketFactorInfo, apiFailureErrorRes: marketFactorInfoFailedRes, isLoading: marketFactorInfoIsLoading } = FetchDataFromApi(`https://loving-humpback-monthly.ngrok-free.app/api/getMarketFactorInfo'`, shouldFetchMarketFactorInfo);
 
-    let tableHeading = Object.keys(marketFactorInfo[0]);
+    let tableHeading = [];
 
     if (gameDataIsLoading || marketFactorInfoIsLoading) return (<div>...Loading</div>);
-    if (gameDataFailiureRes) return (<div>{gameBatchFailureRes}</div>);
+    if (gameDataFailiureRes) return (<div>{gameDataFailiureRes}</div>);
 
     const onMarketFactorInfoFormUpddate = (event) => {
         setShouldFetchMarketFactorInfo(false);
