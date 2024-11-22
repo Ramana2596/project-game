@@ -9,6 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
+import { dateColumns } from '../constants/globalConstants';
+import { formatDate } from '../utils/formatDate';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -31,7 +33,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditableTable }) {
+function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditableTable = false }) {
     let tableValueSet = inputTableData?.map((tableDataObj) => {
         return Object.values(tableDataObj);
     });
@@ -41,7 +43,8 @@ function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditab
         Object.keys(tableObj).forEach((key) => {
             transFormedItem[key] = {
                 value: tableObj[key],
-                inputType: key === 'Game_Id' ? 'checkbox' : 'readOnly'
+                inputType: key === 'Game_Id' ? 'checkbox' : 'readOnly',
+                valueType: dateColumns.includes(key.toLowerCase()) ? 'date' : 'text'
             }
         });
         return transFormedItem;
@@ -126,7 +129,10 @@ function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditab
                                         {
                                             Object.keys(valueObj).map((key) => {
                                                 return (<StyledTableCell align="right">
-                                                    {valueObj[key]}
+                                                    {
+                                                        dateColumns.some((column) => column.includes(key.toLowerCase())) 
+                                                        || (key.toLowerCase()).includes('date') ? formatDate(valueObj[key]) : valueObj[key]
+                                                    }
                                                 </StyledTableCell>)
                                             })
                                         }
