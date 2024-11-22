@@ -11,6 +11,8 @@ import Paper from '@mui/material/Paper';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { useState } from "react";
+import { dateColumns } from '../constants/globalConstants';
+import { formatDate } from '../utils/formatDate';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -85,7 +87,10 @@ function EditableTable({ editableTableData, onCheckboxChange, hiddenColumns }) {
                                                 if (!hiddenColumns.includes(key)) {
                                                     const cellClass = valueObj[key]?.value?.length > 13 ? 'large-cell' : '';
                                                     return valueObj[key].inputType === 'readOnly' ? (<StyledTableCell className={cellClass} align="center">
-                                                        {valueObj[key].value}
+                                                        {
+                                                            dateColumns.some((column) => column.includes(key.toLowerCase()))
+                                                                || (key.toLowerCase()).includes('date') ? formatDate(valueObj[key].value) : valueObj[key].value
+                                                        }
                                                     </StyledTableCell>) : (<FormControlLabel
                                                         control={<Checkbox
                                                             checked={valueObj[key].value}

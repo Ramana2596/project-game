@@ -24,7 +24,7 @@ export default function MarketFactorInfo() {
             "gameId": "'OpsMgt'"
         }
         );
-    let tableHeading = ['Period', 'Category', 'Part', 'Description', 'Quantity', 'Market_Info', 'Unit_Price', 'Currency', 'Price_Info'];
+    let tableHeading = ['Period', 'Category', 'Description', 'Quantity', 'Market_Info', 'Unit_Price', 'Currency', 'Price_Info'];
 
     if (gameDataIsLoading) return (<div>...Loading</div>);
     if (gameDataFailiureRes) return (<div>{gameDataFailiureRes}</div>);
@@ -79,7 +79,7 @@ export default function MarketFactorInfo() {
                     </Button>
                 </Grid>
             </form>
-            <GenericTable inputTableHeadings={tableHeading} inputTableData={marketFactorInfo} ifNoData={marketFactorInfoFailedRes}></GenericTable>
+            <GenericTable inputTableHeadings={tableHeading} inputTableData={marketFactorInfo} ifNoData={marketFactorInfoFailedRes} hiddenColumns={['Part']}></GenericTable>
         </Box>
     );
 }
