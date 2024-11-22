@@ -33,7 +33,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditableTable = false }) {
+function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditableTable = false, hiddenColumns = [] }) {
     let tableValueSet = inputTableData?.map((tableDataObj) => {
         return Object.values(tableDataObj);
     });
@@ -60,9 +60,11 @@ function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditab
                         <TableHead>
                             <TableRow>
                                 {inputTableHeadings?.map(headingString => {
-                                    return (<StyledTableCell align="right">
-                                        {headingString}
-                                    </StyledTableCell>)
+                                    if (!hiddenColumns.includes(headingString)) {
+                                        return (<StyledTableCell align="right">
+                                            {headingString}
+                                        </StyledTableCell>)
+                                    }
                                 })}
                             </TableRow>
                         </TableHead>
@@ -93,14 +95,15 @@ function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditab
                                     return (<StyledTableRow align="right">
                                         {
                                             Object.keys(valueSet).map((key) => {
-                                                return (<StyledTableCell align="right">
-                                                    {valueSet[key]?.inputType === 'checkbox' ? <DoneAllIcon /> : valueSet[key]?.value}
-                                                </StyledTableCell>)
+                                                if (!hiddenColumns.includes(key)) {
+                                                    return (<StyledTableCell align="right">
+                                                        {valueSet[key]?.inputType === 'checkbox' ? <DoneAllIcon /> : valueSet[key]?.value}
+                                                    </StyledTableCell>)
+                                                }
                                             })
                                         }
                                     </StyledTableRow>)
                                 })
-
                             }
 
                         </TableBody>
@@ -128,12 +131,14 @@ function GenericTable({ inputTableHeadings, inputTableData, ifNoData, isAnEditab
                                     return (<StyledTableRow align="right">
                                         {
                                             Object.keys(valueObj).map((key) => {
-                                                return (<StyledTableCell align="right">
-                                                    {
-                                                        dateColumns.some((column) => column.includes(key.toLowerCase())) 
-                                                        || (key.toLowerCase()).includes('date') ? formatDate(valueObj[key]) : valueObj[key]
-                                                    }
-                                                </StyledTableCell>)
+                                                if (!hiddenColumns.includes(key)) {
+                                                    return (<StyledTableCell align="right">
+                                                        {
+                                                            dateColumns.some((column) => column.includes(key.toLowerCase()))
+                                                                || (key.toLowerCase()).includes('date') ? formatDate(valueObj[key]) : valueObj[key]
+                                                        }
+                                                    </StyledTableCell>)
+                                                }
                                             })
                                         }
                                     </StyledTableRow>)
