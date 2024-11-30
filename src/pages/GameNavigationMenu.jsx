@@ -9,6 +9,7 @@ import GameDashboard from './GameDashboard';
 import StrategyLaunched from './StrategyLaunched';
 import StrategyPlan from './StrategyPlanApproval';
 import MarketFactorInfo from './MarketFactorInfo';
+import MarketFactorInfoInput from './MarketFactorInfoInput/MarketFactorInfoInput';
 
 
 export default function TemporaryDrawer({ openState, toggleDrawer }) {
@@ -20,7 +21,8 @@ export default function TemporaryDrawer({ openState, toggleDrawer }) {
     { displayText: 'Game Session', routePath: '/operationGame/gameSession', routeElement: <GameSession /> },
     { displayText: 'Strategy Launched', routePath: '/operationGame/strategyLaunched', routeElement: <StrategyLaunched /> },
     { displayText: 'Strategy Plan Approval', routePath: '/operationGame/strategyPlanApproval', routeElement: <StrategyPlan /> },
-    { displayText: 'Market Factor Info', routePath: '/operationGame/marketFactorInfo', routeElement: <MarketFactorInfo /> }
+    { displayText: 'Market Factor Info', routePath: '/operationGame/marketFactorInfo', routeElement: <MarketFactorInfo /> },
+    { displayText: 'Market Factor Info Input', routePath: '/operationGame/marketFactorInfoInput', routeElement: <MarketFactorInfoInput /> }
   ];
 
   const DrawerList = (

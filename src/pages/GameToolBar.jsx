@@ -11,6 +11,7 @@ import GameDashboard from "./GameDashboard";
 import StrategyLaunched from './StrategyLaunched';
 import StrategyPlanApproval from "./StrategyPlanApproval";
 import MarketFactorInfo from "./MarketFactorInfo";
+import MarketFactorInfoInput from "./MarketFactorInfoInput/MarketFactorInfoInput";
 
 export default function BasicTabs() {
   const [open, setOpen] = useState(false);
@@ -47,6 +48,7 @@ export default function BasicTabs() {
         <Route path="/strategyLaunched" element={<StrategyLaunched />} />
         <Route path="/strategyPlanApproval" element={<StrategyPlanApproval />} />
         <Route path="/marketFactorInfo" element={<MarketFactorInfo />} />
+        <Route path="/marketFactorInfoInput" element={<MarketFactorInfoInput />} />
       </Routes>
     </Box>
   );
