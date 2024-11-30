@@ -3,21 +3,21 @@ import { InputLabel, FormControl, Select, MenuItem, CircularProgress, Alert } fr
 import Grid from '@mui/material/Grid2';
 import { getMarketFactorInfoFormData } from '../services/getMArketInfoInput';
 
-export default function GameBatch({ gameBatch, onFormControlUpdate }) {
+export default function InfoPrice({ infoPrice, onFormControlUpdate }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [gameBatchData, setGameBatchData] = useState([]);
+    const [infoPriceData, setInfoPriceData] = useState([]);
 
-    const gameBatchResponse = getMarketFactorInfoFormData('getBatch', 'OpsMgt');
+    const infoPriceResponse = getMarketFactorInfoFormData('getBatch', 'OpsMgt');
 
     useEffect(() => {
         setLoading(false);
-        if (gameBatchResponse?.apiResponse) {
-            setGameBatchData(gameBatchResponse?.apiResponse);
-        } else if (gameBatchResponse?.apiFailureErrorRes) {
-            setError(gameBatchResponse.apiFailureErrorRes);
+        if (infoPriceResponse?.apiResponse) {
+            setInfoPriceData(infoPriceResponse?.apiResponse);
+        } else if (infoPriceResponse?.apiFailureErrorRes) {
+            setError(infoPriceResponse.apiFailureErrorRes);
         }
-    }, [gameBatchResponse])
+    }, [infoPriceResponse])
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -27,13 +27,13 @@ export default function GameBatch({ gameBatch, onFormControlUpdate }) {
     return (
         <Grid size={{ xs: 2, sm: 4, md: 4 }}>
             <FormControl required sx={{ flexGrow: 1, width: '100%', maxWidth: 220 }}>
-                <InputLabel id="gameBatch">Game Batch</InputLabel>
+                <InputLabel id="infoPrice">Price Info</InputLabel>
                 <Select
-                    labelId="gameBatch"
-                    id="gameBatchRequired"
-                    name="gameBatch"
-                    value={gameBatch}
-                    label="Game Batch *"
+                    labelId="infoPrice"
+                    id="infoPriceRequired"
+                    name="infoPrice"
+                    value={infoPrice}
+                    label="Price Info *"
                     onChange={handleChange}
                     disabled={loading}
                 >
@@ -46,7 +46,7 @@ export default function GameBatch({ gameBatch, onFormControlUpdate }) {
                             <Alert severity="error">{error}</Alert>
                         </MenuItem>
                     ) : (
-                        gameBatchData?.map((batch, index) => (
+                        infoPriceData?.map((batch, index) => (
                             <MenuItem key={index} value={batch.Game_Batch}>
                                 {batch.Game_Batch}
                             </MenuItem>
