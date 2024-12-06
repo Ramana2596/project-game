@@ -15,6 +15,7 @@ import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
 import ColorModeSelect from './theme/ColorModeSelect';
 import { useNavigate } from "react-router-dom";
+import { useUser } from '../../core/access/userContext'; // Import the useUser hook
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -66,6 +67,7 @@ export default function SignIn(props) {
   const [open, setOpen] = React.useState(false);
   const [isValidUser, setValidUser] = React.useState(false);
   const routeHistory = useNavigate();
+  const { login } = useUser(); // Destructure the login function from useUser
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -76,8 +78,8 @@ export default function SignIn(props) {
   };
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     if (emailError || passwordError) {
-      event.preventDefault();
       return;
     }
 
@@ -88,9 +90,10 @@ export default function SignIn(props) {
 
   const validateInputs = () => {
     const email = document.getElementById('email');
-    const password = document.getElementById('password');
+    // const password = document.getElementById('password');
 
     let isValid = true;
+    login('faculty');
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
@@ -101,14 +104,14 @@ export default function SignIn(props) {
       setEmailErrorMessage('');
     }
 
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
+    // if (!password.value || password.value.length < 6) {
+    //   setPasswordError(true);
+    //   setPasswordErrorMessage('Password must be at least 6 characters long.');
+    //   isValid = false;
+    // } else {
+    //   setPasswordError(false);
+    //   setPasswordErrorMessage('');
+    // }
 
     if (isValid) {
       setValidUser(true);
@@ -158,7 +161,7 @@ export default function SignIn(props) {
                 sx={{ ariaLabel: 'email' }}
               />
             </FormControl>
-            <FormControl>
+            {/* <FormControl>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <FormLabel htmlFor="password">Password</FormLabel>
                 <Link
@@ -190,7 +193,7 @@ export default function SignIn(props) {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <ForgotPassword open={open} handleClose={handleClose} />
+            <ForgotPassword open={open} handleClose={handleClose} /> */}
             <Button
               type="submit"
               fullWidth
@@ -199,7 +202,7 @@ export default function SignIn(props) {
             >
               Sign in
             </Button>
-            <Typography sx={{ textAlign: 'center' }}>
+            {/* <Typography sx={{ textAlign: 'center' }}>
               Don&apos;t have an account?{' '}
               <span>
                 <Link
@@ -210,7 +213,7 @@ export default function SignIn(props) {
                   Sign up
                 </Link>
               </span>
-            </Typography>
+            </Typography> */}
           </Box>
         </Card>
       </SignInContainer>

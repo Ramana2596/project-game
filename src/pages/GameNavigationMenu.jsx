@@ -1,37 +1,18 @@
 
 import Box from '@mui/material/Box';
-import GameMaster from './GameMaster';
-import GameBatch from './GameBatch';
 import { Divider, Drawer, List, ListItemButton, ListItem, ListItemText } from '@mui/material';
 import { Link } from "react-router-dom";
-import GameSession from './GameSession';
-import GameDashboard from './GameDashboard';
-import StrategyLaunched from './StrategyLaunched';
-import StrategyPlan from './StrategyPlanApproval';
-import MarketFactorInfo from './MarketFactorInfo';
-import MarketFactorInfoInput from './MarketFactorInfoInput/MarketFactorInfoInput';
-
+import { componentList } from "../constants/globalConstants";
 
 export default function TemporaryDrawer({ openState, toggleDrawer }) {
-
-  const formList = [
-    { displayText: 'Game Dashboard', routePath: '/operationGame/gameDashboard', routeElement: <GameDashboard /> },
-    { displayText: 'Game Master', routePath: '/operationGame/gameMaster', routeElement: <GameMaster /> },
-    { displayText: 'Game Batch', routePath: '/operationGame/gameBatch', routeElement: <GameBatch /> },
-    { displayText: 'Game Session', routePath: '/operationGame/gameSession', routeElement: <GameSession /> },
-    { displayText: 'Strategy Launched', routePath: '/operationGame/strategyLaunched', routeElement: <StrategyLaunched /> },
-    { displayText: 'Strategy Plan Approval', routePath: '/operationGame/strategyPlanApproval', routeElement: <StrategyPlan /> },
-    { displayText: 'Market Factor Info', routePath: '/operationGame/marketFactorInfo', routeElement: <MarketFactorInfo /> },
-    { displayText: 'Market Factor Info Input', routePath: '/operationGame/marketFactorInfoInput', routeElement: <MarketFactorInfoInput /> }
-  ];
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        {formList.map((formListObj) => (
-          <ListItem sx={{ color: 'black' }} disablePadding component={Link} to={formListObj.routePath}>
+        {componentList.map((componentObj) => (
+          <ListItem sx={{ color: 'black' }} disablePadding component={Link} to={componentObj.routePath}>
             <ListItemButton>
-              <ListItemText primary={formListObj.displayText} />
+              <ListItemText primary={componentObj.displayText} />
             </ListItemButton>
             <Divider />
           </ListItem>
