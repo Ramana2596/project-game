@@ -67,7 +67,7 @@ export default function SignIn(props) {
   const [open, setOpen] = React.useState(false);
   const [isValidUser, setValidUser] = React.useState(false);
   const routeHistory = useNavigate();
-  const { login } = useUser(); // Destructure the login function from useUser
+  const { login } = useUser();
 
   const handleClickOpen = () => {
     setOpen(true);

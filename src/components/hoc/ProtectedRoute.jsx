@@ -7,7 +7,7 @@ const ProtectedRoute = ({ component: Component, permission, ...rest }) => {
     const { hasPermission } = useUser();
 
     if (!hasPermission(permission)) {
-        return <Navigate to="/" />;
+        return <Navigate to="/accessDenied" />;
     }
     return Component;
 };

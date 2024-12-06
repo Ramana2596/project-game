@@ -5,14 +5,14 @@ import { roles } from '../../constants/userRoleConstants';
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState({ role: 'faculty' });
+    const [user, setUser] = useState({ role: null });
 
     const login = (role) => {
         setUser({ role });
     };
 
     const logout = () => {
-        setUser({ role: 'faculty' });
+        setUser({ role: null });
     };
 
     const hasPermission = (permission) => {

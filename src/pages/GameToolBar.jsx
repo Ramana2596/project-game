@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AppBar, Box, Toolbar } from "@mui/material"
+import { AppBar, Box, Toolbar, Typography } from "@mui/material"
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import GameNavigationMenu from './GameNavigationMenu';
@@ -12,6 +12,8 @@ import StrategyLaunched from './StrategyLaunched';
 import StrategyPlanApproval from "./StrategyPlanApproval";
 import MarketFactorInfo from "./MarketFactorInfo";
 import MarketFactorInfoInput from "./MarketFactorInfoInput/MarketFactorInfoInput";
+import ProtectedRoute from "../components/hoc/ProtectedRoute";
+import SignOutButton from "../components/SignOutButton";
 
 export default function BasicTabs() {
   const [open, setOpen] = useState(false);
@@ -34,9 +36,10 @@ export default function BasicTabs() {
           >
             <MenuIcon />
           </IconButton>
-          <div variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Welcome to Operation Game
-          </div>
+          </Typography>
+          <SignOutButton></SignOutButton>
         </Toolbar>
       </AppBar>
       <GameNavigationMenu openState={open} toggleDrawer={toggleDrawer} />
@@ -45,8 +48,8 @@ export default function BasicTabs() {
         <Route path="/gameMaster" element={<GameMaster />} />
         <Route path="/gameBatch" element={<GameBatch />} />
         <Route path="/gameSession" element={<GameSession />} />
-        <Route path="/strategyLaunched" element={<StrategyLaunched />} />
-        <Route path="/strategyPlanApproval" element={<StrategyPlanApproval />} />
+        <Route path="/strategyLaunched" element={<ProtectedRoute component={<StrategyLaunched />} permission={'UI 001'} />} />
+        <Route path="/strategyPlanApproval" element={<ProtectedRoute component={<StrategyPlanApproval />} permission={'UI 002'} />} />
         <Route path="/marketFactorInfo" element={<MarketFactorInfo />} />
         <Route path="/marketFactorInfoInput" element={<MarketFactorInfoInput />} />
       </Routes>
