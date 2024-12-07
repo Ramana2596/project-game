@@ -2,8 +2,6 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import GameToolBar from './pages/GameToolBar';
 import SignIn from './pages/SignIn/SignIn';
-import ProtectedRoute from './components/hoc/ProtectedRoute';
-import AccessDenied from './components/AccessDenied';
 
 function App() {
 
@@ -11,8 +9,7 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<SignIn />}></Route>
-        <Route path="/operationGame/*" element={<ProtectedRoute component={<GameToolBar />} permission="UI 001" />} />
-        <Route path="/accessDenied" element={<AccessDenied />}></Route>
+        <Route path="/operationGame/*" element={<GameToolBar />} />
       </Routes>
     </div>
   );

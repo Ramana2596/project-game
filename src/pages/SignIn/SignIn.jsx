@@ -15,7 +15,9 @@ import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
 import ColorModeSelect from './theme/ColorModeSelect';
 import { useNavigate } from "react-router-dom";
-import { useUser } from '../../core/access/userContext'; // Import the useUser hook
+import { useUser } from '../../core/access/userContext';
+import { getUserDetails } from './services/signInServices';
+import FetchDataFromApi from '../../hooks/fetchData';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -66,8 +68,17 @@ export default function SignIn(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [isValidUser, setValidUser] = React.useState(false);
+  const [isApiCallMade, setIsApiCallMade] = React.useState(false);
   const routeHistory = useNavigate();
   const { login } = useUser();
+  let userDetailsObj = { apiResponse: null,
+    apiFailureErrorRes: null,
+    isLoading: null };
+
+    // let { apiResponse: getStrategySetNoData,
+    //   apiFailureErrorRes: getStrategySetNoDataFailed,
+    //   isLoading: getStrategySetNoDataIsLoading } = getUserDetails('getBatch', 'OpsMgt', isApiCallMade);
+    let { apiResponse: userDetailsResponse, apiFailureErrorRes: userDetailsFailure, isLoading: useerDetailsLoading } = FetchDataFromApi('/api/data', isApiCallMade);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -93,7 +104,9 @@ export default function SignIn(props) {
     // const password = document.getElementById('password');
 
     let isValid = true;
-    login('faculty');
+    // const userRoleDetails = getUserDetails('getBatch', 'OpsMgt');
+    setIsApiCallMade(true);
+    login('participant');
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
@@ -119,6 +132,8 @@ export default function SignIn(props) {
       setValidUser(false);
     }
   };
+
+  if (useerDetailsLoading) return (<div>...Loading</div>);
 
   return (
     <div>

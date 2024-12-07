@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppBar, Box, Toolbar, Typography } from "@mui/material"
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -12,7 +12,6 @@ import StrategyLaunched from './StrategyLaunched';
 import StrategyPlanApproval from "./StrategyPlanApproval";
 import MarketFactorInfo from "./MarketFactorInfo";
 import MarketFactorInfoInput from "./MarketFactorInfoInput/MarketFactorInfoInput";
-import ProtectedRoute from "../components/hoc/ProtectedRoute";
 import SignOutButton from "../components/SignOutButton";
 
 export default function BasicTabs() {
@@ -48,8 +47,8 @@ export default function BasicTabs() {
         <Route path="/gameMaster" element={<GameMaster />} />
         <Route path="/gameBatch" element={<GameBatch />} />
         <Route path="/gameSession" element={<GameSession />} />
-        <Route path="/strategyLaunched" element={<ProtectedRoute component={<StrategyLaunched />} permission={'UI 001'} />} />
-        <Route path="/strategyPlanApproval" element={<ProtectedRoute component={<StrategyPlanApproval />} permission={'UI 002'} />} />
+        <Route path="/strategyLaunched" element={<StrategyLaunched />} />
+        <Route path="/strategyPlanApproval" element={<StrategyPlanApproval />} />
         <Route path="/marketFactorInfo" element={<MarketFactorInfo />} />
         <Route path="/marketFactorInfoInput" element={<MarketFactorInfoInput />} />
       </Routes>

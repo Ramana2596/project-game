@@ -8,14 +8,14 @@ import GameMaster from '../pages/GameMaster';
 import GameBatch from '../pages/GameBatch';
 
 export const componentList = [
-  { id: '', displayText: 'Game Dashboard', routePath: '/operationGame/gameDashboard', routeElement: <GameDashboard /> },
-  { id: '', displayText: 'Game Master', routePath: '/operationGame/gameMaster', routeElement: <GameMaster /> },
-  { id: '', displayText: 'Game Batch', routePath: '/operationGame/gameBatch', routeElement: <GameBatch /> },
-  { id: '', displayText: 'Game Session', routePath: '/operationGame/gameSession', routeElement: <GameSession /> },
-  { id: 'UI 001', displayText: 'Strategy Launched', routePath: '/operationGame/strategyLaunched', routeElement: <StrategyLaunched /> },
-  { id: 'UI 002', displayText: 'Strategy Plan Approval', routePath: '/operationGame/strategyPlanApproval', routeElement: <StrategyPlan /> },
-  { id: 'UI 003', displayText: 'Market Factor Info', routePath: '/operationGame/marketFactorInfo', routeElement: <MarketFactorInfo /> },
-  { id: 'UI 004', displayText: 'Market Factor Info Input', routePath: '/operationGame/marketFactorInfoInput', routeElement: <MarketFactorInfoInput /> }
+  { id: '', displayText: 'Game Dashboard', path: '/gameDashboard', routePath: '/operationGame/gameDashboard', routeElement: <GameDashboard /> },
+  { id: '', displayText: 'Game Master', path: '/gameMaster', routePath: '/operationGame/gameMaster', routeElement: <GameMaster /> },
+  { id: '', displayText: 'Game Batch', path: '/gameBatch', routePath: '/operationGame/gameBatch', routeElement: <GameBatch /> },
+  { id: '', displayText: 'Game Session', path: '/gameSession', routePath: '/operationGame/gameSession', routeElement: <GameSession /> },
+  { id: 'UI 001', displayText: 'Strategy Launched', path: '/strategyLaunched', routePath: '/operationGame/strategyLaunched', routeElement: <StrategyLaunched /> },
+  { id: 'UI 002', displayText: 'Strategy Plan Approval', path: '/strategyPlanApproval', routePath: '/operationGame/strategyPlanApproval', routeElement: <StrategyPlan /> },
+  { id: 'UI 003', displayText: 'Market Factor Info', path: '/marketFactorInfo', routePath: '/operationGame/marketFactorInfo', routeElement: <MarketFactorInfo /> },
+  { id: 'UI 004', displayText: 'Market Factor Info Input', path: '/marketFactorInfoInput', routePath: '/operationGame/marketFactorInfoInput', routeElement: <MarketFactorInfoInput /> }
 ];
 
 export const dateColumns = [

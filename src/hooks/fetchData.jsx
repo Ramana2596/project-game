@@ -4,7 +4,7 @@ function FetchDataFromApi(apiEndpoint, shouldTrigger, queryParams = null) {
     const apiBaseUrl = 'https://loving-humpback-monthly.ngrok-free.app';
     const [apiResponse, setApiResponse] = useState(null);
     const [apiFailureErrorRes, setApiFailureRes] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     let queryString = queryParams ? new URLSearchParams(queryParams).toString() : queryParams;
     let apiUrl = '';
     if (queryString) {
@@ -16,6 +16,7 @@ function FetchDataFromApi(apiEndpoint, shouldTrigger, queryParams = null) {
     useEffect(() => {
         async function makeApiCall() {
             try {
+                setIsLoading(true);
                 const res = await fetch(apiUrl, {
                     headers: {
                         'ngrok-skip-browser-warning': 'true'
