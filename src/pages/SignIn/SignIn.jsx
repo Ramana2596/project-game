@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles';
 import ColorModeSelect from './theme/ColorModeSelect';
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../../core/access/userContext';
-import { getUserDetails } from './services/signInServices';
+import { getUserAccessPageIds, getUserDetails } from './services/signInServices';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -69,8 +69,9 @@ export default function SignIn(props) {
 
   React.useEffect(() => {
     if (userDetailsResponse && userDetailsResponse.length > 0) {
-      login(userDetailsResponse[0]?.role?.toLowerCase());
+      login(userDetailsResponse[0]?.role);
       setValidUser(true);
+
     } else {
       setValidUser(false);
     }
@@ -79,7 +80,7 @@ export default function SignIn(props) {
     if (isValidUser) {
       routeHistory('/operationGame/gameDashboard');
     }
-    
+
   }, [userDetailsResponse, isValidUser]);
 
   const handleSubmit = (event) => {

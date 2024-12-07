@@ -1,12 +1,11 @@
-// UserContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { roles } from '../../constants/userRoleConstants';
 import { componentList } from "../../constants/globalConstants";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState({ role: null });
+    const [userAccessablePageIds, setUserAccessablePageIds] = useState(null);
     const [userAccessiblePages, setUserAccessiblePages] = useState(null);
 
 
@@ -14,12 +13,17 @@ export const UserProvider = ({ children }) => {
         setUser({ role });
     };
 
+    const setAccessablePageIds = ((accessablePageIdList) => {
+        const tempArray = accessablePageIdList?.map((accessablePageIdObj) => accessablePageIdObj?.uiId);
+        setUserAccessablePageIds(tempArray);
+    })
+
     useEffect(() => {
         if (user?.role) {
-            const filteredArray = componentList.filter(item => roles[user.role]?.includes(item.id));
+            const filteredArray = componentList.filter(item => userAccessablePageIds?.includes(item.id));
             setUserAccessiblePages(filteredArray);
         }
-    }, [user?.role]);
+    }, [userAccessablePageIds]);
 
     const logout = () => {
         setUser({ role: null });
@@ -27,11 +31,11 @@ export const UserProvider = ({ children }) => {
     };
 
     const hasPermission = (permission) => {
-        return roles[user.role]?.includes(permission);
+        return userAccessablePageIds?.includes(permission);
     };
 
     return (
-        <UserContext.Provider value={{ user, userAccessiblePages, login, logout, hasPermission }}>
+        <UserContext.Provider value={{ user, userAccessiblePages, login, logout, hasPermission, setAccessablePageIds }}>
             {children}
         </UserContext.Provider>
     );

@@ -2,20 +2,28 @@ import { useEffect, useState } from "react";
 import { AppBar, Box, Toolbar, Typography } from "@mui/material"
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import GameNavigationMenu from './GameNavigationMenu';
-import GameMaster from './GameMaster';
-import GameBatch from './GameBatch';
+import GameNavigationMenu from '../GameNavigationMenu';
+import GameMaster from '../GameMaster';
+import GameBatch from '../GameBatch';
 import { Routes, Route } from "react-router-dom";
-import GameSession from "./GameSession";
-import GameDashboard from "./GameDashboard";
-import StrategyLaunched from './StrategyLaunched';
-import StrategyPlanApproval from "./StrategyPlanApproval";
-import MarketFactorInfo from "./MarketFactorInfo";
-import MarketFactorInfoInput from "./MarketFactorInfoInput/MarketFactorInfoInput";
-import SignOutButton from "../components/SignOutButton";
+import GameSession from "../GameSession";
+import GameDashboard from "../GameDashboard";
+import StrategyLaunched from '../StrategyLaunched';
+import StrategyPlanApproval from "../StrategyPlanApproval";
+import MarketFactorInfo from "../MarketFactorInfo";
+import MarketFactorInfoInput from "../MarketFactorInfoInput/MarketFactorInfoInput";
+import SignOutButton from "../../components/SignOutButton";
+import { useUser } from "../../core/access/userContext";
+import { getUserAccessPageIds } from "./services/indexService";
 
-export default function BasicTabs() {
+export default function Index() {
   const [open, setOpen] = useState(false);
+  const { user, setAccessablePageIds } = useUser();
+  const { apiResponse: userAccessablePageIdsResponse, apiFailureErrorRes: failiureRespnes, isLoading: userAccessablePageIdsLoading } = getUserAccessPageIds(user?.role);
+
+  useEffect(() => {
+    setAccessablePageIds(userAccessablePageIdsResponse);
+  }, [userAccessablePageIdsResponse])
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
