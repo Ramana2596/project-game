@@ -1,23 +1,17 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
-import ForgotPassword from './ForgotPassword';
 import ColorModeSelect from './theme/ColorModeSelect';
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../../core/access/userContext';
 import { getUserDetails } from './services/signInServices';
-import FetchDataFromApi from '../../hooks/fetchData';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -61,36 +55,36 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
+
 export default function SignIn(props) {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [open, setOpen] = React.useState(false);
   const [isValidUser, setValidUser] = React.useState(false);
-  const [isApiCallMade, setIsApiCallMade] = React.useState(false);
+  const [shouldTriggerApiCall, setShouldTriggerApiCall] = React.useState(false);
+  const [userEmail, setUserEmailValue] = React.useState(null);
   const routeHistory = useNavigate();
   const { login } = useUser();
-  let userDetailsObj = { apiResponse: null,
-    apiFailureErrorRes: null,
-    isLoading: null };
 
-    // let { apiResponse: getStrategySetNoData,
-    //   apiFailureErrorRes: getStrategySetNoDataFailed,
-    //   isLoading: getStrategySetNoDataIsLoading } = getUserDetails('getBatch', 'OpsMgt', isApiCallMade);
-    let { apiResponse: userDetailsResponse, apiFailureErrorRes: userDetailsFailure, isLoading: useerDetailsLoading } = FetchDataFromApi('/api/data', isApiCallMade);
+  const { apiResponse: userDetailsResponse, apiFailureErrorRes: userDetailsFailure, isLoading: userDetailsLoading } = getUserDetails(userEmail, shouldTriggerApiCall);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  React.useEffect(() => {
+    if (userDetailsResponse && userDetailsResponse.length > 0) {
+      login(userDetailsResponse[0]?.role?.toLowerCase());
+      setValidUser(true);
+    } else {
+      setValidUser(false);
+    }
+    setShouldTriggerApiCall(false);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    if (isValidUser) {
+      routeHistory('/operationGame/gameDashboard');
+    }
+    
+  }, [userDetailsResponse, isValidUser]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (emailError || passwordError) {
+    if (emailError) {
       return;
     }
 
@@ -99,41 +93,21 @@ export default function SignIn(props) {
     }
   };
 
-  const validateInputs = () => {
+  const onLoginClick = () => {
     const email = document.getElementById('email');
-    // const password = document.getElementById('password');
-
-    let isValid = true;
-    // const userRoleDetails = getUserDetails('getBatch', 'OpsMgt');
-    setIsApiCallMade(true);
-    login('participant');
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
       setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
     } else {
       setEmailError(false);
       setEmailErrorMessage('');
-    }
-
-    // if (!password.value || password.value.length < 6) {
-    //   setPasswordError(true);
-    //   setPasswordErrorMessage('Password must be at least 6 characters long.');
-    //   isValid = false;
-    // } else {
-    //   setPasswordError(false);
-    //   setPasswordErrorMessage('');
-    // }
-
-    if (isValid) {
-      setValidUser(true);
-    } else {
-      setValidUser(false);
+      setUserEmailValue(email.value);
+      setShouldTriggerApiCall(true);
     }
   };
 
-  if (useerDetailsLoading) return (<div>...Loading</div>);
+  if (userDetailsLoading) return (<div>...Loading</div>);
 
   return (
     <div>
@@ -176,59 +150,14 @@ export default function SignIn(props) {
                 sx={{ ariaLabel: 'email' }}
               />
             </FormControl>
-            {/* <FormControl>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <Link
-                  component="button"
-                  type="button"
-                  onClick={handleClickOpen}
-                  variant="body2"
-                  sx={{ alignSelf: 'baseline' }}
-                >
-                  Forgot your password?
-                </Link>
-              </Box>
-              <TextField
-                error={passwordError}
-                helperText={passwordErrorMessage}
-                name="password"
-                placeholder="••••••"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                autoFocus
-                required
-                fullWidth
-                variant="outlined"
-                color={passwordError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <ForgotPassword open={open} handleClose={handleClose} /> */}
             <Button
-              type="submit"
+              type="button"
               fullWidth
               variant="contained"
-              onClick={validateInputs}
+              onClick={onLoginClick}
             >
               Sign in
             </Button>
-            {/* <Typography sx={{ textAlign: 'center' }}>
-              Don&apos;t have an account?{' '}
-              <span>
-                <Link
-                  href="/material-ui/getting-started/templates/sign-in/"
-                  variant="body2"
-                  sx={{ alignSelf: 'center' }}
-                >
-                  Sign up
-                </Link>
-              </span>
-            </Typography> */}
           </Box>
         </Card>
       </SignInContainer>
