@@ -8,7 +8,7 @@ import GameMaster from '../pages/GameMaster';
 import GameBatch from '../pages/GameBatch';
 
 export const componentList = [
-  { id: '', displayText: 'Game Dashboard', path: '/gameDashboard', routePath: '/operationGame/gameDashboard', routeElement: <GameDashboard /> },
+  { id: 'UI 005', displayText: 'Game Dashboard', path: '/gameDashboard', routePath: '/operationGame/gameDashboard', routeElement: <GameDashboard /> },
   { id: '', displayText: 'Game Master', path: '/gameMaster', routePath: '/operationGame/gameMaster', routeElement: <GameMaster /> },
   { id: '', displayText: 'Game Batch', path: '/gameBatch', routePath: '/operationGame/gameBatch', routeElement: <GameBatch /> },
   { id: '', displayText: 'Game Session', path: '/gameSession', routePath: '/operationGame/gameSession', routeElement: <GameSession /> },
