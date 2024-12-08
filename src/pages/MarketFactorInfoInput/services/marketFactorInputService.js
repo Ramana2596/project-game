@@ -6,3 +6,10 @@ export function getMarketFactorInfoFormData(requestType, gameId) {
         "gameId": gameId
     });
 }
+
+export function getMarketFactorInfoTableData(requestType, formData, shouldTriggerApi) {
+    return FetchDataFromApi('/api/getMarketFactorInfoInput', shouldTriggerApi, {
+        "type": requestType,
+        ...formData
+    });
+}
