@@ -4,6 +4,6 @@ export const formatDate = (date, locale = 'en-US') => {
       day: '2-digit',
       month: 'short',
       year: 'numeric'
-    }).format(new Date(date)).replace(/ /g, '');
+    }).format(new Date(date)).replace(/  /g, '');
   };
   

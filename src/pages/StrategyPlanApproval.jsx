@@ -74,8 +74,8 @@ export default function StrategyPlanApproval() {
                     <h1>Strategy Plan Approval</h1>
                 </Grid>
                 <Grid container spacing={2} justifyContent="center" alignItems="center">
-                    <h3>Game Batch</h3>
-                    <h3>Game Team</h3>
+                    <h3>Game Batch: 1</h3>
+                    <h3>Game Team: ALPHA</h3>
                 </Grid>
                 <Grid container spacing={2} justifyContent="center" alignItems="center">
                     <Button type="submit" variant="contained" onClick={strategyFormSubmit}>
