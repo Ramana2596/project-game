@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { InputLabel, FormControl, Select, MenuItem, CircularProgress, Alert } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { getMarketFactorInfoFormData } from '../services/getMArketInfoInput';
+import { getMarketFactorInfoFormData } from '../services/marketFactorInputService';
 
 export default function InfoPrice({ infoPrice, onFormControlUpdate }) {
     const [loading, setLoading] = useState(true);

@@ -3,37 +3,38 @@ import { InputLabel, FormControl, Select, MenuItem, CircularProgress, Alert } fr
 import Grid from '@mui/material/Grid2';
 import { getMarketFactorInfoFormData } from '../services/marketFactorInputService';
 
-export default function GameBatch({ gameBatch, onFormControlUpdate }) {
+export default function MarketType({ marketType, onFormControlUpdate }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [gameBatchData, setGameBatchData] = useState([]);
+    const [marketTypeData, setGameBatchData] = useState([]);
 
-    const gameBatchResponse = getMarketFactorInfoFormData('getBatch', 'OpsMgt');
+    const marketTypeResponse = getMarketFactorInfoFormData('getMarketInputId', 'OpsMgt');
 
     useEffect(() => {
         setLoading(false);
-        if (gameBatchResponse?.apiResponse) {
-            setGameBatchData(gameBatchResponse?.apiResponse);
-        } else if (gameBatchResponse?.apiFailureErrorRes) {
-            setError(gameBatchResponse.apiFailureErrorRes);
+        if (marketTypeResponse?.apiResponse) {
+            setGameBatchData(marketTypeResponse?.apiResponse);
+        } else if (marketTypeResponse?.apiFailureErrorRes) {
+            setError(marketTypeResponse.apiFailureErrorRes);
         }
-    }, [gameBatchResponse])
+    }, [marketTypeResponse])
 
     const handleChange = (event) => {
         const { value } = event.target;
-        onFormControlUpdate({'gameBatch': value});
+        const selectedValueObj = marketTypeData.filter((mktTypeObj) => mktTypeObj.Market_Input_Id === value);
+        onFormControlUpdate({'marketInputId': selectedValueObj[0]?.Market_Input_Id, 'partCategory': selectedValueObj[0]?.Part_Category});
     };
 
     return (
         <Grid size={{ xs: 2, sm: 4, md: 4 }}>
             <FormControl required sx={{ flexGrow: 1, width: '100%', maxWidth: 220 }}>
-                <InputLabel id="gameBatch">Game Batch</InputLabel>
+                <InputLabel id="marketType">Market Type</InputLabel>
                 <Select
-                    labelId="gameBatch"
-                    id="gameBatchRequired"
-                    name="gameBatch"
-                    value={gameBatch}
-                    label="Game Batch *"
+                    labelId="marketType"
+                    id="marketTypeRequired"
+                    name="marketInputId"
+                    value={marketType}
+                    label="Market Type *"
                     onChange={handleChange}
                     disabled={loading}
                 >
@@ -46,9 +47,9 @@ export default function GameBatch({ gameBatch, onFormControlUpdate }) {
                             <Alert severity="error">{error}</Alert>
                         </MenuItem>
                     ) : (
-                        gameBatchData?.map((batch, index) => (
-                            <MenuItem key={index} value={batch.Game_Batch}>
-                                {batch.Game_Batch}
+                        marketTypeData?.map((batch, index) => (
+                            <MenuItem key={index} value={batch.Market_Input_Id}>
+                                {batch.Category_Desc}
                             </MenuItem>
                         ))
                     )}

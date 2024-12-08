@@ -9,11 +9,17 @@ import GameBatch from "./components/GameBatch";
 import Period from "./components/Period";
 import Grid from '@mui/material/Grid2';
 import InfoPrice from "./components/InfoPrice";
+import Divider from '@mui/material/Divider';
+import MarketType from "./components/MarketType";
+
 
 export default function MarketFactorInfoInput() {
     const initMarketFactorInfoInputPayload = {
         gameBatch: '',
-        gameId: 'OpsMgt'
+        gameId: 'OpsMgt',
+        marketInputId: '',
+        productionMonth: '',
+        partCategory: ''
     };
 
     const [marketFactorInfoInputPayload, setFormData] = useState(initMarketFactorInfoInputPayload);
@@ -32,8 +38,8 @@ export default function MarketFactorInfoInput() {
         // marketFactorInfoInputUpdate();
     };
 
-    const formControlUpdate = (key, value) => {
-        setFormData({ ...marketFactorInfoInputPayload, [key]: value });
+    const formControlUpdate = (value) => {
+        setFormData({ ...marketFactorInfoInputPayload, ...value });
     };
 
     return (
@@ -44,22 +50,27 @@ export default function MarketFactorInfoInput() {
                 </Grid>
                 <Grid sx={{ margin: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                     <GameBatch gameBatch={marketFactorInfoInputPayload.gameBatch} onFormControlUpdate={formControlUpdate} />
-                    <Period />
+                    <MarketType marketType={marketFactorInfoInputPayload.marketInputId} onFormControlUpdate={formControlUpdate}/>
+                    <Period onDateChange={formControlUpdate}/>
                 </Grid>
-                <Grid sx={{ margin: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                    <ProductDescription />
-                </Grid>
-                <Grid sx={{ margin: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                    <Quantity />
-                    <UnitPrice />
-                    <InfoPrice infoPrice={marketFactorInfoInputPayload.infoPrice} onFormControlUpdate={formControlUpdate} />
-                </Grid>
-                <Grid container spacing={2} justifyContent="center" alignItems="center">
+                <Grid sx={{ margin: 5 }} container spacing={2} justifyContent="center" alignItems="center">
                     <Button type="submit" variant="contained">
                         Submit
                     </Button>
                 </Grid>
             </form>
+            <Divider />
+            <Grid margin={5} container spacing={2} justifyContent="center" alignItems="center">
+                    <Button type="submit" variant="contained">
+                        Add
+                    </Button>
+                    <Button type="submit" variant="contained">
+                        Modify
+                    </Button>
+                    <Button type="submit" variant="contained">
+                        Delete
+                    </Button>
+                </Grid>
             <GenericTable inputTableHeadings={tableHeading} inputTableData={[]} ifNoData={null} />
         </Box>
     );
