@@ -28,7 +28,7 @@ export default function MarketType({ marketType, onFormControlUpdate }) {
     return (
         <Grid size={{ xs: 2, sm: 4, md: 4 }}>
             <FormControl required sx={{ flexGrow: 1, width: '100%', maxWidth: 220 }}>
-                <InputLabel id="marketType">Market Type</InputLabel>
+                <InputLabel id="marketType">Market Input</InputLabel>
                 <Select
                     labelId="marketType"
                     id="marketTypeRequired"

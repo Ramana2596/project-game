@@ -30,7 +30,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tableInputTypes }) {
+function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tableInputTypes, inputTableHeadings }) {
     const [tableData, setTableData] = useState([]);
 
     const initialSelectValues = {};
@@ -101,7 +101,6 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
         }
     };
 
-    const inputTableHeadings = tableInputTypes.map(typeObj => typeObj.columnName);
 
     return (
         <Box margin={10} sx={{ flexGrow: 1 }}>

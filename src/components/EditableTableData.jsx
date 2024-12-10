@@ -9,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
+import RestoreIcon from '@mui/icons-material/Restore';
 import { useState, useEffect } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -28,9 +29,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:last-child td, &:last-child th': {
         border: 0,
     },
+    '&.deleted': {
+        backgroundColor: theme.palette.action.disabledBackground,
+        textDecoration: 'line-through',
+    }
 }));
 
-function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns, tableInputTypes }) {
+function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns, tableInputTypes, inputTableHeadings }) {
     const [tableData, setTableData] = useState([]);
 
     const initialSelectValues = {};
@@ -51,40 +56,36 @@ function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns,
 
     function transformDataToEditableTableData(data) {
         return data?.map(item => {
-            const transformedItem = {};
-            Object.keys(item).forEach(key => {
-                transformedItem[key] = {
-                    value: item[key],
-                    inputType: tableInputTypes.filter((tableInputTypeObj) => tableInputTypeObj.columnName === key)[0]?.inputType || 'readOnly'
-                };
-            });
+            const transformedItem = { ...item, deleted: false }; // Add deleted flag and retain original keys
             return transformedItem;
         });
     }
 
     const handleCheckboxChange = (event, rowIndex, key) => {
         const newData = [...tableData];
-        newData[rowIndex][key].value = event.target.checked;
+        newData[rowIndex][key] = event.target.checked;
         setTableData(newData);
     };
 
     const handleInputChange = (event, rowIndex, key) => {
         const newData = [...tableData];
-        newData[rowIndex][key].value = event.target.value;
+        newData[rowIndex][key] = event.target.value;
         setTableData(newData);
     };
 
     const handleDeleteEntry = (rowIndex) => {
-        const newData = tableData.filter((_, index) => index !== rowIndex);
+        const newData = [...tableData];
+        newData[rowIndex].deleted = !newData[rowIndex].deleted;
         setTableData(newData);
     };
 
     const renderInputField = (valueObj, key, rowIndex) => {
-        switch (valueObj[key].inputType) {
+        if (key === 'deleted') return null; // Skip rendering for the deleted property
+        switch (tableInputTypes.find(typeObj => typeObj.columnName === key)?.inputType) {
             case 'select':
                 return (
                     <Select
-                        value={valueObj[key].value}
+                        value={valueObj[key]}
                         onChange={(event) => handleInputChange(event, rowIndex, key)}
                     >
                         {Array.from(initialSelectValues[key] || []).map((value, index) => (
@@ -95,23 +96,21 @@ function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns,
             case 'checkbox':
                 return (
                     <Checkbox
-                        checked={valueObj[key].value}
+                        checked={valueObj[key]}
                         onChange={(event) => handleCheckboxChange(event, rowIndex, key)}
                     />
                 );
             case 'text':
                 return (
                     <TextField
-                        value={valueObj[key].value}
+                        value={valueObj[key]}
                         onChange={(event) => handleInputChange(event, rowIndex, key)}
                     />
                 );
             default:
-                return valueObj[key].value;
+                return valueObj[key];
         }
     };
-
-    const inputTableHeadings = tableInputTypes.map(typeObj => typeObj.columnName);
 
     return (
         <Box margin={10} sx={{ flexGrow: 1 }}>
@@ -125,16 +124,18 @@ function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns,
                                     {headingString}
                                 </StyledTableCell>
                             ))}
-                            <StyledTableCell align="center">Actions</StyledTableCell>
+                            <StyledTableCell align="center">
+                                Actions
+                            </StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
                             tableData?.map((valueObj, rowIndex) => (
-                                <StyledTableRow key={rowIndex} align="right">
+                                <StyledTableRow key={rowIndex} className={valueObj.deleted ? 'deleted' : ''} align="right">
                                     {
                                         Object.keys(valueObj).map((key, cellIndex) => (
-                                            !hiddenColumns.includes(key) &&
+                                            !hiddenColumns.includes(key) && key !== 'deleted' &&
                                             <StyledTableCell key={cellIndex} align="center">
                                                 {renderInputField(valueObj, key, rowIndex)}
                                             </StyledTableCell>
@@ -142,7 +143,7 @@ function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns,
                                     }
                                     <StyledTableCell align="center">
                                         <IconButton onClick={() => handleDeleteEntry(rowIndex)}>
-                                            <DeleteIcon />
+                                            {valueObj.deleted ? <RestoreIcon /> : <DeleteIcon />}
                                         </IconButton>
                                     </StyledTableCell>
                                 </StyledTableRow>

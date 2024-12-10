@@ -7,7 +7,7 @@ import EditableTableData from '../../../components/EditableTableData';
 
 export default function MarketFactorInputTable({ tableData, isEnableTableActions }) {
     const [isDisableActionBtns, setIsDisableActionBtns] = useState(!isEnableTableActions);
-    const [isDisableSubCanBtns, setIsDisableSubCanBtns] = useState(isEnableTableActions);
+    const [isDisableSubCanBtns, setIsDisableSubCanBtns] = useState(!isEnableTableActions);
     const [isEnableGenericTable, setIsEnableGenericTable] = useState(false);
     const [isEnableTableAdd, setIsEnableTableAdd] = useState(true);
     const [isEnableTableEdit, setIsEnableTableEdit] = useState(true);
@@ -21,7 +21,6 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
 
     useEffect(() => {
         setIsDisableActionBtns(!isEnableTableActions);
-        setIsDisableSubCanBtns(isEnableTableActions);
     }, [isEnableTableActions]);
 
     const frameEditableTableData = (() => {
@@ -68,7 +67,7 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
                     Modify
                 </Button>
                 <Button disabled={isDisableSubCanBtns} type="button" variant="contained" onClick={onSubmitBtnClick}>
-                    Submit
+                    Commit Data
                 </Button>
                 <Button disabled={isDisableSubCanBtns} color="white" type="button" variant="contained" onClick={onCancelButtonClick}>
                     Cancel
@@ -81,10 +80,16 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
                     hiddenColumns={hiddenTableColumns} />
             </div>
             <div hidden={isEnableTableAdd}>
-                <AddTableData editableTableData={tableData} hiddenColumns={hiddenTableColumns} tableInputTypes={inputTypes} />
+                <AddTableData editableTableData={tableData}
+                inputTableHeadings={tableHeading}
+                 hiddenColumns={hiddenTableColumns} 
+                 tableInputTypes={inputTypes} />
             </div>
             <div hidden={isEnableTableEdit}>
-                <EditableTableData editableTableData={tableData} hiddenColumns={hiddenTableColumns} tableInputTypes={inputTypes} />
+                <EditableTableData editableTableData={tableData} 
+                inputTableHeadings={tableHeading} 
+                hiddenColumns={hiddenTableColumns} 
+                tableInputTypes={inputTypes} />
             </div>
         </div>
     );

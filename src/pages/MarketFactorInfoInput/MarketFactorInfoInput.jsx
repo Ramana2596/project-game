@@ -61,7 +61,7 @@ export default function MarketFactorInfoInput() {
                 </Grid>
                 <Grid sx={{ margin: 5 }} container spacing={2} justifyContent="center" alignItems="center">
                     <Button type="submit" variant="contained">
-                        Submit
+                        Load Table
                     </Button>
                 </Grid>
             </form>
