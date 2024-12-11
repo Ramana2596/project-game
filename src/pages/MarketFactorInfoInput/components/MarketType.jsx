@@ -8,7 +8,7 @@ export default function MarketType({ marketType, onFormControlUpdate }) {
     const [error, setError] = useState(null);
     const [marketTypeData, setGameBatchData] = useState([]);
 
-    const marketTypeResponse = getMarketFactorInfoFormData('getMarketInputId', 'OpsMgt');
+    const marketTypeResponse = getMarketFactorInfoFormData({ cmdLine: 'Get_Market_Input_Id', gameId: 'OpsMgt' });
 
     useEffect(() => {
         setLoading(false);
@@ -22,7 +22,7 @@ export default function MarketType({ marketType, onFormControlUpdate }) {
     const handleChange = (event) => {
         const { value } = event.target;
         const selectedValueObj = marketTypeData.filter((mktTypeObj) => mktTypeObj.Market_Input_Id === value);
-        onFormControlUpdate({'marketInputId': selectedValueObj[0]?.Market_Input_Id, 'partCategory': selectedValueObj[0]?.Part_Category});
+        onFormControlUpdate({ 'marketInputId': selectedValueObj[0]?.Market_Input_Id, 'partCategory': selectedValueObj[0]?.Part_Category });
     };
 
     return (

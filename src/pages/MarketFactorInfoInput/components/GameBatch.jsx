@@ -8,7 +8,7 @@ export default function GameBatch({ gameBatch, onFormControlUpdate }) {
     const [error, setError] = useState(null);
     const [gameBatchData, setGameBatchData] = useState([]);
 
-    const gameBatchResponse = getMarketFactorInfoFormData('getBatch', 'OpsMgt');
+    const gameBatchResponse = getMarketFactorInfoFormData({ cmdLine: 'Get_Batch', gameId: 'OpsMgt', gameBatch: 1 });
 
     useEffect(() => {
         setLoading(false);
@@ -21,7 +21,7 @@ export default function GameBatch({ gameBatch, onFormControlUpdate }) {
 
     const handleChange = (event) => {
         const { value } = event.target;
-        onFormControlUpdate({'gameBatch': value});
+        onFormControlUpdate({ 'gameBatch': value });
     };
 
     return (
