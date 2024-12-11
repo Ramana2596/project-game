@@ -11,6 +11,8 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
     const [isEnableGenericTable, setIsEnableGenericTable] = useState(false);
     const [isEnableTableAdd, setIsEnableTableAdd] = useState(true);
     const [isEnableTableEdit, setIsEnableTableEdit] = useState(true);
+    const [checkedRows, setCheckedRows] = useState([]);
+    
     const tableHeading = ['Item Description', 'Quantity', 'Info_Qty', 'Unit Price', 'Info Price'];
     const hiddenTableColumns = ['Qty_Id', 'UOM', 'Part', 'Period', 'currency', 'Price_Id'];
     const inputTypes = [{ columnName: 'Item_Description', inputType: 'select' },
@@ -57,6 +59,11 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
         setIsEnableGenericTable(false);
     };
 
+    const handleCheckboxChange = (selectedRows) => { 
+        setCheckedRows(selectedRows); 
+        console.log('Checked Rows:', selectedRows); 
+    };
+
     return (
         <div>
             <Grid margin={5} container spacing={2} justifyContent="center" alignItems="center">
@@ -82,7 +89,8 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
             <div hidden={isEnableTableAdd}>
                 <AddTableData editableTableData={tableData}
                 inputTableHeadings={tableHeading}
-                 hiddenColumns={hiddenTableColumns} 
+                 hiddenColumns={hiddenTableColumns}
+                 onCheckboxChange={handleCheckboxChange}
                  tableInputTypes={inputTypes} />
             </div>
             <div hidden={isEnableTableEdit}>

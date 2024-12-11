@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Checkbox, TextField, Select, MenuItem, Button, IconButton } from "@mui/material";
+import { Box, Checkbox, TextField, Select, MenuItem, IconButton } from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -32,6 +32,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tableInputTypes, inputTableHeadings }) {
     const [tableData, setTableData] = useState([]);
+    const [checkedItems, setCheckedItems] = useState([]);
 
     const initialSelectValues = {};
 
@@ -44,10 +45,31 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
         });
     });
 
-    const handleCheckboxChange = (event, rowIndex, key) => {
-        const newData = [...tableData];
-        newData[rowIndex][key].value = event.target.checked;
-        setTableData(newData);
+    useEffect(() => {
+        // Initialize with one row by default
+        if (tableData.length === 0) {
+            handleAddEntry();
+        }
+    }, []);
+
+    const handleCheckboxChange = (event, rowIndex) => {
+        const updatedCheckedItems = [...checkedItems];
+        if (event.target.checked) {
+            updatedCheckedItems.push(rowIndex);
+            handleAddEntry();
+        } else {
+            const index = updatedCheckedItems.indexOf(rowIndex);
+            if (index > -1) {
+                updatedCheckedItems.splice(index, 1);
+            }
+        }
+        setCheckedItems(updatedCheckedItems);
+        emitCheckedValues(updatedCheckedItems);
+    };
+
+    const emitCheckedValues = (checkedRows) => {
+        const selectedRows = checkedRows.map(rowIndex => tableData[rowIndex]);
+        onCheckboxChange(selectedRows);
     };
 
     const handleInputChange = (event, rowIndex, key) => {
@@ -66,16 +88,21 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
 
     const handleDeleteEntry = (rowIndex) => {
         const newData = tableData.filter((_, index) => index !== rowIndex);
+        const newCheckedItems = checkedItems.filter(index => index !== rowIndex);
         setTableData(newData);
+        setCheckedItems(newCheckedItems);
+        emitCheckedValues(newCheckedItems);
     };
 
     const renderInputField = (valueObj, key, rowIndex) => {
+        const isChecked = checkedItems.includes(rowIndex);
         switch (valueObj[key].inputType) {
             case 'select':
                 return (
                     <Select
                         value={valueObj[key].value}
                         onChange={(event) => handleInputChange(event, rowIndex, key)}
+                        required={isChecked}
                     >
                         {Array.from(initialSelectValues[key] || []).map((value, index) => (
                             <MenuItem key={index} value={value}>{value}</MenuItem>
@@ -86,7 +113,8 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
                 return (
                     <Checkbox
                         checked={valueObj[key].value}
-                        onChange={(event) => handleCheckboxChange(event, rowIndex, key)}
+                        onChange={(event) => handleInputChange(event, rowIndex, key)}
+                        required={isChecked}
                     />
                 );
             case 'text':
@@ -94,6 +122,7 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
                     <TextField
                         value={valueObj[key].value}
                         onChange={(event) => handleInputChange(event, rowIndex, key)}
+                        required={isChecked}
                     />
                 );
             default:
@@ -101,16 +130,13 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
         }
     };
 
-
     return (
         <Box margin={10} sx={{ flexGrow: 1 }}>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 500 }} aria-label="customized table">
                     <TableHead>
-                        <StyledTableCell align="center">
-                            <Button variant="contained" onClick={handleAddEntry}>Add Entry</Button>
-                        </StyledTableCell>
                         <TableRow>
+                            <StyledTableCell align="center">Select</StyledTableCell>
                             {inputTableHeadings.map((headingString, index) => (
                                 !hiddenColumns.includes(headingString) &&
                                 <StyledTableCell key={index} align="center">
@@ -124,6 +150,12 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
                         {
                             tableData?.map((valueObj, rowIndex) => (
                                 <StyledTableRow key={rowIndex} align="right">
+                                    <StyledTableCell align="center">
+                                        <Checkbox
+                                            checked={checkedItems.includes(rowIndex)}
+                                            onChange={(event) => handleCheckboxChange(event, rowIndex)}
+                                        />
+                                    </StyledTableCell>
                                     {
                                         Object.keys(valueObj).map((key, cellIndex) => (
                                             !hiddenColumns.includes(key) &&
@@ -132,11 +164,13 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
                                             </StyledTableCell>
                                         ))
                                     }
-                                    <StyledTableCell align="center">
-                                        <IconButton onClick={() => handleDeleteEntry(rowIndex)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </StyledTableCell>
+                                    {rowIndex !== 0 && (
+                                        <StyledTableCell align="center">
+                                            <IconButton onClick={() => handleDeleteEntry(rowIndex)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </StyledTableCell>
+                                    )}
                                 </StyledTableRow>
                             ))
                         }
