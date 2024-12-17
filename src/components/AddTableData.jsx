@@ -16,26 +16,19 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         backgroundColor: theme.palette.common.black,
         color: theme.palette.common.white,
     },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-    },
+    [`&.${tableCellClasses.body}`]: { fontSize: 14, },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-    },
-    '&:last-child td, &:last-child th': {
-        border: 0,
-    },
+    '&:nth-of-type(odd)': { backgroundColor: theme.palette.action.hover, },
+    '&:last-child td, &:last-child th': { border: 0, },
 }));
 
 function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tableInputTypes, inputTableHeadings }) {
+
     const [tableData, setTableData] = useState([]);
     const [checkedItems, setCheckedItems] = useState([]);
-
     const initialSelectValues = {};
-
     editableTableData?.forEach(row => {
         Object.keys(row)?.forEach(key => {
             if (!initialSelectValues[key]) {
@@ -44,14 +37,12 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
             initialSelectValues[key].add(row[key]);
         });
     });
-
     useEffect(() => {
-        // Initialize with one row by default
+        // Initialize with one row by default 
         if (tableData.length === 0) {
             handleAddEntry();
         }
     }, []);
-
     const handleCheckboxChange = (event, rowIndex) => {
         const updatedCheckedItems = [...checkedItems];
         if (event.target.checked) {
@@ -63,21 +54,19 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
                 updatedCheckedItems.splice(index, 1);
             }
         }
+
         setCheckedItems(updatedCheckedItems);
         emitCheckedValues(updatedCheckedItems);
     };
-
     const emitCheckedValues = (checkedRows) => {
         const selectedRows = checkedRows.map(rowIndex => tableData[rowIndex]);
         onCheckboxChange(selectedRows);
     };
-
     const handleInputChange = (event, rowIndex, key) => {
         const newData = [...tableData];
         newData[rowIndex][key].value = event.target.value;
         setTableData(newData);
     };
-
     const handleAddEntry = () => {
         const newRow = {};
         tableInputTypes?.forEach(typeObj => {
@@ -85,7 +74,6 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
         });
         setTableData([...tableData, newRow]);
     };
-
     const handleDeleteEntry = (rowIndex) => {
         const newData = tableData.filter((_, index) => index !== rowIndex);
         const newCheckedItems = checkedItems.filter(index => index !== rowIndex);
@@ -93,40 +81,31 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
         setCheckedItems(newCheckedItems);
         emitCheckedValues(newCheckedItems);
     };
-
     const renderInputField = (valueObj, key, rowIndex) => {
         const isChecked = checkedItems.includes(rowIndex);
-        switch (valueObj[key].inputType) {
+        switch (valueObj[key]?.inputType) {
             case 'select':
-                return (
-                    <Select
-                        value={valueObj[key].value}
-                        onChange={(event) => handleInputChange(event, rowIndex, key)}
-                        required={isChecked}
-                    >
-                        {Array.from(initialSelectValues[key] || []).map((value, index) => (
+                return (<Select
+                    value={valueObj[key]?.value}
+                    onChange={(event) => handleInputChange(event, rowIndex, key)} required={isChecked}
+                >
+                    {
+                        Array.from(initialSelectValues[key] || []).map((value, index) => (
                             <MenuItem key={index} value={value}>{value}</MenuItem>
                         ))}
-                    </Select>
+                </Select>
                 );
             case 'checkbox':
-                return (
-                    <Checkbox
-                        checked={valueObj[key].value}
-                        onChange={(event) => handleInputChange(event, rowIndex, key)}
-                        required={isChecked}
-                    />
-                );
+                return (<Checkbox
+                    checked={valueObj[key]?.value}
+                    onChange={(event) => handleInputChange(event, rowIndex, key)} required={isChecked} />);
             case 'text':
-                return (
-                    <TextField
-                        value={valueObj[key].value}
-                        onChange={(event) => handleInputChange(event, rowIndex, key)}
-                        required={isChecked}
-                    />
-                );
+                return (<TextField
+                    value={valueObj[key]?.value}
+                    onChange={(event) => handleInputChange(event, rowIndex, key)}
+                    required={isChecked} />);
             default:
-                return valueObj[key].value;
+                return valueObj[key]?.value;
         }
     };
 
@@ -157,8 +136,8 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
                                         />
                                     </StyledTableCell>
                                     {
-                                        Object.keys(valueObj).map((key, cellIndex) => (
-                                            !hiddenColumns.includes(key) &&
+                                        Object.keys(valueObj)?.map((key, cellIndex) => (
+                                            !hiddenColumns.includes(key) && key !== 'Actions' &&
                                             <StyledTableCell key={cellIndex} align="center">
                                                 {renderInputField(valueObj, key, rowIndex)}
                                             </StyledTableCell>

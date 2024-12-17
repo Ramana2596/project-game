@@ -13,12 +13,16 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
     const [isEnableTableEdit, setIsEnableTableEdit] = useState(true);
     const [checkedRows, setCheckedRows] = useState([]);
     
-    const tableHeading = ['Item Description', 'Quantity', 'Info_Qty', 'Unit Price', 'Info Price'];
-    const hiddenTableColumns = ['Qty_Id', 'UOM', 'Part', 'Period', 'currency', 'Price_Id'];
+    const tableHeading = ['Item Description', 'UOM', 'Quantity', 'Info_Qty','Unit Price', 'currency', 'Info Price'];
+    const tableHeadingForAdd = ['Item Description', 'Quantity', 'Info_Qty','Unit Price', 'Info Price'];
+    const hiddenTableColumns = ['Qty_Id', 'Part', 'Period', 'Price_Id'];
+    const hiddenTableColumnsForAdd = ['Qty_Id', 'UOM', 'Part', 'Period', 'currency', 'Price_Id'];
     const inputTypes = [{ columnName: 'Item_Description', inputType: 'select' },
-    { columnName: 'Info_Qty', inputType: 'select' },
+        { columnName: 'UOM', inputType: null },
     { columnName: 'Quantity', inputType: 'text' },
+    { columnName: 'Info_Qty', inputType: 'select' },
     { columnName: 'Unit_Price', inputType: 'text' },
+    { columnName: 'currency', inputType: null },
     { columnName: 'Info_Price', inputType: 'select' }]
 
     useEffect(() => {
@@ -88,8 +92,8 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
             </div>
             <div hidden={isEnableTableAdd}>
                 <AddTableData editableTableData={tableData}
-                inputTableHeadings={tableHeading}
-                 hiddenColumns={hiddenTableColumns}
+                inputTableHeadings={tableHeadingForAdd}
+                 hiddenColumns={hiddenTableColumnsForAdd}
                  onCheckboxChange={handleCheckboxChange}
                  tableInputTypes={inputTypes} />
             </div>

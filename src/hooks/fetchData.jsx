@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 function FetchDataFromApi(apiEndpoint, shouldTrigger, queryParams = null) {
-    const apiBaseUrl = 'https://loving-humpback-monthly.ngrok-free.app';
+    const apiBaseUrl = 'http://localhost:4000';
     const [apiResponse, setApiResponse] = useState(null);
     const [apiFailureErrorRes, setApiFailureRes] = useState(null);
     const [isLoading, setIsLoading] = useState(false);

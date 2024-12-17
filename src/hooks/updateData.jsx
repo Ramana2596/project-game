@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 function UpdateApiCall(requestBody, apiUrl, shouldTrigger) {
-    const apiBaseUrl = 'https://loving-humpback-monthly.ngrok-free.app';
+    const apiBaseUrl = 'http://localhost';
     const [apiResponse, setApiResponse] = useState(null);
     const [apiFailureErrorRes, setApiFailureRes] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
