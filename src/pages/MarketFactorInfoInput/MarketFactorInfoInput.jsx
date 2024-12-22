@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 import GameBatch from "./components/GameBatch";
 import Period from "./components/Period";
 import MarketType from "./components/MarketType";
-import { getMarketFactorInfoTableData } from "./services/marketFactorInputService";
+import { getMarketFactorInfoTableData, updateMarketFactorInfoInput, deleteMarketFactorInfo, addMarketFactorInfoInput } from "./services/marketFactorInputService";
 import MarketFactorInputTable from "./components/MarketFactorInputTable";
 
 export default function MarketFactorInfoInput() {
@@ -14,13 +14,29 @@ export default function MarketFactorInfoInput() {
 
     const initGetMarketFactorInput = {
         gameId: 'OpsMgt',
-        gameBatch: null,
-        productionMonth: null,
-        marketInputId: null,
+        gameBatch: '',
+        productionMonth: '',
+        marketInputId: '',
         partCategory: null,
         refTypeInfo: null,
         refTypePrice: null,
         cmdLine: 'Get_Info'
+    };
+
+    const initUpdateMarketFactorInput = {
+        marketFactorInfoArray: [{
+            gameId: null,
+            gameBatch: null,
+            productionMonth: null,
+            marketInputId: null,
+            partNo: null,
+            quantityId: null,
+            quantity: null,
+            priceId: null,
+            currency: null,
+            unitPrice: null
+        }],
+        cmdLine: ''
     };
 
     const [getMarketFactorInput, setFormData] = useState(initGetMarketFactorInput);
@@ -54,6 +70,34 @@ export default function MarketFactorInfoInput() {
         setFormData({ ...getMarketFactorInput, ...value });
     };
 
+    const onSubmitApiCall = (updatedData, deletedTableData, isEdit) => {
+        if (isTableActionsEnable) {
+            if(isEdit) {
+                updateTableData(updatedData, deletedTableData);
+            } else {
+                addTableData(updatedData);
+            }
+        }
+    };
+
+    const getFramedPayload = (updatedData) => {
+        if (updatedData && updatedData.length > 0) {
+            return updatedData.map((obj) => ({
+                gameId: getMarketFactorInput.gameId,
+                gameBatch: getMarketFactorInput.gameBatch,
+                productionMonth: getMarketFactorInput.productionMonth,
+                marketInputId: getMarketFactorInput.marketInputId,
+                partNo: obj.Part,
+                quantityId: obj.Qty_Id,
+                quantity: obj.Quantity,
+                priceId: obj.Price_Id,
+                currency: obj.currency,
+                unitPrice: obj.Unit_Price
+            }));
+        }
+        return [];
+    };
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
@@ -66,7 +110,31 @@ export default function MarketFactorInfoInput() {
             </Grid>
             <Divider />
             <MarketFactorInputTable tableData={marketFactorInfoTableData.apiResponse}
-                isEnableTableActions={isTableActionsEnable} />
+                isEnableTableActions={isTableActionsEnable} onSubmitApiCall={onSubmitApiCall} />
         </Box>
     );
+
+    function addTableData(updatedData) {
+        if (updatedData && updatedData.length > 0) {
+            const mktFactorInforPayLoad = {
+                marketFactorInfoArray: getFramedPayload(updatedData)
+            };
+            addMarketFactorInfoInput(mktFactorInforPayLoad);
+        }
+    }
+
+    function updateTableData(updatedData, deletedTableData) {
+        if (updatedData && updatedData.length > 0) {
+            const mktFactorInforPayLoad = {
+                marketFactorInfoArray: getFramedPayload(updatedData)
+            };
+            updateMarketFactorInfoInput(mktFactorInforPayLoad);
+        }
+        if (deletedTableData && deletedTableData.length > 0) {
+            const marketFactorInfoInputPayload = {
+                marketFactorInfoArray: getFramedPayload(deletedTableData)
+            };
+            deleteMarketFactorInfo(marketFactorInfoInputPayload);
+        }
+    }
 }

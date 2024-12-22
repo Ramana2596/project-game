@@ -43,6 +43,7 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
             handleAddEntry();
         }
     }, []);
+    
     const handleCheckboxChange = (event, rowIndex) => {
         const updatedCheckedItems = [...checkedItems];
         if (event.target.checked) {
@@ -58,15 +59,18 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
         setCheckedItems(updatedCheckedItems);
         emitCheckedValues(updatedCheckedItems);
     };
+    
     const emitCheckedValues = (checkedRows) => {
         const selectedRows = checkedRows.map(rowIndex => tableData[rowIndex]);
         onCheckboxChange(selectedRows);
     };
+    
     const handleInputChange = (event, rowIndex, key) => {
         const newData = [...tableData];
         newData[rowIndex][key].value = event.target.value;
         setTableData(newData);
     };
+
     const handleAddEntry = () => {
         const newRow = {};
         tableInputTypes?.forEach(typeObj => {
@@ -74,6 +78,7 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
         });
         setTableData([...tableData, newRow]);
     };
+    
     const handleDeleteEntry = (rowIndex) => {
         const newData = tableData.filter((_, index) => index !== rowIndex);
         const newCheckedItems = checkedItems.filter(index => index !== rowIndex);
@@ -81,6 +86,7 @@ function AddTableData({ editableTableData, onCheckboxChange, hiddenColumns, tabl
         setCheckedItems(newCheckedItems);
         emitCheckedValues(newCheckedItems);
     };
+
     const renderInputField = (valueObj, key, rowIndex) => {
         const isChecked = checkedItems.includes(rowIndex);
         switch (valueObj[key]?.inputType) {

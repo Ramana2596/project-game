@@ -35,7 +35,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     }
 }));
 
-function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns, tableInputTypes, inputTableHeadings }) {
+function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns, tableInputTypes, inputTableHeadings, onUpdate }) {
     const [tableData, setTableData] = useState([]);
 
     const initialSelectValues = {};
@@ -65,18 +65,21 @@ function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns,
         const newData = [...tableData];
         newData[rowIndex][key] = event.target.checked;
         setTableData(newData);
+        onUpdate(newData);
     };
 
     const handleInputChange = (event, rowIndex, key) => {
         const newData = [...tableData];
         newData[rowIndex][key] = event.target.value;
         setTableData(newData);
+        onUpdate(newData);
     };
 
     const handleDeleteEntry = (rowIndex) => {
         const newData = [...tableData];
         newData[rowIndex].deleted = !newData[rowIndex].deleted;
         setTableData(newData);
+        onUpdate(newData);
     };
 
     const renderInputField = (valueObj, key, rowIndex) => {
@@ -88,7 +91,7 @@ function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns,
                         value={valueObj[key]}
                         onChange={(event) => handleInputChange(event, rowIndex, key)}
                     >
-                        {Array.from(initialSelectValues[key] || []).map((value, index) => (
+                        {Array.from(initialSelectValues[key] || [])?.map((value, index) => (
                             <MenuItem key={index} value={value}>{value}</MenuItem>
                         ))}
                     </Select>
@@ -103,6 +106,7 @@ function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns,
             case 'text':
                 return (
                     <TextField
+                        type="number"
                         value={valueObj[key]}
                         onChange={(event) => handleInputChange(event, rowIndex, key)}
                     />
@@ -157,3 +161,4 @@ function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns,
 }
 
 export default EditableTableData;
+
