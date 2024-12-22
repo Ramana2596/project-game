@@ -15,6 +15,7 @@ import MarketFactorInfoInput from "../MarketFactorInfoInput/MarketFactorInfoInpu
 import SignOutButton from "../../components/SignOutButton";
 import { useUser } from "../../core/access/userContext";
 import { getUserAccessPageIds } from "./services/indexService";
+import OperationalPlanInfo from "../OperationalPlanInfo/OperationalPlanInfo";
 
 export default function Index() {
   const [open, setOpen] = useState(false);
@@ -59,6 +60,7 @@ export default function Index() {
         <Route path="/strategyPlanApproval" element={<StrategyPlanApproval />} />
         <Route path="/marketFactorInfo" element={<MarketFactorInfo />} />
         <Route path="/marketFactorInfoInput" element={<MarketFactorInfoInput />} />
+        <Route path="/operationalPlanInfo" element={<OperationalPlanInfo />} />
       </Routes>
     </Box>
   );
