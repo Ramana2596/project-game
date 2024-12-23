@@ -1,7 +1,7 @@
-import FetchDataFromApi from '../../../hooks/fetchData';
+import api from '../../../core/interceptor/api-interceptor';
 
 export function getUserAccessPageIds(userRole) {
-    return FetchDataFromApi('/api/getUserAccessPageIds', true, {
-        userRole
-    })
+    return api.get('/api/getUserAccessPageIds',
+        {params: {userRole}
+    });
 }

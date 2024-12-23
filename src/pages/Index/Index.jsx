@@ -21,11 +21,18 @@ import OperationalPlanInfoInput from "../OperationalPlanInfoInput/OperationalPla
 export default function Index() {
   const [open, setOpen] = useState(false);
   const { user, setAccessablePageIds } = useUser();
-  const { apiResponse: userAccessablePageIdsResponse, apiFailureErrorRes: failiureRespnes, isLoading: userAccessablePageIdsLoading } = getUserAccessPageIds(user?.role);
-
-  useEffect(() => {
-    setAccessablePageIds(userAccessablePageIdsResponse);
-  }, [userAccessablePageIdsResponse])
+  
+  useEffect(() => { 
+    if (user?.role) { 
+      getUserAccessPageIds(user.role)
+      .then(response => {
+        setAccessablePageIds(response.data);
+      })
+      .catch(error => { 
+        console.error('Error fetching data:', error);
+      });
+    }
+  }, [user?.role]);
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);

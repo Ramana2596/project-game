@@ -14,12 +14,14 @@ export const UserProvider = ({ children }) => {
     };
 
     const setAccessablePageIds = ((accessablePageIdList) => {
-        const tempArray = accessablePageIdList?.map((accessablePageIdObj) => accessablePageIdObj?.uiId);
-        setUserAccessablePageIds(tempArray);
+        if(accessablePageIdList && accessablePageIdList.length > 0) {
+            const tempArray = accessablePageIdList?.map((accessablePageIdObj) => accessablePageIdObj?.uiId);
+            setUserAccessablePageIds(tempArray);
+        }
     })
 
     useEffect(() => {
-        if (user?.role) {
+        if (userAccessablePageIds && userAccessablePageIds.length > 0) {
             const filteredArray = componentList.filter(item => userAccessablePageIds?.includes(item.id));
             setUserAccessiblePages(filteredArray);
         }
