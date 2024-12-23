@@ -16,6 +16,7 @@ import SignOutButton from "../../components/SignOutButton";
 import { useUser } from "../../core/access/userContext";
 import { getUserAccessPageIds } from "./services/indexService";
 import OperationalPlanInfo from "../OperationalPlanInfo/OperationalPlanInfo";
+import OperationalPlanInfoInput from "../OperationalPlanInfoInput/OperationalPlanInfoInput";
 
 export default function Index() {
   const [open, setOpen] = useState(false);
@@ -61,6 +62,7 @@ export default function Index() {
         <Route path="/marketFactorInfo" element={<MarketFactorInfo />} />
         <Route path="/marketFactorInfoInput" element={<MarketFactorInfoInput />} />
         <Route path="/operationalPlanInfo" element={<OperationalPlanInfo />} />
+        <Route path="/operationalPlanInfoInput" element={<OperationalPlanInfoInput />} />
       </Routes>
     </Box>
   );
