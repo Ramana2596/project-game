@@ -7,7 +7,7 @@ import GameMaster from '../GameMaster';
 import GameBatch from '../GameBatch';
 import { Routes, Route } from "react-router-dom";
 import GameSession from "../GameSession";
-import GameDashboard from "../GameDashboard";
+import GameDashboard from "../GameDashboard/GameDashboard";
 import StrategyLaunched from '../StrategyLaunched';
 import StrategyPlanApproval from "../StrategyPlanApproval";
 import MarketFactorInfo from "../MarketFactorInfo";

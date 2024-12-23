@@ -1,5 +1,5 @@
 import GameSession from '../pages/GameSession';
-import GameDashboard from '../pages/GameDashboard';
+import GameDashboard from '../pages/GameDashboard/GameDashboard';
 import StrategyLaunched from '../pages/StrategyLaunched';
 import StrategyPlan from '../pages/StrategyPlanApproval';
 import MarketFactorInfo from '../pages/MarketFactorInfo';

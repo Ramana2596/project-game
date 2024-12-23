@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-// import { Box } from "@mui/material";
-import GenericTable from '../components/GenericTable';
+import GenericTable from '../../components/GenericTable';
+import { getDashboardData } from './services/gameDashboard';
 
 function GameDashboard() {
   const [tableData, setData] = useState(null);
@@ -13,28 +13,14 @@ function GameDashboard() {
   // let { apiResponse: gameIdData, apiFailureErrorRes: gameBatchFailureRes, isLoading: gameBatchIsLoading } = FetchDataFromApi('https://loving-humpback-monthly.ngrok-free.app/api/data', true);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          'https://loving-humpback-monthly.ngrok-free.app/api/data',
-          {
-            headers: {
-              'ngrok-skip-browser-warning': 'true'
-            }
-          });
-        if (!response.ok) {
-          throw new Error('Some Error occurred');
-        }
-
-        const result = await response.json();
-        setData(result);
-      } catch (err) {
-        setError(err?.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
+        getDashboardData()
+        .then((response) => {
+          if(response) {
+            setData(response.data);
+          }
+        })
+        .catch((err) => setError(err?.message))
+        .finally(() => setLoading(false));
   }, []);
 
   if (loading) return (<div>...Loading</div>);
