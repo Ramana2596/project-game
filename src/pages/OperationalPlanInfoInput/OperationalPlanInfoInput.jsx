@@ -2,11 +2,8 @@ import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import Grid from '@mui/material/Grid2';
 import Divider from '@mui/material/Divider';
-import GameBatch from "./components/GameBatch";
 import Period from "./components/Period";
-import MarketType from "./components/MarketType";
 import { getOperationalPlanInfoTableData, updateOperationalPlanInfoInput, deleteOperationalPlanInfo, addOperationalPlanInfo } from "./services/operationalPlanInfoInputService";
-import GameTeam from "./components/GameTeam";
 import OperationalPlanInfoType from "./components/OperationalPlanInfo";
 import OperationalPlanInputTable from "./components/OperationalPlanInputTable";
 
@@ -16,13 +13,15 @@ export default function OperationalPlanInfoInput() {
 
     const initGetOperationalPlanInfo = {
         gameId: 'OpsMgt',
-        gameBatch: '',
+        gameBatch: 1,
+        gameTeam: 'ALPHA',
         productionMonth: '',
-        marketInputId: '',
+        operationsInputId: '',
         partCategory: null,
         refTypeInfo: null,
         refTypePrice: null,
-        cmdLine: 'Get_Info'
+        marketInputId: '',
+        cmdLine: 'Get_Input_Id'
     };
 
     const initUpdateOperationalPlanInfo = {
@@ -105,10 +104,11 @@ export default function OperationalPlanInfoInput() {
             <Grid container spacing={2} justifyContent="center" alignItems="center">
                 <h1>Operational Plan Info Input</h1>
             </Grid>
+            <Grid container spacing={2} justifyContent="center" alignItems="center">
+                    <h3>Game Batch: 1</h3>
+                    <h3>Game Team: ALPHA</h3>
+            </Grid>
             <Grid sx={{ margin: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                <GameBatch gameBatch={getOperationalPlanInfoInput.gameBatch} onFormControlUpdate={formControlUpdate} />
-                <GameTeam gameTeam={getOperationalPlanInfoInput.gameTeam} onFormControlUpdate={formControlUpdate} />
-                <MarketType marketType={getOperationalPlanInfoInput.marketInputId} onFormControlUpdate={formControlUpdate} />
                 <OperationalPlanInfoType operationalPlanType={getOperationalPlanInfoInput.operationalPlanId} onFormControlUpdate={formControlUpdate} />
                 <Period onDateChange={(date) => formControlUpdate({ productionMonth: date })} />
             </Grid>

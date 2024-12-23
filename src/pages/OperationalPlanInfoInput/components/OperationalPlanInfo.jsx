@@ -8,7 +8,12 @@ export default function OperationalPlanInfoType({ operationalPlanType, onFormCon
     const [error, setError] = useState(null);
     const [operationalPlanInfoData, setGameBatchData] = useState([]);
 
-    const operationalPlanInfoType = getOperationalPlanInfoData({ cmdLine: 'Get_Market_Input_Id', gameId: 'OpsMgt' });
+    const operationalPlanInfoType = getOperationalPlanInfoData({ 
+        cmdLine: 'Get_Input_Id', 
+        gameId: 'OpsMgt', 
+        gameBatch: 1, 
+        gameTeam: 'ALPHA' 
+    });
 
     useEffect(() => {
         setLoading(false);
@@ -21,8 +26,8 @@ export default function OperationalPlanInfoType({ operationalPlanType, onFormCon
 
     const handleChange = (event) => {
         const { value } = event.target;
-        const selectedValueObj = operationalPlanInfoData.filter((optInfoObj) => optInfoObj.Operational_Plan_Input_Id === value);
-        onFormControlUpdate({ 'operationalPlanTypeId': selectedValueObj[0]?.Operational_Plan_Input_Id, 'partCategory': selectedValueObj[0]?.Part_Category });
+        const selectedValueObj = operationalPlanInfoData.filter((optInfoObj) => optInfoObj.Operations_Input_Id === value);
+        onFormControlUpdate({ 'operationsInputId': selectedValueObj[0]?.Operations_Input_Id, 'partCategory': selectedValueObj[0]?.Part_Category });
     };
 
     return (
@@ -48,7 +53,7 @@ export default function OperationalPlanInfoType({ operationalPlanType, onFormCon
                         </MenuItem>
                     ) : (
                         operationalPlanInfoData?.map((batch, index) => (
-                            <MenuItem key={index} value={batch.Operational_Plan_Input_Id}>
+                            <MenuItem key={index} value={batch.Operations_Input_Id}>
                                 {batch.Category_Desc}
                             </MenuItem>
                         ))
