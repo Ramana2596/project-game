@@ -3,6 +3,7 @@ import api from '../../../core/interceptor/api-interceptor';
 
 let initGetMarketFactorInput = {
     gameId: 'OpsMgt',
+    operationsInputId: '',
     gameBatch: null,
     productionMonth: null,
     marketInputId: null,

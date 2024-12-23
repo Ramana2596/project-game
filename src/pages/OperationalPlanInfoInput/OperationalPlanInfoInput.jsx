@@ -21,7 +21,7 @@ export default function OperationalPlanInfoInput() {
         refTypeInfo: null,
         refTypePrice: null,
         marketInputId: '',
-        cmdLine: 'Get_Input_Id'
+        cmdLine: 'Get_Plan'
     };
 
     const initUpdateOperationalPlanInfo = {
@@ -59,9 +59,8 @@ export default function OperationalPlanInfoInput() {
 
     useEffect(() => {
         // Check if all required inputs have values and trigger API call
-        if (getOperationalPlanInfoInput.gameBatch &&
-            getOperationalPlanInfoInput.productionMonth &&
-            getOperationalPlanInfoInput.marketInputId) {
+        if (getOperationalPlanInfoInput.productionMonth &&
+            getOperationalPlanInfoInput.operationsInputId) {
             setShouldTriggerApi(true);
         }
     }, [getOperationalPlanInfoInput]);
