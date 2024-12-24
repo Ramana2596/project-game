@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { useState } from "react";
-import { dateColumns } from '../constants/globalConstants';
+import { dateColumns } from '../constants/globalConstants.js';
 import { formatDate } from '../utils/formatDate';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({

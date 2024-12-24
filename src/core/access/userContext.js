@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { componentList } from "../../constants/globalConstants";
+import { componentList } from "../../constants/globalConstants.js";
 
 const UserContext = createContext();
 
