@@ -1,4 +1,4 @@
-import { useUser } from '../../core/access/userContext';
+import { useUser } from '../../core/access/userContext.js';
 
 const ProtectedRoute = ({ component: Component, permission, ...rest }) => {
     const { hasPermission } = useUser();

@@ -2,7 +2,7 @@
 import Box from '@mui/material/Box';
 import { Divider, Drawer, List, ListItemButton, ListItem, ListItemText } from '@mui/material';
 import { Link } from "react-router-dom";
-import { useUser } from "../core/access/userContext";
+import { useUser } from "../core/access/userContext.js";
 
 export default function TemporaryDrawer({ openState, toggleDrawer }) {
   const { userAccessiblePages } = useUser();

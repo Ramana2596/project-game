@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../core/access/userContext'; // Adjust the import path
+import { useUser } from '../core/access/userContext.js'; // Adjust the import path
 
 const SignOutButton = () => {
     const { logout } = useUser();

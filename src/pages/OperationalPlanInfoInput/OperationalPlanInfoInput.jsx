@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Grid from '@mui/material/Grid2';
 import Divider from '@mui/material/Divider';
 import Period from "./components/Period";
-import { getOperationalPlanInfoTableData, updateOperationalPlanInfoInput, deleteOperationalPlanInfo, addOperationalPlanInfo } from "./services/operationalPlanInfoInputService";
+import { getOperationalPlanInfoTableData, updateOperationalPlanInfoInput, deleteOperationalPlanInfo, addOperationalPlanInfo } from "./services/operationalPlanInfoInputService.js";
 import OperationalPlanInfoType from "./components/OperationalPlanInfo";
 import OperationalPlanInputTable from "./components/OperationalPlanInputTable";
 

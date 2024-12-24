@@ -10,8 +10,8 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ColorModeSelect from './theme/ColorModeSelect';
 import { useNavigate } from "react-router-dom";
-import { useUser } from '../../core/access/userContext';
-import { getUserAccessPageIds, getUserDetails } from './services/signInServices';
+import { useUser } from '../../core/access/userContext.js';
+import { getUserAccessPageIds, getUserDetails } from './services/signInServices.js';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',

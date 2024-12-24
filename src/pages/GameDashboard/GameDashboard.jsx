@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import GenericTable from '../../components/GenericTable';
-import { getDashboardData } from './services/gameDashboard';
+import { getDashboardData } from './services/gameDashboard.js';
 
 function GameDashboard() {
   const [tableData, setData] = useState(null);

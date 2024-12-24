@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider';
 import GameBatch from "./components/GameBatch";
 import Period from "./components/Period";
 import MarketType from "./components/MarketType";
-import { getMarketFactorInfoTableData, updateMarketFactorInfoInput, deleteMarketFactorInfo, addMarketFactorInfoInput } from "./services/marketFactorInputService";
+import { getMarketFactorInfoTableData, updateMarketFactorInfoInput, deleteMarketFactorInfo, addMarketFactorInfoInput } from "./services/marketFactorInputService.js";
 import MarketFactorInputTable from "./components/MarketFactorInputTable";
 
 export default function MarketFactorInfoInput() {

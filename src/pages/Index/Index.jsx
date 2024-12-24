@@ -13,8 +13,8 @@ import StrategyPlanApproval from "../StrategyPlanApproval";
 import MarketFactorInfo from "../MarketFactorInfo";
 import MarketFactorInfoInput from "../MarketFactorInfoInput/MarketFactorInfoInput";
 import SignOutButton from "../../components/SignOutButton";
-import { useUser } from "../../core/access/userContext";
-import { getUserAccessPageIds } from "./services/indexService";
+import { useUser } from "../../core/access/userContext.js";
+import { getUserAccessPageIds } from "./services/indexService.js";
 import OperationalPlanInfo from "../OperationalPlanInfo/OperationalPlanInfo";
 import OperationalPlanInfoInput from "../OperationalPlanInfoInput/OperationalPlanInfoInput";
 
