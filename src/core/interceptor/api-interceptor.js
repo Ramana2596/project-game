@@ -4,6 +4,8 @@ const api = axios.create({
     baseURL: process.env.REACT_APP_API_BASE_URL
 });
 
+api.defaults.headers.common['ngrok-skip-browser-warning'] = `true`; // Replace 'token' with your actual token or a function to get the token
+
 // Add a request interceptor
 api.interceptors.request.use(config => {
     // Add authorization token or other headers if needed
