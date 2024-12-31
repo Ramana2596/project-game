@@ -1,7 +1,7 @@
 import { Box } from "@mui/material"
 import Grid from '@mui/material/Grid2';
 import GenericTable from "../../components/GenericTable";
-import FetchDataFromApi from "../../hooks/fetchData.js";
+import FetchDataFromApi from "../../hooks/fetchData.jsx";
 
 export default function OperationalPlanInfo() {
     let getOperationalPlanInfoParam = {
