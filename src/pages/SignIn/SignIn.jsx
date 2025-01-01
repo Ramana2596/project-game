@@ -63,13 +63,14 @@ export default function SignIn(props) {
   const [shouldTriggerApiCall, setShouldTriggerApiCall] = React.useState(false);
   const [userEmail, setUserEmailValue] = React.useState(null);
   const routeHistory = useNavigate();
-  const { login } = useUser();
+  const { login, setUserInfo } = useUser();
 
   const { apiResponse: userDetailsResponse, apiFailureErrorRes: userDetailsFailure, isLoading: userDetailsLoading } = getUserDetails(userEmail, shouldTriggerApiCall);
 
   React.useEffect(() => {
     if (userDetailsResponse && userDetailsResponse.length > 0) {
-      login(userDetailsResponse[0]?.role);
+      login(userDetailsResponse[0]?.gameRole);
+      setUserInfo(userDetailsResponse[0]);
       setValidUser(true);
 
     } else {

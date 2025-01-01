@@ -2,17 +2,19 @@ import React, { useEffect, useState } from "react";
 import { InputLabel, FormControl, Select, MenuItem, CircularProgress, Alert } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { getOperationalPlanInfoData } from '../services/operationalPlanInfoInputService';
+import { useUser } from "../../../core/access/userContext";
 
 export default function OperationalPlanInfoType({ operationalPlanType, onFormControlUpdate }) {
+    const { userInfo } = useUser();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [operationalPlanInfoData, setGameBatchData] = useState([]);
 
     const operationalPlanInfoType = getOperationalPlanInfoData({ 
         cmdLine: 'Get_Input_Id', 
-        gameId: 'OpsMgt', 
-        gameBatch: 1, 
-        gameTeam: 'ALPHA' 
+        gameId: userInfo?.gameId, 
+        gameBatch: userInfo?.gameBatch, 
+        gameTeam: userInfo?.gameTeam 
     });
 
     useEffect(() => {

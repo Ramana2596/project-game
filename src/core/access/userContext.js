@@ -5,12 +5,17 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState({ role: null });
+    const [userInfo, setGameInfo] = useState({ gameId: null, gameBatch: null, gameTeam: null, isGameLeader: null });
     const [userAccessablePageIds, setUserAccessablePageIds] = useState(null);
     const [userAccessiblePages, setUserAccessiblePages] = useState(null);
 
 
     const login = (role) => {
         setUser({ role });
+    };
+
+    const setUserInfo = (userInfo) => {
+        setGameInfo({gameId: userInfo?.gameId, gameBatch: userInfo?.gameBatch, gameTeam: userInfo?.gameTeam, isGameLeader: userInfo?.isGameLeader});
     };
 
     const setAccessablePageIds = ((accessablePageIdList) => {
@@ -37,7 +42,7 @@ export const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ user, userAccessiblePages, login, logout, hasPermission, setAccessablePageIds }}>
+        <UserContext.Provider value={{ user, userInfo,  userAccessiblePages, login, logout, hasPermission, setAccessablePageIds, setUserInfo }}>
             {children}
         </UserContext.Provider>
     );

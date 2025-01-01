@@ -4,11 +4,13 @@ import { useState } from "react";
 import Button from '@mui/material/Button';
 import GenericTable from "../components/GenericTable";
 import FetchDataFromApi from "../hooks/fetchData";
+import { useUser } from "../core/access/userContext.js";
 
 export default function MarketFactorInfo() {
     const [shouldFetchMarketFactorInfo, setShouldFetchMarketFactorInfo] = useState(false);
     const [getMarketFactorInfoParam, setGetMarketInfoParam] = useState(null);
     const [selectedGameBatch, setSelectedBatch] = useState(null);
+    const {userInfo} = useUser();
 
 
     let { apiResponse: gameData,
@@ -21,7 +23,7 @@ export default function MarketFactorInfo() {
         apiFailureErrorRes: gameBatchDataFailureRes,
         isLoading: gameBatchDataIsLoading } = FetchDataFromApi(`/api/getStrategySetData`, true, {
             "type": "getGameBatch",
-            "gameId": "'OpsMgt'"
+            "gameId": `'${userInfo?.gameId}'`
         }
         );
     let tableHeading = ['Period', 'Category', 'Description', 'Quantity', 'Market_Info', 'Unit_Price', 'Currency', 'Price_Info'];
@@ -41,7 +43,7 @@ export default function MarketFactorInfo() {
     const marketFormInfoSumbit = (event) => {
         event.preventDefault();
         setGetMarketInfoParam({
-            gameId: 'OpsMgt',
+            gameId: userInfo?.gameId,
             gameBatch: selectedGameBatch
         });
         setShouldFetchMarketFactorInfo(true);

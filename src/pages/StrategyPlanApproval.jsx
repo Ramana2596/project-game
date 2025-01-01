@@ -5,21 +5,23 @@ import Button from '@mui/material/Button';
 import EditableTable from "../components/EditableTable";
 import FetchDataFromApi from "../hooks/fetchData";
 import UpdateApiCall from "../hooks/updateData";
+import { useUser } from "../core/access/userContext.js";
 
 export default function StrategyPlanApproval() {
     const [shouldUpdateStrategyPlan, setShouldUpdateStrategyPlan] = useState(false);
     const [strategyPlanRequestBody, setStrategyPlanRequestBody] = useState(null);
     const [checkboxStates, setCheckboxStates] = useState({});
     let [editableTableData, setEditableTableData] = useState([]);
+    const {userInfo} = useUser();
 
 
     let { apiResponse: gameIdData,
         apiFailureErrorRes: gameBatchFailureRes,
         isLoading: gameBatchIsLoading } = FetchDataFromApi('/api/getStrategyPlan', true, {
             "type": "getStrategyPlan",
-            "gameId": "OpsMgt",
-            "gameBatch": "1",
-            "gameTeam": "ALPHA"
+            "gameId": userInfo?.gameId,
+            "gameBatch": userInfo?.gameBatch,
+            "gameTeam": userInfo?.gameTeam
         }
         );
     let { apiResponse: updateStrategyPlanAppr,
@@ -74,8 +76,8 @@ export default function StrategyPlanApproval() {
                     <h1>Strategy Plan Approval</h1>
                 </Grid>
                 <Grid container spacing={2} justifyContent="center" alignItems="center">
-                    <h3>Game Batch: 1</h3>
-                    <h3>Game Team: ALPHA</h3>
+                    <h3>Game Batch: {userInfo?.gameBatch}</h3>
+                    <h3>Game Team: {userInfo?.gameTeam}</h3>
                 </Grid>
                 <Grid container spacing={2} justifyContent="center" alignItems="center">
                     <Button type="submit" variant="contained" onClick={strategyFormSubmit}>

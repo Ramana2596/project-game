@@ -6,15 +6,17 @@ import Period from "./components/Period";
 import { getOperationalPlanInfoTableData, updateOperationalPlanInfoInput, deleteOperationalPlanInfo, addOperationalPlanInfo } from "./services/operationalPlanInfoInputService.js";
 import OperationalPlanInfoType from "./components/OperationalPlanInfo";
 import OperationalPlanInputTable from "./components/OperationalPlanInputTable";
+import { useUser } from "../../core/access/userContext.js";
 
 export default function OperationalPlanInfoInput() {
+    const { userInfo } = useUser();
     const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
     const [shouldTriggerGetApi, setShouldTriggerApi] = useState(false);
 
     const initGetOperationalPlanInfo = {
-        gameId: 'OpsMgt',
-        gameBatch: 1,
-        gameTeam: 'ALPHA',
+        gameId: userInfo?.gameId,
+        gameBatch: userInfo?.gameBatch,
+        gameTeam: userInfo?.gameTeam,
         productionMonth: '',
         operationsInputId: '',
         partCategory: null,
@@ -104,8 +106,8 @@ export default function OperationalPlanInfoInput() {
                 <h1>Operational Plan Info Input</h1>
             </Grid>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
-                    <h3>Game Batch: 1</h3>
-                    <h3>Game Team: ALPHA</h3>
+                    <h3>Game Batch: {userInfo?.gameBatch}</h3>
+                    <h3>Game Team: {userInfo?.gameTeam}</h3>
             </Grid>
             <Grid sx={{ margin: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                 <OperationalPlanInfoType operationalPlanType={getOperationalPlanInfoInput.operationalPlanId} onFormControlUpdate={formControlUpdate} />

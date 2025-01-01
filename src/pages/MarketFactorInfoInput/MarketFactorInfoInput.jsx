@@ -7,13 +7,15 @@ import Period from "./components/Period";
 import MarketType from "./components/MarketType";
 import { getMarketFactorInfoTableData, updateMarketFactorInfoInput, deleteMarketFactorInfo, addMarketFactorInfoInput } from "./services/marketFactorInputService.js";
 import MarketFactorInputTable from "./components/MarketFactorInputTable";
+import { useUser } from "../../core/access/userContext.js";
 
 export default function MarketFactorInfoInput() {
     const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
     const [shouldTriggerGetApi, setShouldTriggerApi] = useState(false);
+    const {userInfo} = useUser();
 
     const initGetMarketFactorInput = {
-        gameId: 'OpsMgt',
+        gameId: userInfo?.gameId,
         gameBatch: '',
         productionMonth: '',
         marketInputId: '',

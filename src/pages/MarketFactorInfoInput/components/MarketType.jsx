@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import { InputLabel, FormControl, Select, MenuItem, CircularProgress, Alert } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { getMarketFactorInfoFormData } from '../services/marketFactorInputService';
+import { useUser } from "../../../core/access/userContext.js";
 
 export default function MarketType({ marketType, onFormControlUpdate }) {
+    const {userInfo} = useUser();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [marketTypeData, setGameBatchData] = useState([]);
 
-    const marketTypeResponse = getMarketFactorInfoFormData({ cmdLine: 'Get_Market_Input_Id', gameId: 'OpsMgt' });
+    const marketTypeResponse = getMarketFactorInfoFormData({ 
+        cmdLine: 'Get_Market_Input_Id', 
+        gameId: userInfo?.gameId 
+    });
 
     useEffect(() => {
         setLoading(false);

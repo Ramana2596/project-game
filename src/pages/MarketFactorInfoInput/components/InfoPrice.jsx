@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import { InputLabel, FormControl, Select, MenuItem, CircularProgress, Alert } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { getMarketFactorInfoFormData } from '../services/marketFactorInputService';
+import { useUser } from "../../../core/access/userContext.js";
 
 export default function InfoPrice({ infoPrice, onFormControlUpdate }) {
+    const {userInfo} = useUser();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [infoPriceData, setInfoPriceData] = useState([]);
 
-    const infoPriceResponse = getMarketFactorInfoFormData('getBatch', 'OpsMgt');
+    const infoPriceResponse = getMarketFactorInfoFormData('getBatch', userInfo?.gameId);
 
     useEffect(() => {
         setLoading(false);
