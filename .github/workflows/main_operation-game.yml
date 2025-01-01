@@ -42,6 +42,13 @@ jobs:
         with:
           name: react-app
 
+      - name: List files for debugging
+        run: |
+          echo "Listing contents of the current directory:"
+          ls -la
+          echo "Listing contents of the build directory:"
+          ls -la build
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
