@@ -46,8 +46,13 @@ jobs:
         run: |
           echo "Listing contents of the current directory:"
           ls -la
-          echo "Listing contents of the build directory:"
-          ls -la build
+          echo "Listing contents of the artifact directory:"
+          ls -la react-app
+
+      - name: Move artifact to the correct directory
+        run: |
+          mkdir build
+          mv react-app/* build/
 
       - name: Login to Azure
         uses: azure/login@v2
