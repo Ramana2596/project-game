@@ -70,7 +70,8 @@ function EditableTableData({ editableTableData, onCheckboxChange, hiddenColumns,
 
     const handleInputChange = (event, rowIndex, key) => {
         const newData = [...tableData];
-        newData[rowIndex][key] = event.target.value;
+        const { name, value, type } = event.target;
+        newData[rowIndex][key] = type === 'number' ? parseFloat(value) : value;
         setTableData(newData);
         onUpdate(newData);
     };

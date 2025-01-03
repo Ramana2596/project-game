@@ -20,13 +20,13 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
     const hiddenTableColumns = ['Qty_Id', 'Part', 'Period', 'Price_Id'];
     const hiddenTableColumnsForAdd = ['Qty_Id', 'UOM', 'Part', 'Period', 'currency', 'Price_Id'];
     const inputTypes = [
-        { columnName: 'Item_Description', inputType: 'select' },
+        { columnName: 'Item_Description', inputType: null },
         { columnName: 'UOM', inputType: null },
         { columnName: 'Quantity', inputType: 'text' },
-        { columnName: 'Info_Qty', inputType: 'select' },
+        { columnName: 'Info_Qty', inputType: null },
         { columnName: 'Unit_Price', inputType: 'text' },
         { columnName: 'currency', inputType: null },
-        { columnName: 'Info_Price', inputType: 'select' }
+        { columnName: 'Info_Price', inputType: null }
     ];
 
     useEffect(() => {

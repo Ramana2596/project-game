@@ -42,15 +42,21 @@ export default function MarketFactorInfoInput() {
     };
 
     const [getMarketFactorInput, setFormData] = useState(initGetMarketFactorInput);
-    const marketFactorInfoTableData = getMarketFactorInfoTableData(getMarketFactorInput, shouldTriggerGetApi);
+    const [marketFactorInfoTableData, setMarketFactorInfoResponse] = useState([]);
 
     useEffect(() => {
-        if (shouldTriggerGetApi &&
-            marketFactorInfoTableData?.apiResponse &&
-            marketFactorInfoTableData?.apiResponse.length > 0) {
+        if (shouldTriggerGetApi) {
+            getMarketFactorInfoTableData(getMarketFactorInput)
+                .then(response => {
+                    setMarketFactorInfoResponse(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
             setIsTableActionsEnable(true);
+            setShouldTriggerApi(false);
         }
-    }, [shouldTriggerGetApi, marketFactorInfoTableData]);
+    }, [shouldTriggerGetApi]);
 
     useEffect(() => {
         if (isTableActionsEnable) {
@@ -60,7 +66,8 @@ export default function MarketFactorInfoInput() {
 
     useEffect(() => {
         // Check if all required inputs have values and trigger API call
-        if (getMarketFactorInput.gameBatch &&
+        if (getMarketFactorInput.gameId &&
+            getMarketFactorInput.gameBatch &&
             getMarketFactorInput.productionMonth &&
             getMarketFactorInput.marketInputId) {
             setShouldTriggerApi(true);
@@ -79,16 +86,17 @@ export default function MarketFactorInfoInput() {
             } else {
                 addTableData(updatedData);
             }
+            setShouldTriggerApi(true);
         }
     };
 
     const getFramedPayload = (updatedData) => {
         if (updatedData && updatedData.length > 0) {
             return updatedData.map((obj) => ({
-                gameId: getMarketFactorInput.gameId,
-                gameBatch: getMarketFactorInput.gameBatch,
-                productionMonth: getMarketFactorInput.productionMonth,
-                marketInputId: getMarketFactorInput.marketInputId,
+                gameId: getMarketFactorInput?.gameId,
+                gameBatch: getMarketFactorInput?.gameBatch,
+                productionMonth: getMarketFactorInput?.productionMonth,
+                marketInputId: getMarketFactorInput?.marketInputId,
                 partNo: obj.Part,
                 quantityId: obj.Qty_Id,
                 quantity: obj.Quantity,
@@ -111,7 +119,7 @@ export default function MarketFactorInfoInput() {
                 <Period onDateChange={(date) => formControlUpdate({ productionMonth: date })} />
             </Grid>
             <Divider />
-            <MarketFactorInputTable tableData={marketFactorInfoTableData.apiResponse}
+            <MarketFactorInputTable tableData={marketFactorInfoTableData}
                 isEnableTableActions={isTableActionsEnable} onSubmitApiCall={onSubmitApiCall} />
         </Box>
     );
