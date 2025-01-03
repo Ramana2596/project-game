@@ -12,7 +12,7 @@ import { useUser } from "../../core/access/userContext.js";
 export default function MarketFactorInfoInput() {
     const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
     const [shouldTriggerGetApi, setShouldTriggerApi] = useState(false);
-    const {userInfo} = useUser();
+    const { userInfo } = useUser();
 
     const initGetMarketFactorInput = {
         gameId: userInfo?.gameId,
@@ -49,12 +49,12 @@ export default function MarketFactorInfoInput() {
             getMarketFactorInfoTableData(getMarketFactorInput)
                 .then(response => {
                     setMarketFactorInfoResponse(response.data);
+                    setIsTableActionsEnable(true);
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
                 });
-            setIsTableActionsEnable(true);
-            setShouldTriggerApi(false);
+            setShouldTriggerApi(false);  // Reset the trigger after API call
         }
     }, [shouldTriggerGetApi]);
 
@@ -80,13 +80,15 @@ export default function MarketFactorInfoInput() {
     };
 
     const onSubmitApiCall = (updatedData, deletedTableData, isEdit) => {
+        setShouldTriggerApi(false);
         if (isTableActionsEnable) {
-            if(isEdit) {
-                updateTableData(updatedData, deletedTableData);
+            if (isEdit) {
+                updateTableData(updatedData, deletedTableData)
+                    .then(() => setShouldTriggerApi(true));  // Trigger API after update
             } else {
-                addTableData(updatedData);
+                addTableData(updatedData)
+                    .then(() => setShouldTriggerApi(true));  // Trigger API after addition
             }
-            setShouldTriggerApi(true);
         }
     };
 
@@ -125,26 +127,30 @@ export default function MarketFactorInfoInput() {
     );
 
     function addTableData(updatedData) {
+        const promises = [];
         if (updatedData && updatedData.length > 0) {
             const mktFactorInforPayLoad = {
                 marketFactorInfoArray: getFramedPayload(updatedData)
             };
-            addMarketFactorInfoInput(mktFactorInforPayLoad);
+            promises.push(addMarketFactorInfoInput(mktFactorInforPayLoad));
         }
+        return Promise.resolve(promises);
     }
 
     function updateTableData(updatedData, deletedTableData) {
+        const promises = [];
         if (updatedData && updatedData.length > 0) {
             const mktFactorInforPayLoad = {
                 marketFactorInfoArray: getFramedPayload(updatedData)
             };
-            updateMarketFactorInfoInput(mktFactorInforPayLoad);
+            promises.push(updateMarketFactorInfoInput(mktFactorInforPayLoad));
         }
         if (deletedTableData && deletedTableData.length > 0) {
             const marketFactorInfoInputPayload = {
                 marketFactorInfoArray: getFramedPayload(deletedTableData)
             };
-            deleteMarketFactorInfo(marketFactorInfoInputPayload);
+            promises.push(deleteMarketFactorInfo(marketFactorInfoInputPayload));
         }
+        return Promise.all(promises);
     }
 }

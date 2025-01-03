@@ -29,6 +29,16 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
         { columnName: 'Info_Price', inputType: null }
     ];
 
+    const inputTypesForAdd = [
+        { columnName: 'Item_Description', inputType: 'select' },
+        { columnName: 'UOM', inputType: null },
+        { columnName: 'Quantity', inputType: 'text' },
+        { columnName: 'Info_Qty', inputType: 'select' },
+        { columnName: 'Unit_Price', inputType: 'text' },
+        { columnName: 'currency', inputType: null },
+        { columnName: 'Info_Price', inputType: 'select' }
+    ];
+
     useEffect(() => {
         setIsDisableActionBtns(!isEnableTableActions);
     }, [isEnableTableActions]);
@@ -130,7 +140,7 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
                     inputTableHeadings={tableHeadingForAdd}
                     hiddenColumns={hiddenTableColumnsForAdd}
                     onCheckboxChange={handleCheckboxChange}
-                    tableInputTypes={inputTypes} />
+                    tableInputTypes={inputTypesForAdd} />
             </div>
             <div hidden={isEnableTableEdit}>
                 <EditableTableData editableTableData={tableData}
