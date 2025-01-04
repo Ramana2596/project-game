@@ -15,7 +15,12 @@ export const UserProvider = ({ children }) => {
     };
 
     const setUserInfo = (userInfo) => {
-        setGameInfo({gameId: userInfo?.gameId, gameBatch: userInfo?.gameBatch, gameTeam: userInfo?.gameTeam, isGameLeader: userInfo?.isGameLeader});
+        setGameInfo({gameId: userInfo?.Game_id, 
+            gameBatch: userInfo?.Game_Batch, 
+            gameTeam: userInfo?.Game_Team, 
+            isGameLeader: userInfo?.Team_Leader, 
+            loginId: userInfo?.User_Login
+        });
     };
 
     const setAccessablePageIds = ((accessablePageIdList) => {

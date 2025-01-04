@@ -69,7 +69,7 @@ export default function SignIn(props) {
 
   React.useEffect(() => {
     if (userDetailsResponse && userDetailsResponse.length > 0) {
-      login(userDetailsResponse[0]?.gameRole);
+      login(userDetailsResponse[0]?.Role);
       setUserInfo(userDetailsResponse[0]);
       setValidUser(true);
 
