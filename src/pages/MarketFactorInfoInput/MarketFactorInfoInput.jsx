@@ -110,6 +110,23 @@ export default function MarketFactorInfoInput() {
         return [];
     };
 
+    const getFramedPayloadForAdd = (updatedData) => {
+        if (updatedData && updatedData.length > 0) {
+            return updatedData.map((obj) => ({
+                gameId: getMarketFactorInput?.gameId,
+                gameBatch: getMarketFactorInput?.gameBatch,
+                productionMonth: getMarketFactorInput?.productionMonth,
+                marketInputId: getMarketFactorInput?.marketInputId,
+                partNo: obj.Part,
+                quantityId: obj.Info_Qty,
+                quantity: obj.Quantity,
+                priceId: obj.Info_Price,
+                unitPrice: obj.Unit_Price
+            }));
+        }
+        return [];
+    };
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
@@ -122,7 +139,9 @@ export default function MarketFactorInfoInput() {
             </Grid>
             <Divider />
             <MarketFactorInputTable tableData={marketFactorInfoTableData}
-                isEnableTableActions={isTableActionsEnable} onSubmitApiCall={onSubmitApiCall} />
+                isEnableTableActions={isTableActionsEnable}
+                onSubmitApiCall={onSubmitApiCall}
+                selectedMarketInput={getMarketFactorInput} />
         </Box>
     );
 
@@ -130,7 +149,7 @@ export default function MarketFactorInfoInput() {
         const promises = [];
         if (updatedData && updatedData.length > 0) {
             const mktFactorInforPayLoad = {
-                marketFactorInfoArray: getFramedPayload(updatedData)
+                marketFactorInfoArray: getFramedPayloadForAdd(updatedData)
             };
             promises.push(addMarketFactorInfoInput(mktFactorInforPayLoad));
         }

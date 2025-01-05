@@ -17,6 +17,7 @@ export function getMarketFactorInfoFormData(queryParams) {
     // return api.get('/api/getMarketFactorInfoInput', {params: { ...initGetMarketFactorInput, ...queryParams }});
 }
 
+
 export function getMarketFactorInfoTableData(queryParams) {
     return api.get('/api/getMarketFactorInfoInput',
         {params: { ...initGetMarketFactorInput, ...queryParams }

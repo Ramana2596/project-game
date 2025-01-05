@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { InputLabel, FormControl, Select, MenuItem, CircularProgress, Alert } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { getMarketFactorInfoFormData } from '../services/marketFactorInputService';
+import { getMarketFactorInfoTableData } from '../services/marketFactorInputService';
 import { useUser } from "../../../core/access/userContext.js";
 
 export default function MarketType({ marketType, onFormControlUpdate }) {
@@ -10,19 +10,17 @@ export default function MarketType({ marketType, onFormControlUpdate }) {
     const [error, setError] = useState(null);
     const [marketTypeData, setGameBatchData] = useState([]);
 
-    const marketTypeResponse = getMarketFactorInfoFormData({ 
-        cmdLine: 'Get_Market_Input_Id', 
-        gameId: userInfo?.gameId 
-    });
-
     useEffect(() => {
-        setLoading(false);
-        if (marketTypeResponse?.apiResponse) {
-            setGameBatchData(marketTypeResponse?.apiResponse);
-        } else if (marketTypeResponse?.apiFailureErrorRes) {
-            setError(marketTypeResponse.apiFailureErrorRes);
-        }
-    }, [marketTypeResponse])
+        getMarketFactorInfoTableData({ 
+            cmdLine: 'Get_Market_Input_Id', 
+            gameId: userInfo?.gameId 
+        }).then(response => {
+            setLoading(false);
+            setGameBatchData(response.data);
+         }).catch(error => {
+            setError(error);
+         });
+    }, []);
 
     const handleChange = (event) => {
         const { value } = event.target;

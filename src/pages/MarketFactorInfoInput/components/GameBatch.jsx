@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { InputLabel, FormControl, Select, MenuItem, CircularProgress, Alert } from "@mui/material";
 import Grid from '@mui/material/Grid2';
-import { getMarketFactorInfoFormData } from '../services/marketFactorInputService';
+import { getMarketFactorInfoTableData } from '../services/marketFactorInputService';
 import { useUser } from "../../../core/access/userContext.js";
 
 export default function GameBatch({ gameBatch, onFormControlUpdate }) {
@@ -10,20 +10,18 @@ export default function GameBatch({ gameBatch, onFormControlUpdate }) {
     const [error, setError] = useState(null);
     const [gameBatchData, setGameBatchData] = useState([]);
 
-    const gameBatchResponse = getMarketFactorInfoFormData({ 
-        cmdLine: 'Get_Batch', 
-        gameId: userInfo?.gameId, 
-        gameBatch: userInfo?.gameBatch
-     });
-
     useEffect(() => {
-        setLoading(false);
-        if (gameBatchResponse?.apiResponse) {
-            setGameBatchData(gameBatchResponse?.apiResponse);
-        } else if (gameBatchResponse?.apiFailureErrorRes) {
-            setError(gameBatchResponse.apiFailureErrorRes);
-        }
-    }, [gameBatchResponse])
+        getMarketFactorInfoTableData({ 
+            cmdLine: 'Get_Batch', 
+            gameId: userInfo?.gameId, 
+            gameBatch: userInfo?.gameBatch
+         }).then(response => {
+            setLoading(false);
+            setGameBatchData(response?.data);
+         }).catch(error => {
+            setError(error);
+         });
+    }, []);
 
     const handleChange = (event) => {
         const { value } = event.target;
