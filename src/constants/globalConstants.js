@@ -8,6 +8,7 @@ import GameMaster from '../pages/GameMaster';
 import GameBatch from '../pages/GameBatch';
 import OperationalPlanInfo from '../pages/OperationalPlanInfo/OperationalPlanInfo';
 import OperationalPlanInfoInput from '../pages/OperationalPlanInfoInput/OperationalPlanInfoInput';
+import IncomeStatementInfo from '../pages/IncomeStatementInfo/IncomeStatementInfo';
 
 export const componentList = [
   { id: 'UI 001', displayText: 'Game Dashboard', path: '/gameDashboard', routePath: '/operationGame/gameDashboard', routeElement: <GameDashboard /> },
@@ -19,7 +20,8 @@ export const componentList = [
   { id: 'UI 003', displayText: 'Market Factor Info', path: '/marketFactorInfo', routePath: '/operationGame/marketFactorInfo', routeElement: <MarketFactorInfo /> },
   { id: 'UI 004', displayText: 'Market Factor Info Input', path: '/marketFactorInfoInput', routePath: '/operationGame/marketFactorInfoInput', routeElement: <MarketFactorInfoInput /> },
   { id: 'UI 005', displayText: 'Operational Plan Info', path: '/operationalPlanInfo', routePath: '/operationGame/operationalPlanInfo', routeElement: <OperationalPlanInfo /> },
-  { id: 'UI 005', displayText: 'Operational Plan Info Input', path: '/operationalPlanInfoInput', routePath: '/operationGame/operationalPlanInfoInput', routeElement: <OperationalPlanInfoInput /> }
+  { id: 'UI 005', displayText: 'Operational Plan Info Input', path: '/operationalPlanInfoInput', routePath: '/operationGame/operationalPlanInfoInput', routeElement: <OperationalPlanInfoInput /> },
+  { id: 'UI 005', displayText: 'Income Statement Info', path: '/incomeStatementInfo', routePath: '/operationGame/incomeStatementInfo', routeElement: <IncomeStatementInfo /> }
 ];
 
 export const dateColumns = [
