@@ -24,22 +24,33 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:last-child td, &:last-child th': { border: 0, },
 }));
 
-function AddTableData({ onCheckboxChange, hiddenColumns, tableInputTypes, inputTableHeadings }) {
+function AddTableData({ onCheckboxChange, hiddenColumns, tableInputTypes, inputTableHeadings, resetKey }) {
     const [tableData, setTableData] = useState([]);
     const [checkedItems, setCheckedItems] = useState([]);
 
     useEffect(() => {
-        // Initialize with one row by default 
-        if (tableData.length === 0) {
+        // Initialize with one row by default
+        if(resetKey) {
+            setTableData([]);
+            setCheckedItems([]);
+        }
+    }, [resetKey]);
+
+    useEffect(() => {
+        // Initialize with one row by default
+        if(tableData?.length === 0) {
             handleAddEntry();
         }
-    }, []);
+    }, [tableData]);
 
     const handleCheckboxChange = (event, rowIndex) => {
         if (isRowComplete(tableData[rowIndex])) {
             const updatedCheckedItems = [...checkedItems];
             if (event.target.checked) {
                 updatedCheckedItems.push(rowIndex);
+                if(rowIndex === tableData.length - 1) {
+                    handleAddEntry();
+                }
             } else {
                 const index = updatedCheckedItems.indexOf(rowIndex);
                 if (index > -1) {
@@ -49,7 +60,6 @@ function AddTableData({ onCheckboxChange, hiddenColumns, tableInputTypes, inputT
 
             setCheckedItems(updatedCheckedItems);
             emitCheckedValues(updatedCheckedItems);
-            handleAddEntry();
         } else {
             event.preventDefault();
         }

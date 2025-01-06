@@ -233,6 +233,7 @@ export default function MarketFactorInputTable({ tableData, isEnableTableActions
                         hiddenColumns={hiddenTableColumnsForAdd}
                         onCheckboxChange={handleCheckboxChange}
                         tableInputTypes={addTableData}
+                        resetKey={isEnableTableAdd}
                     />
                 </div>
             )}

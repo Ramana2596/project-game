@@ -26,33 +26,15 @@ export function getMarketFactorInfoTableData(queryParams) {
 
 export function addMarketFactorInfoInput(marketFactorInfoInputPayload) {
     let payload = { ...marketFactorInfoInputPayload, cmdLine: 'Add_Market_Factor' }
-    api.post('/api/updateMarketFactorInput', payload)
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error('Error posting data:', error);
-        });
+    return api.post('/api/updateMarketFactorInput', payload);
 }
 
 export function updateMarketFactorInfoInput(marketFactorInfoInputPayload) {
     let payload = { ...marketFactorInfoInputPayload, cmdLine: 'Update_Market_Factor' }
-    api.post('/api/updateMarketFactorInput', payload)
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error('Error posting data:', error);
-        });
+    return api.post('/api/updateMarketFactorInput', payload);
 }
 
 export function deleteMarketFactorInfo(marketFactorInfoInputPayload) {
     let payload = { ...marketFactorInfoInputPayload, cmdLine: 'Delete_Market_Factor' };
-    api.post('/api/updateMarketFactorInput', payload)
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error('Error posting data:', error);
-        });
+    return api.post('/api/updateMarketFactorInput', payload);
 }
