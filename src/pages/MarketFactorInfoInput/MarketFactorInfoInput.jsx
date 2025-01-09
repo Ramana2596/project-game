@@ -14,6 +14,7 @@ import {
 import MarketFactorInputTable from "./components/MarketFactorInputTable";
 import { useUser } from "../../core/access/userContext.js";
 import Alert from "../../components/Alert";
+import { pageConstants } from "./constants/pageConstants.js";
 
 export default function MarketFactorInfoInput() {
   const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
@@ -160,7 +161,7 @@ export default function MarketFactorInfoInput() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h1>Market Factor Info Input</h1>
+        <h1>{pageConstants.pageTitle}</h1>
       </Grid>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
         {alertData?.isVisible && (

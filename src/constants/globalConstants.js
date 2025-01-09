@@ -18,9 +18,9 @@ export const componentList = [
   { id: 'UI 001', displayText: 'Launch Strategy', path: '/strategyLaunched', routePath: '/operationGame/strategyLaunched', routeElement: <StrategyLaunched /> },
   { id: 'UI 002', displayText: 'Strategy Plan Approval', path: '/strategyPlanApproval', routePath: '/operationGame/strategyPlanApproval', routeElement: <StrategyPlan /> },
   { id: 'UI 003', displayText: 'Market Factor Info', path: '/marketFactorInfo', routePath: '/operationGame/marketFactorInfo', routeElement: <MarketFactorInfo /> },
-  { id: 'UI 004', displayText: 'Market Factor Info Input', path: '/marketFactorInfoInput', routePath: '/operationGame/marketFactorInfoInput', routeElement: <MarketFactorInfoInput /> },
+  { id: 'UI 004', displayText: 'Market Factor Input', path: '/marketFactorInfoInput', routePath: '/operationGame/marketFactorInfoInput', routeElement: <MarketFactorInfoInput /> },
   { id: 'UI 005', displayText: 'Operational Plan Info', path: '/operationalPlanInfo', routePath: '/operationGame/operationalPlanInfo', routeElement: <OperationalPlanInfo /> },
-  { id: 'UI 005', displayText: 'Operational Plan Info Input', path: '/operationalPlanInfoInput', routePath: '/operationGame/operationalPlanInfoInput', routeElement: <OperationalPlanInfoInput /> },
+  { id: 'UI 005', displayText: 'Operational Plan Input', path: '/operationalPlanInfoInput', routePath: '/operationGame/operationalPlanInfoInput', routeElement: <OperationalPlanInfoInput /> },
   { id: 'UI 005', displayText: 'Income Statement Info', path: '/incomeStatementInfo', routePath: '/operationGame/incomeStatementInfo', routeElement: <IncomeStatementInfo /> }
 ];
 

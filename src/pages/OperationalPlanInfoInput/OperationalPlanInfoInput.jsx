@@ -128,7 +128,7 @@ export default function OperationalPlanInfoInput() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h1>Operational Plan Info Input</h1>
+        <h1>Operational Plan Input</h1>
       </Grid>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
         <h3>Game Batch: {userInfo?.gameBatch}</h3>
