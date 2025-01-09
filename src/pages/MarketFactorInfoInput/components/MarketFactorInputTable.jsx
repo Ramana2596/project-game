@@ -6,6 +6,7 @@ import AddTableData from "../../../components/AddTableData";
 import EditableTableData from "../../../components/EditableTableData";
 import { useUser } from "../../../core/access/userContext";
 import { getMarketFactorInfoTableData } from "../services/marketFactorInputService";
+import { pageConstants } from "../constants/pageConstants";
 
 export default function MarketFactorInputTable({
   tableData,
@@ -38,49 +39,6 @@ export default function MarketFactorInputTable({
   const [isDataFetched, setIsDataFetched] = useState(false);
   const { userInfo } = useUser();
 
-  const tableHeading = [
-    "Item Description",
-    "UOM",
-    "Quantity",
-    "Info_Qty",
-    "Unit Price",
-    "currency",
-    "Info Price",
-  ];
-  const tableHeadingForAdd = [
-    "Item Description",
-    "Quantity",
-    "Info_Qty",
-    "Unit Price",
-    "Info Price",
-  ];
-  const hiddenTableColumns = ["Qty_Id", "Part", "Period", "Price_Id"];
-  const hiddenTableColumnsForAdd = [
-    "Qty_Id",
-    "UOM",
-    "Part",
-    "Period",
-    "currency",
-    "Price_Id",
-  ];
-  const inputTypes = [
-    { columnName: "Item_Description", inputType: null },
-    { columnName: "UOM", inputType: null },
-    { columnName: "Quantity", inputType: "text" },
-    { columnName: "Info_Qty", inputType: null },
-    { columnName: "Unit_Price", inputType: "text" },
-    { columnName: "currency", inputType: null },
-    { columnName: "Info_Price", inputType: null },
-  ];
-
-  let inputTypesForAdd = [
-    { columnName: "Item_Description", inputType: "select" },
-    { columnName: "Quantity", inputType: "text" },
-    { columnName: "Info_Qty", inputType: "select" },
-    { columnName: "Unit_Price", inputType: "text" },
-    { columnName: "Info_Price", inputType: "select" },
-  ];
-
   useEffect(() => {
     setIsDisableActionBtns(!isEnableTableActions);
   }, [isEnableTableActions]);
@@ -99,13 +57,15 @@ export default function MarketFactorInputTable({
           refTypePrice: null,
           cmdLine: "Get_Part",
         }).then((data) => {
-          inputTypesForAdd.forEach((inputTypeObj) => {
-            if (inputTypeObj.columnName === "Item_Description") {
-              inputTypeObj.data = data.data?.map((dataObj) => {
-                return { value: dataObj?.Part, label: dataObj?.Description };
-              });
+          pageConstants.contentSection.inputTypesForAdd.forEach(
+            (inputTypeObj) => {
+              if (inputTypeObj.columnName === "Item_Description") {
+                inputTypeObj.data = data.data?.map((dataObj) => {
+                  return { value: dataObj?.Part, label: dataObj?.Description };
+                });
+              }
             }
-          });
+          );
         });
 
         const qtyPromise = getMarketFactorInfoTableData({
@@ -118,16 +78,18 @@ export default function MarketFactorInputTable({
           refTypePrice: null,
           cmdLine: "Get_Qty_Id",
         }).then((data) => {
-          inputTypesForAdd.forEach((inputTypeObj) => {
-            if (inputTypeObj.columnName === "Info_Qty") {
-              inputTypeObj.data = data.data?.map((dataObj) => {
-                return {
-                  value: dataObj?.Info_Qty_Id,
-                  label: dataObj?.Info_On_Qty,
-                };
-              });
+          pageConstants.contentSection.inputTypesForAdd.forEach(
+            (inputTypeObj) => {
+              if (inputTypeObj.columnName === "Info_Qty") {
+                inputTypeObj.data = data.data?.map((dataObj) => {
+                  return {
+                    value: dataObj?.Info_Qty_Id,
+                    label: dataObj?.Info_On_Qty,
+                  };
+                });
+              }
             }
-          });
+          );
         });
 
         const pricePromise = getMarketFactorInfoTableData({
@@ -140,22 +102,24 @@ export default function MarketFactorInputTable({
           refTypePrice: null,
           cmdLine: "Get_Price_Id",
         }).then((data) => {
-          inputTypesForAdd.forEach((inputTypeObj) => {
-            if (inputTypeObj.columnName === "Info_Price") {
-              inputTypeObj.data = data.data?.map((dataObj) => {
-                return {
-                  value: dataObj?.Price_Id,
-                  label: dataObj?.Info_On_Price,
-                };
-              });
+          pageConstants.contentSection.inputTypesForAdd.forEach(
+            (inputTypeObj) => {
+              if (inputTypeObj.columnName === "Info_Price") {
+                inputTypeObj.data = data.data?.map((dataObj) => {
+                  return {
+                    value: dataObj?.Price_Id,
+                    label: dataObj?.Info_On_Price,
+                  };
+                });
+              }
             }
-          });
+          );
         });
 
         // Wait for all promises to complete
         await Promise.all([partPromise, qtyPromise, pricePromise]);
 
-        setAddTableData([...inputTypesForAdd]);
+        setAddTableData([...pageConstants.contentSection.inputTypesForAdd]);
         setLoading(false); // All data fetched, set loading to false
         setIsDataFetched(true); // Set fetch data completion state
       } catch (error) {
@@ -256,7 +220,7 @@ export default function MarketFactorInputTable({
           variant="contained"
           onClick={onAddBtnClick}
         >
-          Add
+          {pageConstants.contentSection.addBtnLabel}
         </Button>
         <Button
           disabled={isDisableActionBtns}
@@ -265,7 +229,7 @@ export default function MarketFactorInputTable({
           variant="contained"
           onClick={onModifyBtnClick}
         >
-          Modify
+          {pageConstants.contentSection.modifyBtnLabel}
         </Button>
         <Button
           disabled={isDisableSubCanBtns}
@@ -273,7 +237,7 @@ export default function MarketFactorInputTable({
           variant="contained"
           onClick={onSubmitBtnClick}
         >
-          Commit Data
+          {pageConstants.contentSection.saveBtnLabel}
         </Button>
         <Button
           disabled={isDisableSubCanBtns}
@@ -282,22 +246,24 @@ export default function MarketFactorInputTable({
           variant="contained"
           onClick={onCancelButtonClick}
         >
-          Cancel
+          {pageConstants.contentSection.cancelBtnLabel}
         </Button>
       </Grid>
       <div hidden={isEnableGenericTable}>
         <GenericTable
-          inputTableHeadings={tableHeading}
+          inputTableHeadings={pageConstants.contentSection.tableHeading}
           inputTableData={tableData}
           ifNoData={null}
-          hiddenColumns={hiddenTableColumns}
+          hiddenColumns={pageConstants.contentSection.hiddenTableColumns}
         />
       </div>
       {!loading && (
         <div hidden={isEnableTableAdd}>
           <AddTableData
-            inputTableHeadings={tableHeadingForAdd}
-            hiddenColumns={hiddenTableColumnsForAdd}
+            inputTableHeadings={pageConstants.contentSection.tableHeadingForAdd}
+            hiddenColumns={
+              pageConstants.contentSection.hiddenTableColumnsForAdd
+            }
             onCheckboxChange={handleCheckboxChange}
             tableInputTypes={addTableData}
             resetKey={isEnableTableAdd}
@@ -307,9 +273,9 @@ export default function MarketFactorInputTable({
       <div hidden={isEnableTableEdit}>
         <EditableTableData
           editableTableData={tableData}
-          inputTableHeadings={tableHeading}
-          hiddenColumns={hiddenTableColumns}
-          tableInputTypes={inputTypes}
+          inputTableHeadings={pageConstants.contentSection.tableHeading}
+          hiddenColumns={pageConstants.contentSection.hiddenTableColumns}
+          tableInputTypes={pageConstants.contentSection.inputTypes}
           onUpdate={updateData}
         />
       </div>

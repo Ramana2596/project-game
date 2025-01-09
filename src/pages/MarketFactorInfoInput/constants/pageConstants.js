@@ -1,3 +1,50 @@
 export const pageConstants = {
-    pageTitle: 'Market Factor Input'
+  pageTitle: "Market Factor Input",
+  contentSection: {
+    addBtnLabel: "Add",
+    modifyBtnLabel: "Modify",
+    saveBtnLabel: "Save",
+    cancelBtnLabel: "Cancel",
+    tableHeading: [
+      "Item Description",
+      "UOM",
+      "Quantity",
+      "Info_Qty",
+      "Unit Price",
+      "currency",
+      "Info Price",
+    ],
+    tableHeadingForAdd: [
+      "Item Description",
+      "Quantity",
+      "Info_Qty",
+      "Unit Price",
+      "Info Price",
+    ],
+    hiddenTableColumns: ["Qty_Id", "Part", "Period", "Price_Id"],
+    hiddenTableColumnsForAdd: [
+      "Qty_Id",
+      "UOM",
+      "Part",
+      "Period",
+      "currency",
+      "Price_Id",
+    ],
+    inputTypes: [
+      { columnName: "Item_Description", inputType: null },
+      { columnName: "UOM", inputType: null },
+      { columnName: "Quantity", inputType: "text" },
+      { columnName: "Info_Qty", inputType: null },
+      { columnName: "Unit_Price", inputType: "text" },
+      { columnName: "currency", inputType: null },
+      { columnName: "Info_Price", inputType: null },
+    ],
+    inputTypesForAdd: [
+      { columnName: "Item_Description", inputType: "select" },
+      { columnName: "Quantity", inputType: "text" },
+      { columnName: "Info_Qty", inputType: "select" },
+      { columnName: "Unit_Price", inputType: "text" },
+      { columnName: "Info_Price", inputType: "select" },
+    ],
+  },
 };
