@@ -13,7 +13,6 @@ import {
 } from "./services/marketFactorInputService.js";
 import MarketFactorInputTable from "./components/MarketFactorInputTable";
 import { useUser } from "../../core/access/userContext.js";
-import Alert from "../../components/Alert";
 import { pageConstants } from "./constants/pageConstants.js";
 
 export default function MarketFactorInfoInput() {
@@ -163,11 +162,7 @@ export default function MarketFactorInfoInput() {
       <Grid container spacing={2} justifyContent="center" alignItems="center">
         <h1>{pageConstants.pageTitle}</h1>
       </Grid>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        {alertData?.isVisible && (
-          <Alert severity={alertData.severity} message={alertData.message} />
-        )}
-      </Grid>
+
       <Grid
         sx={{ margin: 5 }}
         container
@@ -193,6 +188,7 @@ export default function MarketFactorInfoInput() {
         isEnableTableActions={isTableActionsEnable}
         onSubmitApiCall={onSubmitApiCall}
         selectedMarketInput={getMarketFactorInput}
+        alertData={alertData}
       />
     </Box>
   );

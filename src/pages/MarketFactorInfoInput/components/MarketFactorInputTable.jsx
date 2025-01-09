@@ -7,12 +7,14 @@ import EditableTableData from "../../../components/EditableTableData";
 import { useUser } from "../../../core/access/userContext";
 import { getMarketFactorInfoTableData } from "../services/marketFactorInputService";
 import { pageConstants } from "../constants/pageConstants";
+import Alert from "../../../components/Alert";
 
 export default function MarketFactorInputTable({
   tableData,
   isEnableTableActions,
   onSubmitApiCall,
   selectedMarketInput,
+  alertData,
 }) {
   const [isDisableActionBtns, setIsDisableActionBtns] = useState(
     !isEnableTableActions
@@ -248,6 +250,11 @@ export default function MarketFactorInputTable({
         >
           {pageConstants.contentSection.cancelBtnLabel}
         </Button>
+      </Grid>
+      <Grid container spacing={2} justifyContent="center" alignItems="center">
+        {alertData?.isVisible && (
+          <Alert severity={alertData?.severity} message={alertData?.message} />
+        )}
       </Grid>
       <div hidden={isEnableGenericTable}>
         <GenericTable
