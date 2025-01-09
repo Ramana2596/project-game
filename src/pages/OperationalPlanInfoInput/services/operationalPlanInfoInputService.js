@@ -3,7 +3,7 @@ import api from '../../../core/interceptor/api-interceptor';
 
 let initGetMarketFactorInput = {
     gameId: 'OpsMgt',
-    operationsInputId: '',
+    operationsInputId: null,
     gameBatch: null,
     productionMonth: null,
     marketInputId: null,
@@ -17,8 +17,8 @@ export function getOperationalPlanInfoData(queryParams) {
     return FetchDataFromApi('/api/getOperationalPlanInfoInput', true, { ...initGetMarketFactorInput, ...queryParams });
 }
 
-export function getOperationalPlanInfoTableData(queryParams, shouldTriggerApi) {
-    return FetchDataFromApi('/api/getOperationalPlanInfoInput', shouldTriggerApi, { ...initGetMarketFactorInput, ...queryParams });
+export function getOperationalPlanInfoTableData(queryParams) {
+    return api.get('/api/getOperationalPlanInfoInput', { params: {...queryParams} });
 }
 
 export function addOperationalPlanInfo(marketFactorInfoInputPayload) {

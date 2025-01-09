@@ -1,6 +1,6 @@
 import GameSession from '../pages/GameSession';
 import GameDashboard from '../pages/GameDashboard/GameDashboard';
-import StrategyLaunched from '../pages/StrategyLaunched';
+import StrategyLaunched from '../pages/LaunchStrategy/StrategyLaunched';
 import StrategyPlan from '../pages/StrategyPlanApproval';
 import MarketFactorInfo from '../pages/MarketFactorInfo';
 import MarketFactorInfoInput from '../pages/MarketFactorInfoInput/MarketFactorInfoInput';
@@ -15,7 +15,7 @@ export const componentList = [
   { id: '', displayText: 'Game Master', path: '/gameMaster', routePath: '/operationGame/gameMaster', routeElement: <GameMaster /> },
   { id: '', displayText: 'Game Batch', path: '/gameBatch', routePath: '/operationGame/gameBatch', routeElement: <GameBatch /> },
   { id: '', displayText: 'Game Session', path: '/gameSession', routePath: '/operationGame/gameSession', routeElement: <GameSession /> },
-  { id: 'UI 001', displayText: 'Strategy Launched', path: '/strategyLaunched', routePath: '/operationGame/strategyLaunched', routeElement: <StrategyLaunched /> },
+  { id: 'UI 001', displayText: 'Launch Strategy', path: '/strategyLaunched', routePath: '/operationGame/strategyLaunched', routeElement: <StrategyLaunched /> },
   { id: 'UI 002', displayText: 'Strategy Plan Approval', path: '/strategyPlanApproval', routePath: '/operationGame/strategyPlanApproval', routeElement: <StrategyPlan /> },
   { id: 'UI 003', displayText: 'Market Factor Info', path: '/marketFactorInfo', routePath: '/operationGame/marketFactorInfo', routeElement: <MarketFactorInfo /> },
   { id: 'UI 004', displayText: 'Market Factor Info Input', path: '/marketFactorInfoInput', routePath: '/operationGame/marketFactorInfoInput', routeElement: <MarketFactorInfoInput /> },
