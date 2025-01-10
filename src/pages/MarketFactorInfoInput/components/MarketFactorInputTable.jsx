@@ -15,6 +15,7 @@ export default function MarketFactorInputTable({
   onSubmitApiCall,
   selectedMarketInput,
   alertData,
+  setDisableHeaderSection,
 }) {
   const [isDisableActionBtns, setIsDisableActionBtns] = useState(
     !isEnableTableActions
@@ -40,6 +41,7 @@ export default function MarketFactorInputTable({
   ]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const { userInfo } = useUser();
+  const [resetKey, setResetKey] = useState(0); // Add resetKey state
 
   useEffect(() => {
     setIsDisableActionBtns(!isEnableTableActions);
@@ -137,6 +139,7 @@ export default function MarketFactorInputTable({
   const onAddBtnClick = () => {
     setIsDisableActionBtns(true);
     setIsDisableSubCanBtns(false);
+    setDisableHeaderSection(true);
     setIsEnableTableAdd(false);
     setIsEnableGenericTable(true);
   };
@@ -144,6 +147,7 @@ export default function MarketFactorInputTable({
   const onModifyBtnClick = () => {
     setIsDisableActionBtns(true);
     setIsDisableSubCanBtns(false);
+    setDisableHeaderSection(true);
     setIsEnableTableEdit(false);
     setIsEnableGenericTable(true);
   };
@@ -155,6 +159,7 @@ export default function MarketFactorInputTable({
     if (!isEnableTableAdd && isEnableTableEdit) {
       onSubmitApiCall(newTableData, deletedTableData, false);
     }
+    setDisableHeaderSection(false);
     setIsDisableActionBtns(false);
     setIsDisableSubCanBtns(true);
     setIsEnableTableEdit(true);
@@ -163,11 +168,13 @@ export default function MarketFactorInputTable({
   };
 
   const onCancelButtonClick = () => {
+    setDisableHeaderSection(false);
     setIsDisableActionBtns(false);
     setIsDisableSubCanBtns(true);
     setIsEnableTableEdit(true);
     setIsEnableTableAdd(true);
     setIsEnableGenericTable(false);
+    setResetKey((prevKey) => prevKey + 1); // Update resetKey to trigger reset
   };
 
   const updateData = (updatedTableData) => {
@@ -279,6 +286,7 @@ export default function MarketFactorInputTable({
       )}
       <div hidden={isEnableTableEdit}>
         <EditableTableData
+          key={resetKey} // Add key prop here to trigger reset
           editableTableData={tableData}
           inputTableHeadings={pageConstants.contentSection.tableHeading}
           hiddenColumns={pageConstants.contentSection.hiddenTableColumns}

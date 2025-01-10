@@ -17,6 +17,7 @@ import { pageConstants } from "./constants/pageConstants.js";
 
 export default function MarketFactorInfoInput() {
   const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
+  const [isDisableHeaderSection, setIsDisableHeaderSection] = useState(false);
   const [shouldTriggerGetApi, setShouldTriggerApi] = useState(false);
   const { userInfo } = useUser();
   const [alertData, setAlertData] = useState({
@@ -109,6 +110,10 @@ export default function MarketFactorInfoInput() {
     }
   };
 
+  const updateHeaderSectionState = (isDisable) => {
+    setIsDisableHeaderSection(isDisable);
+  };
+
   const getFramedPayload = (updatedData) => {
     if (updatedData && updatedData.length > 0) {
       return updatedData.map((obj) => ({
@@ -170,14 +175,17 @@ export default function MarketFactorInfoInput() {
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
         <GameBatch
+          isDisabled={isDisableHeaderSection}
           gameBatch={getMarketFactorInput.gameBatch}
           onFormControlUpdate={formControlUpdate}
         />
         <MarketType
+          isDisabled={isDisableHeaderSection}
           marketType={getMarketFactorInput.marketInputId}
           onFormControlUpdate={formControlUpdate}
         />
         <Period
+          isDisabled={isDisableHeaderSection}
           marketType={getMarketFactorInput.productionMonth}
           onFormControlUpdate={formControlUpdate}
         />
@@ -187,6 +195,7 @@ export default function MarketFactorInfoInput() {
         tableData={marketFactorInfoTableData}
         isEnableTableActions={isTableActionsEnable}
         onSubmitApiCall={onSubmitApiCall}
+        setDisableHeaderSection={updateHeaderSectionState}
         selectedMarketInput={getMarketFactorInput}
         alertData={alertData}
       />
