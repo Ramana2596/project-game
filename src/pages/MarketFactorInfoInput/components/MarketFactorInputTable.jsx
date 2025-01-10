@@ -217,7 +217,7 @@ export default function MarketFactorInputTable({
   return (
     <div>
       <Grid
-        margin={5}
+        margin={2}
         container
         spacing={2}
         justifyContent="center"
@@ -258,7 +258,7 @@ export default function MarketFactorInputTable({
           {pageConstants.contentSection.cancelBtnLabel}
         </Button>
       </Grid>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
+      <Grid margin={0} container justifyContent="center" alignItems="center">
         {alertData?.isVisible && (
           <Alert severity={alertData?.severity} message={alertData?.message} />
         )}

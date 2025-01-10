@@ -23,6 +23,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
+    padding: "8px 16px", // Adjust the padding to reduce height
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -135,7 +136,7 @@ function EditableTableData({
   };
 
   return (
-    <Box margin={10} sx={{ flexGrow: 1 }}>
+    <Box marginLeft={10} marginRight={10} sx={{ flexGrow: 1 }}>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 500 }} aria-label="customized table">
           <TableHead>
