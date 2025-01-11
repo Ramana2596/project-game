@@ -14,6 +14,7 @@ import {
 import MarketFactorInputTable from "./components/MarketFactorInputTable";
 import { useUser } from "../../core/access/userContext.js";
 import { pageConstants } from "./constants/pageConstants.js";
+import ToastMessage from "../../components/ToastMessage.jsx";
 
 export default function MarketFactorInfoInput() {
   const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
@@ -25,6 +26,9 @@ export default function MarketFactorInfoInput() {
     message: "",
     isVisible: false,
   });
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastSeverity, setToastSeverity] = useState("success");
 
   const initGetMarketFactorInput = {
     gameId: userInfo?.gameId,
@@ -188,6 +192,7 @@ export default function MarketFactorInfoInput() {
           isDisabled={isDisableHeaderSection}
           marketType={getMarketFactorInput.productionMonth}
           onFormControlUpdate={formControlUpdate}
+          dateFormat={"dd/mm/yyyy"}
         />
       </Grid>
       <Divider />
@@ -197,7 +202,11 @@ export default function MarketFactorInfoInput() {
         onSubmitApiCall={onSubmitApiCall}
         setDisableHeaderSection={updateHeaderSectionState}
         selectedMarketInput={getMarketFactorInput}
-        alertData={alertData}
+      />
+      <ToastMessage
+        open={alertData.isVisible}
+        severity={alertData.severity}
+        message={alertData.message}
       />
     </Box>
   );

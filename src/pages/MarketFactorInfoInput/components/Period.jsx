@@ -10,12 +10,24 @@ import {
 import Grid from "@mui/material/Grid2";
 import { getMarketFactorInfoTableData } from "../services/marketFactorInputService";
 import { useUser } from "../../../core/access/userContext.js";
+import ToastMessage from "../../../components/ToastMessage.jsx";
 
-export default function Period({ period, onFormControlUpdate, isDisabled }) {
+export default function Period({
+  period,
+  onFormControlUpdate,
+  isDisabled,
+  dateFormat,
+}) {
   const { userInfo } = useUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [gamePeriod, setGamePeriod] = useState([]);
+  const [selectedPeriod, setSelectedPeriod] = useState(period);
+  const [alertData, setAlertData] = useState({
+    severity: "",
+    message: "",
+    isVisible: false,
+  });
 
   useEffect(() => {
     getMarketFactorInfoTableData({
@@ -30,14 +42,51 @@ export default function Period({ period, onFormControlUpdate, isDisabled }) {
       .catch((error) => {
         setError(error);
       });
-  }, []);
+  }, [userInfo?.gameId, userInfo?.gameBatch]);
 
   const handleChange = (event) => {
     const { value } = event.target;
+    setSelectedPeriod(value);
     const selectedValueObj = gamePeriod.filter(
       (gamePeriodObj) => gamePeriodObj.Valid_Period === value
     );
-    onFormControlUpdate({ productionMonth: selectedValueObj[0]?.Valid_Period });
+
+    // Make an API call to validate the selected period
+    getMarketFactorInfoTableData({
+      cmdLine: "Valid_Period",
+      gameId: userInfo?.gameId,
+      gameBatch: userInfo?.gameBatch,
+      period: value,
+    })
+      .then((response) => {
+        if (response.data) {
+          setAlertData({
+            severity: "",
+            message: "",
+            isVisible: false,
+          });
+          if (selectedValueObj.length > 0) {
+            onFormControlUpdate({ productionMonth: value });
+          }
+        } else {
+          // Handle invalid period case
+          console.error("Invalid period selected.");
+        }
+      })
+      .catch((error) => {
+        setAlertData({
+          severity: "error",
+          message: error?.response?.data?.error || "Invalid period selected.",
+          isVisible: true,
+        });
+      });
+  };
+
+  const handleCloseToast = () => {
+    setAlertData((prevState) => ({
+      ...prevState,
+      isVisible: false,
+    }));
   };
 
   return (
@@ -48,7 +97,7 @@ export default function Period({ period, onFormControlUpdate, isDisabled }) {
           labelId="period"
           id="periodRequired"
           name="productionMonth"
-          value={period}
+          value={selectedPeriod}
           label="Period *"
           onChange={handleChange}
           disabled={isDisabled}
@@ -74,6 +123,12 @@ export default function Period({ period, onFormControlUpdate, isDisabled }) {
           )}
         </Select>
       </FormControl>
+      <ToastMessage
+        open={alertData.isVisible}
+        severity={alertData.severity}
+        message={alertData.message}
+        onClose={handleCloseToast}
+      />
     </Grid>
   );
 }
