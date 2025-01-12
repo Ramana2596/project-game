@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid2";
 import Divider from "@mui/material/Divider";
 import GameBatch from "./components/GameBatch";
 import Period from "./components/Period";
+import DatePeriod from "./components/DatePeriod.jsx";
 import MarketType from "./components/MarketType";
 import {
   getMarketFactorInfoTableData,
@@ -188,12 +189,17 @@ export default function MarketFactorInfoInput() {
           marketType={getMarketFactorInput.marketInputId}
           onFormControlUpdate={formControlUpdate}
         />
-        <Period
+        {/* <Period
           selectedGameBatch={getMarketFactorInput.gameBatch}
           isDisabled={isDisableHeaderSection}
           marketType={getMarketFactorInput.productionMonth}
           onFormControlUpdate={formControlUpdate}
-          dateFormat={"dd/mm/yyyy"}
+        /> */}
+        <DatePeriod
+          selectedGameBatch={getMarketFactorInput.gameBatch}
+          isDisabled={isDisableHeaderSection}
+          marketType={getMarketFactorInput.productionMonth}
+          onFormControlUpdate={formControlUpdate}
         />
       </Grid>
       <Divider />
