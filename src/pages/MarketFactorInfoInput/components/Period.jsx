@@ -16,13 +16,13 @@ export default function Period({
   period,
   onFormControlUpdate,
   isDisabled,
-  dateFormat,
+  selectedGameBatch,
 }) {
   const { userInfo } = useUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [gamePeriod, setGamePeriod] = useState([]);
-  const [selectedPeriod, setSelectedPeriod] = useState(period);
+  const [selectedPeriod, setSelectedPeriod] = useState(null); // Initialize as null
   const [alertData, setAlertData] = useState({
     severity: "",
     message: "",
@@ -30,56 +30,30 @@ export default function Period({
   });
 
   useEffect(() => {
-    getMarketFactorInfoTableData({
-      cmdLine: "Get_Period",
-      gameId: userInfo?.gameId,
-      gameBatch: userInfo?.gameBatch,
-    })
-      .then((response) => {
-        setLoading(false);
-        setGamePeriod(response.data);
+    if (selectedGameBatch) {
+      getMarketFactorInfoTableData({
+        cmdLine: "Get_Period",
+        gameId: userInfo?.gameId,
+        gameBatch: selectedGameBatch,
       })
-      .catch((error) => {
-        setError(error);
-      });
-  }, [userInfo?.gameId, userInfo?.gameBatch]);
+        .then((response) => {
+          setLoading(false);
+          setGamePeriod(response.data);
+          const latestPeriod =
+            response.data[response.data.length - 1]?.Valid_Period;
+          setSelectedPeriod(latestPeriod);
+          onFormControlUpdate({ productionMonth: latestPeriod });
+        })
+        .catch((error) => {
+          setError(error);
+        });
+    }
+  }, [userInfo?.gameBatch, selectedGameBatch]);
 
   const handleChange = (event) => {
     const { value } = event.target;
     setSelectedPeriod(value);
-    const selectedValueObj = gamePeriod.filter(
-      (gamePeriodObj) => gamePeriodObj.Valid_Period === value
-    );
-
-    // Make an API call to validate the selected period
-    getMarketFactorInfoTableData({
-      cmdLine: "Valid_Period",
-      gameId: userInfo?.gameId,
-      gameBatch: userInfo?.gameBatch,
-      productionMonth: value,
-    })
-      .then((response) => {
-        if (response.data) {
-          setAlertData({
-            severity: "",
-            message: "",
-            isVisible: false,
-          });
-          if (selectedValueObj.length > 0) {
-            onFormControlUpdate({ productionMonth: value });
-          }
-        } else {
-          // Handle invalid period case
-          console.error("Invalid period selected.");
-        }
-      })
-      .catch((error) => {
-        setAlertData({
-          severity: "error",
-          message: error?.response?.data?.error || "Invalid period selected.",
-          isVisible: true,
-        });
-      });
+    onFormControlUpdate({ productionMonth: value });
   };
 
   const handleCloseToast = () => {
@@ -97,7 +71,7 @@ export default function Period({
           labelId="period"
           id="periodRequired"
           name="productionMonth"
-          value={selectedPeriod}
+          value={selectedPeriod || ""}
           label="Period *"
           onChange={handleChange}
           disabled={isDisabled}
@@ -115,9 +89,8 @@ export default function Period({
               <MenuItem key={index} value={obj.Valid_Period}>
                 {new Date(obj.Valid_Period).toLocaleString("default", {
                   month: "long",
-                }) +
-                  " " +
-                  new Date(obj.Valid_Period).getFullYear()}
+                  year: "numeric",
+                })}
               </MenuItem>
             ))
           )}

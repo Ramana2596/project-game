@@ -189,6 +189,7 @@ export default function MarketFactorInfoInput() {
           onFormControlUpdate={formControlUpdate}
         />
         <Period
+          selectedGameBatch={getMarketFactorInput.gameBatch}
           isDisabled={isDisableHeaderSection}
           marketType={getMarketFactorInput.productionMonth}
           onFormControlUpdate={formControlUpdate}
