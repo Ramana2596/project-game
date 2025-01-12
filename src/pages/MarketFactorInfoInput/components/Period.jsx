@@ -56,7 +56,7 @@ export default function Period({
       cmdLine: "Valid_Period",
       gameId: userInfo?.gameId,
       gameBatch: userInfo?.gameBatch,
-      period: value,
+      productionMonth: value,
     })
       .then((response) => {
         if (response.data) {
