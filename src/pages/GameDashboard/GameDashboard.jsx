@@ -41,7 +41,7 @@ function GameDashboard() {
   return (
     <div>
       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-        Welcome to Operation Game
+        Welcome to Operation Simulation Game
       </Typography>
       <GenericTable
         inputTableHeadings={tableHeadings}

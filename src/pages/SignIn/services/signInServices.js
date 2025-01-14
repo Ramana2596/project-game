@@ -1,13 +1,5 @@
-import FetchDataFromApi from '../../../hooks/fetchData';
+import api from "../../../core/interceptor/api-interceptor";
 
-export function getUserDetails(userEmail, shouldTrigger) {
-    return FetchDataFromApi('/api/getUserDetails', shouldTrigger, {
-        "userEmail": userEmail
-    });
-}
-
-export function getUserAccessPageIds(userRole) {
-    return FetchDataFromApi('/api/getUserAccessPageIds', true, {
-        userRole
-    })
+export function getUserDetails(queryParams) {
+  return api.get("/api/getUserDetails", { params: { ...queryParams } });
 }

@@ -1,24 +1,4 @@
-import FetchDataFromApi from "../../../hooks/fetchData";
 import api from "../../../core/interceptor/api-interceptor";
-
-let initGetMarketFactorInput = {
-  gameId: "OpsMgt",
-  operationsInputId: null,
-  gameBatch: null,
-  productionMonth: null,
-  marketInputId: null,
-  partCategory: null,
-  refTypeInfo: null,
-  refTypePrice: null,
-  cmdLine: null,
-};
-
-export function getOperationalPlanInfoData(queryParams) {
-  return FetchDataFromApi("/api/getOperationalPlanInfoInput", true, {
-    ...initGetMarketFactorInput,
-    ...queryParams,
-  });
-}
 
 export function getOperationalPlanInfoTableData(queryParams) {
   return api.get("/api/getOperationalPlanInfoInput", {

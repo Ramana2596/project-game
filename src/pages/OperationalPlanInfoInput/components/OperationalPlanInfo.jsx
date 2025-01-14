@@ -10,6 +10,7 @@ import {
 import Grid from "@mui/material/Grid2";
 import { getOperationalPlanInfoTableData } from "../services/operationalPlanInfoInputService";
 import { useUser } from "../../../core/access/userContext";
+import { pageConstants } from "../constants/pageConstants";
 
 export default function OperationalPlanInfoType({
   operationalPlanType,
@@ -49,7 +50,9 @@ export default function OperationalPlanInfoType({
   return (
     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
       <FormControl required sx={{ flexGrow: 1, width: "100%", maxWidth: 220 }}>
-        <InputLabel id="operationalPlanType">Info: Operational Plan</InputLabel>
+        <InputLabel id="operationalPlanType">
+          {pageConstants.pageTitle}
+        </InputLabel>
         <Select
           labelId="operationalPlanType"
           id="operationalPlanTypeRequired"

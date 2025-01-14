@@ -4,6 +4,7 @@ import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.js";
 import { useEffect, useState } from "react";
 import { getIncomeStatementInfo } from "./services/incomeStatementInfoService.js";
+import { pageConstants } from "./constants/pageConstants.js";
 
 export default function IncomeStatementInfo() {
   const { userInfo } = useUser();
@@ -20,35 +21,22 @@ export default function IncomeStatementInfo() {
       }
     });
   }, []);
-  let tableHeading = [
-    "Line_no",
-    "Details",
-    "PrvYear_End",
-    "Period_1",
-    "Period_2",
-    "Period_3",
-    "Period_4",
-    "Period_5",
-    "Period_6",
-    "Period_7",
-    "Period_8",
-    "Period_9",
-    "Period_10",
-    "Period_11",
-    "Period_12",
-  ];
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h1>Operational Plan Info</h1>
+        <h1>{pageConstants.pageTitle}</h1>
       </Grid>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h3>Game Batch: {userInfo?.gameBatch}</h3>
-        <h3>Game Team: {userInfo?.gameTeam}</h3>
+        <h3>
+          {pageConstants.gameBatch}: {userInfo?.gameBatch}
+        </h3>
+        <h3>
+          {pageConstants.gameTeam}: {userInfo?.gameTeam}
+        </h3>
       </Grid>
       <GenericTable
-        inputTableHeadings={tableHeading}
+        inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
         hiddenColumns={[]}

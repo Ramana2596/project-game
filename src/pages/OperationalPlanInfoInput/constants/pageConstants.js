@@ -1,5 +1,5 @@
 export const pageConstants = {
-  pageTitle: "Operational Plan Input",
+  pageTitle: "Operational Decision Input",
   gameBatch: "Game Batch",
   gameTeam: "Game Team",
   contentSection: {

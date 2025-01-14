@@ -1,5 +1,5 @@
-import api from '../../../core/interceptor/api-interceptor';
+import api from "../../../core/interceptor/api-interceptor";
 
-export function getDashboardData(userRole) {
-    return api.get('/api/data');
+export function getDashboardData() {
+  return api.get("/api/data");
 }
