@@ -28,15 +28,7 @@ export default function MarketFactorInputTable({
   const [newTableData, setNewTableData] = useState([]);
   const [deletedTableData, setDeletedTableData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [addTableData, setAddTableData] = useState([
-    { columnName: "Item_Description", inputType: "select" },
-    { columnName: "UOM", inputType: null },
-    { columnName: "Quantity", inputType: "text" },
-    { columnName: "Info_Qty", inputType: "select" },
-    { columnName: "Unit_Price", inputType: "text" },
-    { columnName: "currency", inputType: null },
-    { columnName: "Info_Price", inputType: "select" },
-  ]);
+  const [addTableData, setAddTableData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const { userInfo } = useUser();
   const [resetKey, setResetKey] = useState(0); // Add resetKey state
@@ -198,7 +190,6 @@ export default function MarketFactorInputTable({
   const handleCheckboxChange = (selectedRows) => {
     setCheckedRows(selectedRows);
     const newData = selectedRows.map((updatedItem, index) => {
-      const originalItem = tableData[index];
       const transformedItem = {};
       Object.keys(updatedItem).forEach((key) => {
         if (key === "Item_Description") {

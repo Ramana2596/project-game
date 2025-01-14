@@ -112,8 +112,10 @@ function AddTableData({
 
   const isRowComplete = (row) => {
     return Object.keys(row).every((key) => {
-      const value = row[key].value;
-      return value !== "" && value !== null && value !== undefined;
+      if (row[key].inputType) {
+        const value = row[key].value;
+        return value !== "" && value !== null && value !== undefined;
+      }
     });
   };
 

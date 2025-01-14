@@ -8,11 +8,13 @@ import {
   updateOperationalPlanInfoInput,
   deleteOperationalPlanInfo,
   addOperationalPlanInfo,
+  getParamValues,
 } from "./services/operationalPlanInfoInputService.js";
 import OperationalPlanInfoType from "./components/OperationalPlanInfo";
 import OperationalPlanInputTable from "./components/OperationalPlanInputTable";
 import { useUser } from "../../core/access/userContext.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
+import { pageConstants } from "./constants/pageConstants.js";
 
 export default function OperationalPlanInfoInput() {
   const { userInfo } = useUser();
@@ -28,24 +30,6 @@ export default function OperationalPlanInfoInput() {
     refTypePrice: null,
     marketInputId: null,
     cmdLine: "Get_Plan",
-  };
-
-  const initUpdateOperationalPlanInfo = {
-    marketFactorInfoArray: [
-      {
-        gameId: null,
-        gameBatch: null,
-        productionMonth: null,
-        marketInputId: null,
-        partNo: null,
-        quantityId: null,
-        quantity: null,
-        priceId: null,
-        currency: null,
-        unitPrice: null,
-      },
-    ],
-    cmdLine: "",
   };
 
   const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
@@ -77,6 +61,29 @@ export default function OperationalPlanInfoInput() {
   }, [shouldTriggerGetApi]);
 
   useEffect(() => {
+    if (getOperationalPlanInfoInput.operationsInputId) {
+      getParamValues(getOperationalPlanInfoInput)
+        .then((response) => {
+          setFormData({
+            ...getOperationalPlanInfoInput,
+            refTypeInfo: response.data[0].Ref_Type_Info,
+            refTypePrice: response.data[0].Ref_Type_Price,
+            marketInputId: response.data[0].Market_input_id,
+          });
+        })
+        .catch((error) => {
+          setAlertData({
+            severity: "error",
+            message:
+              "Some Error occurred while fetching data" +
+              error?.response?.data?.error,
+            isVisible: true,
+          });
+        });
+    }
+  }, [getOperationalPlanInfoInput.operationsInputId]);
+
+  useEffect(() => {
     if (isTableActionsEnable) {
       setShouldTriggerApi(false);
     }
@@ -87,7 +94,9 @@ export default function OperationalPlanInfoInput() {
       getOperationalPlanInfoInput.gameId &&
       getOperationalPlanInfoInput.gameBatch &&
       getOperationalPlanInfoInput.productionMonth &&
-      getOperationalPlanInfoInput.operationsInputId
+      getOperationalPlanInfoInput.operationsInputId &&
+      getOperationalPlanInfoInput.refTypeInfo &&
+      getOperationalPlanInfoInput.refTypePrice
     ) {
       setIsTableActionsEnable(true);
     }
@@ -136,11 +145,15 @@ export default function OperationalPlanInfoInput() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h1>Operational Plan Input</h1>
+        <h1>{pageConstants.pageTitle}</h1>
       </Grid>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h3>Game Batch: {userInfo?.gameBatch}</h3>
-        <h3>Game Team: {userInfo?.gameTeam}</h3>
+        <h3>
+          {pageConstants.gameBatch}: {userInfo?.gameBatch}
+        </h3>
+        <h3>
+          {pageConstants.gameTeam}: {userInfo?.gameTeam}
+        </h3>
       </Grid>
       <Grid
         sx={{ margin: 5 }}

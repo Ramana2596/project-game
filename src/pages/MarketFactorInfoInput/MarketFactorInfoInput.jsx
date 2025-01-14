@@ -29,23 +29,7 @@ export default function MarketFactorInfoInput() {
     refTypePrice: null,
     cmdLine: "Get_Info",
   };
-  const initUpdateMarketFactorInput = {
-    marketFactorInfoArray: [
-      {
-        gameId: null,
-        gameBatch: null,
-        productionMonth: null,
-        marketInputId: null,
-        partNo: null,
-        quantityId: null,
-        quantity: null,
-        priceId: null,
-        currency: null,
-        unitPrice: null,
-      },
-    ],
-    cmdLine: "",
-  };
+
   const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
   const [isDisableHeaderSection, setIsDisableHeaderSection] = useState(false);
   const [shouldTriggerGetApi, setShouldTriggerApi] = useState(false);
@@ -58,6 +42,7 @@ export default function MarketFactorInfoInput() {
     initGetMarketFactorInput
   );
   const [marketFactorInfoTableData, setMarketFactorInfoResponse] = useState([]);
+
   useEffect(() => {
     if (shouldTriggerGetApi) {
       getMarketFactorInfoTableData(getMarketFactorInput)
@@ -72,6 +57,7 @@ export default function MarketFactorInfoInput() {
       // Reset the trigger after API call
     }
   }, [shouldTriggerGetApi]);
+
   useEffect(() => {
     if (getMarketFactorInput.marketInputId) {
       getParamValues(getMarketFactorInput)
@@ -93,13 +79,14 @@ export default function MarketFactorInfoInput() {
         });
     }
   }, [getMarketFactorInput.marketInputId]);
+
   useEffect(() => {
     if (isTableActionsEnable) {
       setShouldTriggerApi(false);
     }
   }, [isTableActionsEnable]);
+
   useEffect(() => {
-    console.log(getMarketFactorInput);
     if (
       getMarketFactorInput.gameId &&
       getMarketFactorInput.gameBatch &&
@@ -111,6 +98,7 @@ export default function MarketFactorInfoInput() {
       setShouldTriggerApi(true);
     }
   }, [getMarketFactorInput]);
+
   const formControlUpdate = (value) => {
     setShouldTriggerApi(false);
     setFormData({
