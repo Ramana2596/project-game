@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import Divider from "@mui/material/Divider";
 import GameBatch from "./components/GameBatch";
-import Period from "./components/Period";
 import DatePeriod from "./components/DatePeriod.jsx";
 import MarketType from "./components/MarketType";
 import {
@@ -11,6 +10,7 @@ import {
   updateMarketFactorInfoInput,
   deleteMarketFactorInfo,
   addMarketFactorInfoInput,
+  getParamValues,
 } from "./services/marketFactorInputService.js";
 import MarketFactorInputTable from "./components/MarketFactorInputTable";
 import { useUser } from "../../core/access/userContext.js";
@@ -18,19 +18,7 @@ import { pageConstants } from "./constants/pageConstants.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
 
 export default function MarketFactorInfoInput() {
-  const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
-  const [isDisableHeaderSection, setIsDisableHeaderSection] = useState(false);
-  const [shouldTriggerGetApi, setShouldTriggerApi] = useState(false);
   const { userInfo } = useUser();
-  const [alertData, setAlertData] = useState({
-    severity: "",
-    message: "",
-    isVisible: false,
-  });
-  const [toastOpen, setToastOpen] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastSeverity, setToastSeverity] = useState("success");
-
   const initGetMarketFactorInput = {
     gameId: userInfo?.gameId,
     gameBatch: "",
@@ -41,7 +29,6 @@ export default function MarketFactorInfoInput() {
     refTypePrice: null,
     cmdLine: "Get_Info",
   };
-
   const initUpdateMarketFactorInput = {
     marketFactorInfoArray: [
       {
@@ -59,12 +46,18 @@ export default function MarketFactorInfoInput() {
     ],
     cmdLine: "",
   };
-
+  const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
+  const [isDisableHeaderSection, setIsDisableHeaderSection] = useState(false);
+  const [shouldTriggerGetApi, setShouldTriggerApi] = useState(false);
+  const [alertData, setAlertData] = useState({
+    severity: "",
+    message: "",
+    isVisible: false,
+  });
   const [getMarketFactorInput, setFormData] = useState(
     initGetMarketFactorInput
   );
   const [marketFactorInfoTableData, setMarketFactorInfoResponse] = useState([]);
-
   useEffect(() => {
     if (shouldTriggerGetApi) {
       getMarketFactorInfoTableData(getMarketFactorInput)
@@ -75,50 +68,73 @@ export default function MarketFactorInfoInput() {
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
-      setShouldTriggerApi(false); // Reset the trigger after API call
+      setShouldTriggerApi(false);
+      // Reset the trigger after API call
     }
   }, [shouldTriggerGetApi]);
-
+  useEffect(() => {
+    if (getMarketFactorInput.marketInputId) {
+      getParamValues(getMarketFactorInput)
+        .then((response) => {
+          setFormData({
+            ...getMarketFactorInput,
+            refTypeInfo: response.data[0].Ref_Type_Info,
+            refTypePrice: response.data[0].Ref_Type_Price,
+          });
+        })
+        .catch((error) => {
+          setAlertData({
+            severity: "error",
+            message:
+              "Some Error occurred while fetching data" +
+              error?.response?.data?.error,
+            isVisible: true,
+          });
+        });
+    }
+  }, [getMarketFactorInput.marketInputId]);
   useEffect(() => {
     if (isTableActionsEnable) {
       setShouldTriggerApi(false);
     }
   }, [isTableActionsEnable]);
-
   useEffect(() => {
-    // Check if all required inputs have values and trigger API call
+    console.log(getMarketFactorInput);
     if (
       getMarketFactorInput.gameId &&
       getMarketFactorInput.gameBatch &&
       getMarketFactorInput.productionMonth &&
-      getMarketFactorInput.marketInputId
+      getMarketFactorInput.marketInputId &&
+      getMarketFactorInput.refTypeInfo &&
+      getMarketFactorInput.refTypePrice
     ) {
       setShouldTriggerApi(true);
     }
   }, [getMarketFactorInput]);
-
   const formControlUpdate = (value) => {
     setShouldTriggerApi(false);
-    setFormData({ ...getMarketFactorInput, ...value });
+    setFormData({
+      ...getMarketFactorInput,
+      ...value,
+    });
   };
-
   const onSubmitApiCall = (updatedData, deletedTableData, isEdit) => {
     setShouldTriggerApi(false);
     if (isTableActionsEnable) {
       if (isEdit) {
         updateTableData(updatedData, deletedTableData).then(() =>
           setShouldTriggerApi(true)
-        ); // Trigger API after update
+        );
+        // Trigger API after update
       } else {
-        addTableData(updatedData).then(() => setShouldTriggerApi(true)); // Trigger API after addition
+        addTableData(updatedData).then(() => setShouldTriggerApi(true));
+        // Trigger API after addition
       }
     }
   };
-
   const updateHeaderSectionState = (isDisable) => {
     setIsDisableHeaderSection(isDisable);
   };
-
   const getFramedPayload = (updatedData) => {
     if (updatedData && updatedData.length > 0) {
       return updatedData.map((obj) => ({
@@ -136,7 +152,6 @@ export default function MarketFactorInfoInput() {
     }
     return [];
   };
-
   const getFramedPayloadForAdd = (updatedData) => {
     if (updatedData && updatedData.length > 0) {
       return updatedData.map((obj) => ({
@@ -153,7 +168,6 @@ export default function MarketFactorInfoInput() {
     }
     return [];
   };
-
   useEffect(() => {
     if (alertData.isVisible) {
       const timer = setTimeout(() => {
@@ -162,7 +176,6 @@ export default function MarketFactorInfoInput() {
           isVisible: false,
         }));
       }, 5000);
-
       return () => clearTimeout(timer);
     }
   }, [alertData.isVisible]);
@@ -189,12 +202,6 @@ export default function MarketFactorInfoInput() {
           marketType={getMarketFactorInput.marketInputId}
           onFormControlUpdate={formControlUpdate}
         />
-        {/* <Period
-          selectedGameBatch={getMarketFactorInput.gameBatch}
-          isDisabled={isDisableHeaderSection}
-          marketType={getMarketFactorInput.productionMonth}
-          onFormControlUpdate={formControlUpdate}
-        /> */}
         <DatePeriod
           selectedGameBatch={getMarketFactorInput.gameBatch}
           isDisabled={isDisableHeaderSection}
@@ -241,7 +248,6 @@ export default function MarketFactorInfoInput() {
                 error?.response?.data?.error,
               isVisible: true,
             });
-            console.error("Error adding market factor info:", error);
           })
       );
     }
@@ -271,7 +277,6 @@ export default function MarketFactorInfoInput() {
                 error?.response?.data?.error,
               isVisible: true,
             });
-            console.error("Error updating market factor info:", error);
           })
       );
     }

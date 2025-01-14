@@ -12,14 +12,10 @@ import {
 import OperationalPlanInfoType from "./components/OperationalPlanInfo";
 import OperationalPlanInputTable from "./components/OperationalPlanInputTable";
 import { useUser } from "../../core/access/userContext.js";
-import { use } from "react";
+import ToastMessage from "../../components/ToastMessage.jsx";
 
 export default function OperationalPlanInfoInput() {
   const { userInfo } = useUser();
-  const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
-  const [shouldTriggerGetApi, setShouldTriggerApi] = useState(false);
-  const [operationalPlanInfoTableData, setOperationalPlanInfoTableData] =
-    useState([]);
 
   const initGetOperationalPlanInfo = {
     gameId: userInfo?.gameId,
@@ -52,29 +48,33 @@ export default function OperationalPlanInfoInput() {
     cmdLine: "",
   };
 
-  useEffect(() => {
-    if (shouldTriggerGetApi) {
-      getOperationalPlanInfoTableData(getOperationalPlanInfoInput).then(
-        (response) => {
-          setOperationalPlanInfoTableData(response.data);
-        }
-      );
-    }
-  }, [shouldTriggerGetApi]);
-
+  const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
+  const [isDisableHeaderSection, setIsDisableHeaderSection] = useState(false);
+  const [shouldTriggerGetApi, setShouldTriggerApi] = useState(false);
+  const [alertData, setAlertData] = useState({
+    severity: "",
+    message: "",
+    isVisible: false,
+  });
+  const [operationalPlanInfoTableData, setOperationalPlanInfoTableData] =
+    useState([]);
   const [getOperationalPlanInfoInput, setFormData] = useState(
     initGetOperationalPlanInfo
   );
 
   useEffect(() => {
-    if (
-      shouldTriggerGetApi &&
-      operationalPlanInfoTableData?.apiResponse &&
-      operationalPlanInfoTableData?.apiResponse.length > 0
-    ) {
-      setIsTableActionsEnable(true);
+    if (shouldTriggerGetApi) {
+      getOperationalPlanInfoTableData(getOperationalPlanInfoInput)
+        .then((response) => {
+          setOperationalPlanInfoTableData(response.data);
+          setIsTableActionsEnable(true);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+      setShouldTriggerApi(false); // Reset the trigger after API call
     }
-  }, [shouldTriggerGetApi, operationalPlanInfoTableData]);
+  }, [shouldTriggerGetApi]);
 
   useEffect(() => {
     if (isTableActionsEnable) {
@@ -83,12 +83,13 @@ export default function OperationalPlanInfoInput() {
   }, [isTableActionsEnable]);
 
   useEffect(() => {
-    // Check if all required inputs have values and trigger API call
     if (
+      getOperationalPlanInfoInput.gameId &&
+      getOperationalPlanInfoInput.gameBatch &&
       getOperationalPlanInfoInput.productionMonth &&
       getOperationalPlanInfoInput.operationsInputId
     ) {
-      setShouldTriggerApi(true);
+      setIsTableActionsEnable(true);
     }
   }, [getOperationalPlanInfoInput]);
 
@@ -98,22 +99,29 @@ export default function OperationalPlanInfoInput() {
   };
 
   const onSubmitApiCall = (updatedData, deletedTableData, isEdit) => {
+    setShouldTriggerApi(false);
     if (isTableActionsEnable) {
       if (isEdit) {
-        updateTableData(updatedData, deletedTableData);
+        updateTableData(updatedData, deletedTableData).then(() =>
+          setShouldTriggerApi(true)
+        ); // Trigger API after update;
       } else {
-        addTableData(updatedData);
+        addTableData(updatedData).then(() => setShouldTriggerApi(true)); // Trigger API after addition;
       }
     }
+  };
+
+  const updateHeaderSectionState = (isDisable) => {
+    setIsDisableHeaderSection(isDisable);
   };
 
   const getFramedPayload = (updatedData) => {
     if (updatedData && updatedData.length > 0) {
       return updatedData.map((obj) => ({
-        gameId: getOperationalPlanInfoInput.gameId,
-        gameBatch: getOperationalPlanInfoInput.gameBatch,
-        productionMonth: getOperationalPlanInfoInput.productionMonth,
-        marketInputId: getOperationalPlanInfoInput.marketInputId,
+        gameId: getOperationalPlanInfoInput?.gameId,
+        gameBatch: getOperationalPlanInfoInput?.gameBatch,
+        productionMonth: getOperationalPlanInfoInput?.productionMonth,
+        operationsInputId: getOperationalPlanInfoInput?.operationsInputId,
         partNo: obj.Part,
         quantityId: obj.Qty_Id,
         quantity: obj.Quantity,
@@ -153,32 +161,98 @@ export default function OperationalPlanInfoInput() {
       <OperationalPlanInputTable
         tableData={operationalPlanInfoTableData.apiResponse}
         isEnableTableActions={isTableActionsEnable}
+        setDisableHeaderSection={updateHeaderSectionState}
         onSubmitApiCall={onSubmitApiCall}
+        selectedOperationalInput={getOperationalPlanInfoInput}
+      />
+      <ToastMessage
+        open={alertData.isVisible}
+        severity={alertData.severity}
+        message={alertData.message}
       />
     </Box>
   );
 
   function addTableData(updatedData) {
+    const promises = [];
     if (updatedData && updatedData.length > 0) {
       const operationalPlanPayLoad = {
         operationalPlanInfoArray: getFramedPayload(updatedData),
       };
-      addOperationalPlanInfo(operationalPlanPayLoad);
+      promises.push(
+        addOperationalPlanInfo(operationalPlanPayLoad)
+          .then(() => {
+            setAlertData({
+              severity: "success",
+              message: "Operational factor info added successfully",
+              isVisible: true,
+            });
+          })
+          .catch((error) => {
+            setAlertData({
+              severity: "error",
+              message:
+                "Error adding operational factor info: " +
+                error?.response?.data?.error,
+              isVisible: true,
+            });
+            console.error("Error adding operational factor info:", error);
+          })
+      );
     }
+    return Promise.all(promises);
   }
 
   function updateTableData(updatedData, deletedTableData) {
+    const promises = [];
     if (updatedData && updatedData.length > 0) {
       const operationalPlanPayLoad = {
         operationalPlanInfoArray: getFramedPayload(updatedData),
       };
-      updateOperationalPlanInfoInput(operationalPlanPayLoad);
+      promises.push(
+        updateOperationalPlanInfoInput(operationalPlanPayLoad)
+          .then(() => {
+            setAlertData({
+              severity: "success",
+              message: "Operational factor info updated successfully",
+              isVisible: true,
+            });
+          })
+          .catch((error) => {
+            setAlertData({
+              severity: "error",
+              message:
+                "Error updating operational factor info: " +
+                error?.response?.data?.error,
+              isVisible: true,
+            });
+          })
+      );
     }
     if (deletedTableData && deletedTableData.length > 0) {
-      const marketFactorInfoInputPayload = {
+      const operationalInfoInputPayload = {
         operationalPlanInfoArray: getFramedPayload(deletedTableData),
       };
-      deleteOperationalPlanInfo(marketFactorInfoInputPayload);
+      promises.push(
+        deleteOperationalPlanInfo(operationalInfoInputPayload)
+          .then(() => {
+            setAlertData({
+              severity: "success",
+              message: "Operational factor info deleted successfully",
+              isVisible: true,
+            });
+          })
+          .catch((error) => {
+            setAlertData({
+              severity: "error",
+              message:
+                "Error deleting operational factor info: " +
+                error?.response?.data?.error,
+              isVisible: true,
+            });
+          })
+      );
     }
+    return Promise.all(promises);
   }
 }

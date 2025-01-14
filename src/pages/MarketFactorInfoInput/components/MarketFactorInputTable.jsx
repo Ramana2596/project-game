@@ -76,8 +76,8 @@ export default function MarketFactorInputTable({
           productionMonth: null,
           marketInputId: selectedMarketInput?.marketInputId,
           partCategory: selectedMarketInput?.partCategory,
-          refTypeInfo: null,
-          refTypePrice: null,
+          refTypeInfo: selectedMarketInput?.refTypeInfo,
+          refTypePrice: selectedMarketInput?.refTypePrice,
           cmdLine: "Get_Qty_Id",
         }).then((data) => {
           pageConstants.contentSection.inputTypesForAdd.forEach(
@@ -100,8 +100,8 @@ export default function MarketFactorInputTable({
           productionMonth: null,
           marketInputId: selectedMarketInput?.marketInputId,
           partCategory: selectedMarketInput?.partCategory,
-          refTypeInfo: null,
-          refTypePrice: null,
+          refTypeInfo: selectedMarketInput?.refTypeInfo,
+          refTypePrice: selectedMarketInput?.refTypePrice,
           cmdLine: "Get_Price_Id",
         }).then((data) => {
           pageConstants.contentSection.inputTypesForAdd.forEach(
