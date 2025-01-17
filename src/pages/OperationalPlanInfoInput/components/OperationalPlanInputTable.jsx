@@ -73,7 +73,7 @@ export default function OperationalPlanInputTable({
         }).then((data) => {
           pageConstants.contentSection.inputTypesForAdd.forEach(
             (inputTypeObj) => {
-              if (inputTypeObj.columnName === "Info_Qty") {
+              if (inputTypeObj.columnName === "Quantity_Info") {
                 inputTypeObj.data = data.data?.map((dataObj) => {
                   return {
                     value: dataObj?.Info_Qty_Id,
@@ -188,7 +188,7 @@ export default function OperationalPlanInputTable({
     const newData = selectedRows.map((updatedItem, index) => {
       const transformedItem = {};
       Object.keys(updatedItem).forEach((key) => {
-        if (key === "Item_Description") {
+        if (key === "Description") {
           transformedItem["Part"] = updatedItem[key].value || null;
         } else {
           transformedItem[key] = updatedItem[key].value || null;

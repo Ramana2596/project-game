@@ -15,6 +15,7 @@ import { pageConstants } from "../constants/pageConstants";
 export default function OperationalPlanInfoType({
   operationalPlanType,
   onFormControlUpdate,
+  isDisabled,
 }) {
   const { userInfo } = useUser();
   const [loading, setLoading] = useState(true);
@@ -60,7 +61,7 @@ export default function OperationalPlanInfoType({
           value={operationalPlanType}
           label="Info: Operational Plan *"
           onChange={handleChange}
-          disabled={loading}
+          disabled={isDisabled}
         >
           {loading ? (
             <MenuItem disabled>

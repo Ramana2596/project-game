@@ -98,7 +98,7 @@ export default function OperationalPlanInfoInput() {
       getOperationalPlanInfoInput.refTypeInfo &&
       getOperationalPlanInfoInput.refTypePrice
     ) {
-      setIsTableActionsEnable(true);
+      setShouldTriggerApi(true);
     }
   }, [getOperationalPlanInfoInput]);
 
@@ -129,6 +129,7 @@ export default function OperationalPlanInfoInput() {
       return updatedData.map((obj) => ({
         gameId: getOperationalPlanInfoInput?.gameId,
         gameBatch: getOperationalPlanInfoInput?.gameBatch,
+        gameTeam: getOperationalPlanInfoInput?.gameTeam,
         productionMonth: getOperationalPlanInfoInput?.productionMonth,
         operationsInputId: getOperationalPlanInfoInput?.operationsInputId,
         partNo: obj.Part,
@@ -164,15 +165,17 @@ export default function OperationalPlanInfoInput() {
         <OperationalPlanInfoType
           operationalPlanType={getOperationalPlanInfoInput.operationalPlanId}
           onFormControlUpdate={formControlUpdate}
+          isDisabled={isDisableHeaderSection}
         />
         <Period
           marketType={getOperationalPlanInfoInput.productionMonth}
           onFormControlUpdate={formControlUpdate}
+          isDisabled={isDisableHeaderSection}
         />
       </Grid>
       <Divider />
       <OperationalPlanInputTable
-        tableData={operationalPlanInfoTableData.apiResponse}
+        tableData={operationalPlanInfoTableData}
         isEnableTableActions={isTableActionsEnable}
         setDisableHeaderSection={updateHeaderSectionState}
         onSubmitApiCall={onSubmitApiCall}

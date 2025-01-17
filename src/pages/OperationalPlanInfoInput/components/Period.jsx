@@ -11,7 +11,7 @@ import Grid from "@mui/material/Grid2";
 import { useUser } from "../../../core/access/userContext.js";
 import { getOperationalPlanInfoTableData } from "../services/operationalPlanInfoInputService.js";
 
-export default function Period({ period, onFormControlUpdate }) {
+export default function Period({ period, onFormControlUpdate, isDisabled }) {
   const { userInfo } = useUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -51,7 +51,7 @@ export default function Period({ period, onFormControlUpdate }) {
           value={period}
           label="Period *"
           onChange={handleChange}
-          disabled={loading}
+          disabled={isDisabled}
         >
           {loading ? (
             <MenuItem disabled>
