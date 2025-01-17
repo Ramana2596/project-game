@@ -124,7 +124,7 @@ export default function OperationalPlanInfoInput() {
     setIsDisableHeaderSection(isDisable);
   };
 
-  const getFramedPayload = (updatedData) => {
+  const getFramedPayload = (updatedData, isAdd) => {
     if (updatedData && updatedData.length > 0) {
       return updatedData.map((obj) => ({
         gameId: getOperationalPlanInfoInput?.gameId,
@@ -133,10 +133,10 @@ export default function OperationalPlanInfoInput() {
         productionMonth: getOperationalPlanInfoInput?.productionMonth,
         operationsInputId: getOperationalPlanInfoInput?.operationsInputId,
         partNo: obj.Part,
-        quantityId: obj.Qty_Id,
+        quantityId: obj.Quantity_Info,
         quantity: obj.Quantity,
-        priceId: obj.Price_Id,
-        currency: obj.currency,
+        priceId: obj.Info_Price,
+        currency: isAdd ? null : obj.currency,
         unitPrice: obj.Unit_Price,
       }));
     }
@@ -193,7 +193,7 @@ export default function OperationalPlanInfoInput() {
     const promises = [];
     if (updatedData && updatedData.length > 0) {
       const operationalPlanPayLoad = {
-        operationalPlanInfoArray: getFramedPayload(updatedData),
+        operationalPlanInfoArray: getFramedPayload(updatedData, true),
       };
       promises.push(
         addOperationalPlanInfo(operationalPlanPayLoad)
@@ -223,7 +223,7 @@ export default function OperationalPlanInfoInput() {
     const promises = [];
     if (updatedData && updatedData.length > 0) {
       const operationalPlanPayLoad = {
-        operationalPlanInfoArray: getFramedPayload(updatedData),
+        operationalPlanInfoArray: getFramedPayload(updatedData, false),
       };
       promises.push(
         updateOperationalPlanInfoInput(operationalPlanPayLoad)
@@ -247,7 +247,7 @@ export default function OperationalPlanInfoInput() {
     }
     if (deletedTableData && deletedTableData.length > 0) {
       const operationalInfoInputPayload = {
-        operationalPlanInfoArray: getFramedPayload(deletedTableData),
+        operationalPlanInfoArray: getFramedPayload(deletedTableData, false),
       };
       promises.push(
         deleteOperationalPlanInfo(operationalInfoInputPayload)

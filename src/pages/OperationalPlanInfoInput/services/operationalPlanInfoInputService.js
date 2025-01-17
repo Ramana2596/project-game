@@ -20,14 +20,7 @@ export function addOperationalPlanInfo(marketFactorInfoInputPayload) {
     ...marketFactorInfoInputPayload,
     cmdLine: "Add_Operation_Plan",
   };
-  api
-    .post("/api/updateOperationalPlanInfo", payload)
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error posting data:", error);
-    });
+  return api.post("/api/updateOperationalDecisionInput", payload);
 }
 
 export function updateOperationalPlanInfoInput(marketFactorInfoInputPayload) {
@@ -35,14 +28,7 @@ export function updateOperationalPlanInfoInput(marketFactorInfoInputPayload) {
     ...marketFactorInfoInputPayload,
     cmdLine: "Update_Operation_Plan",
   };
-  api
-    .post("/api/updateOperationalPlanInfo", payload)
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error posting data:", error);
-    });
+  return api.post("/api/updateOperationalDecisionInput", payload);
 }
 
 export function deleteOperationalPlanInfo(marketFactorInfoInputPayload) {
@@ -50,12 +36,5 @@ export function deleteOperationalPlanInfo(marketFactorInfoInputPayload) {
     ...marketFactorInfoInputPayload,
     cmdLine: "Delete_Operation_Plan",
   };
-  api
-    .post("/api/updateOperationalPlanInfo", payload)
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error posting data:", error);
-    });
+  return api.post("/api/updateOperationalDecisionInput", payload);
 }
