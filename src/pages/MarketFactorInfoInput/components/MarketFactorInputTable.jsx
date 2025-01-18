@@ -24,13 +24,10 @@ export default function MarketFactorInputTable({
   const [isEnableGenericTable, setIsEnableGenericTable] = useState(false);
   const [isEnableTableAdd, setIsEnableTableAdd] = useState(true);
   const [isEnableTableEdit, setIsEnableTableEdit] = useState(true);
-  const [checkedRows, setCheckedRows] = useState([]);
   const [newTableData, setNewTableData] = useState([]);
   const [deletedTableData, setDeletedTableData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addTableData, setAddTableData] = useState([]);
-  const [isDataFetched, setIsDataFetched] = useState(false);
-  const { userInfo } = useUser();
   const [resetKey, setResetKey] = useState(0); // Add resetKey state
 
   useEffect(() => {
@@ -42,8 +39,8 @@ export default function MarketFactorInputTable({
       try {
         setLoading(true);
         const partPromise = getMarketFactorInfoTableData({
-          gameId: userInfo?.gameId,
-          gameBatch: userInfo?.gameBatch,
+          gameId: selectedMarketInput?.gameId,
+          gameBatch: selectedMarketInput?.gameBatch,
           productionMonth: null,
           marketInputId: selectedMarketInput?.marketInputId,
           partCategory: selectedMarketInput?.partCategory,
@@ -63,8 +60,8 @@ export default function MarketFactorInputTable({
         });
 
         const qtyPromise = getMarketFactorInfoTableData({
-          gameId: userInfo?.gameId,
-          gameBatch: userInfo?.gameBatch,
+          gameId: selectedMarketInput?.gameId,
+          gameBatch: selectedMarketInput?.gameBatch,
           productionMonth: null,
           marketInputId: selectedMarketInput?.marketInputId,
           partCategory: selectedMarketInput?.partCategory,
@@ -87,8 +84,8 @@ export default function MarketFactorInputTable({
         });
 
         const pricePromise = getMarketFactorInfoTableData({
-          gameId: userInfo?.gameId,
-          gameBatch: userInfo?.gameBatch,
+          gameId: selectedMarketInput?.gameId,
+          gameBatch: selectedMarketInput?.gameBatch,
           productionMonth: null,
           marketInputId: selectedMarketInput?.marketInputId,
           partCategory: selectedMarketInput?.partCategory,
@@ -115,11 +112,9 @@ export default function MarketFactorInputTable({
 
         setAddTableData([...pageConstants.contentSection.inputTypesForAdd]);
         setLoading(false); // All data fetched, set loading to false
-        setIsDataFetched(true); // Set fetch data completion state
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false); // Ensure loading is set to false in case of error
-        setIsDataFetched(false); // Ensure isDataFetched is false in case of error
       }
     };
 
@@ -188,7 +183,6 @@ export default function MarketFactorInputTable({
   };
 
   const handleCheckboxChange = (selectedRows) => {
-    setCheckedRows(selectedRows);
     const newData = selectedRows.map((updatedItem, index) => {
       const transformedItem = {};
       Object.keys(updatedItem).forEach((key) => {

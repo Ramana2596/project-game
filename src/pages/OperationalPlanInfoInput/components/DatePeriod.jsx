@@ -5,7 +5,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 
-import { getMarketFactorInfoTableData } from "../services/marketFactorInputService";
+import { getOperationalPlanInfoTableData } from "../services/operationalPlanInfoInputService.js";
 import { useUser } from "../../../core/access/userContext.js";
 import ToastMessage from "../../../components/ToastMessage.jsx";
 
@@ -29,7 +29,7 @@ export default function DatePeriod({
 
   useEffect(() => {
     if (selectedGameBatch) {
-      getMarketFactorInfoTableData({
+      getOperationalPlanInfoTableData({
         cmdLine: "Get_Period",
         gameId: userInfo?.gameId,
         gameBatch: selectedGameBatch,

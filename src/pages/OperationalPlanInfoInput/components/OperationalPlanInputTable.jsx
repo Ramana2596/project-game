@@ -23,7 +23,6 @@ export default function OperationalPlanInputTable({
   const [isEnableGenericTable, setIsEnableGenericTable] = useState(false);
   const [isEnableTableAdd, setIsEnableTableAdd] = useState(true);
   const [isEnableTableEdit, setIsEnableTableEdit] = useState(true);
-  const [checkedRows, setCheckedRows] = useState([]);
   const [newTableData, setNewTableData] = useState([]);
   const [addTableData, setAddTableData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -184,7 +183,6 @@ export default function OperationalPlanInputTable({
   };
 
   const handleCheckboxChange = (selectedRows) => {
-    setCheckedRows(selectedRows);
     const newData = selectedRows.map((updatedItem, index) => {
       const transformedItem = {};
       Object.keys(updatedItem).forEach((key) => {

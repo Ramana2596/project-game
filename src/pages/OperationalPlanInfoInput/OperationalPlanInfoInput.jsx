@@ -15,6 +15,7 @@ import OperationalPlanInputTable from "./components/OperationalPlanInputTable";
 import { useUser } from "../../core/access/userContext.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import { pageConstants } from "./constants/pageConstants.js";
+import DatePeriod from "./components/DatePeriod.jsx";
 
 export default function OperationalPlanInfoInput() {
   const { userInfo } = useUser();
@@ -102,6 +103,18 @@ export default function OperationalPlanInfoInput() {
     }
   }, [getOperationalPlanInfoInput]);
 
+  useEffect(() => {
+    if (alertData.isVisible) {
+      const timer = setTimeout(() => {
+        setAlertData((prevData) => ({
+          ...prevData,
+          isVisible: false,
+        }));
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [alertData.isVisible]);
+
   const formControlUpdate = (value) => {
     setShouldTriggerApi(false);
     setFormData({ ...getOperationalPlanInfoInput, ...value });
@@ -133,9 +146,9 @@ export default function OperationalPlanInfoInput() {
         productionMonth: getOperationalPlanInfoInput?.productionMonth,
         operationsInputId: getOperationalPlanInfoInput?.operationsInputId,
         partNo: obj.Part,
-        quantityId: obj.Quantity_Info,
+        quantityId: isAdd ? obj.Quantity_Info : obj.Qty_Id,
         quantity: obj.Quantity,
-        priceId: obj.Info_Price,
+        priceId: isAdd ? obj.Info_Price : obj.Price_Id,
         currency: isAdd ? null : obj.currency,
         unitPrice: obj.Unit_Price,
       }));
@@ -167,11 +180,11 @@ export default function OperationalPlanInfoInput() {
           onFormControlUpdate={formControlUpdate}
           isDisabled={isDisableHeaderSection}
         />
-        <Period
-          marketType={getOperationalPlanInfoInput.productionMonth}
-          onFormControlUpdate={formControlUpdate}
-          isDisabled={isDisableHeaderSection}
-        />
+        <DatePeriod
+        selectedGameBatch={getOperationalPlanInfoInput.gameBatch}
+        isDisabled={isDisableHeaderSection}
+        marketType={getOperationalPlanInfoInput.productionMonth}
+        onFormControlUpdate={formControlUpdate} />
       </Grid>
       <Divider />
       <OperationalPlanInputTable
