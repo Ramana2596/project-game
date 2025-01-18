@@ -27,6 +27,7 @@ import { getUserAccessPageIds } from "./services/indexService.js";
 import OperationalPlanInfo from "../OperationalPlanInfo/OperationalPlanInfo";
 import OperationalPlanInfoInput from "../OperationalPlanInfoInput/OperationalPlanInfoInput";
 import IncomeStatementInfo from "../IncomeStatementInfo/IncomeStatementInfo.jsx";
+import BalanceSheetInfo from "../BalanceSheetInfo/BalanceSheetInfo.jsx";
 
 export default function Index() {
   const [open, setOpen] = useState(false);
@@ -157,6 +158,7 @@ export default function Index() {
           element={<OperationalPlanInfoInput />}
         />
         <Route path="/incomeStatementInfo" element={<IncomeStatementInfo />} />
+        <Route path="/balanceSheet" element={<BalanceSheetInfo />} />
       </Routes>
     </Box>
   );

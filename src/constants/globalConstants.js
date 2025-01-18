@@ -9,6 +9,7 @@ import GameBatch from "../pages/GameBatch";
 import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInfo";
 import OperationalPlanInfoInput from "../pages/OperationalPlanInfoInput/OperationalPlanInfoInput";
 import IncomeStatementInfo from "../pages/IncomeStatementInfo/IncomeStatementInfo";
+import BalanceSheetInfo from "../pages/BalanceSheetInfo/BalanceSheetInfo";
 
 export const componentList = [
   {
@@ -75,18 +76,25 @@ export const componentList = [
     routeElement: <OperationalPlanInfo />,
   },
   {
-    id: "UI 005",
+    id: "UI 006",
     displayText: "Operational Decision Input",
     path: "/operationalPlanInfoInput",
     routePath: "/operationGame/operationalPlanInfoInput",
     routeElement: <OperationalPlanInfoInput />,
   },
   {
-    id: "UI 005",
+    id: "UI 007",
     displayText: "Income Statement",
     path: "/incomeStatementInfo",
     routePath: "/operationGame/incomeStatementInfo",
     routeElement: <IncomeStatementInfo />,
+  },
+  {
+    id: "UI 008",
+    displayText: "Balance Sheet",
+    path: "/balanceSheet",
+    routePath: "/operationGame/balanceSheet",
+    routeElement: <BalanceSheetInfo />,
   },
 ];
 
