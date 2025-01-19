@@ -16,8 +16,10 @@ import { useUser } from "../../core/access/userContext.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import { pageConstants } from "./constants/pageConstants.js";
 import DatePeriod from "./components/DatePeriod.jsx";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 export default function OperationalPlanInfoInput() {
+  const { setIsLoading } = useLoading();
   const { userInfo } = useUser();
 
   const initGetOperationalPlanInfo = {
@@ -49,6 +51,7 @@ export default function OperationalPlanInfoInput() {
 
   useEffect(() => {
     if (shouldTriggerGetApi) {
+      setIsLoading(true);
       getOperationalPlanInfoTableData(getOperationalPlanInfoInput)
         .then((response) => {
           setOperationalPlanInfoTableData(response.data);
@@ -56,13 +59,15 @@ export default function OperationalPlanInfoInput() {
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
-        });
+        })
+        .finally(() => setIsLoading(false));
       setShouldTriggerApi(false); // Reset the trigger after API call
     }
   }, [shouldTriggerGetApi]);
 
   useEffect(() => {
     if (getOperationalPlanInfoInput.operationsInputId) {
+      setIsLoading(true);
       getParamValues(getOperationalPlanInfoInput)
         .then((response) => {
           setFormData({
@@ -80,7 +85,8 @@ export default function OperationalPlanInfoInput() {
               error?.response?.data?.error,
             isVisible: true,
           });
-        });
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [getOperationalPlanInfoInput.operationsInputId]);
 
@@ -162,43 +168,27 @@ export default function OperationalPlanInfoInput() {
         <h1>{pageConstants.pageTitle}</h1>
       </Grid>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h3>
-          {pageConstants.gameBatch}: {userInfo?.gameBatch}
-        </h3>
-        <h3>
-          {pageConstants.gameTeam}: {userInfo?.gameTeam}
-        </h3>
+        <h3>{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
+        <h3>{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
       </Grid>
-      <Grid
-        sx={{ margin: 5 }}
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        <OperationalPlanInfoType
-          operationalPlanType={getOperationalPlanInfoInput.operationalPlanId}
+      <Grid sx={{ margin: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        <OperationalPlanInfoType operationalPlanType={getOperationalPlanInfoInput.operationalPlanId}
           onFormControlUpdate={formControlUpdate}
+          isDisabled={isDisableHeaderSection} />
+        <DatePeriod selectedGameBatch={getOperationalPlanInfoInput.gameBatch}
           isDisabled={isDisableHeaderSection}
-        />
-        <DatePeriod
-        selectedGameBatch={getOperationalPlanInfoInput.gameBatch}
-        isDisabled={isDisableHeaderSection}
-        marketType={getOperationalPlanInfoInput.productionMonth}
-        onFormControlUpdate={formControlUpdate} />
+          marketType={getOperationalPlanInfoInput.productionMonth}
+          onFormControlUpdate={formControlUpdate} />
       </Grid>
       <Divider />
-      <OperationalPlanInputTable
-        tableData={operationalPlanInfoTableData}
+      <OperationalPlanInputTable tableData={operationalPlanInfoTableData}
         isEnableTableActions={isTableActionsEnable}
         setDisableHeaderSection={updateHeaderSectionState}
         onSubmitApiCall={onSubmitApiCall}
-        selectedOperationalInput={getOperationalPlanInfoInput}
-      />
-      <ToastMessage
-        open={alertData.isVisible}
+        selectedOperationalInput={getOperationalPlanInfoInput} />
+      <ToastMessage open={alertData.isVisible}
         severity={alertData.severity}
-        message={alertData.message}
-      />
+        message={alertData.message} />
     </Box>
   );
 

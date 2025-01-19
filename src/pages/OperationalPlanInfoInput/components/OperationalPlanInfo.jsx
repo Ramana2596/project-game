@@ -51,11 +51,8 @@ export default function OperationalPlanInfoType({
   return (
     <Grid size={{ xs: 2, sm: 4, md: 4 }}>
       <FormControl required sx={{ flexGrow: 1, width: "100%", maxWidth: 220 }}>
-        <InputLabel id="operationalPlanType">
-          {pageConstants.pageTitle}
-        </InputLabel>
-        <Select
-          labelId="operationalPlanType"
+        <InputLabel id="operationalPlanType"> {pageConstants.pageTitle} </InputLabel>
+        <Select labelId="operationalPlanType"
           id="operationalPlanTypeRequired"
           name="operationalPlanTypeId"
           value={operationalPlanType}

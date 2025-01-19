@@ -9,8 +9,10 @@ import {
   getGameBatch,
   getMarketFactorInfo,
 } from "./services/marketFactorInfoService.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 export default function MarketFactorInfo() {
+  const { setIsLoading } = useLoading();
   const [shouldFetchMarketFactorInfo, setShouldFetchMarketFactorInfo] =
     useState(false);
   const [getMarketFactorInfoParam, setGetMarketInfoParam] = useState(null);
@@ -20,22 +22,26 @@ export default function MarketFactorInfo() {
   const [gameBatchData, setGameBatchData] = useState(null);
 
   useEffect(() => {
+    setIsLoading(true);
     getGameBatch({
       gameId: `${userInfo?.gameId}`,
     }).then((response) => {
       if (response) {
         setGameBatchData(response.data);
       }
-    });
+    })
+      .finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {
     if (shouldFetchMarketFactorInfo) {
+      setIsLoading(true);
       getMarketFactorInfo(getMarketFactorInfoParam).then((response) => {
         if (response) {
           setMarketFactorInfo(response.data);
         }
-      });
+      })
+        .finally(() => setIsLoading(false));
     }
   }, [shouldFetchMarketFactorInfo]);
 

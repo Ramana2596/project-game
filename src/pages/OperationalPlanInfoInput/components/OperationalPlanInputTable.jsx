@@ -6,6 +6,7 @@ import AddTableData from "../../../components/AddTableData";
 import EditableTableData from "../../../components/EditableTableData";
 import { pageConstants } from "../constants/pageConstants.js";
 import { getOperationalPlanInfoTableData } from "../services/operationalPlanInfoInputService";
+import { useLoading } from "../../../hooks/loadingIndicatorContext.js";
 
 export default function OperationalPlanInputTable({
   tableData,
@@ -14,6 +15,7 @@ export default function OperationalPlanInputTable({
   setDisableHeaderSection,
   selectedOperationalInput,
 }) {
+  const { setIsLoading } = useLoading();
   const [isDisableActionBtns, setIsDisableActionBtns] = useState(
     !isEnableTableActions
   );
@@ -36,6 +38,7 @@ export default function OperationalPlanInputTable({
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         setLoading(true);
         const partPromise = getOperationalPlanInfoTableData({
           gameId: selectedOperationalInput?.gameId,
@@ -112,6 +115,7 @@ export default function OperationalPlanInputTable({
         await Promise.all([partPromise, qtyPromise, pricePromise]);
         setAddTableData([...pageConstants.contentSection.inputTypesForAdd]);
         setLoading(false); // All data fetched, set loading to false
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false); // Ensure loading is set to false in case of error
@@ -199,45 +203,17 @@ export default function OperationalPlanInputTable({
 
   return (
     <div>
-      <Grid
-        margin={5}
-        container
-        spacing={2}
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Button
-          disabled={isDisableActionBtns}
-          type="button"
-          variant="contained"
-          onClick={onAddBtnClick}
-        >
+      <Grid margin={5} container spacing={2} justifyContent="center" alignItems="center">
+        <Button disabled={isDisableActionBtns} type="button" variant="contained" onClick={onAddBtnClick}>
           {pageConstants.contentSection.addBtnLabel}
         </Button>
-        <Button
-          disabled={isDisableActionBtns}
-          color="white"
-          type="button"
-          variant="contained"
-          onClick={onModifyBtnClick}
-        >
+        <Button disabled={isDisableActionBtns} color="white" type="button" variant="contained" onClick={onModifyBtnClick}>
           {pageConstants.contentSection.modifyBtnLabel}
         </Button>
-        <Button
-          disabled={isDisableSubCanBtns}
-          type="button"
-          variant="contained"
-          onClick={onSubmitBtnClick}
-        >
+        <Button disabled={isDisableSubCanBtns} type="button" variant="contained" onClick={onSubmitBtnClick}>
           {pageConstants.contentSection.saveBtnLabel}
         </Button>
-        <Button
-          disabled={isDisableSubCanBtns}
-          color="white"
-          type="button"
-          variant="contained"
-          onClick={onCancelButtonClick}
-        >
+        <Button disabled={isDisableSubCanBtns} color="white" type="button" variant="contained" onClick={onCancelButtonClick}>
           {pageConstants.contentSection.cancelBtnLabel}
         </Button>
       </Grid>

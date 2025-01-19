@@ -10,18 +10,21 @@ import {
 import Grid from "@mui/material/Grid2";
 import { getMarketFactorInfoTableData } from "../services/marketFactorInputService";
 import { useUser } from "../../../core/access/userContext.js";
+import { useLoading } from "../../../hooks/loadingIndicatorContext.js";
 
 export default function GameBatch({
   gameBatch,
   onFormControlUpdate,
   isDisabled,
 }) {
+  const { setIsLoading } = useLoading();
   const { userInfo } = useUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [gameBatchData, setGameBatchData] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     getMarketFactorInfoTableData({
       cmdLine: "Get_Batch",
       gameId: userInfo?.gameId,
@@ -33,7 +36,8 @@ export default function GameBatch({
       })
       .catch((error) => {
         setError(error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const handleChange = (event) => {

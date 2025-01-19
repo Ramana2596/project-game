@@ -32,7 +32,7 @@ export default function MarketType({
       })
       .catch((error) => {
         setError(error);
-      });
+      })
   }, []);
 
   const handleChange = (event) => {

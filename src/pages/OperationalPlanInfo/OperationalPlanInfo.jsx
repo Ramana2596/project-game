@@ -8,8 +8,10 @@ import {
   getDashboardData,
   getOperationalDecisionData,
 } from "./services/operationalDecisionService.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 export default function OperationalPlanInfo() {
+  const { setIsLoading } = useLoading();
   const { userInfo } = useUser();
   const [gameData, setGameData] = useState(null);
   const [operationalInfoData, setOperationalInfoData] = useState(null);
@@ -21,20 +23,23 @@ export default function OperationalPlanInfo() {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     getDashboardData()
       .then((response) => {
         if (response) {
           setGameData(response.data);
         }
       })
-      .catch((err) => {})
-      .finally(() => {});
+      .catch((err) => { })
+      .finally(() => setIsLoading(false));
 
     getOperationalDecisionData(getOperationalPlanInfoParam).then((response) => {
       if (response) {
         setOperationalInfoData(response.data);
       }
-    });
+    })
+      .catch((err) => { })
+      .finally(() => setIsLoading(false));
   }, []);
 
   if (!gameData) return <div>...Loading</div>;
@@ -45,12 +50,8 @@ export default function OperationalPlanInfo() {
         <h1>{pageConstants.pageTitle}</h1>
       </Grid>
       <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h3>
-          {pageConstants.gameBatch}: {userInfo?.gameBatch}
-        </h3>
-        <h3>
-          {pageConstants.gameTeam}: {userInfo?.gameTeam}
-        </h3>
+        <h3>{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
+        <h3>{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
       </Grid>
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}

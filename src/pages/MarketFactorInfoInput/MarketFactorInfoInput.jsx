@@ -16,8 +16,10 @@ import MarketFactorInputTable from "./components/MarketFactorInputTable";
 import { useUser } from "../../core/access/userContext.js";
 import { pageConstants } from "./constants/pageConstants.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 export default function MarketFactorInfoInput() {
+  const { setIsLoading } = useLoading();
   const { userInfo } = useUser();
   const initGetMarketFactorInput = {
     gameId: userInfo?.gameId,
@@ -45,14 +47,22 @@ export default function MarketFactorInfoInput() {
 
   useEffect(() => {
     if (shouldTriggerGetApi) {
+      setIsLoading(true);
       getMarketFactorInfoTableData(getMarketFactorInput)
         .then((response) => {
           setMarketFactorInfoResponse(response.data);
           setIsTableActionsEnable(true);
         })
         .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
+          setAlertData({
+            severity: "error",
+            message:
+              "Some Error occurred while fetching data" +
+              error?.response?.data?.error,
+            isVisible: true,
+          });
+        })
+        .finally(() => setIsLoading(false));
       setShouldTriggerApi(false);
       // Reset the trigger after API call
     }
@@ -60,6 +70,7 @@ export default function MarketFactorInfoInput() {
 
   useEffect(() => {
     if (getMarketFactorInput.marketInputId) {
+      setIsLoading(true);
       getParamValues(getMarketFactorInput)
         .then((response) => {
           setFormData({
@@ -76,7 +87,8 @@ export default function MarketFactorInfoInput() {
               error?.response?.data?.error,
             isVisible: true,
           });
-        });
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [getMarketFactorInput.marketInputId]);
 

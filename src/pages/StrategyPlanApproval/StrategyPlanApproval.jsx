@@ -9,8 +9,11 @@ import {
   getStrategyPlan,
   updateStrategyPlan,
 } from "./services/strategyPlanApprovalService.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import ToastMessage from "../../components/ToastMessage.jsx";
 
 export default function StrategyPlanApproval() {
+  const { setIsLoading } = useLoading();
   const [shouldUpdateStrategyPlan, setShouldUpdateStrategyPlan] =
     useState(false);
   const [strategyPlanRequestBody, setStrategyPlanRequestBody] = useState(null);
@@ -18,8 +21,14 @@ export default function StrategyPlanApproval() {
   let [editableTableData, setEditableTableData] = useState([]);
   const { userInfo } = useUser();
   const [gameIdData, setGameIdData] = useState(null);
+  const [alertData, setAlertData] = useState({
+    severity: "",
+    message: "",
+    isVisible: false,
+  });
 
   useEffect(() => {
+    setIsLoading(true);
     getStrategyPlan({
       type: "getStrategyPlan",
       gameId: userInfo?.gameId,
@@ -29,7 +38,8 @@ export default function StrategyPlanApproval() {
       if (response) {
         setGameIdData(response.data);
       }
-    });
+    })
+      .finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {
@@ -39,7 +49,7 @@ export default function StrategyPlanApproval() {
           ...strategyPlanApprObj,
           Decision:
             strategyPlanApprObj.Decision &&
-            strategyPlanApprObj.Decision === "Yes"
+              strategyPlanApprObj.Decision === "Yes"
               ? true
               : false,
         }))
@@ -49,11 +59,15 @@ export default function StrategyPlanApproval() {
 
   useEffect(() => {
     if (shouldUpdateStrategyPlan) {
+      setIsLoading(true);
       updateStrategyPlan(strategyPlanRequestBody).then((response) => {
-        if (response) {
-          console.log("Strategy Plan Updated Successfully");
-        }
-      });
+        setAlertData({
+          severity: "success",
+          message: "Strategy Plan Approval updated successfully",
+          isVisible: true,
+        });
+      })
+        .finally(() => setIsLoading(false));
     }
   }, [shouldUpdateStrategyPlan]);
 
@@ -92,30 +106,25 @@ export default function StrategyPlanApproval() {
           <h1>{pageConstants.pageTitle}</h1>
         </Grid>
         <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <h3>
-            {pageConstants.gameBatch}: {userInfo?.gameBatch}
-          </h3>
-          <h3>
-            {pageConstants.gameTeam}: {userInfo?.gameTeam}
-          </h3>
+          <h3>{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
+          <h3>{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
         </Grid>
         <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Button
-            type="submit"
-            variant="contained"
-            onClick={strategyFormSubmit}
-          >
+          <Button type="submit" variant="contained" onClick={strategyFormSubmit} >
             {pageConstants.submitBtn}
           </Button>
         </Grid>
       </form>
       {
-        <EditableTable
-          editableTableData={editableTableData}
+        <EditableTable editableTableData={editableTableData}
           onCheckboxChange={handleCheckboxChange}
           hiddenColumns={pageConstants.table.hiddenColumns}
         ></EditableTable>
       }
+      <ToastMessage open={alertData.isVisible}
+        severity={alertData.severity}
+        message={alertData.message}
+      />
     </Box>
   );
 }

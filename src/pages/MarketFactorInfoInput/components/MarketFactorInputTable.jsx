@@ -4,9 +4,9 @@ import GenericTable from "../../../components/GenericTable";
 import { useState, useEffect } from "react";
 import AddTableData from "../../../components/AddTableData";
 import EditableTableData from "../../../components/EditableTableData";
-import { useUser } from "../../../core/access/userContext";
 import { getMarketFactorInfoTableData } from "../services/marketFactorInputService";
 import { pageConstants } from "../constants/pageConstants";
+import { useLoading } from "../../../hooks/loadingIndicatorContext";
 
 export default function MarketFactorInputTable({
   tableData,
@@ -15,6 +15,7 @@ export default function MarketFactorInputTable({
   selectedMarketInput,
   setDisableHeaderSection,
 }) {
+  const { setIsLoading } = useLoading();
   const [isDisableActionBtns, setIsDisableActionBtns] = useState(
     !isEnableTableActions
   );
@@ -37,6 +38,7 @@ export default function MarketFactorInputTable({
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         setLoading(true);
         const partPromise = getMarketFactorInfoTableData({
           gameId: selectedMarketInput?.gameId,
@@ -112,6 +114,7 @@ export default function MarketFactorInputTable({
 
         setAddTableData([...pageConstants.contentSection.inputTypesForAdd]);
         setLoading(false); // All data fetched, set loading to false
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false); // Ensure loading is set to false in case of error
