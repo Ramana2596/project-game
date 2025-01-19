@@ -149,8 +149,8 @@ export default function OperationalPlanInfoInput() {
         quantityId: isAdd ? obj.Quantity_Info : obj.Qty_Id,
         quantity: obj.Quantity,
         priceId: isAdd ? obj.Info_Price : obj.Price_Id,
-        currency: isAdd ? null : obj.currency,
         unitPrice: obj.Unit_Price,
+        ...(!isAdd ? { currency: obj.currency } : null)
       }));
     }
     return [];
