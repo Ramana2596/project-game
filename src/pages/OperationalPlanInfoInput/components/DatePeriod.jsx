@@ -33,6 +33,7 @@ export default function DatePeriod({
         cmdLine: "Get_Period",
         gameId: userInfo?.gameId,
         gameBatch: selectedGameBatch,
+        gameTeam: userInfo?.gameTeam
       })
         .then((response) => {
           setLoading(false);
