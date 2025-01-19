@@ -28,21 +28,25 @@ import OperationalPlanInfo from "../OperationalPlanInfo/OperationalPlanInfo";
 import OperationalPlanInfoInput from "../OperationalPlanInfoInput/OperationalPlanInfoInput";
 import IncomeStatementInfo from "../IncomeStatementInfo/IncomeStatementInfo.jsx";
 import BalanceSheetInfo from "../BalanceSheetInfo/BalanceSheetInfo.jsx";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 export default function Index() {
+  const {setIsLoading} = useLoading();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const { user, userInfo, setAccessablePageIds } = useUser();
 
   useEffect(() => {
     if (user?.role) {
+      setIsLoading(true);
       getUserAccessPageIds(user.role)
         .then((response) => {
           setAccessablePageIds(response.data);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
-        });
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [user?.role]);
 

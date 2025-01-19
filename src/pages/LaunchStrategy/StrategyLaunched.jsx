@@ -10,8 +10,10 @@ import {
   getGameBatchData,
   getStrategySetNoDataApi,
 } from "./services/strategyLaunchedService";
+import { useLoading } from "../../hooks/loadingIndicatorContext";
 
 export default function StrategyLaunched() {
+  const {setIsLoading} = useLoading();
   const [shouldFetchStratechLaunch, setShouldFetchStrategyLaunch] =
     useState(false);
   const [shouldFetchGameBatch, setShouldFetchGameBatch] = useState(false);
@@ -44,6 +46,7 @@ export default function StrategyLaunched() {
 
   useEffect(() => {
     if (shouldFetchStratechLaunch) {
+      setIsLoading(true);
       getStrategySetData({
         gameId: strategyLaunchedFormData?.gameId,
         gameBatch: strategyLaunchedFormData?.gameBatch,
@@ -52,27 +55,35 @@ export default function StrategyLaunched() {
         if (response) {
           setStrategyLaunchData(response.data);
         }
-      });
+      })
+      .catch()
+      .finally(() => setIsLoading(false));
     }
 
     if (shouldFetchGameBatch) {
+      setIsLoading(true);
       getGameBatchData({ gameId: strategyLaunchedFormData?.gameId }).then(
         (response) => {
           if (response) {
             setGameBatchData(response.data);
           }
         }
-      );
+      )
+      .catch()
+      .finally(()=>setIsLoading(false));
     }
 
     if (shouldFetchStrategySet) {
+      setIsLoading(true);
       getStrategySetNoDataApi({
         gameId: strategyLaunchedFormData?.gameId,
       }).then((response) => {
         if (response) {
           setGetStrategySetNoData(response.data);
         }
-      });
+      })
+      .catch()
+      .finally(()=>setIsLoading(false));
     }
   }, [shouldFetchStratechLaunch, shouldFetchGameBatch, shouldFetchStrategySet]);
 
@@ -120,7 +131,6 @@ export default function StrategyLaunched() {
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
           <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-            <Grid size={{ xs: 2, sm: 4, md: 4 }}>
               <FormControl
                 required
                 sx={{ flexGrow: 1, width: "100%", maxWidth: 220 }}
@@ -143,7 +153,6 @@ export default function StrategyLaunched() {
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
           </Grid>
           <Grid size={{ xs: 2, sm: 4, md: 4 }}>
             <FormControl
@@ -170,7 +179,6 @@ export default function StrategyLaunched() {
             </FormControl>
           </Grid>
           <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-            <Grid size={{ xs: 2, sm: 4, md: 4 }}>
               <FormControl
                 required
                 sx={{ flexGrow: 1, width: "100%", maxWidth: 220 }}
@@ -193,7 +201,6 @@ export default function StrategyLaunched() {
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
           </Grid>
         </Grid>
         <Grid container spacing={2} justifyContent="center" alignItems="center">

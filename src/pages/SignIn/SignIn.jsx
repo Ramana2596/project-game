@@ -12,6 +12,7 @@ import ColorModeSelect from "./theme/ColorModeSelect";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../core/access/userContext.js";
 import { getUserDetails } from "./services/signInServices.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -56,6 +57,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn(props) {
+  const {setIsLoading} = useLoading();
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [isValidUser, setValidUser] = React.useState(false);
@@ -67,11 +69,14 @@ export default function SignIn(props) {
 
   React.useEffect(() => {
     if (shouldTriggerApiCall) {
+      setIsLoading(true);
       getUserDetails({ userEmail: userEmailValue }).then((response) => {
         if (response) {
           setUserDetailsData(response.data);
         }
-      });
+      })
+      .catch(()=> null)
+      .finally(() => setIsLoading(false));
     }
   }, [shouldTriggerApiCall]);
 

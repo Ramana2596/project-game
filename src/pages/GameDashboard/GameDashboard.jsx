@@ -3,11 +3,17 @@ import { useEffect, useState } from "react";
 import GenericTable from "../../components/GenericTable";
 import { getDashboardData } from "./services/gameDashboard.js";
 import { Typography } from "@mui/material";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import ToastMessage from "../../components/ToastMessage.jsx";
 
 function GameDashboard() {
+  const {setIsLoading} = useLoading(); 
   const [tableData, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [alertData, setAlertData] = useState({
+    severity: "",
+    message: "",
+    isVisible: false,
+  });
 
   const tableHeadings = [
     "Game_Id",
@@ -22,21 +28,23 @@ function GameDashboard() {
     "Max_Sessions",
   ];
 
-  // let { apiResponse: gameIdData, apiFailureErrorRes: gameBatchFailureRes, isLoading: gameBatchIsLoading } = FetchDataFromApi('https://loving-humpback-monthly.ngrok-free.app/api/data', true);
-
   useEffect(() => {
+    setIsLoading(true)
     getDashboardData()
       .then((response) => {
         if (response) {
           setData(response.data);
         }
       })
-      .catch((err) => setError(err?.message))
-      .finally(() => setLoading(false));
+      .catch((err) => {
+        setAlertData({
+          severity: "error",
+          message: 'There was an error while processing your request. Please try again later',
+          isVisible: true
+        });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
-
-  if (loading) return <div>...Loading</div>;
-  if (error) return <div>...Error</div>;
 
   return (
     <div>
@@ -47,6 +55,11 @@ function GameDashboard() {
         inputTableHeadings={tableHeadings}
         inputTableData={tableData}
       ></GenericTable>
+      <ToastMessage
+        open={alertData.isVisible}
+        severity={alertData.severity}
+        message={alertData.message}
+      />
     </div>
   );
 }
