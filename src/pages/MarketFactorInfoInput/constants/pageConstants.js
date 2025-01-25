@@ -1,5 +1,4 @@
 export const pageConstants = {
-  pageTitle: "Market Factor Input",
   contentSection: {
     addBtnLabel: "Add",
     modifyBtnLabel: "Modify",

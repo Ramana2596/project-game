@@ -7,7 +7,7 @@ import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
 
 function GameDashboard() {
-  const {setIsLoading} = useLoading(); 
+  const { setIsLoading } = useLoading();
   const [tableData, setData] = useState(null);
   const [alertData, setAlertData] = useState({
     severity: "",
@@ -48,9 +48,6 @@ function GameDashboard() {
 
   return (
     <div>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-        Welcome to Operation Simulation Game
-      </Typography>
       <GenericTable
         inputTableHeadings={tableHeadings}
         inputTableData={tableData}

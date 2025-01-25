@@ -103,9 +103,6 @@ export default function StrategyPlanApproval() {
     <Box sx={{ flexGrow: 1 }}>
       <form onSubmit={strategyFormSubmit}>
         <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <h1>{pageConstants.pageTitle}</h1>
-        </Grid>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
           <h3>{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
           <h3>{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
         </Grid>

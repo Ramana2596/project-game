@@ -1,5 +1,4 @@
 export const pageConstants = {
-  pageTitle: "Operational Decision Info",
   gameBatch: "Game Batch",
   gameTeam: "Game Team",
   tableHeading: [

@@ -1,0 +1,35 @@
+@import '../../../shared.css';
+
+.drawer {
+    z-index: 1000;
+}
+
+.drawer-container {
+    border-right: 1px solid var(--separator-gray);
+}
+
+.drawer-header {
+    border-bottom: 1px solid var(--separator-gray);
+}
+
+.drawer.expanded+.content,
+.drawer.collapsed+.content {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+.drawer.collapsed+.content {
+    margin-left: 80px;
+}
+
+.content {
+    transition: margin-left 0.3s ease-in-out;
+}
+
+.menu-icon {
+    color: var(--common-blue);
+}
+
+.account-icon {
+    color: var(--common-blue);
+}

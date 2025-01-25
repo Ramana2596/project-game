@@ -1,5 +1,4 @@
 export const pageConstants = {
-  pageTitle: "Income Statement",
   gameBatch: "Game Batch",
   gameTeam: "Game Team",
   tableHeading: [

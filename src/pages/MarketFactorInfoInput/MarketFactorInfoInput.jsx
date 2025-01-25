@@ -182,10 +182,6 @@ export default function MarketFactorInfoInput() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container justifyContent="center" alignItems="center">
-        <h2>{pageConstants.pageTitle}</h2>
-      </Grid>
-
       <Grid
         sx={{ margin: 2 }}
         container

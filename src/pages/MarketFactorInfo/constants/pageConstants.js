@@ -1,5 +1,4 @@
 export const pageConstants = {
-  pageTitle: "Market Factor Info",
   submitBtnLabel: "Submit",
   gameBatchLabel: "Game Batch",
   table: {

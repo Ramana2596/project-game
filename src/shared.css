@@ -1,0 +1,29 @@
+:root {
+    --pleasant-blue: #57a6ff;
+    --light-gray: #D3D3D3;
+    --silver: #C0C0C0;
+    --dark-gray: #A9A9A9;
+    --gray: #808080;
+    --dim-gray: #696969;
+    --standard-white: #FFFFFF;
+    --standard-black: #000000;
+    --separator-gray: #CCCCCC;
+    --common-blue: #4682B4;
+    --hover-blue: #5A9BD5;
+}
+
+.header-title {
+    color: var(--common-blue) !important;
+    font-style: italic !important;
+    font-weight: bold !important;
+}
+
+.standard-text-color {
+    color: var(--standard-black);
+}
+
+.hover-effect:hover {
+    color: var(--standard-white) !important;
+    border-color: var(--standard-white) !important;
+    background-color: var(--pleasant-blue) !important;
+}

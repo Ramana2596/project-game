@@ -66,9 +66,6 @@ export default function MarketFactorInfo() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <form onSubmit={marketFormInfoSumbit}>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <h1>{pageConstants.pageTitle}</h1>
-        </Grid>
         <Grid
           sx={{ margin: 5 }}
           container

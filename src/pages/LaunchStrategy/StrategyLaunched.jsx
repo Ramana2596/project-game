@@ -13,7 +13,7 @@ import {
 import { useLoading } from "../../hooks/loadingIndicatorContext";
 
 export default function StrategyLaunched() {
-  const {setIsLoading} = useLoading();
+  const { setIsLoading } = useLoading();
   const [shouldFetchStratechLaunch, setShouldFetchStrategyLaunch] =
     useState(false);
   const [shouldFetchGameBatch, setShouldFetchGameBatch] = useState(false);
@@ -40,8 +40,8 @@ export default function StrategyLaunched() {
           setGameIdData(response.data);
         }
       })
-      .catch((err) => {})
-      .finally(() => {});
+      .catch((err) => { })
+      .finally(() => { });
   }, []);
 
   useEffect(() => {
@@ -56,8 +56,8 @@ export default function StrategyLaunched() {
           setStrategyLaunchData(response.data);
         }
       })
-      .catch()
-      .finally(() => setIsLoading(false));
+        .catch()
+        .finally(() => setIsLoading(false));
     }
 
     if (shouldFetchGameBatch) {
@@ -69,8 +69,8 @@ export default function StrategyLaunched() {
           }
         }
       )
-      .catch()
-      .finally(()=>setIsLoading(false));
+        .catch()
+        .finally(() => setIsLoading(false));
     }
 
     if (shouldFetchStrategySet) {
@@ -82,8 +82,8 @@ export default function StrategyLaunched() {
           setGetStrategySetNoData(response.data);
         }
       })
-      .catch()
-      .finally(()=>setIsLoading(false));
+        .catch()
+        .finally(() => setIsLoading(false));
     }
   }, [shouldFetchStratechLaunch, shouldFetchGameBatch, shouldFetchStrategySet]);
 
@@ -121,9 +121,6 @@ export default function StrategyLaunched() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <form onSubmit={strategyFormSubmit}>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <h1>{pageConstants.pageTitle}</h1>
-        </Grid>
         <Grid
           sx={{ margin: 5 }}
           container
@@ -131,28 +128,28 @@ export default function StrategyLaunched() {
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
           <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-              <FormControl
-                required
-                sx={{ flexGrow: 1, width: "100%", maxWidth: 220 }}
+            <FormControl
+              required
+              sx={{ flexGrow: 1, width: "100%", maxWidth: 220 }}
+            >
+              <InputLabel id="gameId">
+                {pageConstants.headers.gameIdLabel}
+              </InputLabel>
+              <Select
+                labelId="gameId"
+                id="gameIdRequired"
+                name="gameId"
+                value={strategyLaunchedFormData.gameId}
+                label={pageConstants.headers.gameIdLabel + " *"}
+                onChange={onStrategyFormControlUpdate}
               >
-                <InputLabel id="gameId">
-                  {pageConstants.headers.gameIdLabel}
-                </InputLabel>
-                <Select
-                  labelId="gameId"
-                  id="gameIdRequired"
-                  name="gameId"
-                  value={strategyLaunchedFormData.gameId}
-                  label={pageConstants.headers.gameIdLabel + " *"}
-                  onChange={onStrategyFormControlUpdate}
-                >
-                  {gameIdData?.map((mapObj) => (
-                    <MenuItem value={mapObj.Game_Id}>
-                      {mapObj.Game_Title}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                {gameIdData?.map((mapObj) => (
+                  <MenuItem value={mapObj.Game_Id}>
+                    {mapObj.Game_Title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid size={{ xs: 2, sm: 4, md: 4 }}>
             <FormControl
@@ -179,28 +176,28 @@ export default function StrategyLaunched() {
             </FormControl>
           </Grid>
           <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-              <FormControl
-                required
-                sx={{ flexGrow: 1, width: "100%", maxWidth: 220 }}
+            <FormControl
+              required
+              sx={{ flexGrow: 1, width: "100%", maxWidth: 220 }}
+            >
+              <InputLabel id="strategySetNo">
+                {pageConstants.headers.strategySetLabel}
+              </InputLabel>
+              <Select
+                labelId="strategySetNo"
+                id="strategySetNo"
+                name="strategySetNo"
+                value={strategyLaunchedFormData.strategySetNo}
+                label={pageConstants.headers.strategySetLabel + " *"}
+                onChange={onStrategyFormControlUpdate}
               >
-                <InputLabel id="strategySetNo">
-                  {pageConstants.headers.strategySetLabel}
-                </InputLabel>
-                <Select
-                  labelId="strategySetNo"
-                  id="strategySetNo"
-                  name="strategySetNo"
-                  value={strategyLaunchedFormData.strategySetNo}
-                  label={pageConstants.headers.strategySetLabel + " *"}
-                  onChange={onStrategyFormControlUpdate}
-                >
-                  {getStrategySetNoData?.map((mapObj) => (
-                    <MenuItem value={mapObj.Strategy_Set_No}>
-                      {mapObj.Strategy_Set_No}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                {getStrategySetNoData?.map((mapObj) => (
+                  <MenuItem value={mapObj.Strategy_Set_No}>
+                    {mapObj.Strategy_Set_No}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
         </Grid>
         <Grid container spacing={2} justifyContent="center" alignItems="center">
