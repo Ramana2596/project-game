@@ -108,7 +108,15 @@ export default function MiniDrawer() {
           >
             <ArrowForwardIosIcon />
           </IconButton>
-
+          <IconButton
+            className="hover-effect"
+            aria-label="close drawer"
+            onClick={handleDrawerClose}
+            edge="start"
+            sx={{ ...(!open && { display: 'none' }) }}
+          >
+            <ArrowBackIosIcon />
+          </IconButton>
           <Typography color='black' align='left' className="header-title" variant='h5' component="div">
             {displayTitle}
           </Typography>
@@ -187,10 +195,6 @@ export default function MiniDrawer() {
             sx={{ ...(open && { display: 'none' }) }}>
             {pageConstants.companyTitleCollapsed}
           </Typography>}
-
-          <IconButton className="hover-effect" onClick={handleDrawerClose}>
-            {open ? <ArrowBackIosIcon /> : <ArrowForwardIosIcon />}
-          </IconButton>
         </DrawerHeader>
         <List>
           {userAccessiblePages?.map((componentObj) => (
