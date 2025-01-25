@@ -19,6 +19,10 @@ import AddBusinessTwoToneIcon from '@mui/icons-material/AddBusinessTwoTone';
 import DomainAddTwoToneIcon from '@mui/icons-material/DomainAddTwoTone';
 import DomainTwoToneIcon from '@mui/icons-material/DomainTwoTone';
 import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
+import FgStockInfo from "../pages/FgStockInfo/FgStockInfo";
+import LocalAtmTwoToneIcon from '@mui/icons-material/LocalAtmTwoTone';
+import PaymentsTwoToneIcon from '@mui/icons-material/PaymentsTwoTone';
+import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
 
 export const componentList = [
   {
@@ -117,6 +121,22 @@ export const componentList = [
     routePath: "/operationGame/balanceSheet",
     routeElement: <BalanceSheetInfo />,
   },
+  {
+    icon: <LocalAtmTwoToneIcon />,
+    id: "UI 009",
+    displayText: "FG Stock Info",
+    path: "/fgStockInfo",
+    routePath: "/operationGame/fgStockInfo",
+    routeElement: <FgStockInfo />,
+  },
+  {
+    icon: <PaymentsTwoToneIcon />,
+    id: "UI 010",
+    displayText: "RM Stock Info",
+    path: "/rmStockInfo",
+    routePath: "/operationGame/rmStockInfo",
+    routeElement: <RmStockInfo />,
+  },
 ];
 
-export const dateColumns = ["period"];
+export const dateColumns = ["period", "Production_Month"];

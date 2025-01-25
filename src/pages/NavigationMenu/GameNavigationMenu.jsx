@@ -1,3 +1,4 @@
+import RmStockInfo from '../RmStockInfo/RmStockInfo.jsx';
 import {
   React,
   useTheme,
@@ -18,6 +19,7 @@ import {
   ArrowForwardIosIcon,
   SignOutButton,
   ArrowBackIosIcon,
+  FgStockInfo,
   HomeIcon,
   Toolbar,
   Link,
@@ -89,7 +91,7 @@ export default function MiniDrawer() {
   const displayTitle = currentPage?.displayText || 'Default Title'; // Fallback to 'Default Title' if not found
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -223,6 +225,7 @@ export default function MiniDrawer() {
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1 }}>
+        <DrawerHeader />
         <Routes>
           <Route path="/gameDashboard" element={<GameDashboard />} />
           <Route path="/gameMaster" element={<GameMaster />} />
@@ -236,6 +239,8 @@ export default function MiniDrawer() {
           <Route path="/operationalPlanInfoInput" element={<OperationalPlanInfoInput />} />
           <Route path="/incomeStatementInfo" element={<IncomeStatementInfo />} />
           <Route path="/balanceSheet" element={<BalanceSheetInfo />} />
+          <Route path="/fgStockInfo" element={<FgStockInfo />} />
+          <Route path="/rmStockInfo" element={<RmStockInfo />} />
         </Routes>
       </Box>
     </Box>

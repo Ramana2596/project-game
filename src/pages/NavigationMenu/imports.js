@@ -44,6 +44,8 @@ import BalanceSheetInfo from "../BalanceSheetInfo/BalanceSheetInfo.jsx";
 import { getUserAccessPageIds } from "../NavigationMenu/services/indexService.js";
 import { useEffect, useState } from "react";
 import { drawerWidth, DrawerHeader, AppBar, Drawer } from "../NavigationMenu/components/drawerStyle.js"
+import FgStockInfo from '../FgStockInfo/FgStockInfo.jsx';
+
 
 
 export {
@@ -89,6 +91,7 @@ export {
     OperationalPlanInfoInput,
     IncomeStatementInfo,
     BalanceSheetInfo,
+    FgStockInfo,
     getUserAccessPageIds,
     useEffect,
     useState,
