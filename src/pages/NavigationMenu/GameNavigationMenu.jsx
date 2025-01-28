@@ -1,4 +1,5 @@
 
+import SalesRecordInfo from '../SalesRecordInfo/SalesRecordInfo.jsx';
 import {
   React,
   useTheme,
@@ -248,6 +249,7 @@ export default function MiniDrawer() {
           <Route path="/fgStockInfo" element={<FgStockInfo />} />
           <Route path="/rmStockInfo" element={<RmStockInfo />} />
           <Route path="/strategyMaster" element={<StrategyMaster />} />
+          <Route path="/salesRecord" element={<SalesRecordInfo />} />
         </Routes>
       </Box>
     </Box>
