@@ -25,32 +25,12 @@ import PaymentsTwoToneIcon from '@mui/icons-material/PaymentsTwoTone';
 import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
 import StrategyMaster from "../pages/StrategyMaster/StrategyMaster";
 import SalesRecordInfo from "../pages/SalesRecordInfo/SalesRecordInfo";
+import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecordInfo";
 
 export const componentList = [
-  {
-    icon: <HomeIcon />,
-    id: "UI 001",
-    displayText: "Game Dashboard",
-    path: "/gameDashboard",
-    routePath: "/operationGame/gameDashboard",
-    routeElement: <GameDashboard />,
-  },
-  {
-    icon: <HomeIcon />,
-    id: "",
-    displayText: "Game Master",
-    path: "/gameMaster",
-    routePath: "/operationGame/gameMaster",
-    routeElement: <GameMaster />,
-  },
-  {
-    icon: <HomeIcon />,
-    id: "",
-    displayText: "Game Batch",
-    path: "/gameBatch",
-    routePath: "/operationGame/gameBatch",
-    routeElement: <GameBatch />,
-  },
+  { icon: <HomeIcon />, id: "UI 001", displayText: "Game Dashboard", path: "/gameDashboard", routePath: "/operationGame/gameDashboard", routeElement: <GameDashboard /> },
+  { icon: <HomeIcon />, id: "", displayText: "Game Master", path: "/gameMaster", routePath: "/operationGame/gameMaster", routeElement: <GameMaster /> },
+  { icon: <HomeIcon />, id: "", displayText: "Game Batch", path: "/gameBatch", routePath: "/operationGame/gameBatch", routeElement: <GameBatch /> },
   {
     icon: <HomeIcon />,
     id: "",
@@ -141,7 +121,7 @@ export const componentList = [
   },
   {
     icon: <PaymentsTwoToneIcon />,
-    id: "UI 008",
+    id: "UI 018",
     displayText: "Strategy Master",
     path: "/strategyMaster",
     routePath: "/operationGame/strategyMaster",
@@ -149,11 +129,19 @@ export const componentList = [
   },
   {
     icon: <PaymentsTwoToneIcon />,
-    id: "UI 008",
+    id: "UI 013",
     displayText: "Sales Record Info",
     path: "/salesRecord",
     routePath: "/operationGame/salesRecord",
     routeElement: <SalesRecordInfo />,
+  },
+  {
+    icon: <PaymentsTwoToneIcon />,
+    id: "UI 014",
+    displayText: "Production Record Info",
+    path: "/productionRecordInfo",
+    routePath: "/operationGame/productionRecordInfo",
+    routeElement: <ProductionRecordInfo />,
   },
 ];
 

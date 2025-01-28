@@ -1,4 +1,5 @@
 
+import ProductionRecordInfo from '../ProductionRecordInfo/ProductionRecordInfo.jsx';
 import SalesRecordInfo from '../SalesRecordInfo/SalesRecordInfo.jsx';
 import {
   React,
@@ -250,6 +251,7 @@ export default function MiniDrawer() {
           <Route path="/rmStockInfo" element={<RmStockInfo />} />
           <Route path="/strategyMaster" element={<StrategyMaster />} />
           <Route path="/salesRecord" element={<SalesRecordInfo />} />
+          <Route path="/productionRecordInfo" element={<ProductionRecordInfo />} />
         </Routes>
       </Box>
     </Box>
