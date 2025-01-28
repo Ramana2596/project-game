@@ -106,7 +106,7 @@ export const componentList = [
   {
     icon: <LocalAtmTwoToneIcon />,
     id: "UI 009",
-    displayText: "FG Stock Info",
+    displayText: "Finished Goods Stock Info",
     path: "/fgStockInfo",
     routePath: "/operationGame/fgStockInfo",
     routeElement: <FgStockInfo />,
@@ -114,7 +114,7 @@ export const componentList = [
   {
     icon: <PaymentsTwoToneIcon />,
     id: "UI 010",
-    displayText: "RM Stock Info",
+    displayText: "Raw Materials Stock Info",
     path: "/rmStockInfo",
     routePath: "/operationGame/rmStockInfo",
     routeElement: <RmStockInfo />,
