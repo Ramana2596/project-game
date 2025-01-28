@@ -141,7 +141,7 @@ export const componentList = [
   },
   {
     icon: <PaymentsTwoToneIcon />,
-    id: "UI 018",
+    id: "UI 008",
     displayText: "Strategy Master",
     path: "/strategyMaster",
     routePath: "/operationGame/strategyMaster",
@@ -149,7 +149,7 @@ export const componentList = [
   },
   {
     icon: <PaymentsTwoToneIcon />,
-    id: "UI 013",
+    id: "UI 008",
     displayText: "Sales Record Info",
     path: "/salesRecord",
     routePath: "/operationGame/salesRecord",

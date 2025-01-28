@@ -149,7 +149,7 @@ function GenericTable({
                         return (
                           <StyledTableCell align="right">
                             {dateColumns.some((column) =>
-                              column.includes(key.toLowerCase()) || column.includes(key)
+                              column === key.toLowerCase() || column === key
                             ) || key.toLowerCase().includes("date")
                               ? formatDate(valueObj[key])
                               : valueObj[key]}
