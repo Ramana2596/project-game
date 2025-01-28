@@ -33,7 +33,7 @@ export const pageConstants = {
     inputTypes: [
       { columnName: "Description", inputType: null },
       { columnName: "UOM", inputType: null },
-      { columnName: "Quantity", inputType: "text" },
+      { columnName: "Quantity", inputType: "number" },
       { columnName: "Quantity_Info", inputType: null },
       { columnName: "Unit_Price", inputType: null },
       { columnName: "currency", inputType: null },
@@ -42,7 +42,7 @@ export const pageConstants = {
     inputTypesForAdd: [
       { columnName: "Description", inputType: "select" },
       { columnName: "Quantity_Info", inputType: "select" },
-      { columnName: "Quantity", inputType: "text" },
+      { columnName: "Quantity", inputType: "number" },
       { columnName: "Info_Price", inputType: "select" },
     ],
   },

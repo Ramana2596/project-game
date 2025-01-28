@@ -1,4 +1,4 @@
-import RmStockInfo from '../RmStockInfo/RmStockInfo.jsx';
+
 import {
   React,
   useTheme,
@@ -39,6 +39,8 @@ import {
   OperationalPlanInfoInput,
   IncomeStatementInfo,
   BalanceSheetInfo,
+  RmStockInfo,
+  StrategyMaster,
   getUserAccessPageIds,
   useEffect,
   useState,
@@ -245,6 +247,7 @@ export default function MiniDrawer() {
           <Route path="/balanceSheet" element={<BalanceSheetInfo />} />
           <Route path="/fgStockInfo" element={<FgStockInfo />} />
           <Route path="/rmStockInfo" element={<RmStockInfo />} />
+          <Route path="/strategyMaster" element={<StrategyMaster />} />
         </Routes>
       </Box>
     </Box>

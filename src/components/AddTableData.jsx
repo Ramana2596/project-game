@@ -143,10 +143,18 @@ function AddTableData({
             required
           />
         );
-      case "text":
+      case "number":
         return (
           <TextField
             type="number"
+            value={valueObj[key]?.value}
+            onChange={(event) => handleInputChange(event, rowIndex, key)}
+            required
+          />
+        );
+      case "text":
+        return (
+          <TextField
             value={valueObj[key]?.value}
             onChange={(event) => handleInputChange(event, rowIndex, key)}
             required

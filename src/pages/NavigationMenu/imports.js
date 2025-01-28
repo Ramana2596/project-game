@@ -45,6 +45,8 @@ import { getUserAccessPageIds } from "../NavigationMenu/services/indexService.js
 import { useEffect, useState } from "react";
 import { drawerWidth, DrawerHeader, AppBar, Drawer } from "../NavigationMenu/components/drawerStyle.js"
 import FgStockInfo from '../FgStockInfo/FgStockInfo.jsx';
+import RmStockInfo from '../RmStockInfo/RmStockInfo.jsx';
+import StrategyMaster from '../StrategyMaster/StrategyMaster.jsx';
 
 
 
@@ -92,6 +94,8 @@ export {
     IncomeStatementInfo,
     BalanceSheetInfo,
     FgStockInfo,
+    RmStockInfo,
+    StrategyMaster,
     getUserAccessPageIds,
     useEffect,
     useState,

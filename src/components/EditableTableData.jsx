@@ -100,7 +100,7 @@ function EditableTableData({
   const renderInputField = (valueObj, key, rowIndex) => {
     if (key === "deleted") return null;
     switch (
-      tableInputTypes.find((typeObj) => typeObj.columnName === key)?.inputType
+    tableInputTypes.find((typeObj) => typeObj.columnName === key)?.inputType
     ) {
       case "select":
         return (
@@ -122,10 +122,17 @@ function EditableTableData({
             onChange={(event) => handleCheckboxChange(event, rowIndex, key)}
           />
         );
-      case "text":
+      case "number":
         return (
           <TextField
             type="number"
+            value={valueObj[key]}
+            onChange={(event) => handleInputChange(event, rowIndex, key)}
+          />
+        );
+      case "text":
+        return (
+          <TextField
             value={valueObj[key]}
             onChange={(event) => handleInputChange(event, rowIndex, key)}
           />

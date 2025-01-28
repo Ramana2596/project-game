@@ -23,6 +23,7 @@ import FgStockInfo from "../pages/FgStockInfo/FgStockInfo";
 import LocalAtmTwoToneIcon from '@mui/icons-material/LocalAtmTwoTone';
 import PaymentsTwoToneIcon from '@mui/icons-material/PaymentsTwoTone';
 import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
+import StrategyMaster from "../pages/StrategyMaster/StrategyMaster";
 
 export const componentList = [
   {
@@ -136,6 +137,14 @@ export const componentList = [
     path: "/rmStockInfo",
     routePath: "/operationGame/rmStockInfo",
     routeElement: <RmStockInfo />,
+  },
+  {
+    icon: <PaymentsTwoToneIcon />,
+    id: "UI 008",
+    displayText: "Strategy Master",
+    path: "/strategyMaster",
+    routePath: "/operationGame/strategyMaster",
+    routeElement: <StrategyMaster />,
   },
 ];
 
