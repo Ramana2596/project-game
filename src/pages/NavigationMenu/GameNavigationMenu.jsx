@@ -1,4 +1,5 @@
 
+import CasFlowStatement from '../CasFlowStatement/CasFlowStatement.jsx';
 import ProductionRecordInfo from '../ProductionRecordInfo/ProductionRecordInfo.jsx';
 import SalesRecordInfo from '../SalesRecordInfo/SalesRecordInfo.jsx';
 import {
@@ -252,6 +253,7 @@ export default function MiniDrawer() {
           <Route path="/strategyMaster" element={<StrategyMaster />} />
           <Route path="/salesRecord" element={<SalesRecordInfo />} />
           <Route path="/productionRecordInfo" element={<ProductionRecordInfo />} />
+          <Route path="/cashFlowStatement" element={<CasFlowStatement />} />
         </Routes>
       </Box>
     </Box>

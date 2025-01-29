@@ -26,6 +26,12 @@ import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
 import StrategyMaster from "../pages/StrategyMaster/StrategyMaster";
 import SalesRecordInfo from "../pages/SalesRecordInfo/SalesRecordInfo";
 import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecordInfo";
+import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
+import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
+import PrecisionManufacturingTwoToneIcon from '@mui/icons-material/PrecisionManufacturingTwoTone';
+import LoyaltyTwoToneIcon from '@mui/icons-material/LoyaltyTwoTone';
+import RawOnTwoToneIcon from '@mui/icons-material/RawOnTwoTone';
+import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
 
 export const componentList = [
   { icon: <HomeIcon />, id: "UI 001", displayText: "Game Dashboard", path: "/gameDashboard", routePath: "/operationGame/gameDashboard", routeElement: <GameDashboard /> },
@@ -104,7 +110,7 @@ export const componentList = [
     routeElement: <BalanceSheetInfo />,
   },
   {
-    icon: <LocalAtmTwoToneIcon />,
+    icon: <Inventory2TwoToneIcon />,
     id: "UI 009",
     displayText: "Finished Goods Stock Info",
     path: "/fgStockInfo",
@@ -112,7 +118,7 @@ export const componentList = [
     routeElement: <FgStockInfo />,
   },
   {
-    icon: <PaymentsTwoToneIcon />,
+    icon: <RawOnTwoToneIcon />,
     id: "UI 010",
     displayText: "Raw Materials Stock Info",
     path: "/rmStockInfo",
@@ -128,7 +134,7 @@ export const componentList = [
     routeElement: <StrategyMaster />,
   },
   {
-    icon: <PaymentsTwoToneIcon />,
+    icon: <LoyaltyTwoToneIcon />,
     id: "UI 013",
     displayText: "Sales Record Info",
     path: "/salesRecord",
@@ -136,12 +142,20 @@ export const componentList = [
     routeElement: <SalesRecordInfo />,
   },
   {
-    icon: <PaymentsTwoToneIcon />,
-    id: "UI 014",
+    icon: <PrecisionManufacturingTwoToneIcon />,
+    id: "UI 008",
     displayText: "Production Record Info",
     path: "/productionRecordInfo",
     routePath: "/operationGame/productionRecordInfo",
     routeElement: <ProductionRecordInfo />,
+  },
+  {
+    icon: <CurrencyExchangeTwoToneIcon />,
+    id: "UI 008",
+    displayText: "Cash Flow Statement",
+    path: "/cashFlowStatement",
+    routePath: "/operationGame/cashFlowStatement",
+    routeElement: <CasFlowStatement />,
   },
 ];
 
