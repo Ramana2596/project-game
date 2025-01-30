@@ -13,8 +13,6 @@ import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 export default function MarketFactorInfo() {
   const { setIsLoading } = useLoading();
-  const [shouldFetchMarketFactorInfo, setShouldFetchMarketFactorInfo] =
-    useState(false);
   const [getMarketFactorInfoParam, setGetMarketInfoParam] = useState(null);
   const [selectedGameBatch, setSelectedBatch] = useState(null);
   const { userInfo } = useUser();
@@ -34,7 +32,7 @@ export default function MarketFactorInfo() {
   }, []);
 
   useEffect(() => {
-    if (shouldFetchMarketFactorInfo) {
+    if (getMarketFactorInfoParam?.gameId && getMarketFactorInfoParam?.gameBatch) {
       setIsLoading(true);
       getMarketFactorInfo(getMarketFactorInfoParam).then((response) => {
         if (response) {
@@ -43,10 +41,18 @@ export default function MarketFactorInfo() {
       })
         .finally(() => setIsLoading(false));
     }
-  }, [shouldFetchMarketFactorInfo]);
+  }, [getMarketFactorInfoParam]);
+
+  useEffect(() => {
+    if (selectedGameBatch) {
+      setGetMarketInfoParam({
+        gameId: userInfo?.gameId,
+        gameBatch: selectedGameBatch,
+      });
+    }
+  }, [selectedGameBatch]);
 
   const onMarketFactorInfoFormUpddate = (event) => {
-    setShouldFetchMarketFactorInfo(false);
     if (event.currentTarget) {
       setSelectedBatch(event.currentTarget.value);
     } else if (event.target) {
@@ -54,55 +60,40 @@ export default function MarketFactorInfo() {
     }
   };
 
-  const marketFormInfoSumbit = (event) => {
-    event.preventDefault();
-    setGetMarketInfoParam({
-      gameId: userInfo?.gameId,
-      gameBatch: selectedGameBatch,
-    });
-    setShouldFetchMarketFactorInfo(true);
-  };
-
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <form onSubmit={marketFormInfoSumbit}>
-        <Grid
-          sx={{ margin: 5 }}
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          <Grid size={{ xs: 2, sm: 4, md: 4 }}>
-            <FormControl
-              required
-              sx={{ flexGrow: 1, width: "100%", maxWidth: 220 }}
+      <Grid
+        sx={{ margin: 5 }}
+        container
+        spacing={{ xs: 2, md: 3 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+      >
+        <Grid size={{ xs: 2, sm: 4, md: 4 }}>
+          <FormControl
+            required
+            sx={{ flexGrow: 1, width: "100%", maxWidth: 220 }}
+          >
+            <InputLabel id="gameBatch">
+              {pageConstants.gameBatchLabel}
+            </InputLabel>
+            <Select
+              labelId="gameBatch"
+              id="gameBatchRequired"
+              name="gameBatch"
+              label="Game Batch *"
+              value={selectedGameBatch}
+              onChange={onMarketFactorInfoFormUpddate}
             >
-              <InputLabel id="gameBatch">
-                {pageConstants.gameBatchLabel}
-              </InputLabel>
-              <Select
-                labelId="gameBatch"
-                id="gameBatchRequired"
-                name="gameBatch"
-                label="Game Batch *"
-                value={selectedGameBatch}
-                onChange={onMarketFactorInfoFormUpddate}
-              >
-                {gameBatchData?.map((mapObj) => (
-                  <MenuItem value={mapObj.Game_Batch}>
+              {gameBatchData && gameBatchData.length > 0 ?
+                gameBatchData.map((mapObj) => (
+                  <MenuItem key={mapObj.Game_Batch} value={mapObj.Game_Batch}>
                     {mapObj.Game_Batch}
                   </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+                )) : null}
+            </Select>
+          </FormControl>
         </Grid>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Button type="submit" variant="contained">
-            {pageConstants.submitBtnLabel}
-          </Button>
-        </Grid>
-      </form>
+      </Grid>
       <GenericTable
         inputTableHeadings={pageConstants.table.headers}
         inputTableData={marketFactorInfo}

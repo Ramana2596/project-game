@@ -58,7 +58,7 @@ function GenericTable({
 
   if (ifNoData) {
     return (
-      <Box marginLeft={10} marginRight={10} marginTop={2} sx={{ flexGrow: 1 }}>
+      <Box marginLeft={5} marginRight={5} marginTop={2} sx={{ flexGrow: 1 }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
@@ -85,7 +85,7 @@ function GenericTable({
     );
   } else if (isAnEditableTable) {
     return (
-      <Box marginLeft={10} marginRight={10} marginTop={2} sx={{ flexGrow: 1 }}>
+      <Box marginLeft={5} marginRight={5} marginTop={2} sx={{ flexGrow: 1 }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
@@ -126,7 +126,7 @@ function GenericTable({
     );
   } else {
     return (
-      <Box marginLeft={10} marginRight={10} marginTop={2} sx={{ flexGrow: 1 }}>
+      <Box marginLeft={2} marginRight={2} marginTop={2} sx={{ flexGrow: 1 }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>

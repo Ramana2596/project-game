@@ -15,3 +15,7 @@ export function getGameBatchData(queryParams) {
 export function getStrategySetNoDataApi(queryParams) {
     return api.get('/api/getStrategyLaunch', { params: { ...queryParams, cmdLine: "Get_Strategy" } });
 }
+
+export function updateStrategyLaunchData(queryParams) {
+    return api.post('/api/updateStrategyLaunch', { ...queryParams, cmdLine: "Add_Strategy" });
+}
