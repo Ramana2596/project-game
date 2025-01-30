@@ -2,9 +2,9 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import GenericTable from "../../components/GenericTable";
 import { getDashboardData } from "./services/gameDashboard.js";
-import { Typography } from "@mui/material";
 import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
+import { pageConstants } from "../GameDashboard/constants/pageConstants.js";
 
 function GameDashboard() {
   const { setIsLoading } = useLoading();
@@ -14,19 +14,6 @@ function GameDashboard() {
     message: "",
     isVisible: false,
   });
-
-  const tableHeadings = [
-    "Game_Id",
-    "Game_Title",
-    "Game_Short_Title",
-    "Game_Objective",
-    "Discipline",
-    "Subject",
-    "Faculty",
-    "Duration_Hours",
-    "Max_Seats",
-    "Max_Sessions",
-  ];
 
   useEffect(() => {
     setIsLoading(true)
@@ -39,7 +26,7 @@ function GameDashboard() {
       .catch((err) => {
         setAlertData({
           severity: "error",
-          message: 'There was an error while processing your request. Please try again later',
+          message: pageConstants.apiFailiureMessage,
           isVisible: true
         });
       })
@@ -49,7 +36,7 @@ function GameDashboard() {
   return (
     <div>
       <GenericTable
-        inputTableHeadings={tableHeadings}
+        inputTableHeadings={pageConstants.tableHeadings}
         inputTableData={tableData}
       ></GenericTable>
       <ToastMessage

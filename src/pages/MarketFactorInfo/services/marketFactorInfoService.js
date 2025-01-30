@@ -13,7 +13,7 @@ export function getMarketFactorInfo(queryParams) {
 }
 
 export function getGameBatch(queryParams) {
-  return api.get("/api/getStrategySetData", {
+  return api.get("/api/getMarketFactorInfo", {
     params: {
       ...queryParams,
       type: "getGameBatch",

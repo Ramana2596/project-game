@@ -11,6 +11,7 @@ import {
 } from "./services/strategyPlanApprovalService.js";
 import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
+import NotificationMessage from "../../components/NotificationMessage.jsx";
 
 export default function StrategyPlanApproval() {
   const { setIsLoading } = useLoading();
@@ -107,17 +108,19 @@ export default function StrategyPlanApproval() {
           <h3>{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
         </Grid>
         <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Button type="submit" variant="contained" onClick={strategyFormSubmit} >
+          <Button disabled={editableTableData.length === 0} type="submit" variant="contained" onClick={strategyFormSubmit} >
             {pageConstants.submitBtn}
           </Button>
         </Grid>
       </form>
-      {
-        <EditableTable editableTableData={editableTableData}
-          onCheckboxChange={handleCheckboxChange}
-          hiddenColumns={pageConstants.table.hiddenColumns}
-        ></EditableTable>
-      }
+      <Grid container margin={2} spacing={2} justifyContent="center" alignItems="center">
+        {editableTableData.length > 0 ? (
+          <EditableTable editableTableData={editableTableData} onCheckboxChange={handleCheckboxChange} hiddenColumns={pageConstants.table.hiddenColumns} />
+        ) : (
+          <NotificationMessage message={pageConstants.noDataAvailable} />
+        )}
+      </Grid>
+
       <ToastMessage open={alertData.isVisible}
         severity={alertData.severity}
         message={alertData.message}

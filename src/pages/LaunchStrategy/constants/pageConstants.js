@@ -17,5 +17,10 @@ export const pageConstants = {
     "Duration",
     "Norm %",
     "Loss %",
-  ]
+  ],
+  initialStrategyLaunchedFormData: {
+    gameId: "",
+    gameBatch: "",
+    strategySetNo: "",
+  }
 }

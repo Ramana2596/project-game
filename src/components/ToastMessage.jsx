@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Snackbar, Alert, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ToastMessage = ({ open, message, severity, onClose }) => {
+const ToastMessage = ({ open, message, severity, duration = 5000 }) => {
+  const [isOpen, setIsOpen] = useState(open);
+
+  useEffect(() => {
+    setIsOpen(open);
+  }, [open]);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setIsOpen(false);
+  };
+
   return (
     <Snackbar
       anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-      open={open}
-      autoHideDuration={5000}
-      onClose={onClose}
+      open={isOpen}
+      autoHideDuration={duration}
+      onClose={handleClose}
     >
       <Alert
         variant="filled"
-        onClose={onClose}
+        onClose={handleClose}
         severity={severity}
         sx={{ width: "100%" }}
         action={
@@ -20,7 +33,7 @@ const ToastMessage = ({ open, message, severity, onClose }) => {
             aria-label="close"
             color="inherit"
             size="small"
-            onClick={onClose}
+            onClick={handleClose}
           >
             <CloseIcon fontSize="inherit" />
           </IconButton>

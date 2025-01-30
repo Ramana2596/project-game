@@ -5,44 +5,29 @@ import Button from "@mui/material/Button";
 import GenericTable from "../../components/GenericTable";
 import { pageConstants } from "./constants/pageConstants";
 import {
-  getDashboardData,
+  getGameId,
   getStrategySetData,
   getGameBatchData,
   getStrategySetNoDataApi,
 } from "./services/strategyLaunchedService";
 import { useLoading } from "../../hooks/loadingIndicatorContext";
+import { useUser } from "../../core/access/userContext";
 
 export default function StrategyLaunched() {
+  const { userInfo } = useUser();
   const { setIsLoading } = useLoading();
   const [shouldFetchStratechLaunch, setShouldFetchStrategyLaunch] =
     useState(false);
   const [shouldFetchGameBatch, setShouldFetchGameBatch] = useState(false);
   const [shouldFetchStrategySet, setShouldFetchStrategySet] = useState(false);
-  const [gameIdData, setGameIdData] = useState([]);
+  const [gameIdData, setGameIdData] = useState([userInfo?.gameId]);
   const [strategyLaunchData, setStrategyLaunchData] = useState([]);
   const [gameBatchData, setGameBatchData] = useState([]);
   const [getStrategySetNoData, setGetStrategySetNoData] = useState([]);
 
-  const initialStrategyLaunchedFormData = {
-    gameId: "",
-    gameBatch: "",
-    strategySetNo: "",
-  };
-
   const [strategyLaunchedFormData, setFormData] = useState(
-    initialStrategyLaunchedFormData
+    pageConstants.initialStrategyLaunchedFormData
   );
-
-  useEffect(() => {
-    getDashboardData()
-      .then((response) => {
-        if (response) {
-          setGameIdData(response.data);
-        }
-      })
-      .catch((err) => { })
-      .finally(() => { });
-  }, []);
 
   useEffect(() => {
     if (shouldFetchStratechLaunch) {
@@ -143,9 +128,9 @@ export default function StrategyLaunched() {
                 label={pageConstants.headers.gameIdLabel + " *"}
                 onChange={onStrategyFormControlUpdate}
               >
-                {gameIdData?.map((mapObj) => (
-                  <MenuItem value={mapObj.Game_Id}>
-                    {mapObj.Game_Title}
+                {gameIdData?.map((value) => (
+                  <MenuItem value={value}>
+                    {value}
                   </MenuItem>
                 ))}
               </Select>
