@@ -36,14 +36,23 @@ export default function DatePeriod({
       })
         .then((response) => {
           setLoading(false);
-          setGamePeriod(response.data);
-          const latestPeriod =
-            response.data[response.data.length - 1]?.Valid_Period;
-          const earliestPeriod = response.data[0]?.Valid_Period;
-          setSelectedPeriod(latestPeriod);
-          setMinDate(dayjs(earliestPeriod));
-          setMaxDate(dayjs(latestPeriod));
-          onFormControlUpdate({ productionMonth: latestPeriod });
+          if (response.data.length > 0) {
+            setGamePeriod(response.data);
+            const latestPeriod =
+              response.data[response.data.length - 1]?.Valid_Period;
+            const earliestPeriod = response.data[0]?.Valid_Period;
+            setSelectedPeriod(latestPeriod);
+            setMinDate(dayjs(earliestPeriod));
+            setMaxDate(dayjs(latestPeriod));
+            onFormControlUpdate({ productionMonth: latestPeriod });
+          } else {
+            // Handle the case when there is no data
+            setGamePeriod([]);
+            setSelectedPeriod(null); // No default value
+            setMinDate(null);
+            setMaxDate(null);
+            onFormControlUpdate({ productionMonth: null });
+          }
         })
         .catch((error) => {
           setError(error);
@@ -80,8 +89,8 @@ export default function DatePeriod({
       {loading ? (
         <CircularProgress size={24} />
       ) : error ? (
-        <Alert severity="error">{error}</Alert>
-      ) : (
+        <Alert severity="error">{error.message}</Alert>
+      ) : gamePeriod.length > 0 ? (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             views={["year", "month"]}
@@ -96,6 +105,8 @@ export default function DatePeriod({
             )}
           />
         </LocalizationProvider>
+      ) : (
+        <Alert severity="info">No available periods to select.</Alert>
       )}
       <ToastMessage
         open={alertData.isVisible}
