@@ -37,9 +37,7 @@ export default function MarketFactorInputTable({
 
   useEffect(() => {
     const fetchData = async () => {
-      if (selectedMarketInput?.partCategory &&
-        selectedMarketInput?.refTypeInfo &&
-        selectedMarketInput?.refTypePrice) {
+      if (selectedMarketInput?.marketInputId) {
         try {
           setIsLoading(true);
           setLoading(true);
@@ -126,7 +124,7 @@ export default function MarketFactorInputTable({
     };
 
     fetchData();
-  }, [selectedMarketInput]);
+  }, [selectedMarketInput?.marketInputId]);
 
   const onAddBtnClick = () => {
     setIsDisableActionBtns(true);
