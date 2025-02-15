@@ -38,10 +38,16 @@
 
 /* sharedStyles.css */
 .custom-card {
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease-in-out;
+    border: 1px solid var(--separator-gray);
+    /* Light grey border */
+    box-shadow: none !important;
+    /* Remove default shadow */
+    transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
 
 .custom-card:hover {
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2) !important;
+    /* Apply shadow on hover */
+    border-color: #57a6ff;
+    /* Pleasant blue border on hover */
 }
