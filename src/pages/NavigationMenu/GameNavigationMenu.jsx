@@ -1,4 +1,5 @@
 
+import BreadCrumb from '../../components/BreadCrumb.jsx';
 import CasFlowStatement from '../CasFlowStatement/CasFlowStatement.jsx';
 import ProductionRecordInfo from '../ProductionRecordInfo/ProductionRecordInfo.jsx';
 import SalesRecordInfo from '../SalesRecordInfo/SalesRecordInfo.jsx';
@@ -55,7 +56,7 @@ import { pageConstants } from './pageConstants.js';
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const { user, userInfo, setAccessablePageIds, userAccessiblePages } = useUser();
   const location = useLocation();
@@ -90,144 +91,74 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
-  // Find the display title based on the current route
   const currentRoute = location.pathname;
-  const currentPage = userAccessiblePages?.find(page => page.routePath === currentRoute);
-  const displayTitle = currentPage?.displayText || 'Default Title'; // Fallback to 'Default Title' if not found
 
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open}
+        sx={{
+          backgroundColor: '#cae3ff',
+          backgroundImage: 'linear-gradient(45deg,#cae3ff 25%, transparent 25%, transparent 50%,#cae3ff 50%, #cae3ff 75%, transparent 75%, transparent)',
+          backgroundSize: '20px 20px',
+          borderBottom: '2px solid #57a6ff',
+        }}>
         <Toolbar>
-          <Typography color='black' align="left" variant="h4" noWrap component="div"
-            sx={{ ...(open && { display: 'none' }) }}>
+          <Typography color='black' align="left" variant="h4" noWrap component="div" sx={{ ...(open && { display: 'none' }) }}>
             {pageConstants.companyTitleCollapsed}
           </Typography>
-          <IconButton
-            className="hover-effect"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ marginLeft: 1, ...(open && { display: 'none' }) }}
-          >
+          <IconButton className="hover-effect" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{ marginLeft: 1, ...(open && { display: 'none' }) }} >
             <ArrowForwardIosIcon />
           </IconButton>
-          <IconButton
-            className="hover-effect"
-            aria-label="close drawer"
-            onClick={handleDrawerClose}
-            edge="start"
-            sx={{ ...(!open && { display: 'none' }) }}
-          >
+          <IconButton className="hover-effect" aria-label="close drawer" onClick={handleDrawerClose} edge="start" sx={{ ...(!open && { display: 'none' }) }} >
             <ArrowBackIosIcon />
           </IconButton>
-          <Typography color='black' align='left' className="header-title" variant='h5' component="div">
-            {displayTitle}
-          </Typography>
-
+          <BreadCrumb currentRoute={currentRoute} />
           <div style={{ marginLeft: "auto" }}>
-            <Button
-              className="hover-effect"
-              onClick={handleMenu}
-              color="inherit"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                textTransform: "none",
-                border: "1px solid",
-                borderRadius: "30px",
-                padding: "5px 20px",
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-                color: "#4682B4", /* Set to pleasant blue */
-              }}
-            >
-              <AccountCircle
-                className="account-icon"
-                sx={{ fontSize: 40 }} // Adjust the font size to make the icon bigger
-              />
+            <Button className="hover-effect" onClick={handleMenu} color="inherit" sx={{ display: "flex", alignItems: "center", textTransform: "none", border: "1px solid", borderRadius: "30px", padding: "5px 20px", backgroundColor: "rgba(255, 255, 255, 0.1)", color: "#4682B4", /* Set to pleasant blue */ }}>
+              <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
             </Button>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              sx={{
-                "& .MuiPaper-root": {
-                  borderRadius: "10px",
-                  padding: "10px",
-                  width: "250px",
-                  backgroundColor: "#FFFFFF",
-                },
-              }}
-            >
+            <Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right", }} keepMounted transformOrigin={{ vertical: "top", horizontal: "right", }} open={Boolean(anchorEl)} onClose={handleClose} sx={{ "& .MuiPaper-root": { borderRadius: "10px", padding: "10px", width: "250px", backgroundColor: "#FFFFFF", }, }} >
               <Typography className="standard-text-color" disabled>{userInfo?.loginId}</Typography>
-              <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} /> {/* Gray separator with padding */}
+              <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
               <Typography className="standard-text-color" disabled>{user?.role}</Typography>
-              <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} /> {/* Gray separator with padding */}
-              <MenuItem
-                onClick={handleClose}
-                sx={{
-                  "& .MuiButton-root": {
-                    width: "100%",
-                    justifyContent: "flex-start",
-                    textTransform: "none",
-                    padding: "10px",
-                    paddingLeft: "20px", // Adjust the left padding for menu items
-                  }
-                }}
-              >
+              <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
+              <MenuItem onClick={handleClose} sx={{ "& .MuiButton-root": { width: "100%", justifyContent: "flex-start", textTransform: "none", padding: "10px", paddingLeft: "20px", } }} >
                 <SignOutButton />
               </MenuItem>
             </Menu>
           </div>
         </Toolbar>
       </AppBar>
-      <Drawer className="drawer-container" variant="permanent" open={open}>
+      <Drawer className="drawer-container" variant="permanent" open={open}
+        sx={{
+          '.MuiDrawer-paper': {
+            backgroundColor: '#cae3ff',
+            backgroundImage: 'linear-gradient(45deg,#cae3ff 25%, transparent 25%, transparent 50%,#cae3ff 50%, #cae3ff 75%, transparent 75%, transparent)',
+            backgroundSize: '20px 20px',
+            borderRight: '2px solid #57a6ff',
+          }
+        }}>
         <DrawerHeader className="drawer-header">
-          {open ? <Typography color='black' align="left" variant="h6" wrap component="div">
-            {pageConstants.companyTitleExpandedFH} <br /> {pageConstants.companyTitleExpandedSH}
-          </Typography> : <Typography color='black' align="left" variant="h4" noWrap component="div"
-            sx={{ ...(open && { display: 'none' }) }}>
-            {pageConstants.companyTitleCollapsed}
-          </Typography>}
+          {open ? (
+            <Typography color='black' align="left" variant="h6" wrap component="div">
+              {pageConstants.companyTitleExpandedFH} <br />
+              {pageConstants.companyTitleExpandedSH}
+            </Typography>
+          ) : (
+            <Typography color='black' align="left" variant="h4" noWrap component="div" sx={{ ...(open && { display: 'none' }) }}>
+              {pageConstants.companyTitleCollapsed}
+            </Typography>
+          )}
         </DrawerHeader>
         <List>
           {userAccessiblePages?.map((componentObj) => (
-            <ListItem key={componentObj.routePath} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                className="hover-effect"
-                component={Link}
-                to={componentObj.routePath}
-                sx={{
-                  minHeight: 60,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 2 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
+            <ListItem key={componentObj.href} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton className="hover-effect" component={Link} to={componentObj.href} sx={{ minHeight: 60, justifyContent: open ? 'initial' : 'center', px: 2.5 }} >
+                <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : 'auto', justifyContent: 'center', }} >
                   {[componentObj.icon]}
                 </ListItemIcon>
-                <ListItemText primary={componentObj.displayText} sx={{
-                  opacity: open ? 1 : 0,
-                  wordWrap: open ? 'break-word' : 'none',
-                  whiteSpace: open ? 'normal' : 'none'
-                }} />
+                <ListItemText primary={componentObj.label} sx={{ opacity: open ? 1 : 0, wordWrap: open ? 'break-word' : 'none', whiteSpace: open ? 'normal' : 'none' }} />
               </ListItemButton>
             </ListItem>
           ))}

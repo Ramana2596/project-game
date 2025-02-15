@@ -3,11 +3,13 @@
 }
 
 .drawer-container {
-    border-right: 1px solid var(--separator-gray);
+    background-color: '#cae3ff' !important;
+    border-right: 2px solid var(--pleasant-blue) !important;
 }
 
 .drawer-header {
-    border-bottom: 1px solid var(--separator-gray);
+    background-color: '#cae3ff';
+    border-bottom: 2px solid var(--pleasant-blue);
 }
 
 .drawer.expanded+.content,

@@ -23,9 +23,9 @@
 }
 
 .hover-effect:hover {
-    color: var(--standard-white) !important;
+    color: var(--standard-black) !important;
     border-color: var(--standard-white) !important;
-    background-color: var(--pleasant-blue) !important;
+    background-color: var(--standard-white) !important;
 }
 
 .page-container {
@@ -33,4 +33,14 @@
     margin: 0 auto;
     padding: 0 20px;
     box-sizing: border-box;
+}
+
+/* sharedStyles.css */
+.custom-card {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.custom-card:hover {
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }
