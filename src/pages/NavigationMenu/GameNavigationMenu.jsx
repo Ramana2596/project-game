@@ -53,6 +53,7 @@ import {
   DrawerHeader, AppBar, Drawer
 } from './imports.js';
 import { pageConstants } from './pageConstants.js';
+import '../NavigationMenu/styles/temporaryDrawer.css';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -97,11 +98,8 @@ export default function MiniDrawer() {
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}
-        sx={{
-          backgroundColor: '#cae3ff'
-        }}>
-        <Toolbar>
+      <AppBar position="fixed" open={open} sx={{ backgroundImage: 'radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%))' }}>
+        <Toolbar sx={{ backgroundImage: 'inherit' }}>
           <Typography color='black' align="left" variant="h4" noWrap component="div" sx={{ ...(open && { display: 'none' }) }}>
             {pageConstants.companyTitleCollapsed}
           </Typography>
@@ -128,12 +126,7 @@ export default function MiniDrawer() {
           </div>
         </Toolbar>
       </AppBar>
-      <Drawer className="drawer-container" variant="permanent" open={open}
-        sx={{
-          '.MuiDrawer-paper': {
-            backgroundColor: '#cae3ff'
-          }
-        }}>
+      <Drawer className="drawer-container" variant="permanent" open={open}>
         <DrawerHeader className="drawer-header">
           {open ? (
             <Typography color='black' align="left" variant="h6" wrap component="div">
@@ -146,7 +139,7 @@ export default function MiniDrawer() {
             </Typography>
           )}
         </DrawerHeader>
-        <List>
+        <List sx={{ backgroundImage: 'inherit' }}>
           {userAccessiblePages?.map((componentObj) => (
             <ListItem key={componentObj.href} disablePadding sx={{ display: 'block' }}>
               <ListItemButton className="hover-effect" component={Link} to={componentObj.href} sx={{ minHeight: 60, justifyContent: open ? 'initial' : 'center', px: 2.5 }} >

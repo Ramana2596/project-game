@@ -57,7 +57,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn(props) {
-  const {setIsLoading} = useLoading();
+  const { setIsLoading } = useLoading();
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [isValidUser, setValidUser] = React.useState(false);
@@ -75,8 +75,8 @@ export default function SignIn(props) {
           setUserDetailsData(response.data);
         }
       })
-      .catch(()=> null)
-      .finally(() => setIsLoading(false));
+        .catch(() => null)
+        .finally(() => setIsLoading(false));
     }
   }, [shouldTriggerApiCall]);
 

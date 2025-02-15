@@ -14,7 +14,7 @@
 }
 
 .header-title {
-    color: var(--standard-black) !important;
+    color: var(--common-blue) !important;
     font-style: italic !important;
     font-weight: bold !important;
 }
@@ -24,9 +24,9 @@
 }
 
 .hover-effect:hover {
-    color: var(--standard-black) !important;
+    color: var(--standard-white) !important;
     border-color: var(--standard-white) !important;
-    background-color: var(--standard-white) !important;
+    background-color: var(--hover-blue) !important;
 }
 
 .page-container {
