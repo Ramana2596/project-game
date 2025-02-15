@@ -16,5 +16,16 @@ code {
 
 .large-cell {
   min-width: 200px;
-  /* Adjust as needed */
+}
+
+/* sharedStyles.css */
+/* sharedStyles.css */
+.bottom-right-image {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  height: auto;
+  pointer-events: none;
+  z-index: -1;
 }
