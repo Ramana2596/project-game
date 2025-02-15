@@ -14,7 +14,6 @@ import {
 } from "./services/marketFactorInputService.js";
 import MarketFactorInputTable from "./components/MarketFactorInputTable";
 import { useUser } from "../../core/access/userContext.js";
-import { pageConstants } from "./constants/pageConstants.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 

@@ -37,93 +37,95 @@ export default function OperationalPlanInputTable({
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        setLoading(true);
-        const partPromise = getOperationalPlanInfoTableData({
-          gameId: selectedOperationalInput?.gameId,
-          gameBatch: selectedOperationalInput?.gameBatch,
-          gameTeam: selectedOperationalInput?.gameTeam,
-          productionMonth: null,
-          marketInputId: selectedOperationalInput?.marketInputId,
-          partCategory: selectedOperationalInput?.partCategory,
-          operationasInputId: selectedOperationalInput?.operationsInputId,
-          refTypeInfo: null,
-          refTypePrice: null,
-          cmdLine: "Get_Part",
-        }).then((data) => {
-          pageConstants.contentSection.inputTypesForAdd.forEach(
-            (inputTypeObj) => {
-              if (inputTypeObj.columnName === "Description") {
-                inputTypeObj.data = data.data?.map((dataObj) => {
-                  return { value: dataObj?.Part, label: dataObj?.Description };
-                });
+      if (selectedOperationalInput?.operationasInputId) {
+        try {
+          setIsLoading(true);
+          setLoading(true);
+          const partPromise = getOperationalPlanInfoTableData({
+            gameId: selectedOperationalInput?.gameId,
+            gameBatch: selectedOperationalInput?.gameBatch,
+            gameTeam: selectedOperationalInput?.gameTeam,
+            productionMonth: null,
+            marketInputId: selectedOperationalInput?.marketInputId,
+            partCategory: selectedOperationalInput?.partCategory,
+            operationasInputId: selectedOperationalInput?.operationsInputId,
+            refTypeInfo: null,
+            refTypePrice: null,
+            cmdLine: "Get_Part",
+          }).then((data) => {
+            pageConstants.contentSection.inputTypesForAdd.forEach(
+              (inputTypeObj) => {
+                if (inputTypeObj.columnName === "Description") {
+                  inputTypeObj.data = data.data?.map((dataObj) => {
+                    return { value: dataObj?.Part, label: dataObj?.Description };
+                  });
+                }
               }
-            }
-          );
-        });
+            );
+          });
 
-        const qtyPromise = getOperationalPlanInfoTableData({
-          gameId: selectedOperationalInput?.gameId,
-          gameBatch: selectedOperationalInput?.gameBatch,
-          productionMonth: null,
-          marketInputId: selectedOperationalInput?.marketInputId,
-          partCategory: selectedOperationalInput?.partCategory,
-          refTypeInfo: selectedOperationalInput?.refTypeInfo,
-          refTypePrice: selectedOperationalInput?.refTypePrice,
-          cmdLine: "Get_Qty_Id",
-        }).then((data) => {
-          pageConstants.contentSection.inputTypesForAdd.forEach(
-            (inputTypeObj) => {
-              if (inputTypeObj.columnName === "Quantity_Info") {
-                inputTypeObj.data = data.data?.map((dataObj) => {
-                  return {
-                    value: dataObj?.Info_Qty_Id,
-                    label: dataObj?.Info_On_Qty,
-                  };
-                });
+          const qtyPromise = getOperationalPlanInfoTableData({
+            gameId: selectedOperationalInput?.gameId,
+            gameBatch: selectedOperationalInput?.gameBatch,
+            productionMonth: null,
+            marketInputId: selectedOperationalInput?.marketInputId,
+            partCategory: selectedOperationalInput?.partCategory,
+            refTypeInfo: selectedOperationalInput?.refTypeInfo,
+            refTypePrice: selectedOperationalInput?.refTypePrice,
+            cmdLine: "Get_Qty_Id",
+          }).then((data) => {
+            pageConstants.contentSection.inputTypesForAdd.forEach(
+              (inputTypeObj) => {
+                if (inputTypeObj.columnName === "Quantity_Info") {
+                  inputTypeObj.data = data.data?.map((dataObj) => {
+                    return {
+                      value: dataObj?.Info_Qty_Id,
+                      label: dataObj?.Info_On_Qty,
+                    };
+                  });
+                }
               }
-            }
-          );
-        });
+            );
+          });
 
-        const pricePromise = getOperationalPlanInfoTableData({
-          gameId: selectedOperationalInput?.gameId,
-          gameBatch: selectedOperationalInput?.gameBatch,
-          productionMonth: null,
-          marketInputId: selectedOperationalInput?.marketInputId,
-          partCategory: selectedOperationalInput?.partCategory,
-          refTypeInfo: selectedOperationalInput?.refTypeInfo,
-          refTypePrice: selectedOperationalInput?.refTypePrice,
-          cmdLine: "Get_Price_Id",
-        }).then((data) => {
-          pageConstants.contentSection.inputTypesForAdd.forEach(
-            (inputTypeObj) => {
-              if (inputTypeObj.columnName === "Info_Price") {
-                inputTypeObj.data = data.data?.map((dataObj) => {
-                  return {
-                    value: dataObj?.Price_Id,
-                    label: dataObj?.Info_On_Price,
-                  };
-                });
+          const pricePromise = getOperationalPlanInfoTableData({
+            gameId: selectedOperationalInput?.gameId,
+            gameBatch: selectedOperationalInput?.gameBatch,
+            productionMonth: null,
+            marketInputId: selectedOperationalInput?.marketInputId,
+            partCategory: selectedOperationalInput?.partCategory,
+            refTypeInfo: selectedOperationalInput?.refTypeInfo,
+            refTypePrice: selectedOperationalInput?.refTypePrice,
+            cmdLine: "Get_Price_Id",
+          }).then((data) => {
+            pageConstants.contentSection.inputTypesForAdd.forEach(
+              (inputTypeObj) => {
+                if (inputTypeObj.columnName === "Info_Price") {
+                  inputTypeObj.data = data.data?.map((dataObj) => {
+                    return {
+                      value: dataObj?.Price_Id,
+                      label: dataObj?.Info_On_Price,
+                    };
+                  });
+                }
               }
-            }
-          );
-        });
+            );
+          });
 
-        // Wait for all promises to complete
-        await Promise.all([partPromise, qtyPromise, pricePromise]);
-        setAddTableData([...pageConstants.contentSection.inputTypesForAdd]);
-        setLoading(false); // All data fetched, set loading to false
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false); // Ensure loading is set to false in case of error
+          // Wait for all promises to complete
+          await Promise.all([partPromise, qtyPromise, pricePromise]);
+          setAddTableData([...pageConstants.contentSection.inputTypesForAdd]);
+          setLoading(false); // All data fetched, set loading to false
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setLoading(false); // Ensure loading is set to false in case of error
+        }
       }
     };
 
     fetchData();
-  }, [selectedOperationalInput]);
+  }, [selectedOperationalInput?.operationasInputId]);
 
   const onAddBtnClick = () => {
     setIsDisableActionBtns(true);
