@@ -1,11 +1,8 @@
-import GameSession from "../pages/GameSession";
 import GameDashboard from "../pages/GameDashboard/GameDashboard";
 import StrategyLaunched from "../pages/LaunchStrategy/StrategyLaunched";
 import StrategyPlan from "../pages/StrategyPlanApproval/StrategyPlanApproval";
 import MarketFactorInfo from "../pages/MarketFactorInfo/MarketFactorInfo";
 import MarketFactorInfoInput from "../pages/MarketFactorInfoInput/MarketFactorInfoInput";
-import GameMaster from "../pages/GameMaster";
-import GameBatch from "../pages/GameBatch";
 import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInfo";
 import OperationalPlanInfoInput from "../pages/OperationalPlanInfoInput/OperationalPlanInfoInput";
 import IncomeStatementInfo from "../pages/IncomeStatementInfo/IncomeStatementInfo";
@@ -30,8 +27,8 @@ import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
 import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 import PrecisionManufacturingTwoToneIcon from '@mui/icons-material/PrecisionManufacturingTwoTone';
 import LoyaltyTwoToneIcon from '@mui/icons-material/LoyaltyTwoTone';
-import RawOnTwoToneIcon from '@mui/icons-material/RawOnTwoTone';
-import Inventory2TwoToneIcon from '@mui/icons-material/Inventory2TwoTone';
+import FeedTwoToneIcon from '@mui/icons-material/FeedTwoTone';
+import InfoDesk from "../pages/InfoDesk/InfoDesk";
 
 export const componentList = [
   {
@@ -68,15 +65,55 @@ export const componentList = [
       },
     ],
   },
-  { icon: <HomeIcon />, id: "", label: "Game Master", path: "/gameMaster", routePath: "/operationGame/gameMaster", routeElement: <GameMaster /> },
-  { icon: <HomeIcon />, id: "", label: "Game Batch", path: "/gameBatch", routePath: "/operationGame/gameBatch", routeElement: <GameBatch /> },
   {
-    icon: <HomeIcon />,
-    id: "",
-    label: "Game Session",
-    path: "/gameSession",
-    href: "/operationGame/gameSession",
-    routeElement: <GameSession />,
+    icon: <FeedTwoToneIcon />,
+    id: "UI 001",
+    label: "Info Desk",
+    path: "/infoDesk",
+    href: "/operationGame/infoDesk",
+    routeElement: <InfoDesk />,
+    children: [
+      {
+        icon: <PrecisionManufacturingTwoToneIcon />,
+        id: "UI 008",
+        label: "Production Record Info",
+        path: "/productionRecordInfo",
+        href: "/operationGame/productionRecordInfo",
+        routeElement: <ProductionRecordInfo />,
+      },
+      {
+        icon: <LoyaltyTwoToneIcon />,
+        id: "UI 013",
+        label: "Sales Record Info",
+        path: "/salesRecord",
+        href: "/operationGame/salesRecord",
+        routeElement: <SalesRecordInfo />,
+      },
+      {
+        icon: <AccountBalanceWalletTwoToneIcon />,
+        id: "UI 007",
+        label: "Income Statement",
+        path: "/incomeStatementInfo",
+        href: "/operationGame/incomeStatementInfo",
+        routeElement: <IncomeStatementInfo />,
+      },
+      {
+        icon: <LocalAtmTwoToneIcon />,
+        id: "UI 007",
+        label: "Finished Goods Stock Info",
+        path: "/fgStockInfo",
+        href: "/operationGame/fgStockInfo",
+        routeElement: <FgStockInfo />,
+      },
+      {
+        icon: <LocalAtmTwoToneIcon />,
+        id: "UI 007",
+        label: "Finished Goods Stock Info",
+        path: "/rmStockInfo",
+        href: "/operationGame/rmStockInfo",
+        routeElement: <RmStockInfo />,
+      },
+    ],
   },
   {
     icon: <RocketLaunchTwoToneIcon />,
@@ -133,23 +170,7 @@ export const componentList = [
     path: "/strategyMaster",
     href: "/operationGame/strategyMaster",
     routeElement: <StrategyMaster />,
-  },
-  {
-    icon: <LoyaltyTwoToneIcon />,
-    id: "UI 013",
-    label: "Sales Record Info",
-    path: "/salesRecord",
-    href: "/operationGame/salesRecord",
-    routeElement: <SalesRecordInfo />,
-  },
-  {
-    icon: <PrecisionManufacturingTwoToneIcon />,
-    id: "UI 008",
-    label: "Production Record Info",
-    path: "/productionRecordInfo",
-    href: "/operationGame/productionRecordInfo",
-    routeElement: <ProductionRecordInfo />,
-  },
+  }
 ];
 
 export const dateColumns = ["period", "Production_Month"];

@@ -18,24 +18,6 @@ function GameDashboard() {
     isVisible: false,
   });
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   getDashboardData()
-  //     .then((response) => {
-  //       if (response) {
-  //         // Handle response if needed
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       setAlertData({
-  //         severity: 'error',
-  //         message: pageConstants.apiFailiureMessage,
-  //         isVisible: true,
-  //       });
-  //     })
-  //     .finally(() => setIsLoading(false));
-  // }, []);
-
   const handleCardClick = (href) => {
     navigate(href);
   };

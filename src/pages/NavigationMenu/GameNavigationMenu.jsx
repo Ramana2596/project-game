@@ -1,6 +1,7 @@
 
 import BreadCrumb from '../../components/BreadCrumb.jsx';
 import CasFlowStatement from '../CasFlowStatement/CasFlowStatement.jsx';
+import InfoDesk from '../InfoDesk/InfoDesk.jsx';
 import ProductionRecordInfo from '../ProductionRecordInfo/ProductionRecordInfo.jsx';
 import SalesRecordInfo from '../SalesRecordInfo/SalesRecordInfo.jsx';
 import {
@@ -98,10 +99,7 @@ export default function MiniDrawer() {
       <CssBaseline />
       <AppBar position="fixed" open={open}
         sx={{
-          backgroundColor: '#cae3ff',
-          backgroundImage: 'linear-gradient(45deg,#cae3ff 25%, transparent 25%, transparent 50%,#cae3ff 50%, #cae3ff 75%, transparent 75%, transparent)',
-          backgroundSize: '20px 20px',
-          borderBottom: '2px solid #57a6ff',
+          backgroundColor: '#cae3ff'
         }}>
         <Toolbar>
           <Typography color='black' align="left" variant="h4" noWrap component="div" sx={{ ...(open && { display: 'none' }) }}>
@@ -133,10 +131,7 @@ export default function MiniDrawer() {
       <Drawer className="drawer-container" variant="permanent" open={open}
         sx={{
           '.MuiDrawer-paper': {
-            backgroundColor: '#cae3ff',
-            backgroundImage: 'linear-gradient(45deg,#cae3ff 25%, transparent 25%, transparent 50%,#cae3ff 50%, #cae3ff 75%, transparent 75%, transparent)',
-            backgroundSize: '20px 20px',
-            borderRight: '2px solid #57a6ff',
+            backgroundColor: '#cae3ff'
           }
         }}>
         <DrawerHeader className="drawer-header">
@@ -168,6 +163,7 @@ export default function MiniDrawer() {
         <DrawerHeader />
         <Routes>
           <Route path="/gameDashboard" element={<GameDashboard />} />
+          <Route path="/infoDesk" element={<InfoDesk />} />
           <Route path="/gameMaster" element={<GameMaster />} />
           <Route path="/gameBatch" element={<GameBatch />} />
           <Route path="/gameSession" element={<GameSession />} />
