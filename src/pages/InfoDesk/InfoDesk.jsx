@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { Card, CardActionArea, CardContent, Typography, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { componentList } from '../../constants/globalConstants.js';
 import { Box } from "@mui/material";
+import { useUser } from '../../core/access/userContext.js';
 
 function InfoDesk() {
     const navigate = useNavigate();
+    const { userAccessiblePages } = useUser();
 
     const handleCardClick = (href) => {
         navigate(href);
     };
 
-    const infoDeskItem = componentList.find(item => item.label === 'Info Desk');
+    const infoDeskItem = userAccessiblePages.find(item => item.label === 'Info Desk');
     const children = infoDeskItem ? infoDeskItem.children : [];
 
     return (
