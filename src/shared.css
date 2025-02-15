@@ -10,10 +10,11 @@
     --separator-gray: #CCCCCC;
     --common-blue: #4682B4;
     --hover-blue: #5A9BD5;
+    --dark-blue: #00008B;
 }
 
 .header-title {
-    color: var(--common-blue) !important;
+    color: var(--standard-black) !important;
     font-style: italic !important;
     font-weight: bold !important;
 }

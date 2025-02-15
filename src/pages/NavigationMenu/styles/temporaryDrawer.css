@@ -31,5 +31,6 @@
 }
 
 .account-icon {
-    color: var(--common-blue);
+    background-color: var(--standard-white) !important;
+    color: var(--standard-black);
 }

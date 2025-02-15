@@ -115,7 +115,7 @@ export default function MiniDrawer() {
           </IconButton>
           <BreadCrumb currentRoute={currentRoute} />
           <div style={{ marginLeft: "auto" }}>
-            <Button className="hover-effect" onClick={handleMenu} color="inherit" sx={{ display: "flex", alignItems: "center", textTransform: "none", border: "1px solid", borderRadius: "30px", padding: "5px 20px", backgroundColor: "rgba(255, 255, 255, 0.1)", color: "#4682B4", /* Set to pleasant blue */ }}>
+            <Button className="hover-effect" onClick={handleMenu} color="inherit" sx={{ display: "flex", alignItems: "center", textTransform: "none", border: "1px solid", borderRadius: "30px", padding: "5px 20px", backgroundColor: "#FFFFFF", color: "#4682B4", /* Set to pleasant blue */ }}>
               <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
             </Button>
             <Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right", }} keepMounted transformOrigin={{ vertical: "top", horizontal: "right", }} open={Boolean(anchorEl)} onClose={handleClose} sx={{ "& .MuiPaper-root": { borderRadius: "10px", padding: "10px", width: "250px", backgroundColor: "#FFFFFF", }, }} >
