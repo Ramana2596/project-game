@@ -27,3 +27,8 @@
 .content {
     transition: margin-left 0.3s ease-in-out;
 }
+
+.navigation-menu-item-icon {
+    width: 30px;
+    margin: 5px;
+}

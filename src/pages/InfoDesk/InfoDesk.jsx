@@ -12,7 +12,7 @@ function InfoDesk() {
         navigate(href);
     };
 
-    const infoDeskItem = userAccessiblePages.find(item => item.label === 'Info Desk');
+    const infoDeskItem = userAccessiblePages?.find(item => item.label === 'Info Desk');
     const children = infoDeskItem ? infoDeskItem.children : [];
 
     return (

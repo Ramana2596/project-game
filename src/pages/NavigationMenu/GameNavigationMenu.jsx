@@ -54,6 +54,7 @@ import {
 } from './imports.js';
 import { pageConstants } from './pageConstants.js';
 import '../NavigationMenu/styles/temporaryDrawer.css';
+import UserAccessManagement from '../UserAccessManagement/UserAccessManagement.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -143,9 +144,10 @@ export default function MiniDrawer() {
           {userAccessiblePages?.map((componentObj) => (
             <ListItem key={componentObj.href} disablePadding sx={{ display: 'block' }}>
               <ListItemButton className="hover-effect" component={Link} to={componentObj.href} sx={{ minHeight: 60, justifyContent: open ? 'initial' : 'center', px: 2.5 }} >
-                <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : 'auto', justifyContent: 'center', }} >
-                  {[componentObj.icon]}
-                </ListItemIcon>
+                <img src={[componentObj.iconPath]} alt="Description" className="navigation-menu-item-icon" />
+                {/* <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : 'auto', justifyContent: 'center', }} >
+                  {[componentObj.iconPath]}
+                </ListItemIcon> */}
                 <ListItemText primary={componentObj.label} sx={{ opacity: open ? 1 : 0, wordWrap: open ? 'break-word' : 'none', whiteSpace: open ? 'normal' : 'none' }} />
               </ListItemButton>
             </ListItem>
@@ -156,6 +158,7 @@ export default function MiniDrawer() {
         <DrawerHeader />
         <Routes>
           <Route path="/gameDashboard" element={<GameDashboard />} />
+          <Route path="/userAccessManagement" element={<UserAccessManagement />} />
           <Route path="/infoDesk" element={<InfoDesk />} />
           <Route path="/gameMaster" element={<GameMaster />} />
           <Route path="/gameBatch" element={<GameBatch />} />

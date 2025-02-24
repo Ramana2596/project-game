@@ -7,7 +7,6 @@ import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInf
 import OperationalPlanInfoInput from "../pages/OperationalPlanInfoInput/OperationalPlanInfoInput";
 import IncomeStatementInfo from "../pages/IncomeStatementInfo/IncomeStatementInfo";
 import BalanceSheetInfo from "../pages/BalanceSheetInfo/BalanceSheetInfo";
-import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
 import RocketLaunchTwoToneIcon from '@mui/icons-material/RocketLaunchTwoTone';
 import AssignmentTurnedInTwoToneIcon from '@mui/icons-material/AssignmentTurnedInTwoTone';
@@ -29,10 +28,21 @@ import PrecisionManufacturingTwoToneIcon from '@mui/icons-material/PrecisionManu
 import LoyaltyTwoToneIcon from '@mui/icons-material/LoyaltyTwoTone';
 import FeedTwoToneIcon from '@mui/icons-material/FeedTwoTone';
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
+import UserAccessManagement from "../pages/UserAccessManagement/UserAccessManagement";
+import VerifiedUserTwoToneIcon from '@mui/icons-material/VerifiedUserTwoTone';
+import homeIcon from '../assets/navigation-menu/home.png';
+import secureAccessIcon from '../assets/navigation-menu/secure-access.png';
+import infoIcon from '../assets/navigation-menu/information.png';
+import launchIcon from '../assets/navigation-menu/startup.png';
+import approvalIcon from '../assets/navigation-menu/agenda.png';
+import marketfactorInfoIcon from '../assets/navigation-menu/productInfo.png';
+import marketfactorInfoInputIcon from '../assets/navigation-menu/marketFactorInput.png';
+import operationalDecisionIcon from '../assets/navigation-menu/operationalDecision.png';
+import operationalDecisionInputIcon from '../assets/navigation-menu/operationalDecisionInput.png';
 
 export const componentList = [
   {
-    icon: <HomeIcon />,
+    iconPath: homeIcon,
     id: "UI 001",
     label: "Game Dashboard",
     path: "/gameDashboard",
@@ -66,7 +76,15 @@ export const componentList = [
     ],
   },
   {
-    icon: <FeedTwoToneIcon />,
+    iconPath: secureAccessIcon,
+    id: "UI 001",
+    label: "User Access Management",
+    path: "/userAccessManagement",
+    href: "/operationGame/userAccessManagement",
+    routeElement: <UserAccessManagement />
+  },
+  {
+    iconPath: infoIcon,
     id: "UI 001",
     label: "Info Desk",
     path: "/infoDesk",
@@ -116,7 +134,7 @@ export const componentList = [
     ],
   },
   {
-    icon: <RocketLaunchTwoToneIcon />,
+    iconPath: launchIcon,
     id: "UI 001",
     label: "Launch Strategy",
     path: "/strategyLaunched",
@@ -124,7 +142,7 @@ export const componentList = [
     routeElement: <StrategyLaunched />,
   },
   {
-    icon: <AssignmentTurnedInTwoToneIcon />,
+    iconPath: approvalIcon,
     id: "UI 002",
     label: "Strategy Plan Approval",
     path: "/strategyPlanApproval",
@@ -132,7 +150,7 @@ export const componentList = [
     routeElement: <StrategyPlan />,
   },
   {
-    icon: <StoreTwoToneIcon />,
+    iconPath: marketfactorInfoIcon,
     id: "UI 003",
     label: "Market Factor Info",
     path: "/marketFactorInfo",
@@ -140,7 +158,7 @@ export const componentList = [
     routeElement: <MarketFactorInfo />,
   },
   {
-    icon: <AddBusinessTwoToneIcon />,
+    iconPath: marketfactorInfoInputIcon,
     id: "UI 004",
     label: "Market Factor Input",
     path: "/marketFactorInfoInput",
@@ -148,7 +166,7 @@ export const componentList = [
     routeElement: <MarketFactorInfoInput />,
   },
   {
-    icon: <DomainTwoToneIcon />,
+    iconPath: operationalDecisionIcon,
     id: "UI 005",
     label: "Operational Decision Info",
     path: "/operationalPlanInfo",
@@ -156,7 +174,7 @@ export const componentList = [
     routeElement: <OperationalPlanInfo />,
   },
   {
-    icon: <DomainAddTwoToneIcon />,
+    iconPath: operationalDecisionInputIcon,
     id: "UI 006",
     label: "Operational Decision Input",
     path: "/operationalPlanInfoInput",
