@@ -39,6 +39,8 @@ import marketfactorInfoIcon from '../assets/navigation-menu/productInfo.png';
 import marketfactorInfoInputIcon from '../assets/navigation-menu/marketFactorInput.png';
 import operationalDecisionIcon from '../assets/navigation-menu/operationalDecision.png';
 import operationalDecisionInputIcon from '../assets/navigation-menu/operationalDecisionInput.png';
+import appSettings from '../assets/navigation-menu/app-settings.png';
+import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
 
 export const componentList = [
   {
@@ -182,7 +184,14 @@ export const componentList = [
     routeElement: <OperationalPlanInfoInput />,
   },
   {
-    icon: <PaymentsTwoToneIcon />,
+    iconPath: appSettings,
+    id: "UI 001",
+    label: "Feature Management",
+    path: "/featureManagement",
+    href: "/operationGame/featureManagement",
+    routeElement: <FeatureManagement />,
+  },
+  {
     id: "UI 018",
     label: "Strategy Master",
     path: "/strategyMaster",

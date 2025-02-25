@@ -13,6 +13,12 @@
     --dark-blue: #00008B;
 }
 
+.accordian-title {
+    color: var(--common-blue) !important;
+    font-weight: bold !important;
+    font-size: large !important;
+}
+
 .header-title {
     color: var(--common-blue) !important;
     font-style: italic !important;

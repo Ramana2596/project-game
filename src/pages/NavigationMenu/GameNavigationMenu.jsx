@@ -55,6 +55,7 @@ import {
 import { pageConstants } from './pageConstants.js';
 import '../NavigationMenu/styles/temporaryDrawer.css';
 import UserAccessManagement from '../UserAccessManagement/UserAccessManagement.jsx';
+import FeatureManagement from '../FeatureManagement/FeatureManagement.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -145,9 +146,6 @@ export default function MiniDrawer() {
             <ListItem key={componentObj.href} disablePadding sx={{ display: 'block' }}>
               <ListItemButton className="hover-effect" component={Link} to={componentObj.href} sx={{ minHeight: 60, justifyContent: open ? 'initial' : 'center', px: 2.5 }} >
                 <img src={[componentObj.iconPath]} alt="Description" className="navigation-menu-item-icon" />
-                {/* <ListItemIcon sx={{ minWidth: 0, mr: open ? 2 : 'auto', justifyContent: 'center', }} >
-                  {[componentObj.iconPath]}
-                </ListItemIcon> */}
                 <ListItemText primary={componentObj.label} sx={{ opacity: open ? 1 : 0, wordWrap: open ? 'break-word' : 'none', whiteSpace: open ? 'normal' : 'none' }} />
               </ListItemButton>
             </ListItem>
@@ -177,6 +175,7 @@ export default function MiniDrawer() {
           <Route path="/salesRecord" element={<SalesRecordInfo />} />
           <Route path="/productionRecordInfo" element={<ProductionRecordInfo />} />
           <Route path="/cashFlowStatement" element={<CasFlowStatement />} />
+          <Route path="/featureManagement" element={<FeatureManagement />} />
         </Routes>
       </Box>
     </Box>
