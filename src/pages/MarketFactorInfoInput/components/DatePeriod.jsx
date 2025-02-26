@@ -39,8 +39,8 @@ export default function DatePeriod({
           if (response.data.length > 0) {
             setGamePeriod(response.data);
             const latestPeriod =
-              response.data[response.data.length - 1]?.Valid_Period;
-            const earliestPeriod = response.data[0]?.Valid_Period;
+              response.data[response.data.length - 1]?.Period;
+            const earliestPeriod = response.data[0]?.Period;
             setSelectedPeriod(latestPeriod);
             setMinDate(dayjs(earliestPeriod));
             setMaxDate(dayjs(latestPeriod));
