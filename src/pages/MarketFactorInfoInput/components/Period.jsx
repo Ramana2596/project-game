@@ -22,7 +22,7 @@ export default function Period({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [gamePeriod, setGamePeriod] = useState([]);
-  const [selectedPeriod, setSelectedPeriod] = useState(null); // Initialize as null
+  const [selectedPeriod, setSelectedPeriod] = useState(""); // Initialize as an empty string
   const [alertData, setAlertData] = useState({
     severity: "",
     message: "",
@@ -39,10 +39,6 @@ export default function Period({
         .then((response) => {
           setLoading(false);
           setGamePeriod(response.data);
-          const latestPeriod =
-            response.data[response.data.length - 1]?.Valid_Period;
-          setSelectedPeriod(latestPeriod);
-          onFormControlUpdate({ productionMonth: latestPeriod });
         })
         .catch((error) => {
           setError(error);
@@ -71,7 +67,7 @@ export default function Period({
           labelId="period"
           id="periodRequired"
           name="productionMonth"
-          value={selectedPeriod || ""}
+          value={selectedPeriod}
           label="Period *"
           onChange={handleChange}
           disabled={isDisabled}
