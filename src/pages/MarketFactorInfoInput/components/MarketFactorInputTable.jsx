@@ -129,7 +129,8 @@ export default function MarketFactorInputTable({
 
     fetchData();
   }, [selectedMarketInput?.refTypeInfo,
-  selectedMarketInput?.refTypePrice]);
+  selectedMarketInput?.refTypePrice,
+  selectedMarketInput?.marketInputId]);
 
   const onAddBtnClick = () => {
     setIsDisableActionBtns(true);
