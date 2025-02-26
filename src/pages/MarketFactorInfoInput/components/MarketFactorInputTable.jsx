@@ -128,9 +128,7 @@ export default function MarketFactorInputTable({
     };
 
     fetchData();
-  }, [selectedMarketInput?.gameBatch,
-  selectedMarketInput?.marketInputId,
-  selectedMarketInput?.refTypeInfo,
+  }, [selectedMarketInput?.refTypeInfo,
   selectedMarketInput?.refTypePrice]);
 
   const onAddBtnClick = () => {
