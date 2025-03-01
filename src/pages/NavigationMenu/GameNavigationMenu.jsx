@@ -56,6 +56,8 @@ import { pageConstants } from './pageConstants.js';
 import '../NavigationMenu/styles/temporaryDrawer.css';
 import UserAccessManagement from '../UserAccessManagement/UserAccessManagement.jsx';
 import FeatureManagement from '../FeatureManagement/FeatureManagement.jsx';
+import HomePage from '../HomePage/HomePage.jsx';
+import Operations from '../Operations/Operations.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -155,6 +157,7 @@ export default function MiniDrawer() {
       <Box component="main" sx={{ flexGrow: 1 }}>
         <DrawerHeader />
         <Routes>
+          <Route path="/homePage" element={<HomePage />} />
           <Route path="/gameDashboard" element={<GameDashboard />} />
           <Route path="/userAccessManagement" element={<UserAccessManagement />} />
           <Route path="/infoDesk" element={<InfoDesk />} />
@@ -176,6 +179,7 @@ export default function MiniDrawer() {
           <Route path="/productionRecordInfo" element={<ProductionRecordInfo />} />
           <Route path="/cashFlowStatement" element={<CasFlowStatement />} />
           <Route path="/featureManagement" element={<FeatureManagement />} />
+          <Route path="/operations" element={<Operations />} />
         </Routes>
       </Box>
     </Box>

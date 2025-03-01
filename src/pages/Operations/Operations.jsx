@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 import { useUser } from '../../core/access/userContext.js';
 import '../Operations/styles/style.css';
 
-function InfoDesk() {
+function Operations() {
     const navigate = useNavigate();
     const { userAccessiblePages } = useUser();
 
@@ -13,7 +13,7 @@ function InfoDesk() {
         navigate(href);
     };
 
-    const infoDeskItem = userAccessiblePages?.find(item => item.label === 'Info Desk');
+    const infoDeskItem = userAccessiblePages?.find(item => item.label === 'Operations');
     const children = infoDeskItem ? infoDeskItem.children : [];
 
     return (
@@ -40,4 +40,4 @@ function InfoDesk() {
     );
 }
 
-export default InfoDesk;
+export default Operations;

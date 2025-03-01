@@ -37,7 +37,11 @@ export default function OperationalPlanInputTable({
 
   useEffect(() => {
     const fetchData = async () => {
-      if (selectedOperationalInput?.operationasInputId) {
+      if (selectedOperationalInput?.operationsInputId &&
+        selectedOperationalInput?.marketInputId &&
+        selectedOperationalInput?.refTypeInfo &&
+        selectedOperationalInput?.refTypePrice
+      ) {
         try {
           setIsLoading(true);
           setLoading(true);
@@ -125,7 +129,9 @@ export default function OperationalPlanInputTable({
     };
 
     fetchData();
-  }, [selectedOperationalInput?.operationasInputId]);
+  }, [selectedOperationalInput?.operationsInputId, selectedOperationalInput?.marketInputId,
+  selectedOperationalInput?.refTypeInfo,
+  selectedOperationalInput?.refTypePrice]);
 
   const onAddBtnClick = () => {
     setIsDisableActionBtns(true);

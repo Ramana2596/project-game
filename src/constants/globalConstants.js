@@ -31,8 +31,15 @@ import InfoDesk from "../pages/InfoDesk/InfoDesk";
 import UserAccessManagement from "../pages/UserAccessManagement/UserAccessManagement";
 import VerifiedUserTwoToneIcon from '@mui/icons-material/VerifiedUserTwoTone';
 import homeIcon from '../assets/navigation-menu/home.png';
+import dashboardIcon from '../assets/navigation-menu/dash-board.png';
+import productionIcon from '../assets/navigation-menu/production.png';
+import salesIcon from '../assets/navigation-menu/sales.png';
+import walletIcon from '../assets/navigation-menu/wallet.png';
+import finishedIcon from '../assets/navigation-menu/finished.png';
+import rawIcon from '../assets/navigation-menu/raw-material.png';
 import secureAccessIcon from '../assets/navigation-menu/secure-access.png';
 import infoIcon from '../assets/navigation-menu/information.png';
+import operationsIcon from '../assets/navigation-menu/operation.png';
 import launchIcon from '../assets/navigation-menu/startup.png';
 import approvalIcon from '../assets/navigation-menu/agenda.png';
 import marketfactorInfoIcon from '../assets/navigation-menu/productInfo.png';
@@ -41,10 +48,20 @@ import operationalDecisionIcon from '../assets/navigation-menu/operationalDecisi
 import operationalDecisionInputIcon from '../assets/navigation-menu/operationalDecisionInput.png';
 import appSettings from '../assets/navigation-menu/app-settings.png';
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
+import HomePage from "../pages/HomePage/HomePage";
+import Operations from "../pages/Operations/Operations";
 
 export const componentList = [
   {
     iconPath: homeIcon,
+    id: "UI 001",
+    label: "Home",
+    path: "/homePage",
+    href: "/operationGame/homePage",
+    routeElement: <HomePage />,
+  },
+  {
+    iconPath: dashboardIcon,
     id: "UI 001",
     label: "Game Dashboard",
     path: "/gameDashboard",
@@ -78,14 +95,6 @@ export const componentList = [
     ],
   },
   {
-    iconPath: secureAccessIcon,
-    id: "UI 001",
-    label: "User Access Management",
-    path: "/userAccessManagement",
-    href: "/operationGame/userAccessManagement",
-    routeElement: <UserAccessManagement />
-  },
-  {
     iconPath: infoIcon,
     id: "UI 001",
     label: "Info Desk",
@@ -94,7 +103,7 @@ export const componentList = [
     routeElement: <InfoDesk />,
     children: [
       {
-        icon: <PrecisionManufacturingTwoToneIcon />,
+        iconPath: productionIcon,
         id: "UI 008",
         label: "Production Record Info",
         path: "/productionRecordInfo",
@@ -102,7 +111,7 @@ export const componentList = [
         routeElement: <ProductionRecordInfo />,
       },
       {
-        icon: <LoyaltyTwoToneIcon />,
+        iconPath: salesIcon,
         id: "UI 013",
         label: "Sales Record Info",
         path: "/salesRecord",
@@ -110,7 +119,7 @@ export const componentList = [
         routeElement: <SalesRecordInfo />,
       },
       {
-        icon: <AccountBalanceWalletTwoToneIcon />,
+        iconPath: walletIcon,
         id: "UI 007",
         label: "Income Statement",
         path: "/incomeStatementInfo",
@@ -118,7 +127,7 @@ export const componentList = [
         routeElement: <IncomeStatementInfo />,
       },
       {
-        icon: <LocalAtmTwoToneIcon />,
+        iconPath: finishedIcon,
         id: "UI 007",
         label: "Finished Goods Stock Info",
         path: "/fgStockInfo",
@@ -126,78 +135,97 @@ export const componentList = [
         routeElement: <FgStockInfo />,
       },
       {
-        icon: <LocalAtmTwoToneIcon />,
+        iconPath: rawIcon,
         id: "UI 007",
-        label: "Finished Goods Stock Info",
+        label: "Raw Material Stock Info",
         path: "/rmStockInfo",
         href: "/operationGame/rmStockInfo",
         routeElement: <RmStockInfo />,
       },
+      {
+        iconPath: marketfactorInfoIcon,
+        id: "UI 003",
+        label: "Market Factor Info",
+        path: "/marketFactorInfo",
+        href: "/operationGame/marketFactorInfo",
+        routeElement: <MarketFactorInfo />,
+      },
+
+      {
+        iconPath: operationalDecisionIcon,
+        id: "UI 005",
+        label: "Operational Decision Info",
+        path: "/operationalPlanInfo",
+        href: "/operationGame/operationalPlanInfo",
+        routeElement: <OperationalPlanInfo />,
+      }
     ],
   },
   {
-    iconPath: launchIcon,
+    iconPath: operationsIcon,
     id: "UI 001",
-    label: "Launch Strategy",
-    path: "/strategyLaunched",
-    href: "/operationGame/strategyLaunched",
-    routeElement: <StrategyLaunched />,
+    label: "Operations",
+    path: "/operations",
+    href: "/operationGame/operations",
+    routeElement: <Operations />,
+    children: [
+      {
+        iconPath: launchIcon,
+        id: "UI 001",
+        label: "Launch Strategy",
+        path: "/strategyLaunched",
+        href: "/operationGame/strategyLaunched",
+        routeElement: <StrategyLaunched />,
+      },
+      {
+        iconPath: approvalIcon,
+        id: "UI 002",
+        label: "Strategy Plan Approval",
+        path: "/strategyPlanApproval",
+        href: "/operationGame/strategyPlanApproval",
+        routeElement: <StrategyPlan />,
+      },
+      {
+        iconPath: marketfactorInfoInputIcon,
+        id: "UI 004",
+        label: "Market Factor Input",
+        path: "/marketFactorInfoInput",
+        href: "/operationGame/marketFactorInfoInput",
+        routeElement: <MarketFactorInfoInput />,
+      },
+      {
+        iconPath: operationalDecisionInputIcon,
+        id: "UI 006",
+        label: "Operational Decision Input",
+        path: "/operationalPlanInfoInput",
+        href: "/operationGame/operationalPlanInfoInput",
+        routeElement: <OperationalPlanInfoInput />,
+      },
+      {
+        id: "UI 018",
+        label: "Strategy Master",
+        path: "/strategyMaster",
+        href: "/operationGame/strategyMaster",
+        routeElement: <StrategyMaster />,
+      },
+      {
+        iconPath: appSettings,
+        id: "UI 001",
+        label: "Feature Management",
+        path: "/featureManagement",
+        href: "/operationGame/featureManagement",
+        routeElement: <FeatureManagement />,
+      },
+    ],
   },
   {
-    iconPath: approvalIcon,
-    id: "UI 002",
-    label: "Strategy Plan Approval",
-    path: "/strategyPlanApproval",
-    href: "/operationGame/strategyPlanApproval",
-    routeElement: <StrategyPlan />,
-  },
-  {
-    iconPath: marketfactorInfoIcon,
-    id: "UI 003",
-    label: "Market Factor Info",
-    path: "/marketFactorInfo",
-    href: "/operationGame/marketFactorInfo",
-    routeElement: <MarketFactorInfo />,
-  },
-  {
-    iconPath: marketfactorInfoInputIcon,
-    id: "UI 004",
-    label: "Market Factor Input",
-    path: "/marketFactorInfoInput",
-    href: "/operationGame/marketFactorInfoInput",
-    routeElement: <MarketFactorInfoInput />,
-  },
-  {
-    iconPath: operationalDecisionIcon,
-    id: "UI 005",
-    label: "Operational Decision Info",
-    path: "/operationalPlanInfo",
-    href: "/operationGame/operationalPlanInfo",
-    routeElement: <OperationalPlanInfo />,
-  },
-  {
-    iconPath: operationalDecisionInputIcon,
-    id: "UI 006",
-    label: "Operational Decision Input",
-    path: "/operationalPlanInfoInput",
-    href: "/operationGame/operationalPlanInfoInput",
-    routeElement: <OperationalPlanInfoInput />,
-  },
-  {
-    iconPath: appSettings,
+    iconPath: secureAccessIcon,
     id: "UI 001",
-    label: "Feature Management",
-    path: "/featureManagement",
-    href: "/operationGame/featureManagement",
-    routeElement: <FeatureManagement />,
+    label: "User Access Management",
+    path: "/userAccessManagement",
+    href: "/operationGame/userAccessManagement",
+    routeElement: <UserAccessManagement />
   },
-  {
-    id: "UI 018",
-    label: "Strategy Master",
-    path: "/strategyMaster",
-    href: "/operationGame/strategyMaster",
-    routeElement: <StrategyMaster />,
-  }
 ];
 
 export const dateColumns = ["period", "Production_Month"];
