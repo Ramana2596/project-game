@@ -8,17 +8,18 @@ export const pageConstants = {
     cancelBtnLabel: "Cancel",
     tableHeading: [
       "Description",
-      "Quantity_Info",
       "UOM",
       "Quantity",
-      "Info_Price",
-      "currency",
+      "Quantity_Info",
       "Unit Price",
+      "currency",
+      "Info_Price"
     ],
     tableHeadingForAdd: [
       "Description",
-      "Quantity_Info",
       "Quantity",
+      "Quantity_Info",
+      "Unit_Price",
       "Info_Price",
     ],
     hiddenTableColumns: ["Part", "Qty_Id", "Period", "Price_Id"],
@@ -41,8 +42,9 @@ export const pageConstants = {
     ],
     inputTypesForAdd: [
       { columnName: "Description", inputType: "select" },
-      { columnName: "Quantity_Info", inputType: "select" },
       { columnName: "Quantity", inputType: "number" },
+      { columnName: "Quantity_Info", inputType: "select" },
+      { columnName: "Unit_Price", inputType: 'readonly' },
       { columnName: "Info_Price", inputType: "select" },
     ],
   },

@@ -10,5 +10,7 @@ export const pageConstants = {
     ],
     gameFlagButtonLabel: 'Flag-Off',
     gameTeamPlayButtonLabel: 'Play',
-    gameTeamPlayRollBack: 'Roll Back'
+    gameTeamPlayRollBack: 'Roll Back',
+    teamPlayConfirmation: 'By clicking on the Play button, the team play will be reset for current month. If you want to proceed =>',
+    teamPlayRollBackConfirmation: 'By clicking on the Roll Back button, the team play will be rolled back for current month. If you want to proceed =>',
 }

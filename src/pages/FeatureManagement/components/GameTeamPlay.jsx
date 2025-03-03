@@ -1,4 +1,4 @@
-import { Button, Grid2 } from "@mui/material";
+import { Button, Grid2, Typography } from "@mui/material";
 import { pageConstants } from "../constants/pageConstants";
 import { rollBackPeriod, updateGameTeamPlay } from "../services/service";
 import { useUser } from "../../../core/access/userContext";
@@ -55,14 +55,25 @@ export default function GameTeamPlay() {
 
     return (
         <div>
-            <Grid2 container spacing={{ xs: 2, md: 3 }} size={{ xs: 0, sm: 2, md: 2 }} justifyContent="center" alignItems="center">
-                <Button onClick={onPlayButtonClick} variant="contained">
-                    {pageConstants?.gameTeamPlayButtonLabel}
-                </Button>
-                <Button onClick={onRollBackButtonClick} variant="outlined">
-                    {pageConstants?.gameTeamPlayRollBack}
-                </Button>
+            <Grid2 container spacing={{ xs: 2, md: 0 }} justifyContent="center" alignItems="center" direction="column" style={{ flexGrow: 1, width: '100%' }}>
+                <Grid2 container padding={5} spacing={{ xs: 2, md: 3 }} size={{ xs: 0, sm: 2, md: 2 }} justifyContent="center" alignItems="center" style={{ flexGrow: 1, width: '100%' }}>
+                    <Typography variant="h6" component="h6">
+                        {pageConstants?.teamPlayConfirmation}
+                    </Typography>
+                    <Button onClick={onPlayButtonClick} variant="contained">
+                        {pageConstants?.gameTeamPlayButtonLabel}
+                    </Button>
+                </Grid2>
+                <Grid2 container spacing={{ xs: 2, md: 3 }} size={{ xs: 0, sm: 2, md: 2 }} justifyContent="center" alignItems="center" style={{ flexGrow: 1, width: '100%' }}>
+                    <Typography variant="h6" component="h6">
+                        {pageConstants?.teamPlayRollBackConfirmation}
+                    </Typography>
+                    <Button onClick={onRollBackButtonClick} variant="outlined">
+                        {pageConstants?.gameTeamPlayRollBack}
+                    </Button>
+                </Grid2>
             </Grid2>
+
             <ToastMessage
                 open={alertData.isVisible}
                 severity={alertData.severity}

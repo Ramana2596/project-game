@@ -17,7 +17,7 @@ function Operations() {
     const children = infoDeskItem ? infoDeskItem.children : [];
 
     return (
-        <Box sx={{ flexGrow: 1, padding: 20 }}>
+        <Box sx={{ flexGrow: 1, padding: 5 }}>
             <Grid container spacing={2}>
                 {children.map((child, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
