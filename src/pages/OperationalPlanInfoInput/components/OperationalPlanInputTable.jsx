@@ -228,9 +228,9 @@ export default function OperationalPlanInputTable({
       const transformedItem = {};
       Object.keys(updatedItem).forEach((key) => {
         if (key === "Description") {
-          transformedItem["Part"] = updatedItem[key].value || null;
+          transformedItem["Part"] = updatedItem[key].value;
         } else {
-          transformedItem[key] = updatedItem[key].value || null;
+          transformedItem[key] = updatedItem[key].value;
         }
       });
       return transformedItem;
