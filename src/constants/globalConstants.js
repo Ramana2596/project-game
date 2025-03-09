@@ -34,12 +34,18 @@ import marketfactorInfoInputIcon from '../assets/navigation-menu/marketFactorInp
 import operationalDecisionIcon from '../assets/navigation-menu/operationalDecision.png';
 import operationalDecisionInputIcon from '../assets/navigation-menu/operationalDecisionInput.png';
 import appSettings from '../assets/navigation-menu/app-settings.png';
+import payableIcon from '../assets/navigation-menu/payables.png';
+import recievableIcon from '../assets/navigation-menu/receivable.png';
+import savingsIcon from '../assets/navigation-menu/savings.png';
+import gearIcon from '../assets/navigation-menu/gear.png';
+import strategyIcon from '../assets/navigation-menu/strategy.png';
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
 import HomePage from "../pages/HomePage/HomePage";
 import Operations from "../pages/Operations/Operations";
 import AccountPayable from "../pages/AccountPayable/AccountPayable";
 import SavingsRealisable from "../pages/SavingsRealisable/SavingsRealisable";
 import AccountRecievable from "../pages/AccountRecievable/AccountRecievable";
+
 
 export const componentList = [
   {
@@ -141,6 +147,7 @@ export const componentList = [
         routeElement: <OperationalPlanInfo />,
       },
       {
+        iconPath: payableIcon,
         id: "UI 017",
         label: "Account Payable",
         path: "/accountPayable",
@@ -148,13 +155,15 @@ export const componentList = [
         routeElement: <AccountPayable />,
       },
       {
+        iconPath: recievableIcon,
         id: "UI 016",
-        label: "Account Recieveable",
+        label: "Account Receivable",
         path: "/accountRecieveable",
         href: "/operationGame/accountRecieveable",
         routeElement: <AccountRecievable />,
       },
       {
+        iconPath: savingsIcon,
         id: "UI 018",
         label: "Savings Realisable",
         path: "/savingsRealisable",
@@ -204,6 +213,7 @@ export const componentList = [
         routeElement: <OperationalPlanInfoInput />,
       },
       {
+        iconPath: strategyIcon,
         id: "UI 001",
         label: "Strategy Master",
         path: "/strategyMaster",
