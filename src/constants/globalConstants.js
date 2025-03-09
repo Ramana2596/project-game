@@ -8,33 +8,20 @@ import OperationalPlanInfoInput from "../pages/OperationalPlanInfoInput/Operatio
 import IncomeStatementInfo from "../pages/IncomeStatementInfo/IncomeStatementInfo";
 import BalanceSheetInfo from "../pages/BalanceSheetInfo/BalanceSheetInfo";
 import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
-import RocketLaunchTwoToneIcon from '@mui/icons-material/RocketLaunchTwoTone';
-import AssignmentTurnedInTwoToneIcon from '@mui/icons-material/AssignmentTurnedInTwoTone';
-import StoreTwoToneIcon from '@mui/icons-material/StoreTwoTone';
-import AddBusinessTwoToneIcon from '@mui/icons-material/AddBusinessTwoTone';
-import DomainAddTwoToneIcon from '@mui/icons-material/DomainAddTwoTone';
-import DomainTwoToneIcon from '@mui/icons-material/DomainTwoTone';
 import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
 import FgStockInfo from "../pages/FgStockInfo/FgStockInfo";
-import LocalAtmTwoToneIcon from '@mui/icons-material/LocalAtmTwoTone';
-import PaymentsTwoToneIcon from '@mui/icons-material/PaymentsTwoTone';
 import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
 import StrategyMaster from "../pages/StrategyMaster/StrategyMaster";
 import SalesRecordInfo from "../pages/SalesRecordInfo/SalesRecordInfo";
 import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecordInfo";
 import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
 import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
-import PrecisionManufacturingTwoToneIcon from '@mui/icons-material/PrecisionManufacturingTwoTone';
-import LoyaltyTwoToneIcon from '@mui/icons-material/LoyaltyTwoTone';
-import FeedTwoToneIcon from '@mui/icons-material/FeedTwoTone';
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
 import UserAccessManagement from "../pages/UserAccessManagement/UserAccessManagement";
-import VerifiedUserTwoToneIcon from '@mui/icons-material/VerifiedUserTwoTone';
 import homeIcon from '../assets/navigation-menu/home.png';
 import dashboardIcon from '../assets/navigation-menu/dash-board.png';
 import productionIcon from '../assets/navigation-menu/production.png';
 import salesIcon from '../assets/navigation-menu/sales.png';
-import walletIcon from '../assets/navigation-menu/wallet.png';
 import finishedIcon from '../assets/navigation-menu/finished.png';
 import rawIcon from '../assets/navigation-menu/raw-material.png';
 import secureAccessIcon from '../assets/navigation-menu/secure-access.png';
@@ -50,6 +37,9 @@ import appSettings from '../assets/navigation-menu/app-settings.png';
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
 import HomePage from "../pages/HomePage/HomePage";
 import Operations from "../pages/Operations/Operations";
+import AccountPayable from "../pages/AccountPayable/AccountPayable";
+import SavingsRealisable from "../pages/SavingsRealisable/SavingsRealisable";
+import AccountRecievable from "../pages/AccountRecievable/AccountRecievable";
 
 export const componentList = [
   {
@@ -78,7 +68,7 @@ export const componentList = [
       },
       {
         icon: <CurrencyExchangeTwoToneIcon />,
-        id: "UI 008",
+        id: "UI 011",
         label: "Cash Flow Statement",
         path: "/cashFlowStatement",
         href: "/operationGame/cashFlowStatement",
@@ -104,7 +94,7 @@ export const componentList = [
     children: [
       {
         iconPath: productionIcon,
-        id: "UI 008",
+        id: "UI 014",
         label: "Production Record Info",
         path: "/productionRecordInfo",
         href: "/operationGame/productionRecordInfo",
@@ -119,16 +109,8 @@ export const componentList = [
         routeElement: <SalesRecordInfo />,
       },
       {
-        iconPath: walletIcon,
-        id: "UI 007",
-        label: "Income Statement",
-        path: "/incomeStatementInfo",
-        href: "/operationGame/incomeStatementInfo",
-        routeElement: <IncomeStatementInfo />,
-      },
-      {
         iconPath: finishedIcon,
-        id: "UI 007",
+        id: "UI 009",
         label: "Finished Goods Stock Info",
         path: "/fgStockInfo",
         href: "/operationGame/fgStockInfo",
@@ -136,7 +118,7 @@ export const componentList = [
       },
       {
         iconPath: rawIcon,
-        id: "UI 007",
+        id: "UI 010",
         label: "Raw Material Stock Info",
         path: "/rmStockInfo",
         href: "/operationGame/rmStockInfo",
@@ -150,7 +132,6 @@ export const componentList = [
         href: "/operationGame/marketFactorInfo",
         routeElement: <MarketFactorInfo />,
       },
-
       {
         iconPath: operationalDecisionIcon,
         id: "UI 005",
@@ -158,6 +139,27 @@ export const componentList = [
         path: "/operationalPlanInfo",
         href: "/operationGame/operationalPlanInfo",
         routeElement: <OperationalPlanInfo />,
+      },
+      {
+        id: "UI 017",
+        label: "Account Payable",
+        path: "/accountPayable",
+        href: "/operationGame/accountPayable",
+        routeElement: <AccountPayable />,
+      },
+      {
+        id: "UI 016",
+        label: "Account Recieveable",
+        path: "/accountRecieveable",
+        href: "/operationGame/accountRecieveable",
+        routeElement: <AccountRecievable />,
+      },
+      {
+        id: "UI 018",
+        label: "Savings Realisable",
+        path: "/savingsRealisable",
+        href: "/operationGame/savingsRealisable",
+        routeElement: <SavingsRealisable />,
       }
     ],
   },
@@ -202,7 +204,7 @@ export const componentList = [
         routeElement: <OperationalPlanInfoInput />,
       },
       {
-        id: "UI 018",
+        id: "UI 001",
         label: "Strategy Master",
         path: "/strategyMaster",
         href: "/operationGame/strategyMaster",
@@ -211,16 +213,16 @@ export const componentList = [
       {
         iconPath: appSettings,
         id: "UI 001",
-        label: "Feature Management",
-        path: "/featureManagement",
-        href: "/operationGame/featureManagement",
+        label: "Team Play",
+        path: "/teamPlay",
+        href: "/operationGame/teamPlay",
         routeElement: <FeatureManagement />,
       },
     ],
   },
   {
     iconPath: secureAccessIcon,
-    id: "UI 001",
+    id: "UI 310",
     label: "User Access Management",
     path: "/userAccessManagement",
     href: "/operationGame/userAccessManagement",

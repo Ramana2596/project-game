@@ -25,7 +25,7 @@ function Operations() {
                             <CardActionArea onClick={() => handleCardClick(child.href)}>
                                 <CardContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                                     <Typography variant="h5" component="div">
-                                        <img src={child.iconPath} alt="Description" className="card-item-icon" />
+                                        <img src={child.iconPath} className="card-item-icon" />
                                     </Typography>
                                     <Typography variant="h5" component="div">
                                         {child.label}

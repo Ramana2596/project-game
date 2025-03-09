@@ -58,6 +58,9 @@ import UserAccessManagement from '../UserAccessManagement/UserAccessManagement.j
 import FeatureManagement from '../FeatureManagement/FeatureManagement.jsx';
 import HomePage from '../HomePage/HomePage.jsx';
 import Operations from '../Operations/Operations.jsx';
+import AccountPayable from '../AccountPayable/AccountPayable.jsx';
+import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
+import AccountRecievable from '../AccountRecievable/AccountRecievable.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -178,8 +181,11 @@ export default function MiniDrawer() {
           <Route path="/salesRecord" element={<SalesRecordInfo />} />
           <Route path="/productionRecordInfo" element={<ProductionRecordInfo />} />
           <Route path="/cashFlowStatement" element={<CasFlowStatement />} />
-          <Route path="/featureManagement" element={<FeatureManagement />} />
+          <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
+          <Route path="/accountPayable" element={<AccountPayable />} />
+          <Route path="/accountRecieveable" element={<AccountRecievable />} />
+          <Route path="/savingsRealisable" element={<SavingsRealisable />} />
         </Routes>
       </Box>
     </Box>

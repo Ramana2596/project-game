@@ -91,7 +91,7 @@ export default function SignIn(props) {
     setShouldTriggerApiCall(false);
 
     if (isValidUser) {
-      routeHistory("/operationGame/gameDashboard");
+      routeHistory("/operationGame/homePage");
     }
   }, [userDetailsData, isValidUser]);
 
@@ -102,7 +102,7 @@ export default function SignIn(props) {
     }
 
     if (isValidUser) {
-      routeHistory("/operationGame/gameDashboard");
+      routeHistory("/operationGame/homePage");
     }
   };
 
