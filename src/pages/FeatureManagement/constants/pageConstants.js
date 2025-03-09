@@ -3,7 +3,7 @@ import GameTeamPlay from "../components/GameTeamPlay";
 export const pageConstants = {
     accordianList: [
         {
-            headerValue: 'Game Team Play',
+            headerValue: 'Team Roll Play',
             contentValue: <GameTeamPlay />,
             isExpanded: false
         }

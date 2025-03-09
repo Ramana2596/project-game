@@ -32,7 +32,7 @@ export default function OperationalPlanInfoInput() {
     refTypeInfo: null,
     refTypePrice: null,
     marketInputId: null,
-    cmdLine: "Get_Plan",
+    cmdLine: "Get_Info",
   };
 
   const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);

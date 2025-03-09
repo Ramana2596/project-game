@@ -7,6 +7,7 @@ import EditableTableData from "../../../components/EditableTableData";
 import { pageConstants } from "../constants/pageConstants.js";
 import { getOperationalPlanInfoTableData } from "../services/operationalPlanInfoInputService";
 import { useLoading } from "../../../hooks/loadingIndicatorContext.js";
+import AddTableCascading from "../../../components/AddTableCascading.jsx";
 
 export default function OperationalPlanInputTable({
   tableData,
@@ -27,6 +28,8 @@ export default function OperationalPlanInputTable({
   const [isEnableTableEdit, setIsEnableTableEdit] = useState(true);
   const [newTableData, setNewTableData] = useState([]);
   const [addTableData, setAddTableData] = useState([]);
+  const [currentRowDataFromChild, setCurrentRowData] = useState({});
+  const [updatedRowData, setUpdatedRowData] = useState({});
   const [loading, setLoading] = useState(true);
   const [deletedTableData, setDeletedTableData] = useState([]);
   const [resetKey, setResetKey] = useState(0); // Add resetKey state
@@ -132,6 +135,33 @@ export default function OperationalPlanInputTable({
   selectedOperationalInput?.refTypeInfo,
   selectedOperationalInput?.refTypePrice]);
 
+  useEffect(() => {
+    getOperationalPlanInfoTableData({
+      gameId: selectedOperationalInput?.gameId,
+      gameBatch: selectedOperationalInput?.gameBatch,
+      productionMonth: selectedOperationalInput?.productionMonth,
+      marketInputId: selectedOperationalInput?.marketInputId,
+      quantityId: currentRowDataFromChild?.Quantity_Info?.value,
+      priceId: currentRowDataFromChild?.Info_Price?.value,
+      partNo: currentRowDataFromChild?.Description?.value,
+      cmdLine: "Get_Unit_Price",
+    }).then((data) => {
+      if (data && data.lenght > 0) {
+        setUpdatedRowData({
+          ...currentRowDataFromChild,
+          Unit_Price: { value: data[0]?.Unit_Price, label: data[0]?.Unit_Price, inputType: "readonly" }
+        });
+      } else {
+        setUpdatedRowData({
+          ...currentRowDataFromChild,
+          Unit_Price: { value: 0, label: 0, inputType: "readonly" }
+        });
+      }
+    });
+  }, [currentRowDataFromChild?.Info_Price?.value,
+  currentRowDataFromChild?.Quantity_Info?.value,
+  currentRowDataFromChild?.Description?.value]);
+
   const onAddBtnClick = () => {
     setIsDisableActionBtns(true);
     setIsDisableSubCanBtns(false);
@@ -208,6 +238,19 @@ export default function OperationalPlanInputTable({
     setNewTableData(newData);
   };
 
+  const onTableFieldUpdate = (currentRowData) => {
+    if (
+      currentRowData?.Info_Price?.value &&
+      currentRowData?.Quantity_Info?.value &&
+      currentRowData?.Description?.value &&
+      currentRowData?.Info_Price?.value !== "" &&
+      currentRowData?.Quantity_Info?.value !== "" &&
+      currentRowData?.Description?.value !== ""
+    ) {
+      setCurrentRowData(currentRowData);
+    }
+  };
+
   return (
     <div>
       <Grid margin={5} container spacing={2} justifyContent="center" alignItems="center">
@@ -234,14 +277,14 @@ export default function OperationalPlanInputTable({
       </div>
       {!loading && (
         <div hidden={isEnableTableAdd}>
-          <AddTableData
+          <AddTableCascading
             inputTableHeadings={pageConstants.contentSection.tableHeadingForAdd}
-            hiddenColumns={
-              pageConstants.contentSection.hiddenTableColumnsForAdd
-            }
+            hiddenColumns={pageConstants.contentSection.hiddenTableColumnsForAdd}
             onCheckboxChange={handleCheckboxChange}
             tableInputTypes={addTableData}
             resetKey={isEnableTableAdd}
+            onUpdateRowValues={onTableFieldUpdate}
+            updatedRowDataToChild={updatedRowData}  // Pass updated data here
           />
         </div>
       )}
