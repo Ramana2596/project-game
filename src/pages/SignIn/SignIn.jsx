@@ -11,7 +11,7 @@ import { styled } from "@mui/material/styles";
 import ColorModeSelect from "./theme/ColorModeSelect";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../core/access/userContext.js";
-import { getUserDetails } from "./services/signInServices.js";
+import { getUserDetails, intiateTeamPlay } from "./services/signInServices.js";
 import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -64,7 +64,7 @@ export default function SignIn(props) {
   const [shouldTriggerApiCall, setShouldTriggerApiCall] = React.useState(false);
   const [userEmailValue, setUserEmailValue] = React.useState(null);
   const routeHistory = useNavigate();
-  const { login, setUserInfo } = useUser();
+  const { login, setUserInfo, userInfo } = useUser();
   const [userDetailsData, setUserDetailsData] = React.useState(null);
 
   React.useEffect(() => {
@@ -91,6 +91,15 @@ export default function SignIn(props) {
     setShouldTriggerApiCall(false);
 
     if (isValidUser) {
+      intiateTeamPlay({
+        gameId: userInfo.gameId,
+        gameBatch: userInfo.gameBatch,
+        gameTeam: userInfo.gameTeam
+      }).then((response) => {
+        if (response) {
+          console.log('login successful');
+        }
+      });
       routeHistory("/operationGame/homePage");
     }
   }, [userDetailsData, isValidUser]);
