@@ -146,10 +146,10 @@ export default function OperationalPlanInputTable({
       partNo: currentRowDataFromChild?.Description?.value,
       cmdLine: "Get_Unit_Price",
     }).then((data) => {
-      if (data && data.length > 0) {
+      if (data && data.data.length > 0) {
         setUpdatedRowData({
           ...currentRowDataFromChild,
-          Unit_Price: { value: data[0]?.Unit_Price, label: data[0]?.Unit_Price, inputType: "readonly" }
+          Unit_Price: { value: data.data[0]?.Unit_Price, label: data.data[0]?.Unit_Price, inputType: "readonly" }
         });
       } else {
         setUpdatedRowData({
