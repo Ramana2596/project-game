@@ -41,10 +41,10 @@ export default function DatePeriod({
             const latestPeriod =
               response.data[response.data.length - 1]?.Period;
             const earliestPeriod = response.data[0]?.Period;
-            setSelectedPeriod(latestPeriod);
+            setSelectedPeriod(earliestPeriod);
             setMinDate(dayjs(earliestPeriod));
             setMaxDate(dayjs(latestPeriod));
-            onFormControlUpdate({ productionMonth: latestPeriod });
+            onFormControlUpdate({ productionMonth: earliestPeriod });
           } else {
             // Handle the case when there is no data
             setGamePeriod([]);
