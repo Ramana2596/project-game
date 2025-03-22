@@ -214,7 +214,7 @@ export const componentList = [
       },
       {
         iconPath: strategyIcon,
-        id: "UI 001",
+        id: "UI 130",
         label: "Strategy Master",
         path: "/strategyMaster",
         href: "/operationGame/strategyMaster",
