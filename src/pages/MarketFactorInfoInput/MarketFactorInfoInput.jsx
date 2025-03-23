@@ -163,6 +163,7 @@ export default function MarketFactorInfoInput() {
         quantity: obj.Quantity,
         priceId: obj.Info_Price,
         unitPrice: obj.Unit_Price,
+        currency: 'USD'
       }));
     }
     return [];

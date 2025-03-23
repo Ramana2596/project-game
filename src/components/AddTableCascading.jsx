@@ -49,6 +49,13 @@ function AddTableCascading({
         }
     }, [resetKey]);
 
+    React.useEffect(() => {
+        // Initialize with one row by default
+        if (tableData?.length === 0) {
+            handleAddEntry();
+        }
+    }, [tableData]);
+
     // Update tableData with new values when updatedRowDataToChild is passed
     React.useEffect(() => {
         if (updatedRowDataToChild) {
@@ -64,17 +71,33 @@ function AddTableCascading({
     }, [updatedRowDataToChild]);
 
     const handleCheckboxChange = (event, rowIndex) => {
-        const updatedCheckedItems = [...checkedItems];
-        if (event.target.checked) {
-            updatedCheckedItems.push(rowIndex);
-        } else {
-            const index = updatedCheckedItems.indexOf(rowIndex);
-            if (index > -1) {
-                updatedCheckedItems.splice(index, 1);
+        if (isRowComplete(tableData[rowIndex])) {
+            const updatedCheckedItems = [...checkedItems];
+            if (event.target.checked) {
+                updatedCheckedItems.push(rowIndex);
+                if (rowIndex === tableData.length - 1) {
+                    handleAddEntry();
+                }
+            } else {
+                const index = updatedCheckedItems.indexOf(rowIndex);
+                if (index > -1) {
+                    updatedCheckedItems.splice(index, 1);
+                }
             }
+            setCheckedItems(updatedCheckedItems);
+            emitCheckedValues(updatedCheckedItems);
+        } else {
+            event.preventDefault();
         }
-        setCheckedItems(updatedCheckedItems);
-        emitCheckedValues(updatedCheckedItems);
+    };
+
+    const isRowComplete = (row) => {
+        return Object.keys(row).every((key) => {
+            if (row[key].inputType) {
+                const value = row[key].value;
+                return value !== "" && value !== null && value !== undefined;
+            }
+        });
     };
 
     const emitCheckedValues = (checkedRows) => {
@@ -192,11 +215,6 @@ function AddTableCascading({
                                 </StyledTableCell>
                             </StyledTableRow>
                         ))}
-                        <StyledTableRow>
-                            <StyledTableCell colSpan={tableInputTypes.length + 2} align="center">
-                                <button onClick={handleAddEntry}>Add New Row</button>
-                            </StyledTableCell>
-                        </StyledTableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
