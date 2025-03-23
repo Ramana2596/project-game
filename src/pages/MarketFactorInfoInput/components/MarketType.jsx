@@ -68,11 +68,13 @@ export default function MarketType({
               <Alert severity="error">{error}</Alert>
             </MenuItem>
           ) : (
-            marketTypeData?.map((batch, index) => (
+            marketTypeData.length > 0 ? marketTypeData?.map((batch, index) => (
               <MenuItem key={index} value={batch.Market_Input_Id}>
                 {batch.Category_Desc}
               </MenuItem>
-            ))
+            )) : (
+              <MenuItem value={null}>No Market Type Available</MenuItem>
+            )
           )}
         </Select>
       </FormControl>

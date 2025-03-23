@@ -25,5 +25,8 @@ export const pageConstants = {
   },
   updateStrategySuccessMsg: 'Strategy Launched successfully',
   updateStrategyFailureMsg: 'Some Error occurred while updating data',
-  noDataAvailable: 'No strategy data available to launch'
+  noDataAvailable: 'No pending Batch and/or Strategy is already launched',
+  noGameBatch: 'No Game Batch available',
+  noGameId: "No Game ID available",
+  noStrategySet: "No Strategy Set available"
 }

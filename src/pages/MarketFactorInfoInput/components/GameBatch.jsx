@@ -67,11 +67,13 @@ export default function GameBatch({
               <Alert severity="error">{error}</Alert>
             </MenuItem>
           ) : (
-            gameBatchData?.map((batch, index) => (
+            gameBatchData.length > 0 ? (gameBatchData?.map((batch, index) => (
               <MenuItem key={index} value={batch.Game_Batch}>
                 {batch.Game_Batch}
               </MenuItem>
-            ))
+            ))) : (
+              <MenuItem value={null}>No Game Batch Available</MenuItem>
+            )
           )}
         </Select>
       </FormControl>

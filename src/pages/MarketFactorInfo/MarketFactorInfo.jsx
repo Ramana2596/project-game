@@ -89,7 +89,7 @@ export default function MarketFactorInfo() {
                   <MenuItem key={mapObj.Game_Batch} value={mapObj.Game_Batch}>
                     {mapObj.Game_Batch}
                   </MenuItem>
-                )) : null}
+                )) : (<MenuItem value={null}>No Game Batch Available</MenuItem>)}
             </Select>
           </FormControl>
         </Grid>

@@ -82,7 +82,7 @@ export default function DatePeriod({
         <CircularProgress size={24} />
       ) : error ? (
         <Alert severity="error">{error}</Alert>
-      ) : (
+      ) : gamePeriod.length > 0 ? (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             views={["year", "month"]}
@@ -97,6 +97,8 @@ export default function DatePeriod({
             )}
           />
         </LocalizationProvider>
+      ) : (
+        <Alert severity="info">No available periods to select.</Alert>
       )}
       <ToastMessage
         open={alertData.isVisible}

@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import GenericTable from "../../components/GenericTable";
 import { pageConstants } from "./constants/pageConstants";
 import {
-  getGameId,
   getStrategySetData,
   getGameBatchData,
   getStrategySetNoDataApi,
@@ -170,11 +169,15 @@ export default function StrategyLaunched() {
                 label={pageConstants.headers.gameIdLabel + " *"}
                 onChange={onStrategyFormControlUpdate}
               >
-                {gameIdData?.map((value) => (
-                  <MenuItem value={value}>
-                    {value}
-                  </MenuItem>
-                ))}
+                {
+                  gameIdData.length > 0 ? (gameIdData?.map((value) => (
+                    <MenuItem value={value}>
+                      {value}
+                    </MenuItem>
+                  ))) : (<MenuItem value="">
+                    {pageConstants.noGameId}
+                  </MenuItem>)
+                }
               </Select>
             </FormControl>
           </Grid>
@@ -194,11 +197,15 @@ export default function StrategyLaunched() {
                 label={pageConstants.headers.gameBatchLabel + " *"}
                 onChange={onStrategyFormControlUpdate}
               >
-                {gameBatchData?.map((mapObj) => (
-                  <MenuItem value={mapObj.Game_Batch}>
-                    {mapObj.Game_Batch}
-                  </MenuItem>
-                ))}
+                {
+                  gameBatchData.length > 0 ? (gameBatchData?.map((mapObj) => (
+                    <MenuItem value={mapObj.Game_Batch}>
+                      {mapObj.Game_Batch}
+                    </MenuItem>
+                  ))) : (<MenuItem value="">
+                    {pageConstants.noGameBatch}
+                  </MenuItem>)
+                }
               </Select>
             </FormControl>
           </Grid>
@@ -218,11 +225,15 @@ export default function StrategyLaunched() {
                 label={pageConstants.headers.strategySetLabel + " *"}
                 onChange={onStrategyFormControlUpdate}
               >
-                {getStrategySetNoData?.map((mapObj) => (
-                  <MenuItem value={mapObj.Strategy_Set_No}>
-                    {mapObj.Strategy_Set_No}
-                  </MenuItem>
-                ))}
+                {
+                  getStrategySetNoData.length > 0 ? (getStrategySetNoData?.map((mapObj) => (
+                    <MenuItem value={mapObj.Strategy_Set_No}>
+                      {mapObj.Strategy_Set_No}
+                    </MenuItem>
+                  ))) : (<MenuItem value="">
+                    {pageConstants.noStrategySet}
+                  </MenuItem>)
+                }
               </Select>
             </FormControl>
           </Grid>
