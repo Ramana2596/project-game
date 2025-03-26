@@ -45,7 +45,7 @@ import Operations from "../pages/Operations/Operations";
 import AccountPayable from "../pages/AccountPayable/AccountPayable";
 import SavingsRealisable from "../pages/SavingsRealisable/SavingsRealisable";
 import AccountRecievable from "../pages/AccountRecievable/AccountRecievable";
-
+import PartInfo from "../pages/ PartInfo/ PartInfo";
 
 export const componentList = [
   {
@@ -169,7 +169,16 @@ export const componentList = [
         path: "/savingsRealisable",
         href: "/operationGame/savingsRealisable",
         routeElement: <SavingsRealisable />,
+      },
+      {
+        iconPath: savingsIcon,
+        id: "UI 2110",
+        label: "Part Details ",
+        path: "/PartInfo",
+        href: "/operationGame/PartInfo",
+        routeElement: < PartInfo />
       }
+      
     ],
   },
   {
