@@ -61,6 +61,7 @@ import Operations from '../Operations/Operations.jsx';
 import AccountPayable from '../AccountPayable/AccountPayable.jsx';
 import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
 import AccountRecievable from '../AccountRecievable/AccountRecievable.jsx';
+import PartInfo from "../ PartInfo/ PartInfo.jsx";
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -186,6 +187,7 @@ export default function MiniDrawer() {
           <Route path="/accountPayable" element={<AccountPayable />} />
           <Route path="/accountRecieveable" element={<AccountRecievable />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
+          <Route path="/partInfo" element={<partInfo />} />
         </Routes>
       </Box>
     </Box>
