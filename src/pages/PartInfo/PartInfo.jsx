@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getPartInfo} from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function getPartInfo() {
+export default function PartInfo() {
   const { userInfo } = useUser();
   let getTableDataPayload = {
     gameId: userInfo?.gameId,
