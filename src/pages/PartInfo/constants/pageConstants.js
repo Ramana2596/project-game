@@ -7,6 +7,5 @@ export const pageConstants = {
     "UOM",
     "Category",
     "Status"
-  ],
+  ]
 };
-s
