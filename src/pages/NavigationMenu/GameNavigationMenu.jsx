@@ -61,7 +61,7 @@ import Operations from '../Operations/Operations.jsx';
 import AccountPayable from '../AccountPayable/AccountPayable.jsx';
 import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
 import AccountRecievable from '../AccountRecievable/AccountRecievable.jsx';
-import PartInfo from "../ PartInfo/ PartInfo.jsx";
+import PartInfo from '../ PartInfo/ PartInfo.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
