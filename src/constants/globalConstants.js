@@ -172,7 +172,7 @@ export const componentList = [
       },
       {
         iconPath: partIcon,
-        id: "UI 2110",
+        id: "UI 22 010",
         label: "Part Details ",
         path: "/partInfo",
         href: "/operationGame/partInfo",
