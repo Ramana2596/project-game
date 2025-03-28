@@ -37,8 +37,8 @@ import appSettings from '../assets/navigation-menu/app-settings.png';
 import payableIcon from '../assets/navigation-menu/payables.png';
 import recievableIcon from '../assets/navigation-menu/receivable.png';
 import savingsIcon from '../assets/navigation-menu/savings.png';
-import gearIcon from '../assets/navigation-menu/gear.png';
 import strategyIcon from '../assets/navigation-menu/strategy.png';
+import partIcon from '../assets/navigation-menu/part.png'
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
 import HomePage from "../pages/HomePage/HomePage";
 import Operations from "../pages/Operations/Operations";
@@ -171,8 +171,8 @@ export const componentList = [
         routeElement: <SavingsRealisable />,
       },
       {
-        iconPath: savingsIcon,
-        id: "UI 2110",
+        iconPath: partIcon,
+        id: "UI 22 010",
         label: "Part Details ",
         path: "/partInfo",
         href: "/operationGame/partInfo",
