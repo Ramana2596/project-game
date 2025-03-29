@@ -54,7 +54,7 @@ export const componentList = [
     label: "Home",
     path: "/homePage",
     href: "/operationGame/homePage",
-    routeElement: <HomePage />,
+    routeElement: <HomePage />
   },
   {
     iconPath: dashboardIcon,
@@ -66,27 +66,27 @@ export const componentList = [
     children: [
       {
         icon: <SummarizeTwoToneIcon />,
-        id: "UI 008",
+        id: "UI 21 110",
         label: "Balance Sheet",
         path: "/balanceSheet",
         href: "/operationGame/balanceSheet",
-        routeElement: <BalanceSheetInfo />,
+        routeElement: <BalanceSheetInfo />
       },
       {
         icon: <CurrencyExchangeTwoToneIcon />,
-        id: "UI 011",
+        id: "UI 21 130",
         label: "Cash Flow Statement",
         path: "/cashFlowStatement",
         href: "/operationGame/cashFlowStatement",
-        routeElement: <CasFlowStatement />,
+        routeElement: <CasFlowStatement />
       },
       {
         icon: <AccountBalanceWalletTwoToneIcon />,
-        id: "UI 007",
+        id: "UI 21 120",
         label: "Income Statement",
         path: "/incomeStatementInfo",
         href: "/operationGame/incomeStatementInfo",
-        routeElement: <IncomeStatementInfo />,
+        routeElement: <IncomeStatementInfo />
       },
     ],
   },
@@ -100,75 +100,75 @@ export const componentList = [
     children: [
       {
         iconPath: productionIcon,
-        id: "UI 014",
+        id: "UI 21 180",
         label: "Production Record Info",
         path: "/productionRecordInfo",
         href: "/operationGame/productionRecordInfo",
-        routeElement: <ProductionRecordInfo />,
+        routeElement: <ProductionRecordInfo />
       },
       {
         iconPath: salesIcon,
-        id: "UI 013",
+        id: "UI 21 170",
         label: "Sales Record Info",
         path: "/salesRecord",
         href: "/operationGame/salesRecord",
-        routeElement: <SalesRecordInfo />,
+        routeElement: <SalesRecordInfo />
       },
       {
         iconPath: finishedIcon,
-        id: "UI 009",
+        id: "UI 21 150",
         label: "Finished Goods Stock Info",
         path: "/fgStockInfo",
         href: "/operationGame/fgStockInfo",
-        routeElement: <FgStockInfo />,
+        routeElement: <FgStockInfo />
       },
       {
         iconPath: rawIcon,
-        id: "UI 010",
+        id: "UI 21 140",
         label: "Raw Material Stock Info",
         path: "/rmStockInfo",
         href: "/operationGame/rmStockInfo",
-        routeElement: <RmStockInfo />,
+        routeElement: <RmStockInfo />
       },
       {
         iconPath: marketfactorInfoIcon,
-        id: "UI 003",
+        id: "UI 21 090",
         label: "Market Factor Info",
         path: "/marketFactorInfo",
         href: "/operationGame/marketFactorInfo",
-        routeElement: <MarketFactorInfo />,
+        routeElement: <MarketFactorInfo />
       },
       {
         iconPath: operationalDecisionIcon,
-        id: "UI 005",
+        id: "UI 21 100",
         label: "Operational Decision Info",
         path: "/operationalPlanInfo",
         href: "/operationGame/operationalPlanInfo",
-        routeElement: <OperationalPlanInfo />,
+        routeElement: <OperationalPlanInfo />
       },
       {
         iconPath: payableIcon,
-        id: "UI 017",
+        id: "UI 21 210",
         label: "Account Payable",
         path: "/accountPayable",
         href: "/operationGame/accountPayable",
-        routeElement: <AccountPayable />,
+        routeElement: <AccountPayable />
       },
       {
         iconPath: recievableIcon,
-        id: "UI 016",
+        id: "UI 21 200",
         label: "Account Receivable",
         path: "/accountRecieveable",
         href: "/operationGame/accountRecieveable",
-        routeElement: <AccountRecievable />,
+        routeElement: <AccountRecievable />
       },
       {
         iconPath: savingsIcon,
-        id: "UI 018",
+        id: "UI 21 240",
         label: "Savings Realisable",
         path: "/savingsRealisable",
         href: "/operationGame/savingsRealisable",
-        routeElement: <SavingsRealisable />,
+        routeElement: <SavingsRealisable />
       },
       {
         iconPath: partIcon,
@@ -191,62 +191,62 @@ export const componentList = [
     children: [
       {
         iconPath: launchIcon,
-        id: "UI 001",
+        id: "UI 11 020",
         label: "Launch Strategy",
         path: "/strategyLaunched",
         href: "/operationGame/strategyLaunched",
-        routeElement: <StrategyLaunched />,
+        routeElement: <StrategyLaunched />
       },
       {
         iconPath: approvalIcon,
-        id: "UI 002",
+        id: "UI 11 030",
         label: "Strategy Plan Approval",
         path: "/strategyPlanApproval",
         href: "/operationGame/strategyPlanApproval",
-        routeElement: <StrategyPlan />,
+        routeElement: <StrategyPlan />
       },
       {
         iconPath: marketfactorInfoInputIcon,
-        id: "UI 004",
+        id: "UI 11 040",
         label: "Market Factor Input",
         path: "/marketFactorInfoInput",
         href: "/operationGame/marketFactorInfoInput",
-        routeElement: <MarketFactorInfoInput />,
+        routeElement: <MarketFactorInfoInput />
       },
       {
         iconPath: operationalDecisionInputIcon,
-        id: "UI 006",
+        id: "UI 11 050",
         label: "Operational Decision Input",
         path: "/operationalPlanInfoInput",
         href: "/operationGame/operationalPlanInfoInput",
-        routeElement: <OperationalPlanInfoInput />,
+        routeElement: <OperationalPlanInfoInput />
       },
       {
         iconPath: strategyIcon,
-        id: "UI 130",
+        id: "UI 12 170",
         label: "Strategy Master",
         path: "/strategyMaster",
         href: "/operationGame/strategyMaster",
-        routeElement: <StrategyMaster />,
+        routeElement: <StrategyMaster />
       },
       {
         iconPath: appSettings,
-        id: "UI 001",
+        id: "UI 21 260",
         label: "Team Play",
         path: "/teamPlay",
         href: "/operationGame/teamPlay",
-        routeElement: <FeatureManagement />,
+        routeElement: <FeatureManagement />
       },
     ],
   },
   {
     iconPath: secureAccessIcon,
-    id: "UI 310",
+    id: "UI UI 15 030",
     label: "User Access Management",
     path: "/userAccessManagement",
     href: "/operationGame/userAccessManagement",
     routeElement: <UserAccessManagement />
-  },
+  }
 ];
 
 export const dateColumns = ["period", "Production_Month"];
