@@ -80,6 +80,10 @@ import OpsDiscountOfferInfo from '../OpsDiscountOfferInfo/OpsDiscountOfferInfo.j
 import OpsSavingsPlanInfo from '../OpsSavingsPlanInfo/OpsSavingsPlanInfo.jsx';
 import BenefitInfo from '../BenefitInfo/BenefitInfo.jsx';
 import ResultantInfo from '../ResultantInfo/ResultantInfo.jsx';
+import ShopPerformanceInfo from '../ShopPerformanceInfo/ShopPerformanceInfo.jsx';
+import SCMPerformanceInfo from '../SCMPerformanceInfo/SCMPerformanceInfo.jsx';
+import MfgWorkCentreInfo from '../MfgWorkCentreInfo/MfgWorkCentreInfo.jsx';
+import AppInfoDesk from '../AppInfoDesk/AppInfoDesk.jsx';
 
 
 export default function MiniDrawer() {
@@ -225,6 +229,10 @@ export default function MiniDrawer() {
           <Route path="/OpsSavingsPlanInfo" element={<OpsSavingsPlanInfo />} />
           <Route path="/BenefitInfo" element={<BenefitInfo />} />
           <Route path="/ResultantInfo" element={<ResultantInfo />} /> 
+          <Route path="/ShopPerformanceInfo" element={<ShopPerformanceInfo />} /> 
+          <Route path="/SCMPerformanceInfo" element={<SCMPerformanceInfo />} /> 
+          <Route path="/MfgWorkCentreInfo" element={<MfgWorkCentreInfo />} /> 
+          <Route path="/AppInfoDesk" element ={<AppInfoDesk />} />
         </Routes>
       </Box>
      </Box>
