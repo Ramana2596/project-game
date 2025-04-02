@@ -1,6 +1,6 @@
 export const pageConstants = {
-  gameBatch: "Game Batch",
-  gameTeam: "Game Team",
+  //gameBatch: "Game Batch",
+  //gameTeam: "Game Team",
   tableHeading: [
     "Team",
     "Strategy_Set",

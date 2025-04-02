@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getOpsDemandCreationInfo} from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function getOpsDemandCreationInfo() {
+export default function OpsDemandCreationInfo() {
   const { userInfo } = useUser();
   let getTableDataPayload = {
     gameId: userInfo?.gameId,

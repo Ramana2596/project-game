@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
-export function getStrategyLaunchInfo(queryParams) {
-    return api.get('/api/getStrategyLaunchInfo',
+export function getSCMPerformanceInfo(queryParams) {
+    return api.get('/api/getSCMPerformanceInfo',
         {
             params: { ...queryParams }
         });

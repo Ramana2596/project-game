@@ -3,8 +3,11 @@ export const pageConstants = {
   //gameTeam: "Game Team",
   tableHeading: [
     "Screen_Id",
+    "Name",
+    "Category",
     "Title",
     "Status",
-    "Usage"
+    "Usage",
+    "Process Owner"
   ],
 };

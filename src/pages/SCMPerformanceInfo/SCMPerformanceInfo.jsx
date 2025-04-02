@@ -3,19 +3,19 @@ import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.js";
 import { useEffect, useState } from "react";
-import { getStrategyLaunchInfo} from "./services/service.js";
+import { getSCMPerformanceInfo} from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function getStrategyLaunchInfo() {
+export default function SCMPerformanceInfo() {
   const { userInfo } = useUser();
   let getTableDataPayload = {
-    gameId: userInfo?.gameId
-   // gameBatch: userInfo?.gameBatch,
-   // gameTeam: userInfo?.gameTeam,
+    gameId: userInfo?.gameId,
+    gameBatch: userInfo?.gameBatch,
+    gameTeam: userInfo?.gameTeam,
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getStrategyLaunchInfo(getTableDataPayload).then((response) => {
+    getSCMPerformanceInfo(getTableDataPayload).then((response) => {
       if (response) {
         setTableData(response.data);
       }

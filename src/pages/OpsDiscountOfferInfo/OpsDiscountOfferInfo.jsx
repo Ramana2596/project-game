@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getOpsDiscountOfferInfo} from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function getOpsDiscountOfferInfo() {
+export default function OpsDiscountOfferInfo() {
   const { userInfo } = useUser();
   let getTableDataPayload = {
     gameId: userInfo?.gameId,

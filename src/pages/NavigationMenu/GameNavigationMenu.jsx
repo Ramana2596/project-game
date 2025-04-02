@@ -62,6 +62,25 @@ import AccountPayable from '../AccountPayable/AccountPayable.jsx';
 import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
 import AccountRecievable from '../AccountRecievable/AccountRecievable.jsx';
 import PartInfo from '../PartInfo/PartInfo.jsx';
+import BOMInfo from '../BOMInfo/BOMInfo.jsx';
+import RBACInfo from '../RBACInfo/RBACInfo.jsx';
+import ReferenceInfo from '../ReferenceInfo/ReferenceInfo.jsx';
+import ScreenInfo from '../ScreenInfo/ScreenInfo.jsx';
+import StdNormInfo from '../StdNormInfo/StdNormInfo.jsx';
+import StrategyBudgetInfo from '../StrategyBudgetInfo/StrategyBudgetInfo.jsx';
+import StrategyLaunchGist from '../StrategyLaunchGist/StrategyLaunchGist.jsx';
+import StrategyPlanInfo from '../StrategyPlanInfo/StrategyPlanInfo.jsx';
+import TeamProgressInfo from '../TeamProgressInfo/TeamProgressInfo.jsx';
+import CapitalAssetStockInfo from '../CapitalAssetStockInfo/CapitalAssetStockInfo.jsx';
+import CashBookInfo from '../CashBookInfo/CashBookInfo.jsx';
+import CostNormInfo from '../CostNormInfo/CostNormInfo.jsx';
+import MfgRoutingInfo from '../MfgRoutingInfo/MfgRoutingInfo.jsx';
+import OpsDemandCreationInfo from '../OpsDemandCreationInfo/OpsDemandCreationInfo.jsx';
+import OpsDiscountOfferInfo from '../OpsDiscountOfferInfo/OpsDiscountOfferInfo.jsx';
+import OpsSavingsPlanInfo from '../OpsSavingsPlanInfo/OpsSavingsPlanInfo.jsx';
+import BenefitInfo from '../BenefitInfo/BenefitInfo.jsx';
+import ResultantInfo from '../ResultantInfo/ResultantInfo.jsx';
+
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -188,9 +207,27 @@ export default function MiniDrawer() {
           <Route path="/accountRecieveable" element={<AccountRecievable />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
           <Route path="/partInfo" element={<PartInfo />} />
+          <Route path="/BOMInfo" element={<BOMInfo />} />
+          <Route path="/RBACInfo" element={<RBACInfo />} />
+          <Route path="/ReferenceInfo" element={<ReferenceInfo />} />
+          <Route path="/ScreenInfo" element={<ScreenInfo />} />
+          <Route path="/StdNormInfo" element={<StdNormInfo />} />
+          <Route path="/StrategyBudgetInfo" element={<StrategyBudgetInfo />} />
+          <Route path="/StrategyLaunchGist" element={<StrategyLaunchGist />} />
+          <Route path="/StrategyPlanInfo" element={<StrategyPlanInfo />} />
+          <Route path="/TeamProgressInfo" element={<TeamProgressInfo />} />
+          <Route path="/CapitalAssetStockInfo" element={<CapitalAssetStockInfo />} />
+          <Route path="/CashBookInfo" element={<CashBookInfo />} />
+          <Route path="/CostNormInfo" element={<CostNormInfo />} />
+          <Route path="/MfgRoutingInfo" element={<MfgRoutingInfo />} />
+          <Route path="/OpsDemandCreationInfo" element={<OpsDemandCreationInfo />} />
+          <Route path="/OpsDiscountOfferInfo" element={<OpsDiscountOfferInfo />} />
+          <Route path="/OpsSavingsPlanInfo" element={<OpsSavingsPlanInfo />} />
+          <Route path="/BenefitInfo" element={<BenefitInfo />} />
+          <Route path="/ResultantInfo" element={<ResultantInfo />} /> 
         </Routes>
       </Box>
-    </Box>
+     </Box>
   );
 }
 

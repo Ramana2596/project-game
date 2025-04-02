@@ -3,19 +3,19 @@ import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.js";
 import { useEffect, useState } from "react";
-import { getBomInfo} from "./services/service.js";
+import { getResultantInfo} from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function BOM() {
+export default function ResultantInfo() {
   const { userInfo } = useUser();
   let getTableDataPayload = {
-    gameId: userInfo?.gameId,
-    gameBatch: userInfo?.gameBatch,
-    gameTeam: userInfo?.gameTeam,
+    gameId: userInfo?.gameId
+  // gameBatch: userInfo?.gameBatch,
+  // gameTeam: userInfo?.gameTeam,
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getBomInfo(getTableDataPayload).then((response) => {
+    getResultantInfo(getTableDataPayload).then((response) => {
       if (response) {
         setTableData(response.data);
       }
@@ -24,14 +24,14 @@ export default function BOM() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
+      /*<Grid container spacing={2} justifyContent="center" alignItems="center">
         <h3>
           {pageConstants.gameBatch}: {userInfo?.gameBatch}
         </h3>
         <h3>
           {pageConstants.gameTeam}: {userInfo?.gameTeam}
         </h3>
-      </Grid>
+      </Grid> */
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
