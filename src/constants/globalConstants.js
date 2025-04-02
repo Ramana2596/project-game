@@ -17,6 +17,7 @@ import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecord
 import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
 import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
+//import AppInfoDesk from "../pages/AppInfoDesk";
 import UserAccessManagement from "../pages/UserAccessManagement/UserAccessManagement";
 
 // start of png
@@ -72,6 +73,9 @@ import ShopPerformanceInfo from '../pages/ShopPerformanceInfo/ShopPerformanceInf
 import SCMPerformanceInfo from '../pages/SCMPerformanceInfo/SCMPerformanceInfo.jsx';
 import BenefitInfo from '../pages/BenefitInfo/BenefitInfo.jsx';
 import ResultantInfo from '../pages/ResultantInfo/ResultantInfo.jsx';
+import MfgWorkCentreInfo from '../pages/MfgWorkCentreInfo/MfgWorkCentreInfo.jsx'
+
+//
 export const componentList = [
   {
     iconPath: homeIcon,
@@ -133,43 +137,11 @@ export const componentList = [
       },
       {
         iconPath: asterikIcon,
-        id: "UI 21 030",
-        label: "Strategy-Launch Summary",
-        path: "/StrategyLaunchGist",
-        href: "/operationGame/StrategyLaunchGist",
-        routeElement: <StrategyLaunchGist />
-      },
-      {
-        iconPath: asterikIcon,
         id: "UI 21 040",
         label: "Budget Plan for Strategy",
         path: "/StrategyBudgetInfo",
         href: "/operationGame/StrategyBudgetInfo",
         routeElement: <StrategyBudgetInfo />
-      },
-      {
-        iconPath: asterikIcon,
-        id: "UI 21 050",
-        label: "Demand Creation thru Strategy",
-        path: "/OpsDemandCreationInfo",
-        href: "/operationGame/OpsDemandCreationInfo",
-        routeElement: <OpsDemandCreationInfo />
-      },
-      {
-        iconPath: asterikIcon,
-        id: "UI 21 060",
-        label: "Discount Offer thru Strategy",
-        path: "/OpsDiscountOfferInfo",
-        href: "/operationGame/OpsDiscountOfferInfo",
-        routeElement: <OpsDiscountOfferInfo />
-      },
-      {
-        iconPath: asterikIcon,
-        id: "UI 21 070",
-        label: "Savings Plan thru Strategy",
-        path: "/OpsSavingsPlanInfo",
-        href: "/operationGame/OpsSavingsPlanInfo",
-        routeElement: <OpsSavingsPlanInfo />
       },
       {
         iconPath: marketfactorInfoIcon,
@@ -204,20 +176,20 @@ export const componentList = [
         routeElement: <FgStockInfo />
       },
       {
-        iconPath: salesIcon,
-        id: "UI 21 170",
-        label: "Sales Record Info",
-        path: "/salesRecord",
-        href: "/operationGame/salesRecord",
-        routeElement: <SalesRecordInfo />
-      },
-      {
         iconPath: productionIcon,
         id: "UI 21 180",
         label: "Production Record Info",
         path: "/productionRecordInfo",
         href: "/operationGame/productionRecordInfo",
         routeElement: <ProductionRecordInfo />
+      },
+      {
+        iconPath: salesIcon,
+        id: "UI 21 170",
+        label: "Sales Record Info",
+        path: "/salesRecord",
+        href: "/operationGame/salesRecord",
+        routeElement: <SalesRecordInfo />
       },
       {
         iconPath: asterikIcon,
@@ -242,31 +214,7 @@ export const componentList = [
         path: "/accountPayable",
         href: "/operationGame/accountPayable",
         routeElement: <AccountPayable />
-      },
-      {
-        iconPath: asterikIcon,
-        id: "UI 21 220",
-        label: "Shop Performance Report",
-        path: "/ShopPerformanceInfo",
-        href: "/operationGame/ShopPerformanceInfo",
-        routeElement: <ShopPerformanceInfo />
-      },
-      {
-        iconPath: asterikIcon,
-        id: "UI 21 230",
-        label: "SCM Performance Report",
-        path: "/SCMPerformanceInfo",
-        href: "/operationGame/SCMPerformanceInfo",
-        routeElement: <SCMPerformanceInfo />
-      },
-      {
-        iconPath: savingsIcon,
-        id: "UI 21 240",
-        label: "Savings Realisable",
-        path: "/savingsRealisable",
-        href: "/operationGame/savingsRealisable",
-        routeElement: <SavingsRealisable />
-      },
+      }, 
       {
         iconPath: partIcon,
         id: "UI 22 010",
@@ -301,6 +249,70 @@ export const componentList = [
       },
       {
         iconPath: asterikIcon,
+        id: "UI 21 050",
+        label: "Demand Creation thru Strategy",
+        path: "/OpsDemandCreationInfo",
+        href: "/operationGame/OpsDemandCreationInfo",
+        routeElement: <OpsDemandCreationInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 060",
+        label: "Discount Offer thru Strategy",
+        path: "/OpsDiscountOfferInfo",
+        href: "/operationGame/OpsDiscountOfferInfo",
+        routeElement: <OpsDiscountOfferInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 070",
+        label: "Savings Plan thru Strategy",
+        path: "/OpsSavingsPlanInfo",
+        href: "/operationGame/OpsSavingsPlanInfo",
+        routeElement: <OpsSavingsPlanInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 220",
+        label: "Shop Performance Report",
+        path: "/ShopPerformanceInfo",
+        href: "/operationGame/ShopPerformanceInfo",
+        routeElement: <ShopPerformanceInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 230",
+        label: "SCM Performance Report",
+        path: "/SCMPerformanceInfo",
+        href: "/operationGame/SCMPerformanceInfo",
+        routeElement: <SCMPerformanceInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 030",
+        label: "Strategy-Launch Summary",
+        path: "/StrategyLaunchGist",
+        href: "/operationGame/StrategyLaunchGist",
+        routeElement: <StrategyLaunchGist />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 110",
+        label: "Manufacturing Work Centre List",
+        path: "/MfgWorkCentreInfo",
+        href: "/operationGame/MfgWorkCentreInfo",
+        routeElement: <MfgWorkCentreInfo />
+      },     
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 160",
+        label: "Reference Terms",
+        path: "/ReferenceInfo",
+        href: "/operationGame/ReferenceInfo",
+        routeElement: <ReferenceInfo />
+      },     
+      {
+        iconPath: asterikIcon,
         id: "UI 22 140",
         label: "Cost Norm Info",
         path: "/CostNormInfo",
@@ -317,14 +329,6 @@ export const componentList = [
       },
       {
         iconPath: asterikIcon,
-        id: "UI 22 160",
-        label: "Reference Terms",
-        path: "/ReferenceInfo",
-        href: "/operationGame/ReferenceInfo",
-        routeElement: <ReferenceInfo />
-      },
-      {
-        iconPath: asterikIcon,
         id: "UI 22 180",
         label: "Strategy Benefits",
         path: "/BenefitInfo",
@@ -334,12 +338,19 @@ export const componentList = [
       {
         iconPath: asterikIcon,
         id: "UI 22 190",
-        label: "Resutant Outcome",
+        label: "Strategy Outcome / Resultant",
         path: "/ResultantInfo",
         href: "/operationGame/ResultantInfo",
         routeElement: <ResultantInfo />
+      },            
+      {
+        iconPath: savingsIcon,
+        id: "UI 21 240",
+        label: "Savings Realisable",
+        path: "/savingsRealisable",
+        href: "/operationGame/savingsRealisable",
+        routeElement: <SavingsRealisable />
       },
-
       {
         iconPath: asterikIcon,
         id: "UI 24 080",
@@ -433,6 +444,36 @@ export const componentList = [
     href: "/operationGame/userAccessManagement",
     routeElement: <UserAccessManagement />
   }
+  /*
+  {
+    iconPath: asterikIcon,
+    id: "UI 001",
+    label: "App Info Desk",
+    path: "/AppInfoDesk",
+    href: "/operationGame/AppInfoDesk",
+    routeElement: <AppInfoDesk />,
+    children: [
+ 
+      {
+        iconPath: asterikIcon,
+        id: "UI 25 010",
+        label: "UI Screen Master List",
+        path: "/ScreenInfo",
+        href: "/operationGame/ScreenInfo",
+        routeElement: <ScreenInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 25 030",
+        label: "RBAC Screen Access",
+        path: "/RBACInfo",
+        href: "/operationGame/RBACInfo",
+        routeElement: <RBACInfo />
+      }
+    ],
+  }
+  */
+
 ];
 
 export const dateColumns = ["period", "Production_Month"];
