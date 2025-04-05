@@ -60,7 +60,7 @@ import ScreenInfo from '../pages/ScreenInfo/ScreenInfo.jsx';
 import StdNormInfo from '../pages/StdNormInfo/StdNormInfo.jsx';
 import StrategyBudgetInfo from "../pages/StrategyBudgetInfo/StrategyBudgetInfo.jsx";
 import StrategyLaunchGist from "../pages/StrategyLaunchGist/StrategyLaunchGist.jsx";
-import StrategyPlanInfo from '../pages/StrategyPlanInfo/StrategyPlanInfo.jsx';
+import StrategyPlanTeam from '../pages/StrategyPlanTeam/StrategyPlanTeam.jsx';
 import CapitalAssetStockInfo from '../pages/CapitalAssetStockInfo/CapitalAssetStockInfo.jsx';
 import CashBookInfo from '../pages/CashBookInfo/CashBookInfo.jsx';
 import TeamProgressInfo from '../pages/TeamProgressInfo/TeamProgressInfo.jsx';
@@ -130,10 +130,10 @@ export const componentList = [
       {
         iconPath: asterikIcon,
         id: "UI 21 020",
-        label: "Strategy Plan of a Batch",
+        label: "Strategy Plan of a Team",
         path: "/StrategyPlanInfo",
-        href: "/operationGame/StrategyPlanInfo",
-        routeElement: <StrategyPlanInfo />
+        href: "/operationGame/StrategyPlanTeam",
+        routeElement: <StrategyPlanTeam />
       },
       {
         iconPath: asterikIcon,
