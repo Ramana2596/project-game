@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getCostNormInfo} from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function getCostNormInfo() {
+export default function CostNormInfo() {
   const { userInfo } = useUser();
   let getTableDataPayload = {
     gameId: userInfo?.gameId
@@ -24,14 +24,14 @@ export default function getCostNormInfo() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
+    /*  <Grid container spacing={2} justifyContent="center" alignItems="center">
         <h3>
           {pageConstants.gameBatch}: {userInfo?.gameBatch}
         </h3>
         <h3>
           {pageConstants.gameTeam}: {userInfo?.gameTeam}
         </h3>
-      </Grid>
+      </Grid> */
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}

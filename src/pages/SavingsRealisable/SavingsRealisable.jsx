@@ -24,14 +24,14 @@ export default function SavingsRealisable() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
+      /*<Grid container spacing={2} justifyContent="center" alignItems="center">
         <h3>
           {pageConstants.gameBatch}: {userInfo?.gameBatch}
         </h3>
         <h3>
           {pageConstants.gameTeam}: {userInfo?.gameTeam}
         </h3>
-      </Grid>
+      </Grid> */
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}

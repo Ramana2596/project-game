@@ -6,6 +6,7 @@ export const pageConstants = {
       "Period",
       "Category",
       "Description",
+      "UOM",
       "Quantity",
       "Market_Info",
       "Unit_Price",
