@@ -17,7 +17,7 @@ import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecord
 import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
 import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
-//import AppInfoDesk from "../pages/AppInfoDesk";
+import AppInfoDesk from "../pages/AppInfoDesk/AppInfoDesk";
 import UserAccessManagement from "../pages/UserAccessManagement/UserAccessManagement";
 
 // start of png
@@ -443,8 +443,7 @@ export const componentList = [
     path: "/userAccessManagement",
     href: "/operationGame/userAccessManagement",
     routeElement: <UserAccessManagement />
-  }
-  /*
+  },
   {
     iconPath: asterikIcon,
     id: "UI 001",
@@ -472,7 +471,6 @@ export const componentList = [
       }
     ],
   }
-  */
 
 ];
 
