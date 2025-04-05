@@ -69,7 +69,7 @@ import ScreenInfo from '../ScreenInfo/ScreenInfo.jsx';
 import StdNormInfo from '../StdNormInfo/StdNormInfo.jsx';
 import StrategyBudgetInfo from '../StrategyBudgetInfo/StrategyBudgetInfo.jsx';
 import StrategyLaunchGist from '../StrategyLaunchGist/StrategyLaunchGist.jsx';
-import StrategyPlanInfo from '../StrategyPlanInfo/StrategyPlanInfo.jsx';
+import StrategyPlanTeam from '../StrategyPlanTeam/StrategyPlanTeam.jsx';
 import TeamProgressInfo from '../TeamProgressInfo/TeamProgressInfo.jsx';
 import CapitalAssetStockInfo from '../CapitalAssetStockInfo/CapitalAssetStockInfo.jsx';
 import CashBookInfo from '../CashBookInfo/CashBookInfo.jsx';
@@ -218,7 +218,7 @@ export default function MiniDrawer() {
           <Route path="/StdNormInfo" element={<StdNormInfo />} />
           <Route path="/StrategyBudgetInfo" element={<StrategyBudgetInfo />} />
           <Route path="/StrategyLaunchGist" element={<StrategyLaunchGist />} />
-          <Route path="/StrategyPlanInfo" element={<StrategyPlanInfo />} />
+          <Route path="/StrategyPlanTeam" element={<StrategyPlanTeam />} />
           <Route path="/TeamProgressInfo" element={<TeamProgressInfo />} />
           <Route path="/CapitalAssetStockInfo" element={<CapitalAssetStockInfo />} />
           <Route path="/CashBookInfo" element={<CashBookInfo />} />
