@@ -271,6 +271,7 @@ export const componentList = [
         href: "/operationGame/OpsSavingsPlanInfo",
         routeElement: <OpsSavingsPlanInfo />
       },
+      /*
       {
         iconPath: asterikIcon,
         id: "UI 21 220",
@@ -279,6 +280,7 @@ export const componentList = [
         href: "/operationGame/ShopPerformanceInfo",
         routeElement: <ShopPerformanceInfo />
       },
+      */
       {
         iconPath: asterikIcon,
         id: "UI 21 230",
