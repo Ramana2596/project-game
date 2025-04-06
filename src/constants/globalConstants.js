@@ -369,15 +369,6 @@ export const componentList = [
     href: "/operationGame/operations",
     routeElement: <Operations />,
     children: [
-      /*
-      {
-        iconPath: launchIcon,
-        id: "UI 11 020",
-        label: "Launch Strategy",
-        path: "/strategyLaunched",
-        href: "/operationGame/strategyLaunched",
-        routeElement: <StrategyLaunched />
-      }, */
       {
         iconPath: approvalIcon,
         id: "UI 11 030",
@@ -386,16 +377,6 @@ export const componentList = [
         href: "/operationGame/strategyPlanApproval",
         routeElement: <StrategyPlan />
       },
-      /*
-      {
-        iconPath: marketfactorInfoInputIcon,
-        id: "UI 11 040",
-        label: "Market Factor Input",
-        path: "/marketFactorInfoInput",
-        href: "/operationGame/marketFactorInfoInput",
-        routeElement: <MarketFactorInfoInput />
-      },
-      */
       {
         iconPath: operationalDecisionInputIcon,
         id: "UI 11 050",
@@ -404,26 +385,7 @@ export const componentList = [
         href: "/operationGame/operationalPlanInfoInput",
         routeElement: <OperationalPlanInfoInput />
       }
-      /*
-      {
-        iconPath: strategyIcon,
-        id: "UI 12 170",
-        label: "Strategy Master",
-        path: "/strategyMaster",
-        href: "/operationGame/strategyMaster",
-        routeElement: <StrategyMaster />
-      },
-      
-      {
-        iconPath: appSettings,
-        id: "UI 21 260",
-        label: "Team Play",
-        path: "/teamPlay",
-        href: "/operationGame/teamPlay",
-        routeElement: <FeatureManagement />
-      },
-      */
-    ],
+     ],
   },
   {
     iconPath: secureAccessIcon,
