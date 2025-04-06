@@ -1,11 +1,12 @@
 export const pageConstants = {
-  gameBatch: "Game Batch",
-  gameTeam: "Game Team",
+//  gameBatch: "Batch",
+//  gameTeam: "Team",
   tableHeading: [
     "Team",
     "Period",
-    "Amount_Payable",
-    "Payment_Due_Date",
-    "Supply_Status"
+    "Currency",
+    "Amount Payable",
+    "Payment Due Date",
+    "Supply Status"
   ],
 };

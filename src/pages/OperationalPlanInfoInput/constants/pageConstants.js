@@ -1,6 +1,6 @@
 export const pageConstants = {
-  gameBatch: "Game Batch",
-  gameTeam: "Game Team",
+  gameBatch: "Batch",
+  gameTeam: "Team",
   contentSection: {
     addBtnLabel: "Add",
     modifyBtnLabel: "Modify",

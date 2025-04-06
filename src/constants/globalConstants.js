@@ -17,7 +17,10 @@ import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecord
 import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
 import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
+import AppInfoDesk from "../pages/AppInfoDesk/AppInfoDesk";
 import UserAccessManagement from "../pages/UserAccessManagement/UserAccessManagement";
+
+// start of png
 import homeIcon from '../assets/navigation-menu/home.png';
 import dashboardIcon from '../assets/navigation-menu/dash-board.png';
 import productionIcon from '../assets/navigation-menu/production.png';
@@ -39,14 +42,44 @@ import recievableIcon from '../assets/navigation-menu/receivable.png';
 import savingsIcon from '../assets/navigation-menu/savings.png';
 import strategyIcon from '../assets/navigation-menu/strategy.png';
 import partIcon from '../assets/navigation-menu/part.png'
+import bomIcon from '../assets/navigation-menu/bom.png'
+import asterikIcon from '../assets/navigation-menu/asterik.png'
+import budgetIcon from '../assets/navigation-menu/budget.png'
+import applicationIcon from '../assets/navigation-menu/application.png'
+import marketIcon from '../assets/navigation-menu/market.png'
+// end of png 
+
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
 import HomePage from "../pages/HomePage/HomePage";
 import Operations from "../pages/Operations/Operations";
+import MarketScenario from "../pages/MarketScenario/MarketScenario.jsx";
 import AccountPayable from "../pages/AccountPayable/AccountPayable";
 import SavingsRealisable from "../pages/SavingsRealisable/SavingsRealisable";
 import AccountRecievable from "../pages/AccountRecievable/AccountRecievable";
-import PartInfo from "../pages/PartInfo/PartInfo";
+import PartInfo from '../pages/PartInfo/PartInfo';
+import BOMInfo from '../pages/BOMInfo/BOMInfo.jsx';
+import RBACInfo from '../pages/RBACInfo/RBACInfo.jsx';
+import ReferenceInfo from '../pages/ReferenceInfo/ReferenceInfo.jsx';
+import ScreenInfo from '../pages/ScreenInfo/ScreenInfo.jsx';
+import StdNormInfo from '../pages/StdNormInfo/StdNormInfo.jsx';
+import StrategyBudgetInfo from "../pages/StrategyBudgetInfo/StrategyBudgetInfo.jsx";
+import StrategyLaunchGist from "../pages/StrategyLaunchGist/StrategyLaunchGist.jsx";
+import StrategyPlanTeam from '../pages/StrategyPlanTeam/StrategyPlanTeam.jsx';
+import CapitalAssetStockInfo from '../pages/CapitalAssetStockInfo/CapitalAssetStockInfo.jsx';
+import CashBookInfo from '../pages/CashBookInfo/CashBookInfo.jsx';
+import TeamProgressInfo from '../pages/TeamProgressInfo/TeamProgressInfo.jsx';
+import CostNormInfo from '../pages/CostNormInfo/CostNormInfo.jsx';
+import MfgRoutingInfo from '../pages/MfgRoutingInfo/MfgRoutingInfo.jsx';
+import OpsDemandCreationInfo from '../pages/OpsDemandCreationInfo/OpsDemandCreationInfo.jsx';
+import OpsDiscountOfferInfo from '../pages/OpsDiscountOfferInfo/OpsDiscountOfferInfo.jsx';
+import OpsSavingsPlanInfo from '../pages/OpsSavingsPlanInfo/OpsSavingsPlanInfo.jsx';
+import ShopPerformanceInfo from '../pages/ShopPerformanceInfo/ShopPerformanceInfo.jsx';
+import SCMPerformanceInfo from '../pages/SCMPerformanceInfo/SCMPerformanceInfo.jsx';
+import BenefitInfo from '../pages/BenefitInfo/BenefitInfo.jsx';
+import ResultantInfo from '../pages/ResultantInfo/ResultantInfo.jsx';
+import MfgWorkCentreInfo from '../pages/MfgWorkCentreInfo/MfgWorkCentreInfo.jsx'
 
+//
 export const componentList = [
   {
     iconPath: homeIcon,
@@ -73,20 +106,20 @@ export const componentList = [
         routeElement: <BalanceSheetInfo />
       },
       {
-        icon: <CurrencyExchangeTwoToneIcon />,
-        id: "UI 21 130",
-        label: "Cash Flow Statement",
-        path: "/cashFlowStatement",
-        href: "/operationGame/cashFlowStatement",
-        routeElement: <CasFlowStatement />
-      },
-      {
         icon: <AccountBalanceWalletTwoToneIcon />,
         id: "UI 21 120",
         label: "Income Statement",
         path: "/incomeStatementInfo",
         href: "/operationGame/incomeStatementInfo",
         routeElement: <IncomeStatementInfo />
+      },
+      {
+        icon: <CurrencyExchangeTwoToneIcon />,
+        id: "UI 21 130",
+        label: "Cash Flow Statement",
+        path: "/cashFlowStatement",
+        href: "/operationGame/cashFlowStatement",
+        routeElement: <CasFlowStatement />
       },
     ],
   },
@@ -99,36 +132,20 @@ export const componentList = [
     routeElement: <InfoDesk />,
     children: [
       {
-        iconPath: productionIcon,
-        id: "UI 21 180",
-        label: "Production Record Info",
-        path: "/productionRecordInfo",
-        href: "/operationGame/productionRecordInfo",
-        routeElement: <ProductionRecordInfo />
+        iconPath: asterikIcon,
+        id: "UI 21 020",
+        label: "Strategy Plan of a Team",
+        path: "/StrategyPlanInfo",
+        href: "/operationGame/StrategyPlanTeam",
+        routeElement: <StrategyPlanTeam />
       },
       {
-        iconPath: salesIcon,
-        id: "UI 21 170",
-        label: "Sales Record Info",
-        path: "/salesRecord",
-        href: "/operationGame/salesRecord",
-        routeElement: <SalesRecordInfo />
-      },
-      {
-        iconPath: finishedIcon,
-        id: "UI 21 150",
-        label: "Finished Goods Stock Info",
-        path: "/fgStockInfo",
-        href: "/operationGame/fgStockInfo",
-        routeElement: <FgStockInfo />
-      },
-      {
-        iconPath: rawIcon,
-        id: "UI 21 140",
-        label: "Raw Material Stock Info",
-        path: "/rmStockInfo",
-        href: "/operationGame/rmStockInfo",
-        routeElement: <RmStockInfo />
+        iconPath: budgetIcon,
+        id: "UI 21 040",
+        label: "Budget Plan for Strategy",
+        path: "/StrategyBudgetInfo",
+        href: "/operationGame/StrategyBudgetInfo",
+        routeElement: <StrategyBudgetInfo />
       },
       {
         iconPath: marketfactorInfoIcon,
@@ -147,20 +164,142 @@ export const componentList = [
         routeElement: <OperationalPlanInfo />
       },
       {
-        iconPath: payableIcon,
-        id: "UI 21 210",
-        label: "Account Payable",
-        path: "/accountPayable",
-        href: "/operationGame/accountPayable",
-        routeElement: <AccountPayable />
+        iconPath: rawIcon,
+        id: "UI 21 140",
+        label: "Raw Material Stock Info",
+        path: "/rmStockInfo",
+        href: "/operationGame/rmStockInfo",
+        routeElement: <RmStockInfo />
+      },
+      {
+        iconPath: finishedIcon,
+        id: "UI 21 150",
+        label: "Finished Goods Stock Info",
+        path: "/fgStockInfo",
+        href: "/operationGame/fgStockInfo",
+        routeElement: <FgStockInfo />
+      },
+      {
+        iconPath: productionIcon,
+        id: "UI 21 180",
+        label: "Production Record Info",
+        path: "/productionRecordInfo",
+        href: "/operationGame/productionRecordInfo",
+        routeElement: <ProductionRecordInfo />
+      },
+      {
+        iconPath: salesIcon,
+        id: "UI 21 170",
+        label: "Sales Record Info",
+        path: "/salesRecord",
+        href: "/operationGame/salesRecord",
+        routeElement: <SalesRecordInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 190",
+        label: "Cash Balance Statement",
+        path: "/CashBookInfo",
+        href: "/operationGame/CashBookInfo",
+        routeElement: <CashBookInfo />
       },
       {
         iconPath: recievableIcon,
         id: "UI 21 200",
-        label: "Account Receivable",
+        label: "Accounts Receivable",
         path: "/accountRecieveable",
         href: "/operationGame/accountRecieveable",
         routeElement: <AccountRecievable />
+      },
+      {
+        iconPath: payableIcon,
+        id: "UI 21 210",
+        label: "Accounts Payable",
+        path: "/accountPayable",
+        href: "/operationGame/accountPayable",
+        routeElement: <AccountPayable />
+      }, 
+      {
+        iconPath: partIcon,
+        id: "UI 22 010",
+        label: "Part Details ",
+        path: "/partInfo",
+        href: "/operationGame/partInfo",
+        routeElement: <PartInfo />
+      },
+      {
+        iconPath: bomIcon,
+        id: "UI 22 030",
+        label: "Bill of Materials",
+        path: "/BOMInfo",
+        href: "/operationGame/BOMInfo",
+        routeElement: <BOMInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 040",
+        label: "Mfg Process Chart",
+        path: "/MfgRoutingInfo",
+        href: "/operationGame/MfgRoutingInfo",
+        routeElement: <MfgRoutingInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 060",
+        label: "Capital Asset Stock",
+        path: "/CapitalAssetStockInfo",
+        href: "/operationGame/CapitalAssetStockInfo",
+        routeElement: <CapitalAssetStockInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 050",
+        label: "Demand Creation thru Strategy",
+        path: "/OpsDemandCreationInfo",
+        href: "/operationGame/OpsDemandCreationInfo",
+        routeElement: <OpsDemandCreationInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 060",
+        label: "Discount Offer thru Strategy",
+        path: "/OpsDiscountOfferInfo",
+        href: "/operationGame/OpsDiscountOfferInfo",
+        routeElement: <OpsDiscountOfferInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 070",
+        label: "Savings Plan thru Strategy",
+        path: "/OpsSavingsPlanInfo",
+        href: "/operationGame/OpsSavingsPlanInfo",
+        routeElement: <OpsSavingsPlanInfo />
+      },
+      /*
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 220",
+        label: "Shop Performance Report",
+        path: "/ShopPerformanceInfo",
+        href: "/operationGame/ShopPerformanceInfo",
+        routeElement: <ShopPerformanceInfo />
+      },
+      */
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 230",
+        label: "SCM Performance Report",
+        path: "/SCMPerformanceInfo",
+        href: "/operationGame/SCMPerformanceInfo",
+        routeElement: <SCMPerformanceInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 21 030",
+        label: "Strategy-Launch Summary",
+        path: "/StrategyLaunchGist",
+        href: "/operationGame/StrategyLaunchGist",
+        routeElement: <StrategyLaunchGist />
       },
       {
         iconPath: savingsIcon,
@@ -171,24 +310,23 @@ export const componentList = [
         routeElement: <SavingsRealisable />
       },
       {
-        iconPath: partIcon,
-        id: "UI 22 010",
-        label: "Part Details ",
-        path: "/partInfo",
-        href: "/operationGame/partInfo",
-        routeElement: <PartInfo />
+        iconPath: asterikIcon,
+        id: "UI 24 080",
+        label: "Team Progress Status",
+        path: "/TeamProgressInfo",
+        href: "/operationGame/TeamProgressInfo",
+        routeElement: <TeamProgressInfo />
       }
-      
     ],
   },
   {
-    iconPath: operationsIcon,
+    iconPath: marketIcon,
     id: "UI 001",
-    label: "Operations",
-    path: "/operations",
-    href: "/operationGame/operations",
-    routeElement: <Operations />,
-    children: [
+    label: "Market Scenario",
+    path: "/MarketScenario",
+    href: "/operationGame/MarketScenario",
+    routeElement: <MarketScenario />,
+    children: [ 
       {
         iconPath: launchIcon,
         id: "UI 11 020",
@@ -198,28 +336,12 @@ export const componentList = [
         routeElement: <StrategyLaunched />
       },
       {
-        iconPath: approvalIcon,
-        id: "UI 11 030",
-        label: "Strategy Plan Approval",
-        path: "/strategyPlanApproval",
-        href: "/operationGame/strategyPlanApproval",
-        routeElement: <StrategyPlan />
-      },
-      {
         iconPath: marketfactorInfoInputIcon,
         id: "UI 11 040",
         label: "Market Factor Input",
         path: "/marketFactorInfoInput",
         href: "/operationGame/marketFactorInfoInput",
         routeElement: <MarketFactorInfoInput />
-      },
-      {
-        iconPath: operationalDecisionInputIcon,
-        id: "UI 11 050",
-        label: "Operational Decision Input",
-        path: "/operationalPlanInfoInput",
-        href: "/operationGame/operationalPlanInfoInput",
-        routeElement: <OperationalPlanInfoInput />
       },
       {
         iconPath: strategyIcon,
@@ -236,17 +358,118 @@ export const componentList = [
         path: "/teamPlay",
         href: "/operationGame/teamPlay",
         routeElement: <FeatureManagement />
+      }
+    ]
+  },
+  {
+    iconPath: operationsIcon,
+    id: "UI 001",
+    label: "Operations",
+    path: "/operations",
+    href: "/operationGame/operations",
+    routeElement: <Operations />,
+    children: [
+      {
+        iconPath: approvalIcon,
+        id: "UI 11 030",
+        label: "Strategy Plan Approval",
+        path: "/strategyPlanApproval",
+        href: "/operationGame/strategyPlanApproval",
+        routeElement: <StrategyPlan />
       },
-    ],
+      {
+        iconPath: operationalDecisionInputIcon,
+        id: "UI 11 050",
+        label: "Operational Decision Input",
+        path: "/operationalPlanInfoInput",
+        href: "/operationGame/operationalPlanInfoInput",
+        routeElement: <OperationalPlanInfoInput />
+      }
+     ],
   },
   {
     iconPath: secureAccessIcon,
-    id: "UI UI 15 030",
+    id: "UI 15 030",
     label: "User Access Management",
     path: "/userAccessManagement",
     href: "/operationGame/userAccessManagement",
     routeElement: <UserAccessManagement />
+  },
+  {
+    iconPath: applicationIcon,
+    id: "UI 001",
+    label: "App Info Desk",
+    path: "/AppInfoDesk",
+    href: "/operationGame/AppInfoDesk",
+    routeElement: <AppInfoDesk />,
+    children: [
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 110",
+        label: "Manufacturing Work Centre List",
+        path: "/MfgWorkCentreInfo",
+        href: "/operationGame/MfgWorkCentreInfo",
+        routeElement: <MfgWorkCentreInfo />
+      },     
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 160",
+        label: "Reference Terms",
+        path: "/ReferenceInfo",
+        href: "/operationGame/ReferenceInfo",
+        routeElement: <ReferenceInfo />
+      },     
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 140",
+        label: "Cost Norm Info",
+        path: "/CostNormInfo",
+        href: "/operationGame/CostNormInfo",
+        routeElement: <CostNormInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 150",
+        label: "Standard Norms Info",
+        path: "/StdNormInfo",
+        href: "/operationGame/StdNormInfo",
+        routeElement: <StdNormInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 180",
+        label: "Strategy Benefits",
+        path: "/BenefitInfo",
+        href: "/operationGame/BenefitInfo",
+        routeElement: <BenefitInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 190",
+        label: "Strategy Outcome / Resultant",
+        path: "/ResultantInfo",
+        href: "/operationGame/ResultantInfo",
+        routeElement: <ResultantInfo />
+      },            
+      {
+        iconPath: asterikIcon,
+        id: "UI 25 010",
+        label: "UI Screen Master List",
+        path: "/ScreenInfo",
+        href: "/operationGame/ScreenInfo",
+        routeElement: <ScreenInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 25 030",
+        label: "RBAC Screen Access",
+        path: "/RBACInfo",
+        href: "/operationGame/RBACInfo",
+        routeElement: <RBACInfo />
+      }
+    ],
   }
+
 ];
 
 export const dateColumns = ["period", "Production_Month"];

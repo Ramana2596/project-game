@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getOpsSavingsPlanInfo} from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function getOpsSavingsPlanInfo() {
+export default function OpsSavingsPlanInfo() {
   const { userInfo } = useUser();
   let getTableDataPayload = {
     gameId: userInfo?.gameId,
@@ -24,20 +24,14 @@ export default function getOpsSavingsPlanInfo() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h3>
-          {pageConstants.gameBatch}: {userInfo?.gameBatch}
-        </h3>
-        <h3>
-          {pageConstants.gameTeam}: {userInfo?.gameTeam}
-        </h3>
-      </Grid>
+ 
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
         hiddenColumns={[]}
       ></GenericTable>
+      
     </Box>
   );
 }
