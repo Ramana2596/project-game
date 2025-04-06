@@ -84,6 +84,7 @@ import ShopPerformanceInfo from '../ShopPerformanceInfo/ShopPerformanceInfo.jsx'
 import SCMPerformanceInfo from '../SCMPerformanceInfo/SCMPerformanceInfo.jsx';
 import MfgWorkCentreInfo from '../MfgWorkCentreInfo/MfgWorkCentreInfo.jsx';
 import AppInfoDesk from '../AppInfoDesk/AppInfoDesk.jsx';
+import MarketScenario from '../MarketScenario/MarketScenario.jsx';
 
 
 export default function MiniDrawer() {
@@ -233,6 +234,7 @@ export default function MiniDrawer() {
           <Route path="/SCMPerformanceInfo" element={<SCMPerformanceInfo />} /> 
           <Route path="/MfgWorkCentreInfo" element={<MfgWorkCentreInfo />} /> 
           <Route path="/AppInfoDesk" element ={<AppInfoDesk />} />
+          <Route path="/MarketScenario" element ={<MarketScenario />} />
         </Routes>
       </Box>
      </Box>
