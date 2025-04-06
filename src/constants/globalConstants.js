@@ -295,54 +295,7 @@ export const componentList = [
         href: "/operationGame/StrategyLaunchGist",
         routeElement: <StrategyLaunchGist />
       },
-      {
-        iconPath: asterikIcon,
-        id: "UI 22 110",
-        label: "Manufacturing Work Centre List",
-        path: "/MfgWorkCentreInfo",
-        href: "/operationGame/MfgWorkCentreInfo",
-        routeElement: <MfgWorkCentreInfo />
-      },     
-      {
-        iconPath: asterikIcon,
-        id: "UI 22 160",
-        label: "Reference Terms",
-        path: "/ReferenceInfo",
-        href: "/operationGame/ReferenceInfo",
-        routeElement: <ReferenceInfo />
-      },     
-      {
-        iconPath: asterikIcon,
-        id: "UI 22 140",
-        label: "Cost Norm Info",
-        path: "/CostNormInfo",
-        href: "/operationGame/CostNormInfo",
-        routeElement: <CostNormInfo />
-      },
-      {
-        iconPath: asterikIcon,
-        id: "UI 22 150",
-        label: "Standard Norms Info",
-        path: "/StdNormInfo",
-        href: "/operationGame/StdNormInfo",
-        routeElement: <StdNormInfo />
-      },
-      {
-        iconPath: asterikIcon,
-        id: "UI 22 180",
-        label: "Strategy Benefits",
-        path: "/BenefitInfo",
-        href: "/operationGame/BenefitInfo",
-        routeElement: <BenefitInfo />
-      },
-      {
-        iconPath: asterikIcon,
-        id: "UI 22 190",
-        label: "Strategy Outcome / Resultant",
-        path: "/ResultantInfo",
-        href: "/operationGame/ResultantInfo",
-        routeElement: <ResultantInfo />
-      },            
+      
       {
         iconPath: savingsIcon,
         id: "UI 21 240",
@@ -374,8 +327,7 @@ export const componentList = [
         path: "/RBACInfo",
         href: "/operationGame/RBACInfo",
         routeElement: <RBACInfo />
-      },
-
+      }
     ],
   },
   {
@@ -452,7 +404,54 @@ export const componentList = [
     href: "/operationGame/AppInfoDesk",
     routeElement: <AppInfoDesk />,
     children: [
- 
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 110",
+        label: "Manufacturing Work Centre List",
+        path: "/MfgWorkCentreInfo",
+        href: "/operationGame/MfgWorkCentreInfo",
+        routeElement: <MfgWorkCentreInfo />
+      },     
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 160",
+        label: "Reference Terms",
+        path: "/ReferenceInfo",
+        href: "/operationGame/ReferenceInfo",
+        routeElement: <ReferenceInfo />
+      },     
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 140",
+        label: "Cost Norm Info",
+        path: "/CostNormInfo",
+        href: "/operationGame/CostNormInfo",
+        routeElement: <CostNormInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 150",
+        label: "Standard Norms Info",
+        path: "/StdNormInfo",
+        href: "/operationGame/StdNormInfo",
+        routeElement: <StdNormInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 180",
+        label: "Strategy Benefits",
+        path: "/BenefitInfo",
+        href: "/operationGame/BenefitInfo",
+        routeElement: <BenefitInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 190",
+        label: "Strategy Outcome / Resultant",
+        path: "/ResultantInfo",
+        href: "/operationGame/ResultantInfo",
+        routeElement: <ResultantInfo />
+      },            
       {
         iconPath: asterikIcon,
         id: "UI 25 010",
