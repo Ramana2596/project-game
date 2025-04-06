@@ -24,7 +24,20 @@ export default function StrategyPlanTeam() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
+ 
+      <GenericTable
+        inputTableHeadings={pageConstants.tableHeading}
+        inputTableData={tableData}
+        ifNoData={null}
+        hiddenColumns={[]}
+      ></GenericTable>
+
+    </Box>
+  );
+}
+/*
+
+     <Grid container spacing={2} justifyContent="center" alignItems="center">
         <h3>
           {pageConstants.gameBatch}: {userInfo?.gameBatch}
         </h3>
@@ -32,12 +45,5 @@ export default function StrategyPlanTeam() {
           {pageConstants.gameTeam}: {userInfo?.gameTeam}
         </h3>
       </Grid>
-      <GenericTable
-        inputTableHeadings={pageConstants.tableHeading}
-        inputTableData={tableData}
-        ifNoData={null}
-        hiddenColumns={[]}
-      ></GenericTable>
-    </Box>
-  );
-}
+
+*/
