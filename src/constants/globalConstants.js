@@ -313,22 +313,6 @@ export const componentList = [
         path: "/TeamProgressInfo",
         href: "/operationGame/TeamProgressInfo",
         routeElement: <TeamProgressInfo />
-      },
-      {
-        iconPath: asterikIcon,
-        id: "UI 25 010",
-        label: "UI Screen Master List",
-        path: "/ScreenInfo",
-        href: "/operationGame/ScreenInfo",
-        routeElement: <ScreenInfo />
-      },
-      {
-        iconPath: asterikIcon,
-        id: "UI 25 030",
-        label: "RBAC Screen Access",
-        path: "/RBACInfo",
-        href: "/operationGame/RBACInfo",
-        routeElement: <RBACInfo />
       }
     ],
   },
