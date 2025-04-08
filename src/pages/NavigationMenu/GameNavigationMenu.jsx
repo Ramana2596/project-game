@@ -60,7 +60,7 @@ import HomePage from '../HomePage/HomePage.jsx';
 import Operations from '../Operations/Operations.jsx';
 import AccountPayable from '../AccountPayable/AccountPayable.jsx';
 import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
-import AccountRecievable from '../AccountRecievable/AccountRecievable.jsx';
+import AccountReceivable from '../AccountReceivable/AccountReceivable.jsx';
 import PartInfo from '../PartInfo/PartInfo.jsx';
 import BOMInfo from '../BOMInfo/BOMInfo.jsx';
 import RBACInfo from '../RBACInfo/RBACInfo.jsx';
@@ -85,7 +85,9 @@ import SCMPerformanceInfo from '../SCMPerformanceInfo/SCMPerformanceInfo.jsx';
 import MfgWorkCentreInfo from '../MfgWorkCentreInfo/MfgWorkCentreInfo.jsx';
 import AppInfoDesk from '../AppInfoDesk/AppInfoDesk.jsx';
 import MarketScenario from '../MarketScenario/MarketScenario.jsx';
-
+import ValidInputCodes from '../ValidInputCodes/ValidInputCodes.jsx';
+import LiabilityInfo from '../LiabilityInfo/LiabilityInfo.jsx';
+import UserRoles from '../UserRoles/UserRoles.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -209,7 +211,7 @@ export default function MiniDrawer() {
           <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
           <Route path="/accountPayable" element={<AccountPayable />} />
-          <Route path="/accountRecieveable" element={<AccountRecievable />} />
+          <Route path="/accountReceiveable" element={<AccountReceivable />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
           <Route path="/partInfo" element={<PartInfo />} />
           <Route path="/BOMInfo" element={<BOMInfo />} />
@@ -235,6 +237,9 @@ export default function MiniDrawer() {
           <Route path="/MfgWorkCentreInfo" element={<MfgWorkCentreInfo />} /> 
           <Route path="/AppInfoDesk" element ={<AppInfoDesk />} />
           <Route path="/MarketScenario" element ={<MarketScenario />} />
+          <Route path='/ValidInputCodes' element={<ValidInputCodes />} />
+          <Route path='/LiabilityInfo' element={<LiabilityInfo />} />
+          <Route path='/UserRoles' element={<UserRoles />} />
         </Routes>
       </Box>
      </Box>
