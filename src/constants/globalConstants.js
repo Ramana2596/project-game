@@ -49,7 +49,12 @@ import applicationIcon from '../assets/navigation-menu/application.png'
 import marketIcon from '../assets/navigation-menu/market.png'
 import choiceIcon from '../assets/navigation-menu/choice.png'
 import loanIcon from '../assets/navigation-menu/loan.png'
-
+import roleIcon from '../assets/navigation-menu/role.png'
+import tilesIcon from '../assets/navigation-menu/tiles.png'
+import rightaccessIcon from '../assets/navigation-menu/rightaccess.png'
+import costIcon from '../assets/navigation-menu/cost.png'
+import factoryIcon from '../assets/navigation-menu/factory.png'
+import standardIcon from '../assets/navigation-menu/standard.png'
 // end of png 
 
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
@@ -425,7 +430,7 @@ export const componentList = [
         routeElement: <ValidInputCodes />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: factoryIcon,
         id: "UI 22 110",
         label: "Manufacturing Work Centre List",
         path: "/MfgWorkCentreInfo",
@@ -441,7 +446,7 @@ export const componentList = [
         routeElement: <ReferenceInfo />
       },     
       {
-        iconPath: asterikIcon,
+        iconPath: costIcon,
         id: "UI 22 140",
         label: "Cost Norm Info",
         path: "/CostNormInfo",
@@ -449,7 +454,7 @@ export const componentList = [
         routeElement: <CostNormInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: standardIcon,
         id: "UI 22 150",
         label: "Standard Norms Info",
         path: "/StdNormInfo",
@@ -473,7 +478,7 @@ export const componentList = [
         routeElement: <ResultantInfo />
       },            
       {
-        iconPath: asterikIcon,
+        iconPath: tilesIcon,
         id: "UI 25 010",
         label: "UI Screen Master List",
         path: "/ScreenInfo",
@@ -481,7 +486,7 @@ export const componentList = [
         routeElement: <ScreenInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: roleIcon,
         id: "UI 25 020",
         label: "User Roles Info",
         path: "/UserRoles",
@@ -489,7 +494,7 @@ export const componentList = [
         routeElement: <UserRoles />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: rightaccessIcon,
         id: "UI 25 030",
         label: "RBAC Screen Access",
         path: "/RBACInfo",
