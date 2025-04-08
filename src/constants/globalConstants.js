@@ -38,7 +38,7 @@ import operationalDecisionIcon from '../assets/navigation-menu/operationalDecisi
 import operationalDecisionInputIcon from '../assets/navigation-menu/operationalDecisionInput.png';
 import appSettings from '../assets/navigation-menu/app-settings.png';
 import payableIcon from '../assets/navigation-menu/payables.png';
-import recievableIcon from '../assets/navigation-menu/receivable.png';
+import receivableIcon from '../assets/navigation-menu/receivable.png';
 import savingsIcon from '../assets/navigation-menu/savings.png';
 import strategyIcon from '../assets/navigation-menu/strategy.png';
 import partIcon from '../assets/navigation-menu/part.png'
@@ -47,6 +47,9 @@ import asterikIcon from '../assets/navigation-menu/asterik.png'
 import budgetIcon from '../assets/navigation-menu/budget.png'
 import applicationIcon from '../assets/navigation-menu/application.png'
 import marketIcon from '../assets/navigation-menu/market.png'
+import choiceIcon from '../assets/navigation-menu/choice.png'
+import loanIcon from '../assets/navigation-menu/loan.png'
+
 // end of png 
 
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
@@ -55,7 +58,7 @@ import Operations from "../pages/Operations/Operations";
 import MarketScenario from "../pages/MarketScenario/MarketScenario.jsx";
 import AccountPayable from "../pages/AccountPayable/AccountPayable";
 import SavingsRealisable from "../pages/SavingsRealisable/SavingsRealisable";
-import AccountRecievable from "../pages/AccountRecievable/AccountRecievable";
+import AccountReceivable from "../pages/AccountReceivable/AccountReceivable.jsx";
 import PartInfo from '../pages/PartInfo/PartInfo';
 import BOMInfo from '../pages/BOMInfo/BOMInfo.jsx';
 import RBACInfo from '../pages/RBACInfo/RBACInfo.jsx';
@@ -77,8 +80,10 @@ import ShopPerformanceInfo from '../pages/ShopPerformanceInfo/ShopPerformanceInf
 import SCMPerformanceInfo from '../pages/SCMPerformanceInfo/SCMPerformanceInfo.jsx';
 import BenefitInfo from '../pages/BenefitInfo/BenefitInfo.jsx';
 import ResultantInfo from '../pages/ResultantInfo/ResultantInfo.jsx';
-import MfgWorkCentreInfo from '../pages/MfgWorkCentreInfo/MfgWorkCentreInfo.jsx'
-
+import MfgWorkCentreInfo from '../pages/MfgWorkCentreInfo/MfgWorkCentreInfo.jsx';
+import ValidInputCodes from '../pages/ValidInputCodes/ValidInputCodes.jsx';
+import LiabilityInfo from '../pages/LiabilityInfo/LiabilityInfo.jsx';
+import UserRoles from '../pages/UserRoles/UserRoles.jsx';
 //
 export const componentList = [
   {
@@ -204,12 +209,12 @@ export const componentList = [
         routeElement: <CashBookInfo />
       },
       {
-        iconPath: recievableIcon,
+        iconPath: receivableIcon,
         id: "UI 21 200",
         label: "Accounts Receivable",
-        path: "/accountRecieveable",
-        href: "/operationGame/accountRecieveable",
-        routeElement: <AccountRecievable />
+        path: "/accountReceivable",
+        href: "/operationGame/accountReceivable",
+        routeElement: <AccountReceivable />
       },
       {
         iconPath: payableIcon,
@@ -218,6 +223,14 @@ export const componentList = [
         path: "/accountPayable",
         href: "/operationGame/accountPayable",
         routeElement: <AccountPayable />
+      }, 
+      {
+        iconPath: loanIcon,
+        id: "UI 21 220",
+        label: "Liability Details",
+        path: "/LiabilityInfo",
+        href: "/operationGame/LiabilityInfo",
+        routeElement: <LiabilityInfo />
       }, 
       {
         iconPath: partIcon,
@@ -278,7 +291,7 @@ export const componentList = [
       /*
       {
         iconPath: asterikIcon,
-        id: "UI 21 220",
+        id: "UI 21 240",
         label: "Shop Performance Report",
         path: "/ShopPerformanceInfo",
         href: "/operationGame/ShopPerformanceInfo",
@@ -287,7 +300,7 @@ export const componentList = [
       */
       {
         iconPath: asterikIcon,
-        id: "UI 21 230",
+        id: "UI 21 250",
         label: "SCM Performance Report",
         path: "/SCMPerformanceInfo",
         href: "/operationGame/SCMPerformanceInfo",
@@ -303,7 +316,7 @@ export const componentList = [
       },
       {
         iconPath: savingsIcon,
-        id: "UI 21 240",
+        id: "UI 21 230",
         label: "Savings Realisable",
         path: "/savingsRealisable",
         href: "/operationGame/savingsRealisable",
@@ -311,7 +324,7 @@ export const componentList = [
       },
       {
         iconPath: asterikIcon,
-        id: "UI 24 080",
+        id: "UI 24 070",
         label: "Team Progress Status",
         path: "/TeamProgressInfo",
         href: "/operationGame/TeamProgressInfo",
@@ -404,6 +417,14 @@ export const componentList = [
     routeElement: <AppInfoDesk />,
     children: [
       {
+        iconPath: choiceIcon,
+        id: "UI 22 220",
+        label: "Valid Market & Operation Codes",
+        path: "/ValidInputCodes",
+        href: "/operationGame/ValidInputCodes",
+        routeElement: <ValidInputCodes />
+      },
+      {
         iconPath: asterikIcon,
         id: "UI 22 110",
         label: "Manufacturing Work Centre List",
@@ -458,6 +479,14 @@ export const componentList = [
         path: "/ScreenInfo",
         href: "/operationGame/ScreenInfo",
         routeElement: <ScreenInfo />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 25 020",
+        label: "User Roles Info",
+        path: "/UserRoles",
+        href: "/operationGame/UserRoles",
+        routeElement: <UserRoles />
       },
       {
         iconPath: asterikIcon,
