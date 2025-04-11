@@ -17,7 +17,7 @@ import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecord
 import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
 import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
-import AppInfoDesk from "../pages/AppInfoDesk/AppInfoDesk";
+import SystemInfoDesk from "../pages/SystemInfoDesk/SystemInfoDesk.jsx";
 import UserAccessManagement from "../pages/UserAccessManagement/UserAccessManagement";
 
 // start of png
@@ -55,6 +55,12 @@ import rightaccessIcon from '../assets/navigation-menu/rightaccess.png'
 import costIcon from '../assets/navigation-menu/cost.png'
 import factoryIcon from '../assets/navigation-menu/factory.png'
 import standardIcon from '../assets/navigation-menu/standard.png'
+import valueStreamIcon from '../assets/navigation-menu/valueChain.png'
+import productIcon from '../assets/navigation-menu/productLaunch.png'
+import benefitsIcon from '../assets/navigation-menu/benefits.png'
+import referenceIcon from '../assets/navigation-menu/reference.png'
+import strategySetsIcon from '../assets/navigation-menu/strategySets.png'
+
 // end of png 
 
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
@@ -89,6 +95,12 @@ import MfgWorkCentreInfo from '../pages/MfgWorkCentreInfo/MfgWorkCentreInfo.jsx'
 import ValidInputCodes from '../pages/ValidInputCodes/ValidInputCodes.jsx';
 import LiabilityInfo from '../pages/LiabilityInfo/LiabilityInfo.jsx';
 import UserRoles from '../pages/UserRoles/UserRoles.jsx';
+import StrategySetCollection from '../pages/StrategySetCollection/StrategySetCollection.jsx';
+import ProductMstInfo from "../pages/ProductMstInfo/ProductMstInfo.jsx";
+import ValueStream from '../pages/ValueStream/ValueStream.jsx';
+import ValueStreamMap from "../pages/ValueStreamMap/ValueStreamMap.jsx";
+
+
 //
 export const componentList = [
   {
@@ -141,6 +153,14 @@ export const componentList = [
     href: "/operationGame/infoDesk",
     routeElement: <InfoDesk />,
     children: [
+      {
+        iconPath: strategySetsIcon,
+        id: "UI 21 010",
+        label: "Strategy Sets Collection",
+        path: "/StrategySetCollection",
+        href: "/operationGame/StrategySetCollection",
+        routeElement: <StrategySetCollection />
+      },
       {
         iconPath: asterikIcon,
         id: "UI 21 020",
@@ -240,10 +260,18 @@ export const componentList = [
       {
         iconPath: partIcon,
         id: "UI 22 010",
-        label: "Part Details ",
+        label: "Part Master Details ",
         path: "/partInfo",
         href: "/operationGame/partInfo",
         routeElement: <PartInfo />
+      },
+      {
+        iconPath: productIcon,
+        id: "UI 22 020",
+        label: "Product Master Details ",
+        path: "/ProductMstInfo",
+        href: "/operationGame/ProductMstInfo",
+        routeElement: <ProductMstInfo />
       },
       {
         iconPath: bomIcon,
@@ -293,7 +321,6 @@ export const componentList = [
         href: "/operationGame/OpsSavingsPlanInfo",
         routeElement: <OpsSavingsPlanInfo />
       },
-      /*
       {
         iconPath: asterikIcon,
         id: "UI 21 240",
@@ -302,7 +329,6 @@ export const componentList = [
         href: "/operationGame/ShopPerformanceInfo",
         routeElement: <ShopPerformanceInfo />
       },
-      */
       {
         iconPath: asterikIcon,
         id: "UI 21 250",
@@ -416,10 +442,10 @@ export const componentList = [
   {
     iconPath: applicationIcon,
     id: "UI 001",
-    label: "App Info Desk",
-    path: "/AppInfoDesk",
-    href: "/operationGame/AppInfoDesk",
-    routeElement: <AppInfoDesk />,
+    label: "System Info Desk",
+    path: "/SystemInfoDesk",
+    href: "/operationGame/SystemInfoDesk",
+    routeElement: <SystemInfoDesk/>,
     children: [
       {
         iconPath: choiceIcon,
@@ -438,7 +464,7 @@ export const componentList = [
         routeElement: <MfgWorkCentreInfo />
       },     
       {
-        iconPath: asterikIcon,
+        iconPath: referenceIcon,
         id: "UI 22 160",
         label: "Reference Terms",
         path: "/ReferenceInfo",
@@ -462,7 +488,7 @@ export const componentList = [
         routeElement: <StdNormInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: benefitsIcon,
         id: "UI 22 180",
         label: "Strategy Benefits",
         path: "/BenefitInfo",
@@ -476,6 +502,22 @@ export const componentList = [
         path: "/ResultantInfo",
         href: "/operationGame/ResultantInfo",
         routeElement: <ResultantInfo />
+      }, 
+      {
+        iconPath: valueStreamIcon,
+        id: "UI 22 230",
+        label: "Value Stream Details",
+        path: "/ValueStream",
+        href: "/operationGame/ValueStream",
+        routeElement: <ValueStream />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 240",
+        label: "Resultant - Value Stream Map",
+        path: "/ValueStreamMap",
+        href: "/operationGame/ValueStreamMap",
+        routeElement: <ValueStreamMap />
       },            
       {
         iconPath: tilesIcon,
