@@ -3,9 +3,9 @@ import { Card, CardActionArea, CardContent, Typography, Grid } from '@mui/materi
 import { useNavigate } from 'react-router-dom';
 import { Box } from "@mui/material";
 import { useUser } from '../../core/access/userContext.js';
-import '../AppInfoDesk/styles/style.css';
+import './styles/style.css';
 
-function AppInfoDesk() {
+function SystemInfoDesk() {
     const navigate = useNavigate();
     const { userAccessiblePages } = useUser();
 
@@ -13,8 +13,8 @@ function AppInfoDesk() {
         navigate(href);
     };
 
-    const AppInfoDeskItem = userAccessiblePages?.find(item => item.label === 'App Info Desk');
-    const children = AppInfoDeskItem ? AppInfoDeskItem.children : [];
+    const SystemInfoDeskItem = userAccessiblePages?.find(item => item.label === 'System Info Desk');
+    const children = SystemInfoDeskItem ? SystemInfoDeskItem.children : [];
 
     return (
         <Box sx={{ flexGrow: 1, padding: 5 }}>
@@ -40,4 +40,4 @@ function AppInfoDesk() {
     );
 }
 
-export default AppInfoDesk;
+export default SystemInfoDesk;

@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
-export function getShopPerformanceInfo(queryParams) {
-    return api.get('/api/getShopPerformanceInfo',
+export function getProductMstInfo(queryParams) {
+    return api.get('/api/getProductMstInfo',
         {
             params: { ...queryParams }
         });
