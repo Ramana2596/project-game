@@ -4,6 +4,7 @@ export const pageConstants = {
   tableHeading: [
     "Team",
     "Loan Type",
+    'Loan Date',
     "ROI %",
     "Currency",
     "Loan Amount",

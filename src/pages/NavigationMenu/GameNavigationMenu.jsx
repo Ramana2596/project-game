@@ -83,11 +83,15 @@ import ResultantInfo from '../ResultantInfo/ResultantInfo.jsx';
 import ShopPerformanceInfo from '../ShopPerformanceInfo/ShopPerformanceInfo.jsx';
 import SCMPerformanceInfo from '../SCMPerformanceInfo/SCMPerformanceInfo.jsx';
 import MfgWorkCentreInfo from '../MfgWorkCentreInfo/MfgWorkCentreInfo.jsx';
-import AppInfoDesk from '../AppInfoDesk/AppInfoDesk.jsx';
+import SystemInfoDesk from '../SystemInfoDesk/SystemInfoDesk.jsx';
 import MarketScenario from '../MarketScenario/MarketScenario.jsx';
 import ValidInputCodes from '../ValidInputCodes/ValidInputCodes.jsx';
 import LiabilityInfo from '../LiabilityInfo/LiabilityInfo.jsx';
 import UserRoles from '../UserRoles/UserRoles.jsx';
+import StrategySetCollection from '../StrategySetCollection/StrategySetCollection.jsx';
+import ProductMstInfo from '../ProductMstInfo/ProductMstInfo.jsx';
+import ValueStream from '../ValueStream/ValueStream.jsx';
+import ValueStreamMap from '../ValueStreamMap/ValueStreamMap.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -235,11 +239,15 @@ export default function MiniDrawer() {
           <Route path="/ShopPerformanceInfo" element={<ShopPerformanceInfo />} /> 
           <Route path="/SCMPerformanceInfo" element={<SCMPerformanceInfo />} /> 
           <Route path="/MfgWorkCentreInfo" element={<MfgWorkCentreInfo />} /> 
-          <Route path="/AppInfoDesk" element ={<AppInfoDesk />} />
+          <Route path="/SystemInfoDesk" element ={<SystemInfoDesk />} />
           <Route path="/MarketScenario" element ={<MarketScenario />} />
           <Route path='/ValidInputCodes' element={<ValidInputCodes />} />
           <Route path='/LiabilityInfo' element={<LiabilityInfo />} />
           <Route path='/UserRoles' element={<UserRoles />} />
+          <Route path='/StrategySetCollection' element={<StrategySetCollection />} />
+          <Route path='/ProductMstInfo' element={<ProductMstInfo />} />
+          <Route path='/ValueStream' element={<ValueStream />} />
+          <Route path='/ValueStreamMap' element={<ValueStreamMap />} />       
         </Routes>
       </Box>
      </Box>
