@@ -71,6 +71,8 @@ import progressIcon from '../assets/navigation-menu/progress.png'
 import processIcon from '../assets/navigation-menu/process.png'
 import businessStrategyIcon from '../assets/navigation-menu/business-strategy.png'
 import resultIcon from '../assets/navigation-menu/result.png'
+import actionableIcon from '../assets/navigation-menu/actionable.png'
+import statisticsIcon from '../assets/navigation-menu/statistics.png'
 
 
 // end of png 
@@ -350,7 +352,7 @@ export const componentList = [
         routeElement: <SCMPerformanceInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: statisticsIcon,
         id: "UI 21 030",
         label: "Strategy-Launch Summary",
         path: "/StrategyLaunchGist",
@@ -524,7 +526,7 @@ export const componentList = [
         routeElement: <ValueStream />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: actionableIcon,
         id: "UI 22 240",
         label: "Resultant - Value Stream Map",
         path: "/ValueStreamMap",
