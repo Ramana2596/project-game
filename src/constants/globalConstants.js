@@ -60,6 +60,20 @@ import productIcon from '../assets/navigation-menu/productLaunch.png'
 import benefitsIcon from '../assets/navigation-menu/benefits.png'
 import referenceIcon from '../assets/navigation-menu/reference.png'
 import strategySetsIcon from '../assets/navigation-menu/strategySets.png'
+import demandIcon from '../assets/navigation-menu/demand.png'
+import discountIcon from '../assets/navigation-menu/discount.png'
+import cashBookIcon from '../assets/navigation-menu/cashBook.png'
+import machineIcon  from '../assets/navigation-menu/machine.png'
+import improvementIcon from '../assets/navigation-menu/improvement.png'
+import factoryPerfIcon from '../assets/navigation-menu/factoryPerf.png'
+import supplierPerfIcon from '../assets/navigation-menu/supplierPerf.png'
+import progressIcon from '../assets/navigation-menu/progress.png'
+import processIcon from '../assets/navigation-menu/process.png'
+import businessStrategyIcon from '../assets/navigation-menu/business-strategy.png'
+import resultIcon from '../assets/navigation-menu/result.png'
+import actionableIcon from '../assets/navigation-menu/actionable.png'
+import statisticsIcon from '../assets/navigation-menu/statistics.png'
+
 
 // end of png 
 
@@ -162,7 +176,7 @@ export const componentList = [
         routeElement: <StrategySetCollection />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: businessStrategyIcon,
         id: "UI 21 020",
         label: "Strategy Plan of a Team",
         path: "/StrategyPlanInfo",
@@ -226,7 +240,7 @@ export const componentList = [
         routeElement: <SalesRecordInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: cashBookIcon,
         id: "UI 21 190",
         label: "Cash Balance Statement",
         path: "/CashBookInfo",
@@ -282,7 +296,7 @@ export const componentList = [
         routeElement: <BOMInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: processIcon,
         id: "UI 22 040",
         label: "Mfg Process Chart",
         path: "/MfgRoutingInfo",
@@ -290,7 +304,7 @@ export const componentList = [
         routeElement: <MfgRoutingInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: machineIcon,
         id: "UI 22 060",
         label: "Capital Asset Stock",
         path: "/CapitalAssetStockInfo",
@@ -298,7 +312,7 @@ export const componentList = [
         routeElement: <CapitalAssetStockInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: demandIcon,
         id: "UI 21 050",
         label: "Demand Creation thru Strategy",
         path: "/OpsDemandCreationInfo",
@@ -306,7 +320,7 @@ export const componentList = [
         routeElement: <OpsDemandCreationInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: discountIcon,
         id: "UI 21 060",
         label: "Discount Offer thru Strategy",
         path: "/OpsDiscountOfferInfo",
@@ -314,7 +328,7 @@ export const componentList = [
         routeElement: <OpsDiscountOfferInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: improvementIcon,
         id: "UI 21 070",
         label: "Savings Plan thru Strategy",
         path: "/OpsSavingsPlanInfo",
@@ -322,7 +336,7 @@ export const componentList = [
         routeElement: <OpsSavingsPlanInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: factoryPerfIcon,
         id: "UI 21 240",
         label: "Shop Performance Report",
         path: "/ShopPerformanceInfo",
@@ -330,7 +344,7 @@ export const componentList = [
         routeElement: <ShopPerformanceInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: supplierPerfIcon,
         id: "UI 21 250",
         label: "SCM Performance Report",
         path: "/SCMPerformanceInfo",
@@ -338,7 +352,7 @@ export const componentList = [
         routeElement: <SCMPerformanceInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: statisticsIcon,
         id: "UI 21 030",
         label: "Strategy-Launch Summary",
         path: "/StrategyLaunchGist",
@@ -354,7 +368,7 @@ export const componentList = [
         routeElement: <SavingsRealisable />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: progressIcon,
         id: "UI 24 070",
         label: "Team Progress Status",
         path: "/TeamProgressInfo",
@@ -496,7 +510,7 @@ export const componentList = [
         routeElement: <BenefitInfo />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: resultIcon,
         id: "UI 22 190",
         label: "Strategy Outcome / Resultant",
         path: "/ResultantInfo",
@@ -512,7 +526,7 @@ export const componentList = [
         routeElement: <ValueStream />
       },
       {
-        iconPath: asterikIcon,
+        iconPath: actionableIcon,
         id: "UI 22 240",
         label: "Resultant - Value Stream Map",
         path: "/ValueStreamMap",
