@@ -45,7 +45,6 @@ import partIcon from '../assets/navigation-menu/part.png'
 import bomIcon from '../assets/navigation-menu/bom.png'
 import asterikIcon from '../assets/navigation-menu/asterik.png'
 import budgetIcon from '../assets/navigation-menu/budget.png'
-import applicationIcon from '../assets/navigation-menu/application.png'
 import marketIcon from '../assets/navigation-menu/market.png'
 import choiceIcon from '../assets/navigation-menu/choice.png'
 import loanIcon from '../assets/navigation-menu/loan.png'
@@ -73,7 +72,8 @@ import businessStrategyIcon from '../assets/navigation-menu/business-strategy.pn
 import resultIcon from '../assets/navigation-menu/result.png'
 import actionableIcon from '../assets/navigation-menu/actionable.png'
 import statisticsIcon from '../assets/navigation-menu/statistics.png'
-
+import onlinestudyIcon from '../assets/navigation-menu/onlinestudy.png'
+import softwareIcon from '../assets/navigation-menu/software.png'
 
 // end of png 
 
@@ -83,7 +83,8 @@ import Operations from "../pages/Operations/Operations";
 import MarketScenario from "../pages/MarketScenario/MarketScenario.jsx";
 import AccountPayable from "../pages/AccountPayable/AccountPayable";
 import SavingsRealisable from "../pages/SavingsRealisable/SavingsRealisable";
-import AccountReceivable from "../pages/AccountReceivable/AccountReceivable.jsx";
+import AccountReceivableData from '../pages/AccountReceivableData/AccountReceivableData.jsx';
+import AcReceivable from "../pages/AcReceivable/AcReceivable.jsx";
 import PartInfo from '../pages/PartInfo/PartInfo';
 import BOMInfo from '../pages/BOMInfo/BOMInfo.jsx';
 import RBACInfo from '../pages/RBACInfo/RBACInfo.jsx';
@@ -113,6 +114,7 @@ import StrategySetCollection from '../pages/StrategySetCollection/StrategySetCol
 import ProductMstInfo from "../pages/ProductMstInfo/ProductMstInfo.jsx";
 import ValueStream from '../pages/ValueStream/ValueStream.jsx';
 import ValueStreamMap from "../pages/ValueStreamMap/ValueStreamMap.jsx";
+import GameInSession from "../pages/GameInSession/GameInSession.jsx";
 
 
 //
@@ -247,13 +249,23 @@ export const componentList = [
         href: "/operationGame/CashBookInfo",
         routeElement: <CashBookInfo />
       },
+      /*
       {
         iconPath: receivableIcon,
         id: "UI 21 200",
         label: "Accounts Receivable",
-        path: "/accountReceivable",
-        href: "/operationGame/accountReceivable",
-        routeElement: <AccountReceivable />
+        path: "/AccountReceivableData",
+        href: "/operationGame/AccountReceivableData",
+        routeElement: <AccountReceivableData />
+      },
+      */
+      {
+        iconPath: receivableIcon,
+        id: "UI 21 200",
+        label: "Accounts Receivable",
+        path: "/AcReceivable",
+        href: "/operationGame/AcReceivable",
+        routeElement: <AcReceivable />
       },
       {
         iconPath: payableIcon,
@@ -368,13 +380,22 @@ export const componentList = [
         routeElement: <SavingsRealisable />
       },
       {
-        iconPath: progressIcon,
+        iconPath: onlinestudyIcon,
         id: "UI 24 070",
+        label: "Game In-Session",
+        path: "/GameInSession",
+        href: "/operationGame/GameInSession",
+        routeElement: <GameInSession />
+      },
+      {
+        iconPath: progressIcon,
+        id: "UI 24 090",
         label: "Team Progress Status",
         path: "/TeamProgressInfo",
         href: "/operationGame/TeamProgressInfo",
         routeElement: <TeamProgressInfo />
       }
+      
     ],
   },
   {
@@ -454,7 +475,7 @@ export const componentList = [
     routeElement: <UserAccessManagement />
   },
   {
-    iconPath: applicationIcon,
+    iconPath: softwareIcon,
     id: "UI 001",
     label: "System Info Desk",
     path: "/SystemInfoDesk",
