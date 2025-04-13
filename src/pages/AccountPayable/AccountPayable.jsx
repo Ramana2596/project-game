@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.js";
 import { useEffect, useState } from "react";
-import { getSalesRecordInfo } from "./services/service.js";
+import { getAccountPayable } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
 export default function AccountPayable() {
@@ -15,7 +15,7 @@ export default function AccountPayable() {
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getSalesRecordInfo(getTableDataPayload).then((response) => {
+      getAccountPayable(getTableDataPayload).then((response) => {  
       if (response) {
         setTableData(response.data);
       }
