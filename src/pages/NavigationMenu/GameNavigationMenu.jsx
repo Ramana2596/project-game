@@ -60,7 +60,8 @@ import HomePage from '../HomePage/HomePage.jsx';
 import Operations from '../Operations/Operations.jsx';
 import AccountPayable from '../AccountPayable/AccountPayable.jsx';
 import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
-import AccountReceivable from '../AccountReceivable/AccountReceivable.jsx';
+import AccountReceivableData from '../AccountReceivableData/AccountReceivableData.jsx';
+import AcReceivable from '../AcReceivable/AcReceivable.jsx';
 import PartInfo from '../PartInfo/PartInfo.jsx';
 import BOMInfo from '../BOMInfo/BOMInfo.jsx';
 import RBACInfo from '../RBACInfo/RBACInfo.jsx';
@@ -92,6 +93,7 @@ import StrategySetCollection from '../StrategySetCollection/StrategySetCollectio
 import ProductMstInfo from '../ProductMstInfo/ProductMstInfo.jsx';
 import ValueStream from '../ValueStream/ValueStream.jsx';
 import ValueStreamMap from '../ValueStreamMap/ValueStreamMap.jsx';
+import GameInSession from '../GameInSession/GameInSession.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -215,7 +217,8 @@ export default function MiniDrawer() {
           <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
           <Route path="/accountPayable" element={<AccountPayable />} />
-          <Route path="/accountReceiveable" element={<AccountReceivable />} />
+          <Route path="/accountReceivableData" element={<AccountReceivableData />} />
+          <Route path="/AcReceivable" element={<AcReceivable />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
           <Route path="/partInfo" element={<PartInfo />} />
           <Route path="/BOMInfo" element={<BOMInfo />} />
@@ -247,7 +250,8 @@ export default function MiniDrawer() {
           <Route path='/StrategySetCollection' element={<StrategySetCollection />} />
           <Route path='/ProductMstInfo' element={<ProductMstInfo />} />
           <Route path='/ValueStream' element={<ValueStream />} />
-          <Route path='/ValueStreamMap' element={<ValueStreamMap />} />       
+          <Route path='/ValueStreamMap' element={<ValueStreamMap />} />
+          <Route path='/GameInSession' element={<GameInSession />} />
         </Routes>
       </Box>
      </Box>
