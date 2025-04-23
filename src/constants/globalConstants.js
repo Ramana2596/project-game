@@ -63,7 +63,7 @@ import strategySetsIcon from '../assets/navigation-menu/strategySets.png'
 import demandIcon from '../assets/navigation-menu/demand.png'
 import discountIcon from '../assets/navigation-menu/discount.png'
 import cashBookIcon from '../assets/navigation-menu/cashBook.png'
-import machineIcon  from '../assets/navigation-menu/machine.png'
+import machineIcon from '../assets/navigation-menu/machine.png'
 import improvementIcon from '../assets/navigation-menu/improvement.png'
 import factoryPerfIcon from '../assets/navigation-menu/factoryPerf.png'
 import supplierPerfIcon from '../assets/navigation-menu/supplierPerf.png'
@@ -262,7 +262,7 @@ export const componentList = [
         path: "/accountPayable",
         href: "/operationGame/accountPayable",
         routeElement: <AccountPayable />
-      }, 
+      },
       {
         iconPath: loanIcon,
         id: "UI 21 220",
@@ -270,7 +270,7 @@ export const componentList = [
         path: "/LiabilityInfo",
         href: "/operationGame/LiabilityInfo",
         routeElement: <LiabilityInfo />
-      }, 
+      },
       {
         iconPath: partIcon,
         id: "UI 22 010",
@@ -384,7 +384,7 @@ export const componentList = [
     path: "/MarketScenario",
     href: "/operationGame/MarketScenario",
     routeElement: <MarketScenario />,
-    children: [ 
+    children: [
       {
         iconPath: launchIcon,
         id: "UI 11 020",
@@ -443,7 +443,7 @@ export const componentList = [
         href: "/operationGame/operationalPlanInfoInput",
         routeElement: <OperationalPlanInfoInput />
       }
-     ],
+    ],
   },
   {
     iconPath: secureAccessIcon,
@@ -459,7 +459,7 @@ export const componentList = [
     label: "System Info Desk",
     path: "/SystemInfoDesk",
     href: "/operationGame/SystemInfoDesk",
-    routeElement: <SystemInfoDesk/>,
+    routeElement: <SystemInfoDesk />,
     children: [
       {
         iconPath: choiceIcon,
@@ -476,7 +476,7 @@ export const componentList = [
         path: "/MfgWorkCentreInfo",
         href: "/operationGame/MfgWorkCentreInfo",
         routeElement: <MfgWorkCentreInfo />
-      },     
+      },
       {
         iconPath: referenceIcon,
         id: "UI 22 160",
@@ -484,7 +484,7 @@ export const componentList = [
         path: "/ReferenceInfo",
         href: "/operationGame/ReferenceInfo",
         routeElement: <ReferenceInfo />
-      },     
+      },
       {
         iconPath: costIcon,
         id: "UI 22 140",
@@ -516,7 +516,7 @@ export const componentList = [
         path: "/ResultantInfo",
         href: "/operationGame/ResultantInfo",
         routeElement: <ResultantInfo />
-      }, 
+      },
       {
         iconPath: valueStreamIcon,
         id: "UI 22 230",
@@ -532,7 +532,7 @@ export const componentList = [
         path: "/ValueStreamMap",
         href: "/operationGame/ValueStreamMap",
         routeElement: <ValueStreamMap />
-      },            
+      },
       {
         iconPath: tilesIcon,
         id: "UI 25 010",

@@ -215,7 +215,7 @@ export default function MiniDrawer() {
           <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
           <Route path="/accountPayable" element={<AccountPayable />} />
-          <Route path="/accountReceiveable" element={<AccountReceivable />} />
+          <Route path="/accountReceivable" element={<AccountReceivable />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
           <Route path="/partInfo" element={<PartInfo />} />
           <Route path="/BOMInfo" element={<BOMInfo />} />
@@ -235,22 +235,22 @@ export default function MiniDrawer() {
           <Route path="/OpsDiscountOfferInfo" element={<OpsDiscountOfferInfo />} />
           <Route path="/OpsSavingsPlanInfo" element={<OpsSavingsPlanInfo />} />
           <Route path="/BenefitInfo" element={<BenefitInfo />} />
-          <Route path="/ResultantInfo" element={<ResultantInfo />} /> 
-          <Route path="/ShopPerformanceInfo" element={<ShopPerformanceInfo />} /> 
-          <Route path="/SCMPerformanceInfo" element={<SCMPerformanceInfo />} /> 
-          <Route path="/MfgWorkCentreInfo" element={<MfgWorkCentreInfo />} /> 
-          <Route path="/SystemInfoDesk" element ={<SystemInfoDesk />} />
-          <Route path="/MarketScenario" element ={<MarketScenario />} />
+          <Route path="/ResultantInfo" element={<ResultantInfo />} />
+          <Route path="/ShopPerformanceInfo" element={<ShopPerformanceInfo />} />
+          <Route path="/SCMPerformanceInfo" element={<SCMPerformanceInfo />} />
+          <Route path="/MfgWorkCentreInfo" element={<MfgWorkCentreInfo />} />
+          <Route path="/SystemInfoDesk" element={<SystemInfoDesk />} />
+          <Route path="/MarketScenario" element={<MarketScenario />} />
           <Route path='/ValidInputCodes' element={<ValidInputCodes />} />
           <Route path='/LiabilityInfo' element={<LiabilityInfo />} />
           <Route path='/UserRoles' element={<UserRoles />} />
           <Route path='/StrategySetCollection' element={<StrategySetCollection />} />
           <Route path='/ProductMstInfo' element={<ProductMstInfo />} />
           <Route path='/ValueStream' element={<ValueStream />} />
-          <Route path='/ValueStreamMap' element={<ValueStreamMap />} />       
+          <Route path='/ValueStreamMap' element={<ValueStreamMap />} />
         </Routes>
       </Box>
-     </Box>
+    </Box>
   );
 }
 
