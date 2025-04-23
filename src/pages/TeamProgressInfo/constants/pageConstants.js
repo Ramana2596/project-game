@@ -5,6 +5,6 @@ export const pageConstants = {
     "Team",
     "Played Period",
     "Completed Stage",
-    "Date of Play",
+    "Date of Participation",
   ],
 };
