@@ -3,14 +3,14 @@ import GameTeamPlay from "../components/GameTeamPlay";
 export const pageConstants = {
     accordianList: [
         {
-            headerValue: 'Team Roll Play',
+            headerValue: 'Play Action in Simulation Game',
             contentValue: <GameTeamPlay />,
             isExpanded: false
         }
     ],
     gameFlagButtonLabel: 'Flag-Off',
     gameTeamPlayButtonLabel: 'Play',
-    gameTeamPlayRollBack: 'Roll Back',
-    teamPlayConfirmation: 'By clicking on the Play button, the team play will be reset for current month. If you want to proceed =>',
-    teamPlayRollBackConfirmation: 'By clicking on the Roll Back button, the team play will be rolled back for current month. If you want to proceed =>',
+    gameTeamPlayRollBack: 'Revert Back',
+    teamPlayConfirmation: 'To Step through on your Current Decision,     Click =>',
+    teamPlayRollBackConfirmation: 'To Revert back to Previous Period,      Click =>',
 }
