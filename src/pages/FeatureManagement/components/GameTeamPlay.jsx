@@ -18,7 +18,7 @@ export default function GameTeamPlay() {
             .then(() => {
                 setAlertData({
                     severity: "success",
-                    message: "Team Play Reset successfully",
+                    message: "Team Play Successful",
                     isVisible: true,
                 });
             })
@@ -26,7 +26,7 @@ export default function GameTeamPlay() {
                 setAlertData({
                     severity: "error",
                     message:
-                        "Error in reset" +
+                        "Error in Team Play" +
                         error?.response?.data?.error,
                     isVisible: true,
                 });
