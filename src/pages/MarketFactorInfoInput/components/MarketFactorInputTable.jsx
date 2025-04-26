@@ -220,16 +220,21 @@ export default function MarketFactorInputTable({
         <Button
           disabled={isDisableActionBtns}
           type="button"
-          variant="contained"
+          sx={{
+            height: '45px'
+          }}
+          className="standard-button-primary-button"
           onClick={onAddBtnClick}
         >
           {pageConstants.contentSection.addBtnLabel}
         </Button>
         <Button
           disabled={isDisableActionBtns}
-          color="white"
           type="button"
-          variant="contained"
+          sx={{
+            height: '45px'
+          }}
+          className="standard-button-secondary-button"
           onClick={onModifyBtnClick}
         >
           {pageConstants.contentSection.modifyBtnLabel}
@@ -237,16 +242,21 @@ export default function MarketFactorInputTable({
         <Button
           disabled={isDisableSubCanBtns}
           type="button"
-          variant="contained"
+          sx={{
+            height: '45px'
+          }}
+          className="standard-button-primary-button"
           onClick={onSubmitBtnClick}
         >
           {pageConstants.contentSection.saveBtnLabel}
         </Button>
         <Button
           disabled={isDisableSubCanBtns}
-          color="white"
           type="button"
-          variant="contained"
+          sx={{
+            height: '45px'
+          }}
+          className="standard-button-secondary-button"
           onClick={onCancelButtonClick}
         >
           {pageConstants.contentSection.cancelBtnLabel}

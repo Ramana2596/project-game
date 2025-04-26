@@ -103,17 +103,27 @@ export default function StrategyPlanApproval() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <form onSubmit={strategyFormSubmit}>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <h3>{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
-          <h3>{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
-        </Grid>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Button disabled={editableTableData.length === 0} type="submit" variant="contained" onClick={strategyFormSubmit} >
-            {pageConstants.submitBtn}
-          </Button>
+        <Grid container margin={2} spacing={2}>
+          <h3 className="standard-title-color">{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
+          <h3 className="standard-title-color">{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
+          <Grid item xs={12} container justifyContent="flex-end">
+            <Button
+              disabled={editableTableData.length === 0}
+              type="submit"
+              className="standard-button-primary-button"
+              onClick={strategyFormSubmit}
+              sx={{
+                width: '100px',
+                height: '50px'
+              }}
+            >
+              {pageConstants.submitBtn}
+            </Button>
+          </Grid>
         </Grid>
       </form>
-      <Grid container margin={2} spacing={2} justifyContent="center" alignItems="center">
+
+      <Grid spacing={2}>
         {editableTableData.length > 0 ? (
           <EditableTable editableTableData={editableTableData} onCheckboxChange={handleCheckboxChange} hiddenColumns={pageConstants.table.hiddenColumns} />
         ) : (
@@ -121,10 +131,12 @@ export default function StrategyPlanApproval() {
         )}
       </Grid>
 
-      <ToastMessage open={alertData.isVisible}
+      <ToastMessage
+        open={alertData.isVisible}
         severity={alertData.severity}
         message={alertData.message}
       />
     </Box>
+
   );
 }

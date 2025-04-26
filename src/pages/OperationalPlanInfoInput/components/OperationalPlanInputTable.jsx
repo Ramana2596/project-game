@@ -254,16 +254,32 @@ export default function OperationalPlanInputTable({
   return (
     <div>
       <Grid margin={5} container spacing={2} justifyContent="center" alignItems="center">
-        <Button disabled={isDisableActionBtns} type="button" variant="contained" onClick={onAddBtnClick}>
+        <Button disabled={isDisableActionBtns}
+          type="button" className="standard-button-primary-button" onClick={onAddBtnClick}
+          sx={{
+            height: '45px'
+          }}>
           {pageConstants.contentSection.addBtnLabel}
         </Button>
-        <Button disabled={isDisableActionBtns} color="white" type="button" variant="contained" onClick={onModifyBtnClick}>
+        <Button disabled={isDisableActionBtns}
+          type="button" className="standard-button-secondary-button" onClick={onModifyBtnClick}
+          sx={{
+            height: '45px'
+          }}>
           {pageConstants.contentSection.modifyBtnLabel}
         </Button>
-        <Button disabled={isDisableSubCanBtns} type="button" variant="contained" onClick={onSubmitBtnClick}>
+        <Button disabled={isDisableSubCanBtns}
+          type="button" className="standard-button-primary-button" onClick={onSubmitBtnClick}
+          sx={{
+            height: '45px'
+          }}>
           {pageConstants.contentSection.saveBtnLabel}
         </Button>
-        <Button disabled={isDisableSubCanBtns} color="white" type="button" variant="contained" onClick={onCancelButtonClick}>
+        <Button disabled={isDisableSubCanBtns}
+          type="button" className="standard-button-secondary-button" onClick={onCancelButtonClick}
+          sx={{
+            height: '45px'
+          }}>
           {pageConstants.contentSection.cancelBtnLabel}
         </Button>
       </Grid>

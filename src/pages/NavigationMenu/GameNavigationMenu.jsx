@@ -54,7 +54,6 @@ import {
 } from './imports.js';
 import { pageConstants } from './pageConstants.js';
 import '../NavigationMenu/styles/temporaryDrawer.css';
-import UserAccessManagement from '../UserAccessManagement/UserAccessManagement.jsx';
 import FeatureManagement from '../FeatureManagement/FeatureManagement.jsx';
 import HomePage from '../HomePage/HomePage.jsx';
 import Operations from '../Operations/Operations.jsx';
@@ -92,6 +91,7 @@ import StrategySetCollection from '../StrategySetCollection/StrategySetCollectio
 import ProductMstInfo from '../ProductMstInfo/ProductMstInfo.jsx';
 import ValueStream from '../ValueStream/ValueStream.jsx';
 import ValueStreamMap from '../ValueStreamMap/ValueStreamMap.jsx';
+import UserRoleManagement from '../UserRoleManagement/UserRoleManagement.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -149,7 +149,7 @@ export default function MiniDrawer() {
           </IconButton>
           <BreadCrumb currentRoute={currentRoute} />
           <div style={{ marginLeft: "auto" }}>
-            <Button className="hover-effect" onClick={handleMenu} color="inherit" sx={{ display: "flex", alignItems: "center", textTransform: "none", border: "1px solid", borderRadius: "30px", padding: "5px 20px", backgroundColor: "#FFFFFF", color: "#4682B4", /* Set to pleasant blue */ }}>
+            <Button className="hover-effect" onClick={handleMenu} color="inherit" sx={{ display: "flex", alignItems: "center", textTransform: "none", border: "1px solid", borderRadius: "30px", padding: "5px 20px", backgroundColor: "#FFFFFF", color: "#180081", /* Set to pleasant blue */ }}>
               <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
             </Button>
             <Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right", }} keepMounted transformOrigin={{ vertical: "top", horizontal: "right", }} open={Boolean(anchorEl)} onClose={handleClose} sx={{ "& .MuiPaper-root": { borderRadius: "10px", padding: "10px", width: "250px", backgroundColor: "#FFFFFF", }, }} >
@@ -157,9 +157,9 @@ export default function MiniDrawer() {
               <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
               <Typography className="standard-text-color" disabled>{user?.role}</Typography>
               <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
-              <MenuItem onClick={handleClose} sx={{ "& .MuiButton-root": { width: "100%", justifyContent: "flex-start", textTransform: "none", padding: "10px", paddingLeft: "20px", } }} >
+              <Typography onClick={handleClose} sx={{ "& .MuiButton-root": { width: "100%", justifyContent: "flex-start", textTransform: "none", padding: "10px", paddingLeft: "20px", } }} >
                 <SignOutButton />
-              </MenuItem>
+              </Typography>
             </Menu>
           </div>
         </Toolbar>
@@ -193,7 +193,7 @@ export default function MiniDrawer() {
         <Routes>
           <Route path="/homePage" element={<HomePage />} />
           <Route path="/gameDashboard" element={<GameDashboard />} />
-          <Route path="/userAccessManagement" element={<UserAccessManagement />} />
+          <Route path="/userRoleManagement" element={<UserRoleManagement />} />
           <Route path="/infoDesk" element={<InfoDesk />} />
           <Route path="/gameMaster" element={<GameMaster />} />
           <Route path="/gameBatch" element={<GameBatch />} />

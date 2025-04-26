@@ -13,13 +13,16 @@ const WelcomePage = () => {
                         Strategic Operations Research Management
                     </Typography>
                     <Button
-                        sx={{ backgroundColor: '#00008B', color: 'white', marginRight: 1 }}
+                        className='standard-button-secondary-button'
+                        sx={{ marginRight: 1 }}
                         component={Link}
                         to="/register"
                     >
                         Register
                     </Button>
-                    <Button sx={{ border: '1px solid black' }} color="inherit" component={Link} to="/signIn">
+                    <Button
+                        className='standard-button-primary-button'
+                        component={Link} to="/signIn">
                         Sign In
                     </Button>
                 </Toolbar>

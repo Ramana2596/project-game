@@ -18,7 +18,7 @@ import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
 import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
 import SystemInfoDesk from "../pages/SystemInfoDesk/SystemInfoDesk.jsx";
-import UserAccessManagement from "../pages/UserAccessManagement/UserAccessManagement";
+import UserRoleManagement from "../pages/UserRoleManagement/UserRoleManagement";
 
 // start of png
 import homeIcon from '../assets/navigation-menu/home.png';
@@ -448,10 +448,10 @@ export const componentList = [
   {
     iconPath: secureAccessIcon,
     id: "UI 15 030",
-    label: "User Access Management",
-    path: "/userAccessManagement",
-    href: "/operationGame/userAccessManagement",
-    routeElement: <UserAccessManagement />
+    label: "User Role Management",
+    path: "/userRoleManagement",
+    href: "/operationGame/userRoleManagement",
+    routeElement: <UserRoleManagement />
   },
   {
     iconPath: applicationIcon,
