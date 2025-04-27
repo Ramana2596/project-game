@@ -83,7 +83,7 @@ export default function StrategyMaster() {
       return updatedData.map((obj) => ({
         gameId: strategyMasterFormData?.gameId,
         strategyId: obj?.Strategy_Id,
-        strategyDescription: obj?.Strategy_Description,
+        strategy: obj?.Strategy,
         businessEnabler: obj?.Business_Enabler,
         costType: obj.Cost_Type,
         mutualGroup: obj.Exclsuive_Group
@@ -96,7 +96,7 @@ export default function StrategyMaster() {
       return updatedData.map((obj) => ({
         gameId: strategyMasterFormData?.gameId,
         strategyId: obj?.Strategy_Id,
-        strategyDescription: obj?.Strategy_Description,
+        strategy: obj?.Strategy,
         businessEnabler: obj?.Business_Enabler,
         costType: obj.Cost_Type,
         mutualGroup: obj.Exclsuive_Group
