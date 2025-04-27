@@ -46,9 +46,9 @@ export default function OperationalPlanInfo() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h3>{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
-        <h3>{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
+      <Grid container margin={3} spacing={2}>
+        <h3 className="standard-title-color">{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
+        <h3 className="standard-title-color">{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
       </Grid>
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}

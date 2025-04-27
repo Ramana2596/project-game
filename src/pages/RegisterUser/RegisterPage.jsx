@@ -6,7 +6,20 @@ const Register = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [profession, setProfession] = useState('');
+    const [error, setError] = useState(false);
+
     const routeHistory = useNavigate();
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setEmail(value);
+
+        // Regular expression to validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        setError(!emailRegex.test(value));
+    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -14,6 +27,7 @@ const Register = () => {
         console.log('First Name:', firstName);
         console.log('Last Name:', lastName);
         console.log('Email:', email);
+        console.log('Email:', profession);
     };
 
     return (
@@ -21,7 +35,7 @@ const Register = () => {
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
                 <Card sx={{ boxShadow: 3, width: 500, maxWidth: 800, padding: 2 }}>
                     <CardContent>
-                        <Typography variant="h4" component="h1" gutterBottom>
+                        <Typography variant="h4" component="h1" gutterBottom className='standard-title-color'>
                             Register
                         </Typography>
                         <form onSubmit={handleSubmit}>
@@ -52,13 +66,25 @@ const Register = () => {
                                     fullWidth
                                     value={email}
                                     required
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={handleChange}
+                                    error={error}
+                                    helperText={error ? "Please enter a valid email address" : ""}
                                 />
                             </Box>
-                            <Button type="submit" variant="contained" color="primary">
+                            <Box sx={{ mb: 2 }}>
+                                <TextField
+                                    label="Profession"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={profession}
+                                    required
+                                    onChange={(e) => setProfession(e.target.value)}
+                                />
+                            </Box>
+                            <Button type="submit" className='standard-button-primary-button' color="primary">
                                 Register
                             </Button>
-                            <Button sx={{ marginLeft: 5 }} variant="contained" color="white" onClick={() => routeHistory("/")}>
+                            <Button sx={{ marginLeft: 5 }} className='standard-button-secondary-button' onClick={() => routeHistory("/")}>
                                 Go Back to Welcome
                             </Button>
                         </form>

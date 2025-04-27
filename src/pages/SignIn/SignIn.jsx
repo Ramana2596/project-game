@@ -140,6 +140,7 @@ export default function SignIn(props) {
           <Typography
             component="h1"
             variant="h4"
+            className='standard-title-color'
             sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
           >
             Sign in
@@ -175,7 +176,7 @@ export default function SignIn(props) {
             <Button
               type="button"
               fullWidth
-              variant="contained"
+              className="standard-button-primary-button"
               onClick={onLoginClick}
             >
               Sign in

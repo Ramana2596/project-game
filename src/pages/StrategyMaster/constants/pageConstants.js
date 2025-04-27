@@ -9,7 +9,8 @@ export const pageConstants = {
       "Strategy_Description",
       "Business_Enabler",
       "Cost_Type",
-      "Exclsuive_Group"
+      "Exclsuive_Group",
+      "Usage Status"
     ],
     tableHeadingForAdd: [
       "Strategy_Description",

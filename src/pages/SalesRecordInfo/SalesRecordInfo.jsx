@@ -24,11 +24,11 @@ export default function SalesRecordInfo() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h3>
+      <Grid container spacing={2} margin={3}>
+        <h3 className="standard-title-color">
           {pageConstants.gameBatch}: {userInfo?.gameBatch}
         </h3>
-        <h3>
+        <h3 className="standard-title-color">
           {pageConstants.gameTeam}: {userInfo?.gameTeam}
         </h3>
       </Grid>

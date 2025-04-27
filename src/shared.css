@@ -2,15 +2,20 @@
     --pleasant-blue: #57a6ff;
     --light-gray: #D3D3D3;
     --silver: #C0C0C0;
-    --dark-gray: #A9A9A9;
+    --dark-gray: #333333;
     --gray: #808080;
     --dim-gray: #696969;
     --standard-white: #FFFFFF;
     --standard-black: #000000;
     --separator-gray: #CCCCCC;
-    --common-blue: #4682B4;
-    --hover-blue: #5A9BD5;
+    --common-blue: #0078db;
+    --hover-blue: #0078db;
     --dark-blue: #00008B;
+    --light-blue: #8dc1fa;
+    --button-primary-border-color: #1d7a56;
+    --button-primary-color: #46cd99;
+    --button-secondary-color: #f8f8f8;
+    --button-secondary-border-color: #585757;
 }
 
 .accordian-title {
@@ -27,6 +32,10 @@
 
 .standard-text-color {
     color: var(--standard-black);
+}
+
+.standard-title-color {
+    color: var(--dark-blue) !important;
 }
 
 .hover-effect:hover {
@@ -56,4 +65,66 @@
     /* Apply shadow on hover */
     border-color: #57a6ff;
     /* Pleasant blue border on hover */
+}
+
+.standard-button-primary-button {
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    color: var(--standard-black) !important;
+    background-color: var(--button-primary-color) !important;
+    border: 2px solid var(--button-primary-border-color) !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.standard-button-primary-button:hover {
+    box-shadow: 0 6px 12px var(--button-primary-border-color) !important;
+    font-weight: bold !important;
+    border-radius: 20px !important;
+}
+
+.standard-button-primary-button:disabled {
+    color: #A0A0A0;
+    /* Muted text */
+    background-color: #E5E5E5;
+    /* Soft gray background */
+    border: 2px solid #C0C0C0;
+    /* Lighter border */
+    cursor: not-allowed;
+    box-shadow: none;
+    /* Remove hover effect */
+    opacity: 0.6;
+    /* Slight transparency */
+}
+
+.standard-button-secondary-button {
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    color: var(--standard-black) !important;
+    background-color: var(--button-secondary-color) !important;
+    border: 2px solid var(--button-secondary-border-color) !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.standard-button-secondary-button:hover {
+    box-shadow: 0 6px 12px var(--button-secondary-border-color) !important;
+    font-weight: bold !important;
+    border-radius: 20px !important;
+}
+
+.standard-button-secondary-button:disabled {
+    color: #A0A0A0;
+    /* Muted text */
+    background-color: #E5E5E5;
+    /* Soft gray background */
+    border: 2px solid #C0C0C0;
+    /* Lighter border */
+    cursor: not-allowed;
+    box-shadow: none;
+    /* Remove hover effect */
+    opacity: 0.6;
+    /* Slight transparency */
 }

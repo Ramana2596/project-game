@@ -163,12 +163,12 @@ export default function OperationalPlanInfoInput() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <h3>{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
-        <h3>{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
+    <Box sx={{ flexGrow: 1, padding: 2 }}>
+      <Grid container spacing={2}>
+        <h3 className="standard-title-color">{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
+        <h3 className="standard-title-color">{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
       </Grid>
-      <Grid sx={{ margin: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+      <Grid sx={{ marginBottom: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
         <OperationalPlanInfoType operationalPlanType={getOperationalPlanInfoInput.operationalPlanId}
           onFormControlUpdate={formControlUpdate}
           isDisabled={isDisableHeaderSection} />

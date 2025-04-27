@@ -13,7 +13,7 @@ const SignOutButton = () => {
     };
 
     return (
-        <Button color="secondary" type="reset" variant="contained" onClick={handleLogout}>
+        <Button color="secondary" type="reset" className='standard-button-secondary-button' onClick={handleLogout}>
             Sign Out
         </Button>
     );

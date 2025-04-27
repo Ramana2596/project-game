@@ -238,7 +238,11 @@ export default function StrategyLaunched() {
             </FormControl>
           </Grid>
           <Grid container size={{ xs: 0, sm: 2, md: 2 }} justifyContent="center" alignItems="center">
-            <Button disabled={strategyLaunchData?.length === 0} type="submit" variant="contained">
+            <Button disabled={strategyLaunchData?.length === 0}
+              type="submit" className="standard-button-primary-button"
+              sx={{
+                height: '45px'
+              }}>
               {pageConstants.submitBtnLabel}
             </Button>
           </Grid>

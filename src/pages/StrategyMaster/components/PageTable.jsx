@@ -159,16 +159,16 @@ export default function PageTable({
   return (
     <div>
       <Grid margin={2} container spacing={2} justifyContent="center" alignItems="center" >
-        <Button disabled={isDisableActionBtns} type="button" variant="contained" onClick={onAddBtnClick}>
+        <Button className="standard-button-primary-button" disabled={isDisableActionBtns} type="button" onClick={onAddBtnClick}>
           {pageConstants.contentSection.addBtnLabel}
         </Button>
-        <Button disabled={isDisableActionBtns} color="white" type="button" variant="contained" onClick={onModifyBtnClick}>
+        <Button className="standard-button-secondary-button" disabled={isDisableActionBtns} color="white" type="button" onClick={onModifyBtnClick}>
           {pageConstants.contentSection.modifyBtnLabel}
         </Button>
-        <Button disabled={isDisableSubCanBtns} type="button" variant="contained" onClick={onSubmitBtnClick}>
+        <Button className="standard-button-primary-button" disabled={isDisableSubCanBtns} type="button" onClick={onSubmitBtnClick}>
           {pageConstants.contentSection.saveBtnLabel}
         </Button>
-        <Button disabled={isDisableSubCanBtns} color="white" type="button" variant="contained" onClick={onCancelButtonClick}>
+        <Button className="standard-button-secondary-button" disabled={isDisableSubCanBtns} type="button" onClick={onCancelButtonClick}>
           {pageConstants.contentSection.cancelBtnLabel}
         </Button>
       </Grid>

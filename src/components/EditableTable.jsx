@@ -67,7 +67,7 @@ function EditableTable({ editableTableData, onCheckboxChange, hiddenColumns }) {
     };
 
     return (
-      <Box marginLeft={10} marginRight={10} sx={{ flexGrow: 1 }}>
+      <Box marginLeft={2} marginRight={2} sx={{ flexGrow: 1 }}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
