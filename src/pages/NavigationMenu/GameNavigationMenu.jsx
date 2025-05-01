@@ -92,8 +92,9 @@ import StrategySetCollection from '../StrategySetCollection/StrategySetCollectio
 import ProductMstInfo from '../ProductMstInfo/ProductMstInfo.jsx';
 import ValueStream from '../ValueStream/ValueStream.jsx';
 import ValueStreamMap from '../ValueStreamMap/ValueStreamMap.jsx';
-import GameInSession from '../GameInSession/GameInSession.jsx';
+import ClassRoomSession from '../ClassRoomSession/ClassRoomSession.jsx';
 import UserRoleManagement from '../UserRoleManagement/UserRoleManagement.jsx';
+
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -217,7 +218,7 @@ export default function MiniDrawer() {
           <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
           <Route path="/accountPayable" element={<AccountPayable />} />
-          <Route path="/accountReceivable" element={<AccountReceivable />} />
+          <Route path="/accountReceivableData" element={<AccountReceivableData />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
           <Route path="/partInfo" element={<PartInfo />} />
           <Route path="/BOMInfo" element={<BOMInfo />} />
@@ -250,7 +251,7 @@ export default function MiniDrawer() {
           <Route path='/ProductMstInfo' element={<ProductMstInfo />} />
           <Route path='/ValueStream' element={<ValueStream />} />
           <Route path='/ValueStreamMap' element={<ValueStreamMap />} />
-          <Route path='/GameInSession' element={<GameInSession />} />
+          <Route path='/ClassRoomSession' element={<ClassRoomSession />} />
         </Routes>
       </Box>
     </Box>
