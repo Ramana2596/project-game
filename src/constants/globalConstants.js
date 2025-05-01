@@ -114,7 +114,7 @@ import StrategySetCollection from '../pages/StrategySetCollection/StrategySetCol
 import ProductMstInfo from "../pages/ProductMstInfo/ProductMstInfo.jsx";
 import ValueStream from '../pages/ValueStream/ValueStream.jsx';
 import ValueStreamMap from "../pages/ValueStreamMap/ValueStreamMap.jsx";
-import GameSession from "../pages/GameSession/GameSession.js
+import ClassRoomSession from "../pages/ClassRoomSession/ClassRoomSession.jsx";
 
 
 //
@@ -382,10 +382,10 @@ export const componentList = [
       {
         iconPath: onlinestudyIcon,
         id: "UI 24 070",
-        label: "Game Session Participants",
-        path: "/GameSession",
-        href: "/operationGame/GameSession",
-        routeElement: <GameSession />
+        label: "Class Room Session",
+        path: "/ClassRoomSession",
+        href: "/operationGame/ClassRoomSession",
+        routeElement: <ClassRoomSession />
       },
       {
         iconPath: progressIcon,
