@@ -74,6 +74,7 @@ import actionableIcon from '../assets/navigation-menu/actionable.png'
 import statisticsIcon from '../assets/navigation-menu/statistics.png'
 import onlinestudyIcon from '../assets/navigation-menu/onlinestudy.png'
 import softwareIcon from '../assets/navigation-menu/software.png'
+import professionalIcon from '../assets/navigation-menu/professional.png'
 
 // end of png 
 
@@ -115,6 +116,8 @@ import ProductMstInfo from "../pages/ProductMstInfo/ProductMstInfo.jsx";
 import ValueStream from '../pages/ValueStream/ValueStream.jsx';
 import ValueStreamMap from "../pages/ValueStreamMap/ValueStreamMap.jsx";
 import ClassRoomSession from "../pages/ClassRoomSession/ClassRoomSession.jsx";
+import ProfessionInfo from '../pages/ProfessionInfo/ProfessionInfo.jsx';
+
 
 
 //
@@ -565,10 +568,18 @@ export const componentList = [
       {
         iconPath: roleIcon,
         id: "UI 25 020",
-        label: "User Roles Info",
+        label: "Role Info",
         path: "/RoleInfo",
         href: "/operationGame/RoleInfo",
         routeElement: <RoleInfo />
+      },
+      {
+        iconPath: professionalIcon,
+        id: "UI 25 060",
+        label: "Profession Info",
+        path: "/ProfessionInfo",
+        href: "/operationGame/ProfessionInfo",
+        routeElement: <ProfessionInfo />
       },
       {
         iconPath: rightaccessIcon,

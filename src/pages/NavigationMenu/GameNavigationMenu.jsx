@@ -94,6 +94,7 @@ import ValueStream from '../ValueStream/ValueStream.jsx';
 import ValueStreamMap from '../ValueStreamMap/ValueStreamMap.jsx';
 import ClassRoomSession from '../ClassRoomSession/ClassRoomSession.jsx';
 import UserRoleManagement from '../UserRoleManagement/UserRoleManagement.jsx';
+import ProfessionInfo from '../ProfessionInfo/ProfessionInfo.jsx';
 
 
 export default function MiniDrawer() {
@@ -252,6 +253,7 @@ export default function MiniDrawer() {
           <Route path='/ValueStream' element={<ValueStream />} />
           <Route path='/ValueStreamMap' element={<ValueStreamMap />} />
           <Route path='/ClassRoomSession' element={<ClassRoomSession />} />
+          <Route path='/ProfessionInfo' element={<ProfessionInfo />} />
         </Routes>
       </Box>
     </Box>
