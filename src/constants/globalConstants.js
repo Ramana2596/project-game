@@ -75,6 +75,8 @@ import statisticsIcon from '../assets/navigation-menu/statistics.png'
 import onlinestudyIcon from '../assets/navigation-menu/onlinestudy.png'
 import softwareIcon from '../assets/navigation-menu/software.png'
 import professionalIcon from '../assets/navigation-menu/professional.png'
+import IdCardIcon from '../assets/navigation-menu/IdCard.png'
+
 
 // end of png 
 
@@ -117,7 +119,7 @@ import ValueStream from '../pages/ValueStream/ValueStream.jsx';
 import ValueStreamMap from "../pages/ValueStreamMap/ValueStreamMap.jsx";
 import ClassRoomSession from "../pages/ClassRoomSession/ClassRoomSession.jsx";
 import ProfessionInfo from '../pages/ProfessionInfo/ProfessionInfo.jsx';
-
+import ProfessionRoleInfo from '../pages/ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 
 
 //
@@ -580,6 +582,14 @@ export const componentList = [
         path: "/ProfessionInfo",
         href: "/operationGame/ProfessionInfo",
         routeElement: <ProfessionInfo />
+      },
+      {
+        iconPath: IdCardIcon,
+        id: "UI 25 070",
+        label: "Profession Vs Role Info",
+        path: "/ProfessionRoleInfo",
+        href: "/operationGame/ProfessionRoleInfo",
+        routeElement: <ProfessionRoleInfo />
       },
       {
         iconPath: rightaccessIcon,
