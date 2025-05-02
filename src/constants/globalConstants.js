@@ -109,7 +109,7 @@ import ResultantInfo from '../pages/ResultantInfo/ResultantInfo.jsx';
 import MfgWorkCentreInfo from '../pages/MfgWorkCentreInfo/MfgWorkCentreInfo.jsx';
 import ValidInputCodes from '../pages/ValidInputCodes/ValidInputCodes.jsx';
 import LiabilityInfo from '../pages/LiabilityInfo/LiabilityInfo.jsx';
-import UserRoles from '../pages/UserRoles/UserRoles.jsx';
+import RoleInfo from '../pages/RoleInfo/RoleInfo.jsx';
 import StrategySetCollection from '../pages/StrategySetCollection/StrategySetCollection.jsx';
 import ProductMstInfo from "../pages/ProductMstInfo/ProductMstInfo.jsx";
 import ValueStream from '../pages/ValueStream/ValueStream.jsx';
@@ -566,9 +566,9 @@ export const componentList = [
         iconPath: roleIcon,
         id: "UI 25 020",
         label: "User Roles Info",
-        path: "/UserRoles",
-        href: "/operationGame/UserRoles",
-        routeElement: <UserRoles />
+        path: "/RoleInfo",
+        href: "/operationGame/RoleInfo",
+        routeElement: <RoleInfo />
       },
       {
         iconPath: rightaccessIcon,

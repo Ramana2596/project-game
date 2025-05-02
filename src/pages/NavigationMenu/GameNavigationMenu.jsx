@@ -87,7 +87,7 @@ import SystemInfoDesk from '../SystemInfoDesk/SystemInfoDesk.jsx';
 import MarketScenario from '../MarketScenario/MarketScenario.jsx';
 import ValidInputCodes from '../ValidInputCodes/ValidInputCodes.jsx';
 import LiabilityInfo from '../LiabilityInfo/LiabilityInfo.jsx';
-import UserRoles from '../UserRoles/UserRoles.jsx';
+import RoleInfo from '../RoleInfo/RoleInfo.jsx';
 import StrategySetCollection from '../StrategySetCollection/StrategySetCollection.jsx';
 import ProductMstInfo from '../ProductMstInfo/ProductMstInfo.jsx';
 import ValueStream from '../ValueStream/ValueStream.jsx';
@@ -246,7 +246,7 @@ export default function MiniDrawer() {
           <Route path="/MarketScenario" element={<MarketScenario />} />
           <Route path='/ValidInputCodes' element={<ValidInputCodes />} />
           <Route path='/LiabilityInfo' element={<LiabilityInfo />} />
-          <Route path='/UserRoles' element={<UserRoles />} />
+          <Route path='/RoleInfo' element={<RoleInfo />} />
           <Route path='/StrategySetCollection' element={<StrategySetCollection />} />
           <Route path='/ProductMstInfo' element={<ProductMstInfo />} />
           <Route path='/ValueStream' element={<ValueStream />} />
