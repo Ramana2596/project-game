@@ -76,7 +76,7 @@ import onlinestudyIcon from '../assets/navigation-menu/onlinestudy.png'
 import softwareIcon from '../assets/navigation-menu/software.png'
 import professionalIcon from '../assets/navigation-menu/professional.png'
 import IdCardIcon from '../assets/navigation-menu/IdCard.png'
-
+import userIcon from '../assets/navigation-menu/user.png'
 
 // end of png 
 
@@ -87,7 +87,7 @@ import MarketScenario from "../pages/MarketScenario/MarketScenario.jsx";
 import AccountPayable from "../pages/AccountPayable/AccountPayable";
 import SavingsRealisable from "../pages/SavingsRealisable/SavingsRealisable";
 import AccountReceivableData from '../pages/AccountReceivableData/AccountReceivableData.jsx';
-import AcReceivable from "../pages/AcReceivable/AcReceivable.jsx";
+import AcReceivable from '../pages/AcReceivable/AcReceivable.jsx';
 import PartInfo from '../pages/PartInfo/PartInfo';
 import BOMInfo from '../pages/BOMInfo/BOMInfo.jsx';
 import RBACInfo from '../pages/RBACInfo/RBACInfo.jsx';
@@ -120,7 +120,7 @@ import ValueStreamMap from "../pages/ValueStreamMap/ValueStreamMap.jsx";
 import ClassRoomSession from "../pages/ClassRoomSession/ClassRoomSession.jsx";
 import ProfessionInfo from '../pages/ProfessionInfo/ProfessionInfo.jsx';
 import ProfessionRoleInfo from '../pages/ProfessionRoleInfo/ProfessionRoleInfo.jsx';
-
+import UserProfileInfo from "../pages/UserProfileInfo/UserProfileInfo.jsx";
 
 //
 export const componentList = [
@@ -254,7 +254,6 @@ export const componentList = [
         href: "/operationGame/CashBookInfo",
         routeElement: <CashBookInfo />
       },
-      /*
       {
         iconPath: receivableIcon,
         id: "UI 21 200",
@@ -263,7 +262,6 @@ export const componentList = [
         href: "/operationGame/AccountReceivableData",
         routeElement: <AccountReceivableData />
       },
-      */
       {
         iconPath: receivableIcon,
         id: "UI 21 200",
@@ -598,6 +596,14 @@ export const componentList = [
         path: "/RBACInfo",
         href: "/operationGame/RBACInfo",
         routeElement: <RBACInfo />
+      },
+      {
+        iconPath: userIcon,
+        id: "UI 25 040",
+        label: "User Profile",
+        path: "/UserProfileInfo",
+        href: "/operationGame/UserProfileInfo",
+        routeElement: <UserProfileInfo />
       }
     ],
   }

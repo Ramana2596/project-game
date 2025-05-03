@@ -220,7 +220,8 @@ export default function MiniDrawer() {
           <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
           <Route path="/accountPayable" element={<AccountPayable />} />
-          <Route path="/accountReceivableData" element={<AccountReceivableData />} />
+          <Route path="/AcReceivable" element={<AcReceivable />} />          
+          <Route path="/AccountReceivableData" element={<AccountReceivableData />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
           <Route path="/partInfo" element={<PartInfo />} />
           <Route path="/BOMInfo" element={<BOMInfo />} />
