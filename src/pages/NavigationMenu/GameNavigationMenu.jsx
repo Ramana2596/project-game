@@ -59,7 +59,6 @@ import HomePage from '../HomePage/HomePage.jsx';
 import Operations from '../Operations/Operations.jsx';
 import AccountPayable from '../AccountPayable/AccountPayable.jsx';
 import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
-import AccountReceivableData from '../AccountReceivableData/AccountReceivableData.jsx';
 import AcReceivable from '../AcReceivable/AcReceivable.jsx';
 import PartInfo from '../PartInfo/PartInfo.jsx';
 import BOMInfo from '../BOMInfo/BOMInfo.jsx';
@@ -219,9 +218,8 @@ export default function MiniDrawer() {
           <Route path="/cashFlowStatement" element={<CasFlowStatement />} />
           <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
-          <Route path="/accountPayable" element={<AccountPayable />} />
-          <Route path="/AcReceivable" element={<AcReceivable />} />          
-          <Route path="/AccountReceivableData" element={<AccountReceivableData />} />
+          <Route path="/accountPayable" element={<AccountPayable />} />      
+          <Route path="/AcReceivable" element={<AcReceivable />} />             
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
           <Route path="/partInfo" element={<PartInfo />} />
           <Route path="/BOMInfo" element={<BOMInfo />} />

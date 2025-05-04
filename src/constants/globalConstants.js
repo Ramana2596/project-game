@@ -86,7 +86,6 @@ import Operations from "../pages/Operations/Operations";
 import MarketScenario from "../pages/MarketScenario/MarketScenario.jsx";
 import AccountPayable from "../pages/AccountPayable/AccountPayable";
 import SavingsRealisable from "../pages/SavingsRealisable/SavingsRealisable";
-import AccountReceivableData from '../pages/AccountReceivableData/AccountReceivableData.jsx';
 import AcReceivable from '../pages/AcReceivable/AcReceivable.jsx';
 import PartInfo from '../pages/PartInfo/PartInfo';
 import BOMInfo from '../pages/BOMInfo/BOMInfo.jsx';
@@ -253,14 +252,6 @@ export const componentList = [
         path: "/CashBookInfo",
         href: "/operationGame/CashBookInfo",
         routeElement: <CashBookInfo />
-      },
-      {
-        iconPath: receivableIcon,
-        id: "UI 21 200",
-        label: "Accounts Receivable",
-        path: "/AccountReceivableData",
-        href: "/operationGame/AccountReceivableData",
-        routeElement: <AccountReceivableData />
       },
       {
         iconPath: receivableIcon,
