@@ -3,10 +3,10 @@ import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.js";
 import { useEffect, useState } from "react";
-import { getAccountPayable } from "./services/service.js";
+import { getAcReceivable} from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function AccountPayable() {
+export default function AcReceivable() {
   const { userInfo } = useUser();
   let getTableDataPayload = {
     gameId: userInfo?.gameId,
@@ -15,7 +15,7 @@ export default function AccountPayable() {
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-      getAccountPayable(getTableDataPayload).then((response) => {  
+      getAcReceivable(getTableDataPayload).then((response) => {  
       if (response) {
         setTableData(response.data);
       }

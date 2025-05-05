@@ -3,19 +3,18 @@ import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.js";
 import { useEffect, useState } from "react";
-import { getUserRoles} from "./services/service.js";
+import { getClassRoomSession} from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function UserRoles() {
+export default function ClassRoomSession() {
   const { userInfo } = useUser();
   let getTableDataPayload = {
-    gameId: userInfo?.gameId
-  //  gameBatch: userInfo?.gameBatch,
-  //  gameTeam: userInfo?.gameTeam,
+    gameId: userInfo?.gameId,
+    gameBatch: userInfo?.gameBatch,
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getUserRoles(getTableDataPayload).then((response) => {
+    getClassRoomSession(getTableDataPayload).then((response) => {
       if (response) {
         setTableData(response.data);
       }
@@ -24,7 +23,7 @@ export default function UserRoles() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
- 
+
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}

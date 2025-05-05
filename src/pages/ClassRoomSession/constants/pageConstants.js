@@ -3,8 +3,11 @@ export const pageConstants = {
 //  gameTeam: "Team",
   tableHeading: [
     "Team",
-    "Played Period",
+    "Period",
     "Completed Stage",
-    "Date of Participation",
-  ],
+    "Role in Team",
+    "User Name",
+    "In Session",
+    "Attending As",
+  ]
 };

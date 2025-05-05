@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
-export function getUserRoles(queryParams) {
-    return api.get('/api/getUserRoles',
+export function getRoleInfo(queryParams) {
+    return api.get('/api/getRoleInfo',
         {
             params: { ...queryParams }
         });

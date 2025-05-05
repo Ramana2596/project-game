@@ -45,7 +45,6 @@ import partIcon from '../assets/navigation-menu/part.png'
 import bomIcon from '../assets/navigation-menu/bom.png'
 import asterikIcon from '../assets/navigation-menu/asterik.png'
 import budgetIcon from '../assets/navigation-menu/budget.png'
-import applicationIcon from '../assets/navigation-menu/application.png'
 import marketIcon from '../assets/navigation-menu/market.png'
 import choiceIcon from '../assets/navigation-menu/choice.png'
 import loanIcon from '../assets/navigation-menu/loan.png'
@@ -73,7 +72,11 @@ import businessStrategyIcon from '../assets/navigation-menu/business-strategy.pn
 import resultIcon from '../assets/navigation-menu/result.png'
 import actionableIcon from '../assets/navigation-menu/actionable.png'
 import statisticsIcon from '../assets/navigation-menu/statistics.png'
-
+import onlinestudyIcon from '../assets/navigation-menu/onlinestudy.png'
+import softwareIcon from '../assets/navigation-menu/software.png'
+import professionalIcon from '../assets/navigation-menu/professional.png'
+import IdCardIcon from '../assets/navigation-menu/IdCard.png'
+import userIcon from '../assets/navigation-menu/user.png'
 
 // end of png 
 
@@ -83,7 +86,7 @@ import Operations from "../pages/Operations/Operations";
 import MarketScenario from "../pages/MarketScenario/MarketScenario.jsx";
 import AccountPayable from "../pages/AccountPayable/AccountPayable";
 import SavingsRealisable from "../pages/SavingsRealisable/SavingsRealisable";
-import AccountReceivable from "../pages/AccountReceivable/AccountReceivable.jsx";
+import AcReceivable from '../pages/AcReceivable/AcReceivable.jsx';
 import PartInfo from '../pages/PartInfo/PartInfo';
 import BOMInfo from '../pages/BOMInfo/BOMInfo.jsx';
 import RBACInfo from '../pages/RBACInfo/RBACInfo.jsx';
@@ -108,12 +111,15 @@ import ResultantInfo from '../pages/ResultantInfo/ResultantInfo.jsx';
 import MfgWorkCentreInfo from '../pages/MfgWorkCentreInfo/MfgWorkCentreInfo.jsx';
 import ValidInputCodes from '../pages/ValidInputCodes/ValidInputCodes.jsx';
 import LiabilityInfo from '../pages/LiabilityInfo/LiabilityInfo.jsx';
-import UserRoles from '../pages/UserRoles/UserRoles.jsx';
+import RoleInfo from '../pages/RoleInfo/RoleInfo.jsx';
 import StrategySetCollection from '../pages/StrategySetCollection/StrategySetCollection.jsx';
 import ProductMstInfo from "../pages/ProductMstInfo/ProductMstInfo.jsx";
 import ValueStream from '../pages/ValueStream/ValueStream.jsx';
 import ValueStreamMap from "../pages/ValueStreamMap/ValueStreamMap.jsx";
-
+import ClassRoomSession from "../pages/ClassRoomSession/ClassRoomSession.jsx";
+import ProfessionInfo from '../pages/ProfessionInfo/ProfessionInfo.jsx';
+import ProfessionRoleInfo from '../pages/ProfessionRoleInfo/ProfessionRoleInfo.jsx';
+import UserProfileInfo from "../pages/UserProfileInfo/UserProfileInfo.jsx";
 
 //
 export const componentList = [
@@ -251,9 +257,9 @@ export const componentList = [
         iconPath: receivableIcon,
         id: "UI 21 200",
         label: "Accounts Receivable",
-        path: "/accountReceivable",
-        href: "/operationGame/accountReceivable",
-        routeElement: <AccountReceivable />
+        path: "/AcReceivable",
+        href: "/operationGame/AcReceivable",
+        routeElement: <AcReceivable />
       },
       {
         iconPath: payableIcon,
@@ -368,13 +374,22 @@ export const componentList = [
         routeElement: <SavingsRealisable />
       },
       {
-        iconPath: progressIcon,
+        iconPath: onlinestudyIcon,
         id: "UI 24 070",
+        label: "Class Room Session",
+        path: "/ClassRoomSession",
+        href: "/operationGame/ClassRoomSession",
+        routeElement: <ClassRoomSession />
+      },
+      {
+        iconPath: progressIcon,
+        id: "UI 24 090",
         label: "Team Progress Status",
         path: "/TeamProgressInfo",
         href: "/operationGame/TeamProgressInfo",
         routeElement: <TeamProgressInfo />
       }
+      
     ],
   },
   {
@@ -454,7 +469,7 @@ export const componentList = [
     routeElement: <UserRoleManagement />
   },
   {
-    iconPath: applicationIcon,
+    iconPath: softwareIcon,
     id: "UI 001",
     label: "System Info Desk",
     path: "/SystemInfoDesk",
@@ -544,10 +559,26 @@ export const componentList = [
       {
         iconPath: roleIcon,
         id: "UI 25 020",
-        label: "User Roles Info",
-        path: "/UserRoles",
-        href: "/operationGame/UserRoles",
-        routeElement: <UserRoles />
+        label: "Role Info",
+        path: "/RoleInfo",
+        href: "/operationGame/RoleInfo",
+        routeElement: <RoleInfo />
+      },
+      {
+        iconPath: professionalIcon,
+        id: "UI 25 060",
+        label: "Profession Info",
+        path: "/ProfessionInfo",
+        href: "/operationGame/ProfessionInfo",
+        routeElement: <ProfessionInfo />
+      },
+      {
+        iconPath: IdCardIcon,
+        id: "UI 25 070",
+        label: "Profession Vs Role Info",
+        path: "/ProfessionRoleInfo",
+        href: "/operationGame/ProfessionRoleInfo",
+        routeElement: <ProfessionRoleInfo />
       },
       {
         iconPath: rightaccessIcon,
@@ -556,6 +587,14 @@ export const componentList = [
         path: "/RBACInfo",
         href: "/operationGame/RBACInfo",
         routeElement: <RBACInfo />
+      },
+      {
+        iconPath: userIcon,
+        id: "UI 25 040",
+        label: "User Profile",
+        path: "/UserProfileInfo",
+        href: "/operationGame/UserProfileInfo",
+        routeElement: <UserProfileInfo />
       }
     ],
   }

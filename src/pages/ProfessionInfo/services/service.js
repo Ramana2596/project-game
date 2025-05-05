@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
-    export function getAccountPayable(queryParams) {
-    return api.get('/api/getAccountPayableData',
+export function getProfessionInfo(queryParams) {
+    return api.get('/api/getProfessionInfo',
         {
             params: { ...queryParams }
         });

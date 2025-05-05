@@ -59,7 +59,7 @@ import HomePage from '../HomePage/HomePage.jsx';
 import Operations from '../Operations/Operations.jsx';
 import AccountPayable from '../AccountPayable/AccountPayable.jsx';
 import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
-import AccountReceivable from '../AccountReceivable/AccountReceivable.jsx';
+import AcReceivable from '../AcReceivable/AcReceivable.jsx';
 import PartInfo from '../PartInfo/PartInfo.jsx';
 import BOMInfo from '../BOMInfo/BOMInfo.jsx';
 import RBACInfo from '../RBACInfo/RBACInfo.jsx';
@@ -86,12 +86,16 @@ import SystemInfoDesk from '../SystemInfoDesk/SystemInfoDesk.jsx';
 import MarketScenario from '../MarketScenario/MarketScenario.jsx';
 import ValidInputCodes from '../ValidInputCodes/ValidInputCodes.jsx';
 import LiabilityInfo from '../LiabilityInfo/LiabilityInfo.jsx';
-import UserRoles from '../UserRoles/UserRoles.jsx';
+import RoleInfo from '../RoleInfo/RoleInfo.jsx';
 import StrategySetCollection from '../StrategySetCollection/StrategySetCollection.jsx';
 import ProductMstInfo from '../ProductMstInfo/ProductMstInfo.jsx';
 import ValueStream from '../ValueStream/ValueStream.jsx';
 import ValueStreamMap from '../ValueStreamMap/ValueStreamMap.jsx';
+import ClassRoomSession from '../ClassRoomSession/ClassRoomSession.jsx';
 import UserRoleManagement from '../UserRoleManagement/UserRoleManagement.jsx';
+import ProfessionInfo from '../ProfessionInfo/ProfessionInfo.jsx';
+import ProfessionRoleInfo from '../ProfessionRoleInfo/ProfessionRoleInfo.jsx';
+import UserProfileInfo from '../UserProfileInfo/UserProfileInfo.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -214,8 +218,8 @@ export default function MiniDrawer() {
           <Route path="/cashFlowStatement" element={<CasFlowStatement />} />
           <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
-          <Route path="/accountPayable" element={<AccountPayable />} />
-          <Route path="/accountReceivable" element={<AccountReceivable />} />
+          <Route path="/accountPayable" element={<AccountPayable />} />      
+          <Route path="/AcReceivable" element={<AcReceivable />} />             
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
           <Route path="/partInfo" element={<PartInfo />} />
           <Route path="/BOMInfo" element={<BOMInfo />} />
@@ -243,11 +247,15 @@ export default function MiniDrawer() {
           <Route path="/MarketScenario" element={<MarketScenario />} />
           <Route path='/ValidInputCodes' element={<ValidInputCodes />} />
           <Route path='/LiabilityInfo' element={<LiabilityInfo />} />
-          <Route path='/UserRoles' element={<UserRoles />} />
+          <Route path='/RoleInfo' element={<RoleInfo />} />
           <Route path='/StrategySetCollection' element={<StrategySetCollection />} />
           <Route path='/ProductMstInfo' element={<ProductMstInfo />} />
           <Route path='/ValueStream' element={<ValueStream />} />
           <Route path='/ValueStreamMap' element={<ValueStreamMap />} />
+          <Route path='/ClassRoomSession' element={<ClassRoomSession />} />
+          <Route path='/ProfessionInfo' element={<ProfessionInfo />} />
+          <Route path='/ProfessionRoleInfo' element={<ProfessionRoleInfo />} />
+          <Route path='/UserProfileInfo' element={<UserProfileInfo />} />
         </Routes>
       </Box>
     </Box>
