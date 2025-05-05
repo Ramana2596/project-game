@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
-export function getAccountReceivable(queryParams) {
-    return api.get('/api/getAccountReceivable',
+export function getAccountReceivableData(queryParams) {
+    return api.get('/api/getAccountReceivableData',
         {
             params: { ...queryParams }
         });
