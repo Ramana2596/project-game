@@ -83,6 +83,7 @@ import ShopPerformanceInfo from '../ShopPerformanceInfo/ShopPerformanceInfo.jsx'
 import SCMPerformanceInfo from '../SCMPerformanceInfo/SCMPerformanceInfo.jsx';
 import MfgWorkCentreInfo from '../MfgWorkCentreInfo/MfgWorkCentreInfo.jsx';
 import SystemInfoDesk from '../SystemInfoDesk/SystemInfoDesk.jsx';
+import UserMgtDesk from '../UserMgtDesk/UserMgtDesk.jsx';
 import MarketScenario from '../MarketScenario/MarketScenario.jsx';
 import ValidInputCodes from '../ValidInputCodes/ValidInputCodes.jsx';
 import LiabilityInfo from '../LiabilityInfo/LiabilityInfo.jsx';
@@ -244,6 +245,7 @@ export default function MiniDrawer() {
           <Route path="/SCMPerformanceInfo" element={<SCMPerformanceInfo />} />
           <Route path="/MfgWorkCentreInfo" element={<MfgWorkCentreInfo />} />
           <Route path="/SystemInfoDesk" element={<SystemInfoDesk />} />
+          <Route path="/UserMgtDesk" element={<UserMgtDesk />} />
           <Route path="/MarketScenario" element={<MarketScenario />} />
           <Route path='/ValidInputCodes' element={<ValidInputCodes />} />
           <Route path='/LiabilityInfo' element={<LiabilityInfo />} />

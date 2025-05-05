@@ -18,6 +18,7 @@ import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
 import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
 import SystemInfoDesk from "../pages/SystemInfoDesk/SystemInfoDesk.jsx";
+import UserMgtDesk from "../pages/UserMgtDesk/UserMgtDesk.jsx";
 import UserRoleManagement from "../pages/UserRoleManagement/UserRoleManagement";
 
 // start of png
@@ -77,6 +78,7 @@ import softwareIcon from '../assets/navigation-menu/software.png'
 import professionalIcon from '../assets/navigation-menu/professional.png'
 import IdCardIcon from '../assets/navigation-menu/IdCard.png'
 import userIcon from '../assets/navigation-menu/user.png'
+import verifiedIcon from '../assets/navigation-menu/verified.png'
 
 // end of png 
 
@@ -389,7 +391,6 @@ export const componentList = [
         href: "/operationGame/TeamProgressInfo",
         routeElement: <TeamProgressInfo />
       }
-      
     ],
   },
   {
@@ -461,7 +462,7 @@ export const componentList = [
     ],
   },
   {
-    iconPath: secureAccessIcon,
+    iconPath: verifiedIcon,
     id: "UI 15 030",
     label: "User Role Management",
     path: "/userRoleManagement",
@@ -547,7 +548,17 @@ export const componentList = [
         path: "/ValueStreamMap",
         href: "/operationGame/ValueStreamMap",
         routeElement: <ValueStreamMap />
-      },
+      }
+    ],
+  },
+  {
+    iconPath: secureAccessIcon,
+    id: "UI 001",
+    label: "User Mgt Desk",
+    path: "/UserMgtDesk",
+    href: "/operationGame/UserMgtDesk",
+    routeElement: <UserMgtDesk />,
+    children: [
       {
         iconPath: tilesIcon,
         id: "UI 25 010",
