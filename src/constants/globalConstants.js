@@ -122,6 +122,7 @@ import ClassRoomSession from "../pages/ClassRoomSession/ClassRoomSession.jsx";
 import ProfessionInfo from '../pages/ProfessionInfo/ProfessionInfo.jsx';
 import ProfessionRoleInfo from '../pages/ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from "../pages/UserProfileInfo/UserProfileInfo.jsx";
+import OperationInputError from '../pages/OperationInputError/OperationInputError.jsx';
 
 //
 export const componentList = [
@@ -214,6 +215,14 @@ export const componentList = [
         path: "/operationalPlanInfo",
         href: "/operationGame/operationalPlanInfo",
         routeElement: <OperationalPlanInfo />
+      },
+       {
+        iconPath: asterikIcon,
+        id: "UI 22 280",
+        label: "Check Minimum Operation Input",
+        path: "/OperationInputError",
+        href: "/operationGame/OperationInputError",
+        routeElement: <OperationInputError />
       },
       {
         iconPath: rawIcon,
