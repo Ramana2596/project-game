@@ -123,6 +123,8 @@ import ProfessionInfo from '../pages/ProfessionInfo/ProfessionInfo.jsx';
 import ProfessionRoleInfo from '../pages/ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from "../pages/UserProfileInfo/UserProfileInfo.jsx";
 import OperationInputError from '../pages/OperationInputError/OperationInputError.jsx';
+import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
+
 
 //
 export const componentList = [
@@ -215,14 +217,6 @@ export const componentList = [
         path: "/operationalPlanInfo",
         href: "/operationGame/operationalPlanInfo",
         routeElement: <OperationalPlanInfo />
-      },
-       {
-        iconPath: asterikIcon,
-        id: "UI 22 280",
-        label: "Check Minimum Operation Input",
-        path: "/OperationInputError",
-        href: "/operationGame/OperationInputError",
-        routeElement: <OperationInputError />
       },
       {
         iconPath: rawIcon,
@@ -427,6 +421,14 @@ export const componentList = [
         routeElement: <MarketFactorInfoInput />
       },
       {
+        iconPath: asterikIcon,
+        id: "UI 22 270",
+        label: "Check Minimum Market Input",
+        path: "/MarketInputError",
+        href: "/operationGame/MarketInputError",
+        routeElement: <MarketInputError />
+      },
+      {
         iconPath: strategyIcon,
         id: "UI 12 170",
         label: "Strategy Master",
@@ -467,6 +469,14 @@ export const componentList = [
         path: "/operationalPlanInfoInput",
         href: "/operationGame/operationalPlanInfoInput",
         routeElement: <OperationalPlanInfoInput />
+      },
+      {
+        iconPath: asterikIcon,
+        id: "UI 22 280",
+        label: "Check Minimum Operation Input",
+        path: "/OperationInputError",
+        href: "/operationGame/OperationInputError",
+        routeElement: <OperationInputError />
       }
     ],
   },

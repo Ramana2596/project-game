@@ -98,6 +98,8 @@ import ProfessionInfo from '../ProfessionInfo/ProfessionInfo.jsx';
 import ProfessionRoleInfo from '../ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from '../UserProfileInfo/UserProfileInfo.jsx';
 import OperationInputError from '../OperationInputError/OperationInputError.jsx';
+import MarketInputError from '../MarketInputError/MarketInputError.jsx';
+
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -260,6 +262,7 @@ export default function MiniDrawer() {
           <Route path='/ProfessionRoleInfo' element={<ProfessionRoleInfo />} />
           <Route path='/UserProfileInfo' element={<UserProfileInfo />} />
           <Route path='/OperationInputError' element={<OperationInputError />} />
+          <Route path='/MarketInputError' element={<MarketInputError />} />
           
         </Routes>
       </Box>
