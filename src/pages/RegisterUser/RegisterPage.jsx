@@ -41,7 +41,7 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle the form submission logic here
-        registerUser(registerUserPayload);
+        registerUser({ ...registerUserPayload, cmdLine: 'Add_User' });
     };
 
     return (
