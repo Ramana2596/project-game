@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
-import { TextField, Button, Container, Box, Typography, Card, CardContent } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { TextField, Button, Container, Box, Typography, Card, CardContent, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useNavigate } from "react-router-dom";
+import { getProfessionInfo, registerUser } from "./services/service.js";
 
 const Register = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [profession, setProfession] = useState('');
+    const [learningMode, setLearningMode] = useState('');
     const [error, setError] = useState(false);
+    const [professionInfo, setProfessionData] = useState([]);
+    let registerUserPayload = {
+        name: name,
+        email: email,
+        profession: profession,
+        learningMode: learningMode
+    };
 
     const routeHistory = useNavigate();
 
@@ -20,14 +28,20 @@ const Register = () => {
         setError(!emailRegex.test(value));
     };
 
+    useEffect(() => {
+        getProfessionInfo().then((response) => {
+            if (response) {
+                setProfessionData(response.data);
+            }
+        });
+    }, []);
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle the form submission logic here
-        console.log('First Name:', firstName);
-        console.log('Last Name:', lastName);
-        console.log('Email:', email);
-        console.log('Email:', profession);
+        registerUser(registerUserPayload);
     };
 
     return (
@@ -41,22 +55,12 @@ const Register = () => {
                         <form onSubmit={handleSubmit}>
                             <Box sx={{ mb: 2 }}>
                                 <TextField
-                                    label="First Name"
+                                    label="Name"
                                     variant="outlined"
                                     fullWidth
-                                    value={firstName}
+                                    value={name}
                                     required
-                                    onChange={(e) => setFirstName(e.target.value)}
-                                />
-                            </Box>
-                            <Box sx={{ mb: 2 }}>
-                                <TextField
-                                    label="Last Name"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={lastName}
-                                    required
-                                    onChange={(e) => setLastName(e.target.value)}
+                                    onChange={(e) => setName(e.target.value)}
                                 />
                             </Box>
                             <Box sx={{ mb: 2 }}>
@@ -72,15 +76,34 @@ const Register = () => {
                                 />
                             </Box>
                             <Box sx={{ mb: 2 }}>
-                                <TextField
-                                    label="Profession"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={profession}
-                                    required
-                                    onChange={(e) => setProfession(e.target.value)}
-                                />
+                                <FormControl fullWidth variant="outlined" required>
+                                    <InputLabel>Profession</InputLabel>
+                                    <Select
+                                        value={profession}
+                                        onChange={(e) => setProfession(e.target.value)}
+                                        label="Profession"
+                                    >
+                                        {professionInfo.map((prof) => (
+                                            <MenuItem key={prof.profession} value={prof.PF_Id}>
+                                                {prof.Profession}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Box>
+                            <Box sx={{ mb: 2 }}>
+                                <FormControl fullWidth variant="outlined" required>
+                                    <InputLabel>Learning Mode</InputLabel>
+                                    <Select
+                                        value={learningMode}
+                                        onChange={(e) => setLearningMode(e.target.value)}
+                                        label="Learning Mode"
+                                    >
+                                        <MenuItem value="class_room">class_room</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+
                             <Button type="submit" className='standard-button-primary-button' color="primary">
                                 Register
                             </Button>

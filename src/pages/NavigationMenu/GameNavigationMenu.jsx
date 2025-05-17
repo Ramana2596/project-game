@@ -99,6 +99,7 @@ import ProfessionRoleInfo from '../ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from '../UserProfileInfo/UserProfileInfo.jsx';
 import OperationInputError from '../OperationInputError/OperationInputError.jsx';
 import MarketInputError from '../MarketInputError/MarketInputError.jsx';
+import omgLogo from '../../assets/omg-logo.png';
 
 
 export default function MiniDrawer() {
@@ -146,6 +147,8 @@ export default function MiniDrawer() {
       <CssBaseline />
       <AppBar position="fixed" open={open} sx={{ backgroundImage: 'radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%))' }}>
         <Toolbar sx={{ backgroundImage: 'inherit' }}>
+          {/* Logo Image */}
+          <img src={omgLogo} alt="OMG Logo" style={{ width: 40, height: 40, marginRight: 8 }} />
           <Typography color='black' align="left" variant="h4" noWrap component="div" sx={{ ...(open && { display: 'none' }) }}>
             {pageConstants.companyTitleCollapsed}
           </Typography>
@@ -222,8 +225,8 @@ export default function MiniDrawer() {
           <Route path="/cashFlowStatement" element={<CasFlowStatement />} />
           <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
-          <Route path="/accountPayable" element={<AccountPayable />} />      
-          <Route path="/AcReceivable" element={<AcReceivable />} />             
+          <Route path="/accountPayable" element={<AccountPayable />} />
+          <Route path="/AcReceivable" element={<AcReceivable />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
           <Route path="/partInfo" element={<PartInfo />} />
           <Route path="/BOMInfo" element={<BOMInfo />} />
@@ -263,7 +266,7 @@ export default function MiniDrawer() {
           <Route path='/UserProfileInfo' element={<UserProfileInfo />} />
           <Route path='/OperationInputError' element={<OperationInputError />} />
           <Route path='/MarketInputError' element={<MarketInputError />} />
-          
+
         </Routes>
       </Box>
     </Box>
