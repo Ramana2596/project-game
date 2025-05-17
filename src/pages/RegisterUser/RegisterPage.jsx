@@ -13,8 +13,8 @@ const Register = () => {
     let registerUserPayload = {
         name: name,
         email: email,
-        profession: profession,
-        learningMode: learningMode
+        pfId: profession,
+        learnMode: learningMode
     };
 
     const routeHistory = useNavigate();
