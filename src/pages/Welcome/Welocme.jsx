@@ -57,7 +57,7 @@ const WelcomePage = () => {
                                 }
                             }}
                         >
-                            <Button onClick={() => setActiveSection(section?.key)} sx={{ marginRight: 1 }}>
+                            <Button onClick={() => setActiveSection(section?.key)} sx={{ fontWeight: 'bold', marginRight: 1 }}>
                                 {shortTitles[section?.key] || section?.title}
                             </Button>
                         </Tooltip>
