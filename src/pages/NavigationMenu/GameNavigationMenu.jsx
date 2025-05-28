@@ -56,6 +56,7 @@ import { pageConstants } from './pageConstants.js';
 import '../NavigationMenu/styles/temporaryDrawer.css';
 import FeatureManagement from '../FeatureManagement/FeatureManagement.jsx';
 import HomePage from '../HomePage/HomePage.jsx';
+import HomePageNew from '../HomePage/HomePageNew.jsx';
 import Operations from '../Operations/Operations.jsx';
 import AccountPayable from '../AccountPayable/AccountPayable.jsx';
 import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
@@ -99,7 +100,7 @@ import ProfessionRoleInfo from '../ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from '../UserProfileInfo/UserProfileInfo.jsx';
 import OperationInputError from '../OperationInputError/OperationInputError.jsx';
 import MarketInputError from '../MarketInputError/MarketInputError.jsx';
-
+import ReleaseMarketInput from '../ReleaseMarketInput/ReleaseMarketInput.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -199,7 +200,7 @@ export default function MiniDrawer() {
       <Box component="main" sx={{ flexGrow: 1 }}>
         <DrawerHeader />
         <Routes>
-          <Route path="/homePage" element={<HomePage />} />
+          <Route path="/homePage" element={<HomePageNew />} />
           <Route path="/gameDashboard" element={<GameDashboard />} />
           <Route path="/userRoleManagement" element={<UserRoleManagement />} />
           <Route path="/infoDesk" element={<InfoDesk />} />
@@ -263,7 +264,7 @@ export default function MiniDrawer() {
           <Route path='/UserProfileInfo' element={<UserProfileInfo />} />
           <Route path='/OperationInputError' element={<OperationInputError />} />
           <Route path='/MarketInputError' element={<MarketInputError />} />
-          
+          <Route path='/ReleaseMarketInput' element={<ReleaseMarketInput />} />
         </Routes>
       </Box>
     </Box>
