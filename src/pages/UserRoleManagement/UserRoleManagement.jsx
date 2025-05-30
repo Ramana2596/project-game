@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { fetchEmails, fetchRoles, approveUserRole } from './services/userRoleManagementService';
-import { Container, Grid, Typography, FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio, Box, Button } from '@mui/material';
+import { fetchEmails, fetchRoles, approveUserRole, fetchDefaultRolesForProfession } from './services/userRoleManagementService';
+import { Container, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, Box, Button } from '@mui/material';
 
 const UserRoleManagement = () => {
     const [emails, setEmails] = useState([]);
     const [roles, setRoles] = useState([]);
     const [selectedEmail, setSelectedEmail] = useState('');
-    const [selectedRoles, setSelectedRoles] = useState('');
+    const [selectedRoles, setSelectedRoles] = useState([]);
+    const [profession, setProfession] = useState('');
+    const [defaultRoles, setDefaultRoles] = useState([]);
 
     useEffect(() => {
+        loadDefaultRoles();
         loadEmails();
         loadRoles();
     }, []);
 
+    // Fetch emails
     const loadEmails = async () => {
         try {
             const emailData = await fetchEmails();
@@ -22,27 +26,47 @@ const UserRoleManagement = () => {
         }
     };
 
+    // Fetch all roles
     const loadRoles = async () => {
         try {
-            const roleData = await fetchRoles();
+            const roleData = await fetchRoles({ gameId: 'OpsMgt' });
             setRoles(roleData);
         } catch (error) {
             console.error('Failed to load roles:', error);
         }
     };
 
+    // Fetch default roles for a profession
+    const loadDefaultRoles = async () => {
+        try {
+            const defaultRoleIds = await fetchDefaultRolesForProfession({ gameId: 'OpsMgt' });
+            setDefaultRoles(defaultRoleIds.map(String)); // ensure string type
+        } catch (error) {
+            console.error('Failed to load default roles:', error);
+            setDefaultRoles([]);
+        }
+    };
+
+    // Handle email change and set profession
     const handleEmailChange = (event) => {
         setSelectedEmail(event.target.value);
     };
 
+    // Handle role checkbox change
     const handleRoleChange = (event) => {
-        setSelectedRoles(event.target.value);
+        const value = event.target.value;
+        setSelectedRoles((prev) =>
+            prev.includes(value)
+                ? prev.filter((roleId) => roleId !== value)
+                : [...prev, value]
+        );
     };
 
+    // Approve handler
     const handleApprove = async () => {
-        if (selectedEmail && selectedRoles) {
+        if (selectedEmail && selectedRoles.length > 0) {
             try {
-                await approveUserRole({ userId: selectedEmail, selectedRole: selectedRoles });
+                await approveUserRole({ userId: selectedEmail, selectedRoles });
                 alert('User role approved successfully!');
             } catch (error) {
                 console.error('Approval failed:', error);
@@ -110,18 +134,27 @@ const UserRoleManagement = () => {
                             Select Role
                         </Typography>
                         <FormControl component="fieldset">
-                            <RadioGroup value={selectedRoles} onChange={handleRoleChange}>
-                                {roles.map((role) => (
-                                    <FormControlLabel key={role} value={role} control={<Radio sx={{ color: 'primary.main' }} />} label={role} />
-                                ))}
-                            </RadioGroup>
+                            {roles.map((role) => (
+                                <FormControlLabel
+                                    key={role.RL_Id}
+                                    control={
+                                        <Checkbox
+                                            checked={selectedRoles.includes(String(role.RL_Id))}
+                                            onChange={handleRoleChange}
+                                            value={String(role.RL_Id)}
+                                            sx={{ color: 'primary.main' }}
+                                        />
+                                    }
+                                    label={role.Role}
+                                />
+                            ))}
                         </FormControl>
 
                         {/* Approve Button */}
                         <Button
                             fullWidth
                             className="standard-button-primary-button"
-                            disabled={!selectedEmail || !selectedRoles}
+                            disabled={!selectedEmail || selectedRoles.length === 0}
                             onClick={handleApprove}
                         >
                             Approve

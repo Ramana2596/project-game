@@ -23,7 +23,6 @@ import UserRoleManagement from "../pages/UserRoleManagement/UserRoleManagement";
 
 // start of png
 import homeIcon from '../assets/navigation-menu/home.png';
-import dashboardIcon from '../assets/navigation-menu/dash-board.png';
 import productionIcon from '../assets/navigation-menu/production.png';
 import salesIcon from '../assets/navigation-menu/sales.png';
 import finishedIcon from '../assets/navigation-menu/finished.png';
@@ -83,7 +82,6 @@ import verifiedIcon from '../assets/navigation-menu/verified.png'
 // end of png 
 
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
-import HomePage from "../pages/HomePage/HomePage";
 import Operations from "../pages/Operations/Operations";
 import MarketScenario from "../pages/MarketScenario/MarketScenario.jsx";
 import AccountPayable from "../pages/AccountPayable/AccountPayable";
@@ -131,17 +129,9 @@ export const componentList = [
   {
     iconPath: homeIcon,
     id: "UI 001",
-    label: "Home",
+    label: "Game Dashboard",
     path: "/homePage",
     href: "/operationGame/homePage",
-    routeElement: <HomePage />
-  },
-  {
-    iconPath: dashboardIcon,
-    id: "UI 001",
-    label: "Game Dashboard",
-    path: "/gameDashboard",
-    href: "/operationGame/gameDashboard",
     routeElement: <GameDashboard />,
     children: [
       {
