@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchAvailableUsers, fetchRoles, updateUserRole, fetchDefaultRolesForProfession } from './services/userRoleManagementService';
 import { Container, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, Box, Button } from '@mui/material';
 import ToastMessage from '../../components/ToastMessage.jsx';
+import { useUser } from "../../core/access/userContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js"; // <-- Use shared loading context
 
 const UserRoleManagement = () => {
+    const { userInfo } = useUser(); // Get userInfo (contains gameId)
+    const gameId = userInfo?.gameId;
+    const { setIsLoading } = useLoading(); // <-- Use loading context
+
     const [users, setUsers] = useState([]);
     const [roles, setRoles] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -16,40 +22,35 @@ const UserRoleManagement = () => {
     });
 
     useEffect(() => {
-        loadUsers();
-        loadRoles();
-        loadProfessionRoles();
-    }, []);
-
-    // Fetch users
-    const loadUsers = async () => {
-        try {
-            const userData = await fetchAvailableUsers({ gameId: 'OpsMgt' });
-            setUsers(userData);
-        } catch (error) {
-            console.error('Failed to load users:', error);
-        }
-    };
-
-    // Fetch all roles
-    const loadRoles = async () => {
-        try {
-            const roleData = await fetchRoles({ gameId: 'OpsMgt' });
-            setRoles(roleData);
-        } catch (error) {
-            console.error('Failed to load roles:', error);
-        }
-    };
-
-    // Fetch all profession-role mappings ONCE
-    const loadProfessionRoles = async () => {
-        try {
-            const data = await fetchDefaultRolesForProfession({ gameId: 'OpsMgt' });
-            setProfessionRoleMap(data); // Expecting array of { PF_Id, RL_Id }
-        } catch (error) {
-            setProfessionRoleMap([]);
-        }
-    };
+        let isMounted = true;
+        const fetchAll = async () => {
+            setIsLoading(true);
+            try {
+                const [userData, roleData, professionRoleData] = await Promise.all([
+                    fetchAvailableUsers({ gameId }),
+                    fetchRoles({ gameId }),
+                    fetchDefaultRolesForProfession({ gameId })
+                ]);
+                if (isMounted) {
+                    setUsers(userData);
+                    setRoles(roleData);
+                    setProfessionRoleMap(professionRoleData);
+                }
+            } catch (error) {
+                if (isMounted) {
+                    setAlertData({
+                        severity: "error",
+                        message: "Failed to load data.",
+                        isVisible: true,
+                    });
+                }
+            } finally {
+                if (isMounted) setIsLoading(false);
+            }
+        };
+        if (gameId) fetchAll();
+        return () => { isMounted = false; };
+    }, [gameId, setIsLoading]);
 
     // When user changes, set selected user and roles
     const handleUserChange = (event) => {
@@ -90,9 +91,10 @@ const UserRoleManagement = () => {
     // Approve handler
     const handleApprove = async () => {
         if (selectedUser && selectedRoles.length > 0) {
+            setIsLoading(true);
             try {
                 const userRoleList = selectedRoles.map(roleId => ({
-                    gameId: 'OpsMgt',
+                    gameId,
                     userId: selectedUser.User_Id,
                     roleId: roleId
                 }));
@@ -103,6 +105,12 @@ const UserRoleManagement = () => {
                         message: "User role updated successfully!",
                         isVisible: true,
                     });
+                } else {
+                    setAlertData({
+                        severity: "error",
+                        message: response.error || "Failed to update user role.",
+                        isVisible: true,
+                    });
                 }
             } catch (error) {
                 setAlertData({
@@ -110,6 +118,8 @@ const UserRoleManagement = () => {
                     message: `Code: ${error?.status} - ${error?.response?.data?.message}`,
                     isVisible: true,
                 });
+            } finally {
+                setIsLoading(false);
             }
         }
     };
@@ -235,7 +245,6 @@ const UserRoleManagement = () => {
                 </Grid>
 
             </Grid>
-
             <ToastMessage
                 open={alertData.isVisible}
                 severity={alertData.severity}

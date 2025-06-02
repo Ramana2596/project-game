@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Box, Typography, Card, CardContent, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { getProfessionInfo, registerUser } from "./services/service.js";
+import ToastMessage from '../../components/ToastMessage.jsx';
+import { useLoading } from "../../hooks/loadingIndicatorContext.js"; // <-- Use shared loading context
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -10,6 +12,13 @@ const Register = () => {
     const [learningMode, setLearningMode] = useState('');
     const [error, setError] = useState(false);
     const [professionInfo, setProfessionData] = useState([]);
+    const [alertData, setAlertData] = useState({
+        severity: "",
+        message: "",
+        isVisible: false,
+    });
+    const { setIsLoading } = useLoading(); // <-- Use loading context
+
     let registerUserPayload = {
         name: name,
         email: email,
@@ -29,19 +38,46 @@ const Register = () => {
     };
 
     useEffect(() => {
+        setIsLoading(true);
         getProfessionInfo().then((response) => {
             if (response) {
                 setProfessionData(response.data);
             }
-        });
-    }, []);
+            setIsLoading(false);
+        }).catch(() => setIsLoading(false));
+    }, [setIsLoading]);
 
+    // Auto-hide the toast after 5 seconds
+    useEffect(() => {
+        if (alertData.isVisible) {
+            const timer = setTimeout(() => {
+                setAlertData((prev) => ({ ...prev, isVisible: false }));
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [alertData.isVisible]);
 
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle the form submission logic here
-        registerUser({ ...registerUserPayload, cmdLine: 'Add_User' });
+        setIsLoading(true);
+        try {
+            const response = await registerUser({ ...registerUserPayload, cmdLine: 'Add_User' });
+            if (response) {
+                setAlertData({
+                    severity: "success",
+                    message: "User registered successfully!",
+                    isVisible: true,
+                });
+            }
+        } catch (err) {
+            setAlertData({
+                severity: "error",
+                message: "Failed to register user.",
+                isVisible: true,
+            });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -114,6 +150,11 @@ const Register = () => {
                     </CardContent>
                 </Card>
             </Box>
+            <ToastMessage
+                open={alertData.isVisible}
+                severity={alertData.severity}
+                message={alertData.message}
+            />
         </Container>
     );
 };
