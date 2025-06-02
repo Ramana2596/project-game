@@ -1,28 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { fetchEmails, fetchRoles, approveUserRole, fetchDefaultRolesForProfession } from './services/userRoleManagementService';
+import { fetchAvailableUsers, fetchRoles, updateUserRole, fetchDefaultRolesForProfession } from './services/userRoleManagementService';
 import { Container, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, Box, Button } from '@mui/material';
+import ToastMessage from '../../components/ToastMessage.jsx';
 
 const UserRoleManagement = () => {
-    const [emails, setEmails] = useState([]);
+    const [users, setUsers] = useState([]);
     const [roles, setRoles] = useState([]);
-    const [selectedEmail, setSelectedEmail] = useState('');
+    const [selectedUser, setSelectedUser] = useState(null);
     const [selectedRoles, setSelectedRoles] = useState([]);
-    const [profession, setProfession] = useState('');
-    const [defaultRoles, setDefaultRoles] = useState([]);
+    const [professionRoleMap, setProfessionRoleMap] = useState([]); // All profession-role mappings
+    const [alertData, setAlertData] = useState({
+        severity: "",
+        message: "",
+        isVisible: false,
+    });
 
     useEffect(() => {
-        loadDefaultRoles();
-        loadEmails();
+        loadUsers();
         loadRoles();
+        loadProfessionRoles();
     }, []);
 
-    // Fetch emails
-    const loadEmails = async () => {
+    // Fetch users
+    const loadUsers = async () => {
         try {
-            const emailData = await fetchEmails();
-            setEmails(emailData);
+            const userData = await fetchAvailableUsers({ gameId: 'OpsMgt' });
+            setUsers(userData);
         } catch (error) {
-            console.error('Failed to load emails:', error);
+            console.error('Failed to load users:', error);
         }
     };
 
@@ -36,20 +41,40 @@ const UserRoleManagement = () => {
         }
     };
 
-    // Fetch default roles for a profession
-    const loadDefaultRoles = async () => {
+    // Fetch all profession-role mappings ONCE
+    const loadProfessionRoles = async () => {
         try {
-            const defaultRoleIds = await fetchDefaultRolesForProfession({ gameId: 'OpsMgt' });
-            setDefaultRoles(defaultRoleIds.map(String)); // ensure string type
+            const data = await fetchDefaultRolesForProfession({ gameId: 'OpsMgt' });
+            setProfessionRoleMap(data); // Expecting array of { PF_Id, RL_Id }
         } catch (error) {
-            console.error('Failed to load default roles:', error);
-            setDefaultRoles([]);
+            setProfessionRoleMap([]);
         }
     };
 
-    // Handle email change and set profession
-    const handleEmailChange = (event) => {
-        setSelectedEmail(event.target.value);
+    // When user changes, set selected user and roles
+    const handleUserChange = (event) => {
+        const user = users.find(u => u.User_Email === event.target.value);
+        setSelectedUser(user || null);
+
+        if (user) {
+            // Find all RL_Id for this user's PF_Id in professionRoleMap
+            const allowedRoleIds = professionRoleMap
+                .filter(pr => String(pr.PF_Id) === String(user.PF_Id))
+                .map(pr => String(pr.RL_Id));
+
+            // If user.RL_Id exists, set selectedRoles to the intersection of allowedRoleIds and user.RL_Id (can be array or single value)
+            let checkedRoles = [];
+            if (user.RL_Id) {
+                // RL_Id can be a single value or an array, normalize to array of strings
+                const userRoleIds = Array.isArray(user.RL_Id)
+                    ? user.RL_Id.map(String)
+                    : [String(user.RL_Id)];
+                checkedRoles = allowedRoleIds.filter(roleId => userRoleIds.includes(roleId));
+            }
+            setSelectedRoles(checkedRoles);
+        } else {
+            setSelectedRoles([]);
+        }
     };
 
     // Handle role checkbox change
@@ -64,16 +89,49 @@ const UserRoleManagement = () => {
 
     // Approve handler
     const handleApprove = async () => {
-        if (selectedEmail && selectedRoles.length > 0) {
+        if (selectedUser && selectedRoles.length > 0) {
             try {
-                await approveUserRole({ userId: selectedEmail, selectedRoles });
-                alert('User role approved successfully!');
+                const userRoleList = selectedRoles.map(roleId => ({
+                    gameId: 'OpsMgt',
+                    userId: selectedUser.User_Id,
+                    roleId: roleId
+                }));
+                const response = await updateUserRole(userRoleList);
+                if (response.success) {
+                    setAlertData({
+                        severity: "success",
+                        message: "User role updated successfully!",
+                        isVisible: true,
+                    });
+                }
             } catch (error) {
-                console.error('Approval failed:', error);
-                alert('Failed to approve user role.');
+                setAlertData({
+                    severity: "error",
+                    message: `Code: ${error?.status} - ${error?.response?.data?.message}`,
+                    isVisible: true,
+                });
             }
         }
     };
+
+    // Filter roles to only those applicable for the selected user's profession
+    let filteredRoles = [];
+    if (selectedUser && selectedUser.PF_Id) {
+        const allowedRoleIds = professionRoleMap
+            .filter(pr => String(pr.PF_Id) === String(selectedUser.PF_Id))
+            .map(pr => String(pr.RL_Id));
+        filteredRoles = roles.filter(role => allowedRoleIds.includes(String(role.RL_Id)));
+    }
+
+    // Auto-hide the toast after 5 seconds
+    useEffect(() => {
+        if (alertData.isVisible) {
+            const timer = setTimeout(() => {
+                setAlertData((prev) => ({ ...prev, isVisible: false }));
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [alertData.isVisible]);
 
     return (
         <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -91,7 +149,7 @@ const UserRoleManagement = () => {
                 }}
             >
 
-                {/* Left Section - Email Selection */}
+                {/* Left Section - User Selection */}
                 <Grid xs={12} sm={6} sx={{
                     backgroundColor: '#f9f9f9',
                     p: 2,
@@ -104,17 +162,25 @@ const UserRoleManagement = () => {
                     <Box sx={{ p: 2, backgroundColor: '#fff', borderRadius: 2, boxShadow: '0px 2px 6px rgba(0,0,0,0.1)', width: '100%' }}>
                         <FormControl fullWidth margin="normal">
                             <InputLabel>Select Email ID</InputLabel>
-                            <Select value={selectedEmail} onChange={handleEmailChange} sx={{ backgroundColor: '#f0f0f0', borderRadius: 2 }}>
+                            <Select
+                                value={selectedUser ? selectedUser.User_Email : ""}
+                                onChange={handleUserChange}
+                                sx={{ backgroundColor: '#f0f0f0', borderRadius: 2 }}
+                            >
                                 <MenuItem value=""><em>Select an email</em></MenuItem>
-                                {emails.map((email) => <MenuItem key={email} value={email}>{email}</MenuItem>)}
+                                {users.map((user) => (
+                                    <MenuItem key={user.User_Id} value={user.User_Email}>
+                                        {user.User_Email}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
 
                         <Typography className='standard-title-color' variant="h6" sx={{ mt: 2, color: 'blue' }}>
-                            Name: <span className='standard-text-color'>{selectedEmail || "Not selected"}</span>
+                            Name: <span className='standard-text-color'>{selectedUser ? selectedUser.User_Name : "Not selected"}</span>
                         </Typography>
                         <Typography className='standard-title-color' variant="h6" sx={{ mt: 1, color: 'blue' }}>
-                            Profession: <span className='standard-text-color'>{selectedEmail || "Not selected"}</span>
+                            Profession: <span className='standard-text-color'>{selectedUser ? selectedUser.Profession : "Not selected"}</span>
                         </Typography>
                     </Box>
                 </Grid>
@@ -134,7 +200,12 @@ const UserRoleManagement = () => {
                             Select Role
                         </Typography>
                         <FormControl component="fieldset">
-                            {roles.map((role) => (
+                            {filteredRoles.length === 0 && (
+                                <Typography variant="body2" color="text.secondary">
+                                    No roles available for this profession.
+                                </Typography>
+                            )}
+                            {filteredRoles.map((role) => (
                                 <FormControlLabel
                                     key={role.RL_Id}
                                     control={
@@ -154,7 +225,7 @@ const UserRoleManagement = () => {
                         <Button
                             fullWidth
                             className="standard-button-primary-button"
-                            disabled={!selectedEmail || selectedRoles.length === 0}
+                            disabled={!selectedUser || selectedRoles.length === 0}
                             onClick={handleApprove}
                         >
                             Approve
@@ -164,6 +235,12 @@ const UserRoleManagement = () => {
                 </Grid>
 
             </Grid>
+
+            <ToastMessage
+                open={alertData.isVisible}
+                severity={alertData.severity}
+                message={alertData.message}
+            />
         </Container>
     );
 };
