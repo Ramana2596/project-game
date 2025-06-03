@@ -126,7 +126,8 @@ import ProfessionRoleInfo from '../pages/ProfessionRoleInfo/ProfessionRoleInfo.j
 import UserProfileInfo from "../pages/UserProfileInfo/UserProfileInfo.jsx";
 import OperationInputError from '../pages/OperationInputError/OperationInputError.jsx';
 import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
-import ReleaseMarketInput from "../pages/ReleaseMarketInput/ReleaseMarketInput.jsx";
+import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
+import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
 
 //
 export const componentList = [
@@ -434,9 +435,9 @@ export const componentList = [
         iconPath: marketInputIcon,
         id: "UI 22 200",
         label: "Release Std Market Input",
-        path: "/ReleaseMarketInput",
-        href: "/operationGame/ReleaseMarketInput",
-        routeElement: <ReleaseMarketInput />
+        path: "/StdMarketInput",
+        href: "/operationGame/StdMarketInput",
+        routeElement: <StdMarketInput />
       },
       {
         iconPath: strategyIcon,
@@ -506,6 +507,14 @@ export const componentList = [
     href: "/operationGame/SystemInfoDesk",
     routeElement: <SystemInfoDesk />,
     children: [
+      {
+        iconPath: operationInputIcon,
+        id: "UI 22 210",
+        label: "Release Std Operation Input",
+        path: "/StdOperationInput",
+        href: "/operationGame/StdOperationInput",
+        routeElement: <StdOperationInput />
+      },
       {
         iconPath: choiceIcon,
         id: "UI 22 220",
