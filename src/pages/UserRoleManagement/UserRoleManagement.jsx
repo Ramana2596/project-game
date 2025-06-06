@@ -110,10 +110,11 @@ const UserRoleManagement = () => {
                 const userRoleList = selectedRoles.map(roleId => ({
                     gameId,
                     userId: selectedUser.User_Id,
-                    roleId: roleId
+                    roleId: roleId,
+                    cmdLine: 'Add_Role'
                 }));
                 const response = await updateUserRole(userRoleList);
-                if (response.success) {
+                if (response) {
                     setAlertData({
                         severity: "success",
                         message: "User role updated successfully!",
