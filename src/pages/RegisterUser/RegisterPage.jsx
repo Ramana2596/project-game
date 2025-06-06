@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Box, Typography, Card, CardContent, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { TextField, Button, Container, Box, Typography, Card, CardContent, FormControl, InputLabel, Select, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { getProfessionInfo, registerUser } from "./services/service.js";
+import { getProfessionInfo, registerUser, enrollUser } from "./services/service.js";
 import ToastMessage from '../../components/ToastMessage.jsx';
 import { useLoading } from "../../hooks/loadingIndicatorContext.js"; // <-- Use shared loading context
 
@@ -17,6 +17,8 @@ const Register = () => {
         message: "",
         isVisible: false,
     });
+    const [showEnrollDialog, setShowEnrollDialog] = useState(false);
+    const [registeredUserId, setRegisteredUserId] = useState(null);
     const { setIsLoading } = useLoading(); // <-- Use loading context
 
     let registerUserPayload = {
@@ -68,11 +70,43 @@ const Register = () => {
                     message: "User registered successfully!",
                     isVisible: true,
                 });
+                setRegisteredUserId(response.userId || response.User_Id || null); // Adjust according to your API response
+                setShowEnrollDialog(true);
+            } else {
+                setAlertData({
+                    severity: "error",
+                    message: response?.error || "Failed to register user.",
+                    isVisible: true,
+                });
             }
         } catch (err) {
             setAlertData({
                 severity: "error",
                 message: "Failed to register user.",
+                isVisible: true,
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleEnroll = async () => {
+        setShowEnrollDialog(false);
+        if (!registeredUserId) return;
+        setIsLoading(true);
+        try {
+            const enrollResponse = await enrollUser({ userId: registeredUserId });
+            if (enrollResponse) {
+                setAlertData({
+                    severity: "success",
+                    message: "Enrolled for the game successfully!",
+                    isVisible: true,
+                });
+            }
+        } catch (err) {
+            setAlertData({
+                severity: "error",
+                message: "Failed to enroll for the game.",
                 isVisible: true,
             });
         } finally {
@@ -150,6 +184,22 @@ const Register = () => {
                     </CardContent>
                 </Card>
             </Box>
+            <Dialog open={showEnrollDialog} onClose={() => setShowEnrollDialog(false)}>
+                <DialogTitle>Alert</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Do you want to enroll for the game?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setShowEnrollDialog(false)} color="secondary">
+                        No
+                    </Button>
+                    <Button onClick={handleEnroll} color="primary" autoFocus>
+                        Yes
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <ToastMessage
                 open={alertData.isVisible}
                 severity={alertData.severity}

@@ -7,3 +7,7 @@ export function getProfessionInfo() {
 export function registerUser(payload) {
     return api.post('/api/addUserProfile', payload);
 }
+
+export function enrollUser(payload) {
+    return api.post('/api/enrollUser', payload);
+}

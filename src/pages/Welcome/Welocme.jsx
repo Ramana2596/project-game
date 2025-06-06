@@ -4,9 +4,25 @@ import { Link } from 'react-router-dom';
 import '../Welcome/styles/pageStyle.css';
 import { pageConstants } from './constants/pageConstants';
 import omgLogo from '../../assets/omg-logo.png';
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useUser } from "../../core/access/userContext.js";
+import { getUserDetails } from './services/service.js';
+import { useNavigate } from "react-router-dom";
 
 const WelcomePage = () => {
     const [activeSection, setActiveSection] = useState('aboutSimulation');
+    const { setIsLoading } = useLoading(); // <-- Use loading context
+    const [userDetailsData, setUserDetailsData] = React.useState(null);
+    const { login, setUserInfo } = useUser();
+    const routeHistory = useNavigate();
+
+    React.useEffect(() => {
+        if (userDetailsData && userDetailsData.length > 0) {
+            login(userDetailsData[0]?.Role);
+            setUserInfo(userDetailsData[0]);
+            routeHistory("/operationGame/homePage");
+        }
+    }, [userDetailsData]);
 
     // Mapping short titles
     const shortTitles = {
@@ -16,6 +32,17 @@ const WelcomePage = () => {
         forWhom: 'For Whom',
         howItWorks: 'How it Works',
         benefits: 'Learning',
+    };
+
+    const onDemoClick = () => {
+        setIsLoading(true);
+        getUserDetails({ userEmail: 'guest@guest.com' }).then((response) => {
+            if (response) {
+                setUserDetailsData(response.data);
+            }
+        })
+            .catch(() => null)
+            .finally(() => setIsLoading(false));
     };
 
     return (
@@ -63,7 +90,10 @@ const WelcomePage = () => {
                         </Tooltip>
                     ))}
 
-                    {/* Register & Sign-In Buttons */}
+                    {/*Demo & Register & Sign-In Buttons */}
+                    <Button className='standard-button-third-button' sx={{ marginRight: 1 }} onClick={onDemoClick}>
+                        Demo
+                    </Button>
                     <Button className='standard-button-secondary-button' sx={{ marginRight: 1 }} component={Link} to="/register">
                         Register
                     </Button>

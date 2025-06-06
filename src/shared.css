@@ -16,6 +16,8 @@
     --button-primary-color: #46cd99;
     --button-secondary-color: #f8f8f8;
     --button-secondary-border-color: #585757;
+    --button-third-color: #f2ff7e;
+    --button-third-border-color: #585757;
 }
 
 .accordian-title {
@@ -116,6 +118,37 @@
 }
 
 .standard-button-secondary-button:disabled {
+    color: #A0A0A0;
+    /* Muted text */
+    background-color: #E5E5E5;
+    /* Soft gray background */
+    border: 2px solid #C0C0C0;
+    /* Lighter border */
+    cursor: not-allowed;
+    box-shadow: none;
+    /* Remove hover effect */
+    opacity: 0.6;
+    /* Slight transparency */
+}
+
+.standard-button-third-button {
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    color: var(--standard-black) !important;
+    background-color: var(--button-third-color) !important;
+    border: 2px solid var(--button-third-border-color) !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.standard-button-third-button:hover {
+    box-shadow: 0 6px 12px var(--button-secondary-border-color) !important;
+    font-weight: bold !important;
+    border-radius: 20px !important;
+}
+
+.standard-button-third-button:disabled {
     color: #A0A0A0;
     /* Muted text */
     background-color: #E5E5E5;
