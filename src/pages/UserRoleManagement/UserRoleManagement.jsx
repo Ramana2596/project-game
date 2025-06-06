@@ -1,40 +1,39 @@
 import { useState, useEffect } from 'react';
-import { fetchAvailableUsers, fetchRoles, updateUserRole, fetchDefaultRolesForProfession } from './services/userRoleManagementService';
+import { fetchAvailableUsers, fetchRoles, updateUserRole, fetchApprovedRoles } from './services/userRoleManagementService';
 import { Container, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, Box, Button } from '@mui/material';
 import ToastMessage from '../../components/ToastMessage.jsx';
 import { useUser } from "../../core/access/userContext.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js"; // <-- Use shared loading context
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 const UserRoleManagement = () => {
-    const { userInfo } = useUser(); // Get userInfo (contains gameId)
+    const { userInfo } = useUser();
     const gameId = userInfo?.gameId;
-    const { setIsLoading } = useLoading(); // <-- Use loading context
+    const { setIsLoading } = useLoading();
 
     const [users, setUsers] = useState([]);
-    const [roles, setRoles] = useState([]);
+    const [roles, setRoles] = useState([]); // This will be the filtered roles for the selected profession
+    const [allRoles, setAllRoles] = useState([]); // All roles for the game, used for initial load
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedRoles, setSelectedRoles] = useState([]);
-    const [professionRoleMap, setProfessionRoleMap] = useState([]); // All profession-role mappings
     const [alertData, setAlertData] = useState({
         severity: "",
         message: "",
         isVisible: false,
     });
 
+    // Initial load: fetch users and all roles
     useEffect(() => {
         let isMounted = true;
         const fetchAll = async () => {
             setIsLoading(true);
             try {
-                const [userData, roleData, professionRoleData] = await Promise.all([
+                const [userData, allRoleData] = await Promise.all([
                     fetchAvailableUsers({ gameId }),
                     fetchRoles({ gameId }),
-                    fetchDefaultRolesForProfession({ gameId })
                 ]);
                 if (isMounted) {
                     setUsers(userData);
-                    setRoles(roleData);
-                    setProfessionRoleMap(professionRoleData);
+                    setAllRoles(allRoleData);
                 }
             } catch (error) {
                 if (isMounted) {
@@ -52,28 +51,43 @@ const UserRoleManagement = () => {
         return () => { isMounted = false; };
     }, [gameId, setIsLoading]);
 
-    // When user changes, set selected user and roles
-    const handleUserChange = (event) => {
+    // When user changes, fetch profession roles and approved roles, then set checked roles
+    const handleUserChange = async (event) => {
         const user = users.find(u => u.User_Email === event.target.value);
         setSelectedUser(user || null);
 
         if (user) {
-            // Find all RL_Id for this user's PF_Id in professionRoleMap
-            const allowedRoleIds = professionRoleMap
-                .filter(pr => String(pr.PF_Id) === String(user.PF_Id))
-                .map(pr => String(pr.RL_Id));
+            setIsLoading(true);
+            try {
+                // 1. Fetch roles for the selected user's profession
+                const roleData = await fetchRoles({ gameId: userInfo.gameId, pfId: user.PF_Id });
+                setRoles(roleData);
 
-            // If user.RL_Id exists, set selectedRoles to the intersection of allowedRoleIds and user.RL_Id (can be array or single value)
-            let checkedRoles = [];
-            if (user.RL_Id) {
-                // RL_Id can be a single value or an array, normalize to array of strings
-                const userRoleIds = Array.isArray(user.RL_Id)
-                    ? user.RL_Id.map(String)
-                    : [String(user.RL_Id)];
-                checkedRoles = allowedRoleIds.filter(roleId => userRoleIds.includes(roleId));
+                // 2. Fetch approved roles for the selected user
+                const approvedRoles = await fetchApprovedRoles({ gameId: userInfo.gameId, userId: user.User_Id });
+
+                // 3. After both API calls, set checked roles by comparing RL_Id
+                let checkedRoles = [];
+                if (approvedRoles && approvedRoles.length > 0) {
+                    const approvedRoleIds = approvedRoles.map(r => String(r.RL_Id));
+                    checkedRoles = roleData
+                        .filter(role => approvedRoleIds.includes(String(role.RL_Id)))
+                        .map(role => String(role.RL_Id));
+                }
+                setSelectedRoles(checkedRoles);
+            } catch (error) {
+                setAlertData({
+                    severity: "error",
+                    message: "Failed to load user roles.",
+                    isVisible: true,
+                });
+                setRoles([]);
+                setSelectedRoles([]);
+            } finally {
+                setIsLoading(false);
             }
-            setSelectedRoles(checkedRoles);
         } else {
+            setRoles([]);
             setSelectedRoles([]);
         }
     };
@@ -123,15 +137,6 @@ const UserRoleManagement = () => {
             }
         }
     };
-
-    // Filter roles to only those applicable for the selected user's profession
-    let filteredRoles = [];
-    if (selectedUser && selectedUser.PF_Id) {
-        const allowedRoleIds = professionRoleMap
-            .filter(pr => String(pr.PF_Id) === String(selectedUser.PF_Id))
-            .map(pr => String(pr.RL_Id));
-        filteredRoles = roles.filter(role => allowedRoleIds.includes(String(role.RL_Id)));
-    }
 
     // Auto-hide the toast after 5 seconds
     useEffect(() => {
@@ -210,12 +215,12 @@ const UserRoleManagement = () => {
                             Select Role
                         </Typography>
                         <FormControl component="fieldset">
-                            {filteredRoles.length === 0 && (
+                            {roles.length === 0 && (
                                 <Typography variant="body2" color="text.secondary">
                                     No roles available for this profession.
                                 </Typography>
                             )}
-                            {filteredRoles.map((role) => (
+                            {roles.map((role) => (
                                 <FormControlLabel
                                     key={role.RL_Id}
                                     control={
