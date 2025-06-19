@@ -98,6 +98,8 @@ import ProfessionRoleInfo from '../ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from '../UserProfileInfo/UserProfileInfo.jsx';
 import OperationInputError from '../OperationInputError/OperationInputError.jsx';
 import MarketInputError from '../MarketInputError/MarketInputError.jsx';
+import StdMarketInput from '../StdMarketInput/StdMarketInput.jsx';
+import StdOperationInput from '../StdOperationInput/StdOperationInput.jsx';
 import omgLogo from '../../assets/omg-logo.png';
 
 
@@ -264,6 +266,8 @@ export default function MiniDrawer() {
           <Route path='/UserProfileInfo' element={<UserProfileInfo />} />
           <Route path='/OperationInputError' element={<OperationInputError />} />
           <Route path='/MarketInputError' element={<MarketInputError />} />
+          <Route path='/StdMarketInput' element={<StdMarketInput />} />
+          <Route path='/StdOperationInput' element={<StdOperationInput />} />
 
         </Routes>
       </Box>

@@ -38,7 +38,7 @@ export default function GameTeamPlay() {
             .then(() => {
                 setAlertData({
                     severity: "success",
-                    message: "Roll back period successfull",
+                    message: "Rollback A Period Successful",
                     isVisible: true,
                 });
             })
@@ -46,7 +46,7 @@ export default function GameTeamPlay() {
                 setAlertData({
                     severity: "error",
                     message:
-                        "Error in Roll back period" +
+                        "Error in Rollback A Period" +
                         error?.response?.data?.error,
                     isVisible: true,
                 });
