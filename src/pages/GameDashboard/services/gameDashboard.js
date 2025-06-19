@@ -1,5 +1,6 @@
 import api from "../../../core/interceptor/api-interceptor";
 
-export function getDashboardData() {
-  return api.get("/api/getDashBoardData");
+// Get chart info with query params: gameId, gameBatch, gameTeam, cmdLine
+export function getChartInfo(params) {
+  return api.get("/api/getChartInfo", { params });
 }

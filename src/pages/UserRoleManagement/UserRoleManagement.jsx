@@ -1,55 +1,153 @@
-import React, { useState, useEffect } from 'react';
-import { fetchEmails, fetchRoles, approveUserRole } from './services/userRoleManagementService';
-import { Container, Grid, Typography, FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio, Box, Button } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { fetchAvailableUsers, fetchRoles, updateUserRole, fetchApprovedRoles } from './services/userRoleManagementService';
+import { Container, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, Box, Button } from '@mui/material';
+import ToastMessage from '../../components/ToastMessage.jsx';
+import { useUser } from "../../core/access/userContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 const UserRoleManagement = () => {
-    const [emails, setEmails] = useState([]);
-    const [roles, setRoles] = useState([]);
-    const [selectedEmail, setSelectedEmail] = useState('');
-    const [selectedRoles, setSelectedRoles] = useState('');
+    const { userInfo } = useUser();
+    const gameId = userInfo?.gameId;
+    const { setIsLoading } = useLoading();
 
+    const [users, setUsers] = useState([]);
+    const [roles, setRoles] = useState([]); // This will be the filtered roles for the selected profession
+    const [allRoles, setAllRoles] = useState([]); // All roles for the game, used for initial load
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedRoles, setSelectedRoles] = useState([]);
+    const [alertData, setAlertData] = useState({
+        severity: "",
+        message: "",
+        isVisible: false,
+    });
+
+    // Initial load: fetch users and all roles
     useEffect(() => {
-        loadEmails();
-        loadRoles();
-    }, []);
-
-    const loadEmails = async () => {
-        try {
-            const emailData = await fetchEmails();
-            setEmails(emailData);
-        } catch (error) {
-            console.error('Failed to load emails:', error);
-        }
-    };
-
-    const loadRoles = async () => {
-        try {
-            const roleData = await fetchRoles();
-            setRoles(roleData);
-        } catch (error) {
-            console.error('Failed to load roles:', error);
-        }
-    };
-
-    const handleEmailChange = (event) => {
-        setSelectedEmail(event.target.value);
-    };
-
-    const handleRoleChange = (event) => {
-        setSelectedRoles(event.target.value);
-    };
-
-    const handleApprove = async () => {
-        if (selectedEmail && selectedRoles) {
+        let isMounted = true;
+        const fetchAll = async () => {
+            setIsLoading(true);
             try {
-                await approveUserRole({ userId: selectedEmail, selectedRole: selectedRoles });
-                alert('User role approved successfully!');
+                const [userData, allRoleData] = await Promise.all([
+                    fetchAvailableUsers({ gameId }),
+                    fetchRoles({ gameId }),
+                ]);
+                if (isMounted) {
+                    setUsers(userData);
+                    setAllRoles(allRoleData);
+                }
             } catch (error) {
-                console.error('Approval failed:', error);
-                alert('Failed to approve user role.');
+                if (isMounted) {
+                    setAlertData({
+                        severity: "error",
+                        message: "Failed to load data.",
+                        isVisible: true,
+                    });
+                }
+            } finally {
+                if (isMounted) setIsLoading(false);
+            }
+        };
+        if (gameId) fetchAll();
+        return () => { isMounted = false; };
+    }, [gameId, setIsLoading]);
+
+    // When user changes, fetch profession roles and approved roles, then set checked roles
+    const handleUserChange = async (event) => {
+        const user = users.find(u => u.User_Email === event.target.value);
+        setSelectedUser(user || null);
+
+        if (user) {
+            setIsLoading(true);
+            try {
+                // 1. Fetch roles for the selected user's profession
+                const roleData = await fetchRoles({ gameId: userInfo.gameId, pfId: user.PF_Id });
+                setRoles(roleData);
+
+                // 2. Fetch approved roles for the selected user
+                const approvedRoles = await fetchApprovedRoles({ gameId: userInfo.gameId, userId: user.User_Id });
+
+                // 3. After both API calls, set checked roles by comparing RL_Id
+                let checkedRoles = [];
+                if (approvedRoles && approvedRoles.length > 0) {
+                    const approvedRoleIds = approvedRoles.map(r => String(r.RL_Id));
+                    checkedRoles = roleData
+                        .filter(role => approvedRoleIds.includes(String(role.RL_Id)))
+                        .map(role => String(role.RL_Id));
+                }
+                setSelectedRoles(checkedRoles);
+            } catch (error) {
+                setAlertData({
+                    severity: "error",
+                    message: "Failed to load user roles.",
+                    isVisible: true,
+                });
+                setRoles([]);
+                setSelectedRoles([]);
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            setRoles([]);
+            setSelectedRoles([]);
+        }
+    };
+
+    // Handle role checkbox change
+    const handleRoleChange = (event) => {
+        const value = event.target.value;
+        setSelectedRoles((prev) =>
+            prev.includes(value)
+                ? prev.filter((roleId) => roleId !== value)
+                : [...prev, value]
+        );
+    };
+
+    // Approve handler
+    const handleApprove = async () => {
+        if (selectedUser && selectedRoles.length > 0) {
+            setIsLoading(true);
+            try {
+                const userRoleList = selectedRoles.map(roleId => ({
+                    gameId,
+                    userId: selectedUser.User_Id,
+                    roleId: roleId,
+                    cmdLine: 'Add_Role'
+                }));
+                const response = await updateUserRole(userRoleList);
+                if (response) {
+                    setAlertData({
+                        severity: "success",
+                        message: "User role updated successfully!",
+                        isVisible: true,
+                    });
+                } else {
+                    setAlertData({
+                        severity: "error",
+                        message: response.error || "Failed to update user role.",
+                        isVisible: true,
+                    });
+                }
+            } catch (error) {
+                setAlertData({
+                    severity: "error",
+                    message: `Code: ${error?.status} - ${error?.response?.data?.message}`,
+                    isVisible: true,
+                });
+            } finally {
+                setIsLoading(false);
             }
         }
     };
+
+    // Auto-hide the toast after 5 seconds
+    useEffect(() => {
+        if (alertData.isVisible) {
+            const timer = setTimeout(() => {
+                setAlertData((prev) => ({ ...prev, isVisible: false }));
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [alertData.isVisible]);
 
     return (
         <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -67,7 +165,7 @@ const UserRoleManagement = () => {
                 }}
             >
 
-                {/* Left Section - Email Selection */}
+                {/* Left Section - User Selection */}
                 <Grid xs={12} sm={6} sx={{
                     backgroundColor: '#f9f9f9',
                     p: 2,
@@ -80,17 +178,25 @@ const UserRoleManagement = () => {
                     <Box sx={{ p: 2, backgroundColor: '#fff', borderRadius: 2, boxShadow: '0px 2px 6px rgba(0,0,0,0.1)', width: '100%' }}>
                         <FormControl fullWidth margin="normal">
                             <InputLabel>Select Email ID</InputLabel>
-                            <Select value={selectedEmail} onChange={handleEmailChange} sx={{ backgroundColor: '#f0f0f0', borderRadius: 2 }}>
+                            <Select
+                                value={selectedUser ? selectedUser.User_Email : ""}
+                                onChange={handleUserChange}
+                                sx={{ backgroundColor: '#f0f0f0', borderRadius: 2 }}
+                            >
                                 <MenuItem value=""><em>Select an email</em></MenuItem>
-                                {emails.map((email) => <MenuItem key={email} value={email}>{email}</MenuItem>)}
+                                {users.map((user) => (
+                                    <MenuItem key={user.User_Id} value={user.User_Email}>
+                                        {user.User_Email}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
 
                         <Typography className='standard-title-color' variant="h6" sx={{ mt: 2, color: 'blue' }}>
-                            Name: <span className='standard-text-color'>{selectedEmail || "Not selected"}</span>
+                            Name: <span className='standard-text-color'>{selectedUser ? selectedUser.User_Name : "Not selected"}</span>
                         </Typography>
                         <Typography className='standard-title-color' variant="h6" sx={{ mt: 1, color: 'blue' }}>
-                            Profession: <span className='standard-text-color'>{selectedEmail || "Not selected"}</span>
+                            Profession: <span className='standard-text-color'>{selectedUser ? selectedUser.Profession : "Not selected"}</span>
                         </Typography>
                     </Box>
                 </Grid>
@@ -110,18 +216,32 @@ const UserRoleManagement = () => {
                             Select Role
                         </Typography>
                         <FormControl component="fieldset">
-                            <RadioGroup value={selectedRoles} onChange={handleRoleChange}>
-                                {roles.map((role) => (
-                                    <FormControlLabel key={role} value={role} control={<Radio sx={{ color: 'primary.main' }} />} label={role} />
-                                ))}
-                            </RadioGroup>
+                            {roles.length === 0 && (
+                                <Typography variant="body2" color="text.secondary">
+                                    No roles available for this profession.
+                                </Typography>
+                            )}
+                            {roles.map((role) => (
+                                <FormControlLabel
+                                    key={role.RL_Id}
+                                    control={
+                                        <Checkbox
+                                            checked={selectedRoles.includes(String(role.RL_Id))}
+                                            onChange={handleRoleChange}
+                                            value={String(role.RL_Id)}
+                                            sx={{ color: 'primary.main' }}
+                                        />
+                                    }
+                                    label={role.Role}
+                                />
+                            ))}
                         </FormControl>
 
                         {/* Approve Button */}
                         <Button
                             fullWidth
                             className="standard-button-primary-button"
-                            disabled={!selectedEmail || !selectedRoles}
+                            disabled={!selectedUser || selectedRoles.length === 0}
                             onClick={handleApprove}
                         >
                             Approve
@@ -131,6 +251,11 @@ const UserRoleManagement = () => {
                 </Grid>
 
             </Grid>
+            <ToastMessage
+                open={alertData.isVisible}
+                severity={alertData.severity}
+                message={alertData.message}
+            />
         </Container>
     );
 };

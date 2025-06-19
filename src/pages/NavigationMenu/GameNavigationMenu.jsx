@@ -55,8 +55,6 @@ import {
 import { pageConstants } from './pageConstants.js';
 import '../NavigationMenu/styles/temporaryDrawer.css';
 import FeatureManagement from '../FeatureManagement/FeatureManagement.jsx';
-import HomePage from '../HomePage/HomePage.jsx';
-import HomePageNew from '../HomePage/HomePageNew.jsx';
 import Operations from '../Operations/Operations.jsx';
 import AccountPayable from '../AccountPayable/AccountPayable.jsx';
 import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
@@ -102,6 +100,8 @@ import OperationInputError from '../OperationInputError/OperationInputError.jsx'
 import MarketInputError from '../MarketInputError/MarketInputError.jsx';
 import StdMarketInput from '../StdMarketInput/StdMarketInput.jsx';
 import StdOperationInput from '../StdOperationInput/StdOperationInput.jsx';
+import omgLogo from '../../assets/omg-logo.png';
+
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -148,6 +148,8 @@ export default function MiniDrawer() {
       <CssBaseline />
       <AppBar position="fixed" open={open} sx={{ backgroundImage: 'radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%))' }}>
         <Toolbar sx={{ backgroundImage: 'inherit' }}>
+          {/* Logo Image */}
+          <img src={omgLogo} alt="OMG Logo" style={{ width: 40, height: 40, marginRight: 8 }} />
           <Typography color='black' align="left" variant="h4" noWrap component="div" sx={{ ...(open && { display: 'none' }) }}>
             {pageConstants.companyTitleCollapsed}
           </Typography>
@@ -201,8 +203,7 @@ export default function MiniDrawer() {
       <Box component="main" sx={{ flexGrow: 1 }}>
         <DrawerHeader />
         <Routes>
-          <Route path="/homePage" element={<HomePageNew />} />
-          <Route path="/gameDashboard" element={<GameDashboard />} />
+          <Route path="/homePage" element={<GameDashboard />} />
           <Route path="/userRoleManagement" element={<UserRoleManagement />} />
           <Route path="/infoDesk" element={<InfoDesk />} />
           <Route path="/gameMaster" element={<GameMaster />} />
@@ -224,8 +225,8 @@ export default function MiniDrawer() {
           <Route path="/cashFlowStatement" element={<CasFlowStatement />} />
           <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
-          <Route path="/accountPayable" element={<AccountPayable />} />      
-          <Route path="/AcReceivable" element={<AcReceivable />} />             
+          <Route path="/accountPayable" element={<AccountPayable />} />
+          <Route path="/AcReceivable" element={<AcReceivable />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
           <Route path="/partInfo" element={<PartInfo />} />
           <Route path="/BOMInfo" element={<BOMInfo />} />
@@ -267,6 +268,7 @@ export default function MiniDrawer() {
           <Route path='/MarketInputError' element={<MarketInputError />} />
           <Route path='/StdMarketInput' element={<StdMarketInput />} />
           <Route path='/StdOperationInput' element={<StdOperationInput />} />
+
         </Routes>
       </Box>
     </Box>
