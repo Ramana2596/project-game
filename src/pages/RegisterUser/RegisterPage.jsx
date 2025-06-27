@@ -70,7 +70,7 @@ const Register = () => {
                     message: "User registered successfully!",
                     isVisible: true,
                 });
-                setRegisteredUserId(response.userId || response.User_Id || null); // Adjust according to your API response
+                setRegisteredUserId(response.data.userID || null); // Adjust according to your API response
                 setShowEnrollDialog(true);
             } else {
                 setAlertData({
@@ -95,7 +95,7 @@ const Register = () => {
         if (!registeredUserId) return;
         setIsLoading(true);
         try {
-            const enrollResponse = await enrollUser({ userId: registeredUserId });
+            const enrollResponse = await enrollUser({ userId: registeredUserId, learnMode: learningMode });
             if (enrollResponse) {
                 setAlertData({
                     severity: "success",
