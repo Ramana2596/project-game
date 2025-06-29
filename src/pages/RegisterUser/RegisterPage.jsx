@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Box, Typography, Card, CardContent, FormControl, InputLabel, Select, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { getProfessionInfo, registerUser, enrollUser } from "./services/service.js";
+import { getUserProfile, registerUser, enrollUser } from "./services/service.js"; // <-- updated import
 import ToastMessage from '../../components/ToastMessage.jsx';
-import { useLoading } from "../../hooks/loadingIndicatorContext.js"; // <-- Use shared loading context
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [profession, setProfession] = useState('');
     const [learningMode, setLearningMode] = useState('');
+    const [learningModes, setLearningModes] = useState([]);
     const [error, setError] = useState(false);
     const [professionInfo, setProfessionData] = useState([]);
     const [alertData, setAlertData] = useState({
@@ -41,9 +42,15 @@ const Register = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        getProfessionInfo().then((response) => {
-            if (response) {
-                setProfessionData(response.data);
+        Promise.all([
+            getUserProfile({ cmdLine: 'Profession', gameId: null }),
+            getUserProfile({ cmdLine: 'Learn_Mode', gameId: 'OpsMgt' })
+        ]).then(([profResponse, learnModeResponse]) => {
+            if (profResponse) {
+                setProfessionData(profResponse.data);
+            }
+            if (learnModeResponse) {
+                setLearningModes(learnModeResponse.data);
             }
             setIsLoading(false);
         }).catch(() => setIsLoading(false));
@@ -169,7 +176,11 @@ const Register = () => {
                                         onChange={(e) => setLearningMode(e.target.value)}
                                         label="Learning Mode"
                                     >
-                                        <MenuItem value="class_room">class_room</MenuItem>
+                                        {learningModes.map((mode) => (
+                                            <MenuItem key={mode.Learn_Mode} value={mode.Learn_Mode}>
+                                                {mode.Learn_Mode}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                                 </FormControl>
                             </Box>

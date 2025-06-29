@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
-export function getProfessionInfo() {
-    return api.get('/api/getProfessionInfo');
+export function getUserProfile(params) {
+    return api.get('/api/getUserProfile', { params });
 }
 
 export function registerUser(payload) {
