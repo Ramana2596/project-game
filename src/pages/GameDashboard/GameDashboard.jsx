@@ -7,8 +7,11 @@ import { pageConstants } from '../GameDashboard/constants/pageConstants.js';
 import { componentList } from '../../constants/globalConstants.js';
 import { Box } from "@mui/material";
 import BarChartComponent from '../../components/BarChartComponent.jsx';
+import InventoryLineChart from './components/InventoryLineChart.jsx';
+import ProfitPercentLineChart from './components/ProfitPercentLineChart.jsx';
 import { getChartInfo } from './services/gameDashboard.js';
 import { useUser } from "../../core/access/userContext.js";
+import CashFlowChart from './components/CashFlowChart.jsx';
 
 function GameDashboard() {
   const { setIsLoading } = useLoading();
@@ -22,9 +25,9 @@ function GameDashboard() {
 
   // Chart data state
   const [chartData, setChartData] = useState({
-    Total_Inventory: null,
-    Profit_Percent: null,
-    Cash_Flow: null,
+    Total_Inventory: [],
+    Profit_Percent: [],
+    Cash_Flow: [],
   });
 
   // Find the "Game Dashboard" item and get its children
@@ -46,10 +49,35 @@ function GameDashboard() {
           getChartInfo({ ...params, cmdLine: 'Profit_%' }),
           getChartInfo({ ...params, cmdLine: 'Cash_Flow' }),
         ]);
+        // Transform cashflow and inventory data for the chart
+        const cashFlowData = (cashflow?.data || []).map(item => ({
+          label: item.Period,
+          value: item.Value,
+          legend: item.Legend,
+          team: item.Team,
+          chartType: item.Chart_Type,
+          chart: item.Chart,
+        }));
+        const inventoryData = (inventory?.data || []).map(item => ({
+          label: item.Period,
+          value: item.Value,
+          legend: item.Legend,
+          team: item.Team,
+          chartType: item.Chart_Type,
+          chart: item.Chart,
+        }));
+        const profitPercentData = (profit?.data || []).map(item => ({
+          label: item.Period,
+          value: item.Value,
+          legend: item.Legend,
+          team: item.Team,
+          chartType: item.Chart_Type,
+          chart: item.Chart,
+        }));
         setChartData({
-          Total_Inventory: inventory?.data || [],
-          Profit_Percent: profit?.data || [],
-          Cash_Flow: cashflow?.data || [],
+          Total_Inventory: inventoryData,
+          Profit_Percent: profitPercentData,
+          Cash_Flow: cashFlowData,
         });
       } catch (error) {
         setAlertData({
@@ -71,31 +99,41 @@ function GameDashboard() {
     navigate(href);
   };
 
-  // Map chart data to children by label
+
+  // Normalize label for robust matching
+  const normalize = (str) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   const getChartForLabel = (label) => {
-    if (label === "Total Inventory") return chartData.Total_Inventory;
-    if (label === "Profit %") return chartData.Profit_Percent;
-    if (label === "Cash Flow") return chartData.Cash_Flow;
+    const norm = normalize(label);
+    if (norm.includes('balance')) return chartData.Total_Inventory;
+    if (norm.includes('income')) return chartData.Profit_Percent;
+    if (norm.includes('cashflow')) return chartData.Cash_Flow;
     return [];
   };
 
   return (
-    <Box sx={{ flexGrow: 1, padding: 20 }}>
-      <Grid container spacing={2}>
-        {children.map((child, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card className="custom-card">
-              <CardActionArea onClick={() => handleCardClick(child.href)}>
-                <CardContent>
-                  <Typography variant="h5" component="div">
-                    {child.label}
-                  </Typography>
-                  <BarChartComponent data={getChartForLabel(child.label)} />
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
+    <Box sx={{ flexGrow: 1, padding: 2 }}>
+      <Grid container direction="column" spacing={3} alignItems="stretch">
+        {children.map((child, index) => {
+          const normLabel = normalize(child.label);
+          let ChartComponent = BarChartComponent;
+          if (normLabel.includes('cashflow')) ChartComponent = CashFlowChart;
+          else if (normLabel.includes('balance')) ChartComponent = InventoryLineChart;
+          else if (normLabel.includes('income')) ChartComponent = ProfitPercentLineChart;
+          return (
+            <Grid item xs={12} key={index}>
+              <Card className="custom-card" sx={{ width: '100%' }}>
+                <CardActionArea onClick={() => handleCardClick(child.href)}>
+                  <CardContent>
+                    <Typography variant="h5" component="div">
+                      {child.label}
+                    </Typography>
+                    <ChartComponent data={getChartForLabel(child.label)} />
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          );
+        })}
       </Grid>
       <ToastMessage
         open={alertData.isVisible}
