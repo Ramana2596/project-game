@@ -458,7 +458,7 @@ export const componentList = [
       {
         iconPath: approvalIcon,
         id: "UI 11 030",
-        label: "Strategy Plan Approval",
+        label: "Strategy Plan Decision",
         path: "/strategyPlanApproval",
         href: "/operationGame/strategyPlanApproval",
         routeElement: <StrategyPlan />
