@@ -6,14 +6,12 @@ export const pageConstants = {
     "Product",
     "Name",
     "UOM",
-    "Cat Id",
     "Category",
     "Date of Launch",
-    "PLM Id",
     "Product Life Cycle",
     "Profit %",
     "Currency",
     "Unit Price",
     "Pricing Date"
-  ]
+      ]
 };
