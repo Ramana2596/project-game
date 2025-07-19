@@ -5,5 +5,5 @@ export const pageConstants = {
   table: {
     hiddenColumns: ["Strategy_Id", "Strategy_Set_No"],
   },
-  noDataAvailable: 'Strategy Plan: Not Exists or Decision is already Completed !'
+  noDataAvailable: 'Strategy Plan: NOT launched Yet or Decision is already Completed !'
 };
