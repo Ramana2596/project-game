@@ -278,7 +278,7 @@ export const componentList = [
       {
         iconPath: partIcon,
         id: "UI 22 010",
-        label: "Part Master Details ",
+        label: "Capital Asset Details ",
         path: "/partInfo",
         href: "/operationGame/partInfo",
         routeElement: <PartInfo />
