@@ -3,6 +3,7 @@ export const pageConstants = {
   gameBatchLabel: "Game Batch",
   table: {
     headers: [
+      "Batch",
       "Period",
       "Category",
       "Description",
