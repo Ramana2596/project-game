@@ -8,10 +8,10 @@ export const pageConstants = {
       "Description",
       "UOM",
       "Quantity",
-      "Market_Info",
-      "Unit_Price",
+      "Market Info",
+      "Unit Price",
       "Currency",
-      "Price_Info"
+      "Price Info"
   ]
 };
 
