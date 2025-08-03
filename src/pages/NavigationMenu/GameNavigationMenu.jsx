@@ -53,6 +53,11 @@ import {
   DrawerHeader, AppBar, Drawer
 } from './imports.js';
 import { pageConstants } from './pageConstants.js';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
 import '../NavigationMenu/styles/temporaryDrawer.css';
 import FeatureManagement from '../FeatureManagement/FeatureManagement.jsx';
 import Operations from '../Operations/Operations.jsx';
@@ -103,15 +108,22 @@ import StdOperationInput from '../StdOperationInput/StdOperationInput.jsx';
 import omgLogo from '../../assets/omg-logo.png';
 import StdMarketInputNew from '../StdMarketInputNew/StdMarketInputNew.jsx'; // Import the new component
 import MarketInfo from '../MarketInfo/MarketInfo.jsx';
+import { enrollUser } from './services/indexService.js';
+import ToastMessage from '../../components/ToastMessage.jsx';
 
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
-  const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const { user, userInfo, setAccessablePageIds, userAccessiblePages } = useUser();
+  const [showEnrollDialog, setShowEnrollDialog] = useState(false);
   const location = useLocation();
+  const [alertData, setAlertData] = useState({
+    severity: "",
+    message: "",
+    isVisible: false,
+  });
 
   useEffect(() => {
     if (user?.role) {
@@ -145,6 +157,38 @@ export default function MiniDrawer() {
 
   const currentRoute = location.pathname;
 
+  // Show enroll button if user is logged in and does not have a gameId
+  const showEnrollButton = user && !userInfo?.gameId;
+
+  const handleEnrollClick = () => {
+    setShowEnrollDialog(true);
+  };
+
+  const handleEnroll = async () => {
+    setShowEnrollDialog(false);
+    if (!userInfo.loginId) return;
+    setIsLoading(true);
+    try {
+      console.log(userInfo);
+      const enrollResponse = await enrollUser({ userId: userInfo.userId, learnMode: userInfo?.learnMode });
+      if (enrollResponse) {
+        setAlertData({
+          severity: "success",
+          message: "Enrolled for the game successfully!",
+          isVisible: true,
+        });
+      }
+    } catch (err) {
+      setAlertData({
+        severity: "error",
+        message: "Failed to enroll for the game.",
+        isVisible: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
@@ -162,10 +206,31 @@ export default function MiniDrawer() {
             <ArrowBackIosIcon />
           </IconButton>
           <BreadCrumb currentRoute={currentRoute} />
-          <div style={{ marginLeft: "auto" }}>
-            <Button className="hover-effect" onClick={handleMenu} color="inherit" sx={{ display: "flex", alignItems: "center", textTransform: "none", border: "1px solid", borderRadius: "30px", padding: "5px 20px", backgroundColor: "#FFFFFF", color: "#180081", /* Set to pleasant blue */ }}>
+          <div style={{ marginLeft: "auto", display: 'flex', alignItems: 'center', gap: 2 }}>
+            {showEnrollButton && (
+              <Button className='standard-button-secondary-button' sx={{ marginRight: 1 }} onClick={handleEnrollClick}>
+                Enroll
+              </Button>
+            )}
+            <Button className="hover-effect" onClick={handleMenu} color="inherit" sx={{ display: "flex", alignItems: "center", textTransform: "none", border: "1px solid", borderRadius: "30px", padding: "5px 20px", backgroundColor: "#FFFFFF", color: "#180081" }}>
               <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
             </Button>
+            <Dialog open={showEnrollDialog} onClose={() => setShowEnrollDialog(false)}>
+              <DialogTitle>Alert</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Do you want to enroll for the game?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setShowEnrollDialog(false)} color="secondary">
+                  No
+                </Button>
+                <Button onClick={handleEnroll} color="primary" autoFocus>
+                  Yes
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right", }} keepMounted transformOrigin={{ vertical: "top", horizontal: "right", }} open={Boolean(anchorEl)} onClose={handleClose} sx={{ "& .MuiPaper-root": { borderRadius: "10px", padding: "10px", width: "250px", backgroundColor: "#FFFFFF", }, }} >
               <Typography className="standard-text-color" disabled>{userInfo?.loginId}</Typography>
               <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
@@ -274,6 +339,11 @@ export default function MiniDrawer() {
           <Route path='/MarketInfo' element={<MarketInfo/>} />
         </Routes>
       </Box>
+      <ToastMessage
+        open={alertData.isVisible}
+        severity={alertData.severity}
+        message={alertData.message}
+      />
     </Box>
   );
 }
