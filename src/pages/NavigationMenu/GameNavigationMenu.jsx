@@ -158,7 +158,7 @@ export default function MiniDrawer() {
   const currentRoute = location.pathname;
 
   // Show enroll button if user is logged in and does not have a gameId
-  const showEnrollButton = user && !userInfo?.gameId;
+  const showEnrollButton = user && !userInfo?.gameBatch;
 
   const handleEnrollClick = () => {
     setShowEnrollDialog(true);
@@ -336,7 +336,7 @@ export default function MiniDrawer() {
           <Route path='/StdMarketInput' element={<StdMarketInput />} />
           <Route path='/StdOperationInput' element={<StdOperationInput />} />
           <Route path='/StdMarketInputNew' element={<StdMarketInputNew />} /> {/* New Route for StdMarketInputNew */}
-          <Route path='/MarketInfo' element={<MarketInfo/>} />
+          <Route path='/MarketInfo' element={<MarketInfo />} />
         </Routes>
       </Box>
       <ToastMessage
