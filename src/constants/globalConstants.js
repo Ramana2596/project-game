@@ -126,6 +126,8 @@ import OperationInputError from '../pages/OperationInputError/OperationInputErro
 import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
 import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
+import StdMarketInputNew from "../pages/StdMarketInputNew/StdMarketInputNew.jsx";
+import MarketInfo from "../pages/MarketInfo/MarketInfo.jsx";
 
 //
 export const componentList = [
@@ -197,11 +199,19 @@ export const componentList = [
       },
       {
         iconPath: marketfactorInfoIcon,
-        id: "UI 21 090",
-        label: "Market Factor Info",
+        id: "UI 21 080",
+        label: "Market Factor Archive",
         path: "/marketFactorInfo",
         href: "/operationGame/marketFactorInfo",
         routeElement: <MarketFactorInfo />
+      },
+      {
+        iconPath: marketfactorInfoIcon,
+        id: "UI 21 090",
+        label: "Market Factor Info",
+        path: "/marketInfo",
+        href: "/operationGame/marketInfo",
+        routeElement: <MarketInfo />
       },
       {
         iconPath: operationalDecisionIcon,
@@ -428,6 +438,14 @@ export const componentList = [
         path: "/StdMarketInput",
         href: "/operationGame/StdMarketInput",
         routeElement: <StdMarketInput />
+      },
+      {
+        iconPath: marketInputIcon,
+        id: "UI 22 201",
+        label: "New Release Std Market Input",
+        path: "/StdMarketInputNew",
+        href: "/operationGame/StdMarketInputNew",
+        routeElement: <StdMarketInputNew />
       },
       {
         iconPath: strategyIcon,
