@@ -128,6 +128,7 @@ import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
 // import StdMarketInputNew from "../pages/StdMarketInputNew/StdMarketInputNew.jsx";
 import MarketInfo from "../pages/MarketInfo/MarketInfo.jsx";
+import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 
 //
 export const componentList = [
@@ -285,6 +286,7 @@ export const componentList = [
         href: "/operationGame/LiabilityInfo",
         routeElement: <LiabilityInfo />
       },
+      /*
       {
         iconPath: partIcon,
         id: "UI 22 010",
@@ -292,6 +294,15 @@ export const componentList = [
         path: "/partInfo",
         href: "/operationGame/partInfo",
         routeElement: <PartInfo />
+      },
+      */
+      {
+        iconPath: partIcon,
+        id: "UI 22 010",
+        label: "Asset Catalog - Team",
+        path: "/assetCatalogTeam",
+        href: "/operationGame/assetCatalogTeam",
+        routeElement: <AssetCatalogTeam />
       },
       {
         iconPath: productIcon,

@@ -110,6 +110,8 @@ import omgLogo from '../../assets/omg-logo.png';
 import MarketInfo from '../MarketInfo/MarketInfo.jsx';
 import { enrollUser } from './services/indexService.js';
 import ToastMessage from '../../components/ToastMessage.jsx';
+import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
+
 
 
 export default function MiniDrawer() {
@@ -295,7 +297,7 @@ export default function MiniDrawer() {
           <Route path="/accountPayable" element={<AccountPayable />} />
           <Route path="/AcReceivable" element={<AcReceivable />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
-          <Route path="/partInfo" element={<PartInfo />} />
+          /* <Route path="/partInfo" element={<PartInfo />} /> */
           <Route path="/BOMInfo" element={<BOMInfo />} />
           <Route path="/RBACInfo" element={<RBACInfo />} />
           <Route path="/ReferenceInfo" element={<ReferenceInfo />} />
@@ -337,6 +339,8 @@ export default function MiniDrawer() {
           <Route path='/StdOperationInput' element={<StdOperationInput />} />
           {/* <Route path='/StdMarketInputNew' element={<StdMarketInputNew />} /> New Route for StdMarketInputNew */}
           <Route path='/MarketInfo' element={<MarketInfo />} />
+          <Route path='/AssetCatalogTeam' element={<AssetCatalogTeam />} />
+
         </Routes>
       </Box>
       <ToastMessage
