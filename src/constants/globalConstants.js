@@ -79,7 +79,7 @@ import IdCardIcon from '../assets/navigation-menu/IdCard.png'
 import userIcon from '../assets/navigation-menu/user.png'
 import verifiedIcon from '../assets/navigation-menu/verified.png'
 import operationInputIcon from '../assets/navigation-menu/potential.png'
-import marketInputIcon from '../assets/navigation-menu/marketInput.png' 
+import marketInputIcon from '../assets/navigation-menu/marketInput.png'
 
 // end of png 
 
@@ -126,6 +126,8 @@ import OperationInputError from '../pages/OperationInputError/OperationInputErro
 import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
 import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
+// import StdMarketInputNew from "../pages/StdMarketInputNew/StdMarketInputNew.jsx";
+import MarketInfo from "../pages/MarketInfo/MarketInfo.jsx";
 
 //
 export const componentList = [
@@ -197,11 +199,19 @@ export const componentList = [
       },
       {
         iconPath: marketfactorInfoIcon,
-        id: "UI 21 090",
-        label: "Market Factor Info",
+        id: "UI 21 080",
+        label: "Market Factor Archive",
         path: "/marketFactorInfo",
         href: "/operationGame/marketFactorInfo",
         routeElement: <MarketFactorInfo />
+      },
+      {
+        iconPath: marketfactorInfoIcon,
+        id: "UI 21 090",
+        label: "Market Factor Info",
+        path: "/marketInfo",
+        href: "/operationGame/marketInfo",
+        routeElement: <MarketInfo />
       },
       {
         iconPath: operationalDecisionIcon,
@@ -429,6 +439,14 @@ export const componentList = [
         href: "/operationGame/StdMarketInput",
         routeElement: <StdMarketInput />
       },
+      // {
+      //   iconPath: marketInputIcon,
+      //   id: "UI 22 201",
+      //   label: "New Release Std Market Input",
+      //   path: "/StdMarketInputNew",
+      //   href: "/operationGame/StdMarketInputNew",
+      //   routeElement: <StdMarketInputNew />
+      // },
       {
         iconPath: strategyIcon,
         id: "UI 12 170",
