@@ -33,6 +33,12 @@ export default function StrategyMaster() {
         .then((response) => {
           setTableData(response.data);
           setIsTableActionsEnable(true);
+            setAlertData({
+            severity: "success",
+            message:
+              "Rows displayed ",
+            isVisible: true,
+          });
         })
         .catch((error) => {
           setAlertData({
