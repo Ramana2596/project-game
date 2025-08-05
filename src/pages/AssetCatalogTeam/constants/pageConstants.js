@@ -3,9 +3,10 @@ export const pageConstants = {
 //  gameTeam: "Team",
   tableHeading: [
     "Team",
-    "Part",
+    "Asset Description",
     "UOM",
     "Category",
     "Status"
-  ]
+  ],
+      hiddenColumns: ["Game_Id","Part_No"],
 };

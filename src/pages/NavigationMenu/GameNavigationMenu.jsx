@@ -111,6 +111,7 @@ import MarketInfo from '../MarketInfo/MarketInfo.jsx';
 import { enrollUser } from './services/indexService.js';
 import ToastMessage from '../../components/ToastMessage.jsx';
 import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
+import AssetCatalogBatch from '../AssetCatalogBatch/AssetCatalogBatch.jsx';
 
 
 
@@ -340,6 +341,8 @@ export default function MiniDrawer() {
           {/* <Route path='/StdMarketInputNew' element={<StdMarketInputNew />} /> New Route for StdMarketInputNew */}
           <Route path='/MarketInfo' element={<MarketInfo />} />
           <Route path='/AssetCatalogTeam' element={<AssetCatalogTeam />} />
+          <Route path='/AssetCatalogBatch' element={<AssetCatalogBatch />} />
+
 
         </Routes>
       </Box>
