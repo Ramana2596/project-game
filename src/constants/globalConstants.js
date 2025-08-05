@@ -129,6 +129,8 @@ import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx"
 // import StdMarketInputNew from "../pages/StdMarketInputNew/StdMarketInputNew.jsx";
 import MarketInfo from "../pages/MarketInfo/MarketInfo.jsx";
 import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
+import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
+
 
 //
 export const componentList = [
@@ -286,19 +288,17 @@ export const componentList = [
         href: "/operationGame/LiabilityInfo",
         routeElement: <LiabilityInfo />
       },
-      /*
       {
         iconPath: partIcon,
         id: "UI 22 010",
-        label: "Capital Item Catalog",
-        path: "/partInfo",
-        href: "/operationGame/partInfo",
-        routeElement: <PartInfo />
+        label: "Asset Catalog Master",
+        path: "/assetCatalogBatch",
+        href: "/operationGame/assetCatalogBatch",
+        routeElement: <AssetCatalogBatch />
       },
-      */
       {
         iconPath: partIcon,
-        id: "UI 22 010",
+        id: "UI 22 011",
         label: "Asset Catalog - Team",
         path: "/assetCatalogTeam",
         href: "/operationGame/assetCatalogTeam",
