@@ -297,6 +297,14 @@ export const componentList = [
         routeElement: <AssetCatalogTeam />
       },
       {
+        iconPath: partIcon,
+        id: "UI 22 050",
+        label: "Capital Asset Catalog Master",
+        path: "/assetCatalogBatch",
+        href: "/operationGame/assetCatalogBatch",
+        routeElement: <AssetCatalogBatch />
+      },
+      {
         iconPath: productIcon,
         id: "UI 22 020",
         label: "Product Master Details ",
@@ -319,14 +327,6 @@ export const componentList = [
         path: "/MfgRoutingInfo",
         href: "/operationGame/MfgRoutingInfo",
         routeElement: <MfgRoutingInfo />
-      },
-      {
-        iconPath: partIcon,
-        id: "UI 22 050",
-        label: "Capital Asset Catalog Master",
-        path: "/assetCatalogBatch",
-        href: "/operationGame/assetCatalogBatch",
-        routeElement: <AssetCatalogBatch />
       },
       {
         iconPath: machineIcon,
