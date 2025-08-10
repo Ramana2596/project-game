@@ -189,7 +189,7 @@ export const componentList = [
       {
         iconPath: businessStrategyIcon,
         id: "UI 21 020",
-        label: "Strategy Plan of a Team",
+        label: "Strategy Plan",
         path: "/StrategyPlanInfo",
         href: "/operationGame/StrategyPlanTeam",
         routeElement: <StrategyPlanTeam />
@@ -205,7 +205,7 @@ export const componentList = [
       {
         iconPath: marketfactorInfoIcon,
         id: "UI 21 080",
-        label: "Market Factor Archive",
+        label: "Market Info Archive",
         path: "/marketFactorInfo",
         href: "/operationGame/marketFactorInfo",
         routeElement: <MarketFactorInfo />
@@ -213,7 +213,7 @@ export const componentList = [
       {
         iconPath: marketfactorInfoIcon,
         id: "UI 21 090",
-        label: "Market Factor Info",
+        label: "Market Info",
         path: "/marketInfo",
         href: "/operationGame/marketInfo",
         routeElement: <MarketInfo />
@@ -221,7 +221,7 @@ export const componentList = [
       {
         iconPath: operationalDecisionIcon,
         id: "UI 21 100",
-        label: "Operational Decision Info",
+        label: "Operations Decision Info",
         path: "/operationalPlanInfo",
         href: "/operationGame/operationalPlanInfo",
         routeElement: <OperationalPlanInfo />
@@ -293,7 +293,7 @@ export const componentList = [
       {
         iconPath: partIcon,
         id: "UI 22 010",
-        label: "Capital Asset Catalog - Team",
+        label: "Capital Asset Catalog",
         path: "/assetCatalogTeam",
         href: "/operationGame/assetCatalogTeam",
         routeElement: <AssetCatalogTeam />
@@ -551,7 +551,7 @@ export const componentList = [
       {
         iconPath: choiceIcon,
         id: "UI 22 220",
-        label: "Valid Market & Operation Codes",
+        label: "Valid Market Vs Operation Codes",
         path: "/ValidInputCodes",
         href: "/operationGame/ValidInputCodes",
         routeElement: <ValidInputCodes />
