@@ -13,23 +13,16 @@ import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 // AssetCatalogBatch Component
 export default function AssetCatalogBatch() {
-  // Loading state management
-  const { setIsLoading } = useLoading(); 
-  // State variables for managing form data and API responses
-  const [getAssetCatalogBatchParam, setGetAssetCatalogBatchParam] = useState(null);
-  // State for selected game batch
-  const [selectedGameBatch, setSelectedBatch] = useState(null);
-  // User information from context
-  const { userInfo } = useUser();
-  // State for storing Asset Catalog Batch data
-  const [AssetCatalogBatch, setAssetCatalogBatch] = useState(null);
-  // State for storing game batch data
-  const [gameBatchData, setGameBatchData] = useState(null);
+  const { setIsLoading } = useLoading(); // Loading state management
+  const { userInfo } = useUser();  // User information from context
+  const [gameBatchData, setGameBatchData] = useState(null);   // State for storing game batch data
+  const [selectedGameBatch, setSelectedBatch] = useState(null); // State for selected game batch
+  const [getAssetCatalogBatchParam, setGetAssetCatalogBatchParam] = useState(null);// State for parameters to fetch data
+  const [AssetCatalogBatch, setAssetCatalogBatch] = useState(null);  // State for storing Asset Catalog Batch data
 
-// Game Batch Data Fetching
+  // Game Batch Data Fetching
   useEffect(() => {
     setIsLoading(true);
-    // Fetching game batch data based on user gameId
     getGameBatch({
       gameId: `${userInfo?.gameId}`,
     }).then((response) => {
@@ -66,25 +59,23 @@ export default function AssetCatalogBatch() {
   }, [getAssetCatalogBatchParam]); // Dependency on parameters to trigger API call
 
 
-  // Setting Parameters for API Call
+  // Setting Parameters for API Call to fetch Asset Catalog Batch
   useEffect(() => {
-    // If a game batch is selected, set the parameters for fetching Asset Catalog Batch
-    if (selectedGameBatch) {
+     if (selectedGameBatch) {
     //if (selectedGameBatch !== null && !isNaN(selectedGameBatch)) {
-     const params = {
-      gameId: userInfo?.gameId,
-      gameBatch: selectedGameBatch,
-    };
-    setGetAssetCatalogBatchParam(params);
+        const params = {
+          gameId: userInfo?.gameId,
+          gameBatch: selectedGameBatch,
+       };
+      setGetAssetCatalogBatchParam(params);
 
-    // 👇 Log API call parameters
-    console.log("Fetch Params:", params);
-  }
+      // 👇 Log API call parameters
+      console.log("Fetch Params:", params);
+      }
   }, [selectedGameBatch]);
 
   // Handler for Game Batch Selection
-
-  const onAssetCatalogBatchFormUpdate = (event) => {
+    const onAssetCatalogBatchFormUpdate = (event) => {
     if (event.currentTarget) {
       setSelectedBatch(event.currentTarget.value);
     } else if (event.target) {
