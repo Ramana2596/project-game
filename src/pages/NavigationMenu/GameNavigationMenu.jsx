@@ -103,16 +103,16 @@ import ProfessionRoleInfo from '../ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from '../UserProfileInfo/UserProfileInfo.jsx';
 import OperationInputError from '../OperationInputError/OperationInputError.jsx';
 import MarketInputError from '../MarketInputError/MarketInputError.jsx';
-import StdMarketInput from '../StdMarketInput/StdMarketInput.jsx';
+import StdMarketInputVer01 from '../StdMarketInput/StdMarketInputVer01.jsx';
 import StdOperationInput from '../StdOperationInput/StdOperationInput.jsx';
 import omgLogo from '../../assets/omg-logo.png';
-// import StdMarketInputNew from '../StdMarketInputNew/StdMarketInputNew.jsx'; // Import the new component
+import StdMarketInputNew from '../StdMarketInputNew/StdMarketInputNew.jsx'; // Import the new component
 import MarketInfo from '../MarketInfo/MarketInfo.jsx';
 import { enrollUser } from './services/indexService.js';
 import ToastMessage from '../../components/ToastMessage.jsx';
 import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
 import AssetCatalogBatch from '../AssetCatalogBatch/AssetCatalogBatch.jsx';
-
+//import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
 
 export default function MiniDrawer() {
@@ -336,14 +336,15 @@ export default function MiniDrawer() {
           <Route path='/UserProfileInfo' element={<UserProfileInfo />} />
           <Route path='/OperationInputError' element={<OperationInputError />} />
           <Route path='/MarketInputError' element={<MarketInputError />} />
-          <Route path='/StdMarketInput' element={<StdMarketInput />} />
+          {/*<Route path='/StdMarketInput' element={<StdMarketInput />} />*/}
+          <Route path='/StdMarketInput' element={<StdMarketInputVer01 />} />
           <Route path='/StdOperationInput' element={<StdOperationInput />} />
-          {/* <Route path='/StdMarketInputNew' element={<StdMarketInputNew />} /> New Route for StdMarketInputNew */}
+          <Route path='/StdMarketInputNew' element={<StdMarketInputNew />} /> {/* New Release Std Market Input */}
           <Route path='/MarketInfo' element={<MarketInfo />} />
           <Route path='/AssetCatalogTeam' element={<AssetCatalogTeam />} />
           <Route path='/AssetCatalogBatch' element={<AssetCatalogBatch />} />
-
-
+          {/*<Route path='/AssetCatalog' element={<AssetCatalog />} /> */}
+          
         </Routes>
       </Box>
       <ToastMessage
