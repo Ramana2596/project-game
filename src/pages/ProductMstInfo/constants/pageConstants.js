@@ -11,7 +11,7 @@ export const pageConstants = {
     "Product Life Cycle",
     "Profit %",
     "Currency",
-    "Unit Price",
+    "Estd. Price",
     "Pricing Date"
       ]
 };
