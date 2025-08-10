@@ -125,11 +125,13 @@ import UserProfileInfo from "../pages/UserProfileInfo/UserProfileInfo.jsx";
 import OperationInputError from '../pages/OperationInputError/OperationInputError.jsx';
 import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
 import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
+import StdMarketInputVer01 from "../pages/StdMarketInput/StdMarketInputVer01.jsx";
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
-// import StdMarketInputNew from "../pages/StdMarketInputNew/StdMarketInputNew.jsx";
+import StdMarketInputNew from "../pages/StdMarketInputNew/StdMarketInputNew.jsx";
 import MarketInfo from "../pages/MarketInfo/MarketInfo.jsx";
 import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
+// import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
 
 //
@@ -296,6 +298,16 @@ export const componentList = [
         href: "/operationGame/assetCatalogTeam",
         routeElement: <AssetCatalogTeam />
       },
+      /*
+      {
+        iconPath: partIcon,
+        id: "UI 22 010",
+        label: "Capital Asset Catalog",
+        path: "/assetCatalog",
+        href: "/operationGame/assetCatalog",
+        routeElement: <AssetCatalog />
+       },
+       */
       {
         iconPath: partIcon,
         id: "UI 22 050",
@@ -442,22 +454,24 @@ export const componentList = [
         href: "/operationGame/MarketInputError",
         routeElement: <MarketInputError />
       },
+      /*
       {
         iconPath: marketInputIcon,
         id: "UI 22 200",
         label: "Release Std Market Input",
         path: "/StdMarketInput",
         href: "/operationGame/StdMarketInput",
-        routeElement: <StdMarketInput />
+        routeElement: <StdMarketInputVer01 />
       },
-      // {
-      //   iconPath: marketInputIcon,
-      //   id: "UI 22 201",
-      //   label: "New Release Std Market Input",
-      //   path: "/StdMarketInputNew",
-      //   href: "/operationGame/StdMarketInputNew",
-      //   routeElement: <StdMarketInputNew />
-      // },
+      */
+      {
+        iconPath: marketInputIcon,
+        id: "UI 22 201",
+        label: "New Release Std Market Input",
+        path: "/StdMarketInputNew",
+         href: "/operationGame/StdMarketInputNew",
+         routeElement: <StdMarketInputNew />
+      },
       {
         iconPath: strategyIcon,
         id: "UI 12 170",
