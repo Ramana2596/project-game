@@ -549,13 +549,13 @@ export const componentList = [
         routeElement: <StdOperationInput />
       },
       {
-        iconPath: choiceIcon,
-        id: "UI 22 220",
-        label: "Valid Market Vs Operation Codes",
-        path: "/ValidInputCodes",
-        href: "/operationGame/ValidInputCodes",
-        routeElement: <ValidInputCodes />
-      },
+  iconPath: choiceIcon,
+  id: "UI 22 220",
+  label: "Valid Market Vs Operation Codes",
+  path: "/ValidInputCodes",
+  href: "/operationGame/ValidInputCodes",
+  routeElement: <ValidInputCodes />
+},
       {
         iconPath: factoryIcon,
         id: "UI 22 110",
