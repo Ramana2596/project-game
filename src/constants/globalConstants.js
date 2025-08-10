@@ -509,7 +509,7 @@ export const componentList = [
       {
         iconPath: operationalDecisionInputIcon,
         id: "UI 11 050",
-        label: "Operational Decision Input",
+        label: "Operations Decision Input",
         path: "/operationalPlanInfoInput",
         href: "/operationGame/operationalPlanInfoInput",
         routeElement: <OperationalPlanInfoInput />
