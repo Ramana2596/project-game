@@ -1,3 +1,4 @@
+// src/pages/StdMarketInputNew/StdMarketInputNew.jsx
 import { Box, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
@@ -11,18 +12,20 @@ import {
 } from "./services/service.js";
 import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
+// StdMarketInputNew Component
 export default function StdMarketInputNew() {
-  const { setIsLoading } = useLoading();
-  const [getStdMarketInputNewParam, setGetMarketInfoParam] = useState(null);
-  const [selectedGameBatch, setSelectedBatch] = useState(null);
-  const { userInfo } = useUser();
-  const [stdMarketInputNew, setStdMarketInputNew] = useState(null);
-  const [gameBatchData, setGameBatchData] = useState(null);
+  const { setIsLoading } = useLoading(); // Loading state management
+  const { userInfo } = useUser();// User information from context
+  const [gameBatchData, setGameBatchData] = useState(null);// State for storing game batch data
+  const [selectedGameBatch, setSelectedBatch] = useState(null);// State for selected game batch
+  const [getStdMarketInputNewParam, setGetStdMarketInputNewParam] = useState(null);// State for parameters to fetch data
+  const [stdMarketInputNew, setStdMarketInputNew] = useState(null);// State for storing StdMarketInputNew data
 
+// Fetching game batch data
   useEffect(() => {
     setIsLoading(true);
     getGameBatch({
-      gameId: `${userInfo?.gameId}`,
+      gameId: `${userInfo?.gameId}`
     }).then((response) => {
       if (response) {
         setGameBatchData(response.data);
@@ -31,27 +34,39 @@ export default function StdMarketInputNew() {
       .finally(() => setIsLoading(false));
   }, []);
 
+// Setting Parameters for API Call, once game batch is selected
   useEffect(() => {
-    if (getStdMarketInputNewParam?.gameId && getStdMarketInputNewParam?.gameBatch) {
-      setIsLoading(true);
-      getStdMarketInputNew(getStdMarketInputNewParam).then((response) => {
-        if (response) {
-          setStdMarketInputNew(response.data);
-        }
-      })
-        .finally(() => setIsLoading(false));
-    }
-  }, [getStdMarketInputNewParam]);
-
-  useEffect(() => {
-    if (selectedGameBatch) {
-      setGetMarketInfoParam({
+    //if (selectedGameBatch) {
+     // ✅ FIX: Allow 0 as valid Game_Batch ID
+    if (selectedGameBatch !== null && selectedGameBatch !== undefined) {
+      setGetStdMarketInputNewParam({
         gameId: userInfo?.gameId,
         gameBatch: selectedGameBatch,
       });
     }
-  }, [selectedGameBatch]);
+  }, [selectedGameBatch]); // Update parameters when selected game batch changes
 
+
+// Fetching StdMarketInputNew data for the selected game batch
+  useEffect(() => {
+    //if (getStdMarketInputNewParam?.gameId && 
+    //    getStdMarketInputNewParam?.gameBatch)
+     // ✅ FIX: Allow 0 as valid Game_Batch ID
+    if (getStdMarketInputNewParam?.gameId != null && 
+        getStdMarketInputNewParam?.gameBatch != null)
+        {
+          setIsLoading(true);
+          getStdMarketInputNew(getStdMarketInputNewParam).then((response) => {
+            if (response) {
+              setStdMarketInputNew(response.data);
+            }
+          })
+        .finally(() => setIsLoading(false));
+    }
+  }, [getStdMarketInputNewParam]); // Dependency on parameters to trigger API call
+
+  // Event Handler for updating selected game batch done thru the dropdown
+  // This will trigger the API call to fetch StdMarketInputNew data
   const onStdMarketInputNewFormUpddate = (event) => {
     if (event.currentTarget) {
       setSelectedBatch(event.currentTarget.value);
