@@ -38,7 +38,8 @@ export default function StdMarketInput() {
       gameId: `${userInfo?.gameId}`
     }).then((response) => {
       if (response) {
-        // API returns data format: data: [...], outmessage as OUTPUT
+        // API retruns Object = response.data = data & metadata
+        // Get gameBatchData Array and not message
         setGameBatchData(response.data.data);  
       }
     })
