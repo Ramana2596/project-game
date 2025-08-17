@@ -12,6 +12,9 @@ import ProfitPercentLineChart from './components/ProfitPercentLineChart.jsx';
 import { getChartInfo } from './services/gameDashboard.js';
 import { useUser } from "../../core/access/userContext.js";
 import CashFlowChart from './components/CashFlowChart.jsx';
+import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
+import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
+import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 
 function GameDashboard() {
   const { setIsLoading } = useLoading();
@@ -95,10 +98,10 @@ function GameDashboard() {
     // eslint-disable-next-line
   }, [userInfo]);
 
-  const handleCardClick = (href) => {
-    navigate(href);
+  const handleCardClick = (child) => {
+    // navigate to the child's page; that page will render the chart above its table
+    if (child?.href) navigate(child.href);
   };
-
 
   // Normalize label for robust matching
   const normalize = (str) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -111,23 +114,35 @@ function GameDashboard() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, padding: 2 }}>
-      <Grid container direction="column" spacing={3} alignItems="stretch">
+    <Box sx={{ flexGrow: 1, padding: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
+      {/* Cards row: show three cards horizontally (responsive) */}
+      <Grid container spacing={3} alignItems="stretch" justifyContent="center" sx={{ width: '100%', maxWidth: 1200 }}>
         {children.map((child, index) => {
           const normLabel = normalize(child.label);
-          let ChartComponent = BarChartComponent;
-          if (normLabel.includes('cashflow')) ChartComponent = CashFlowChart;
-          else if (normLabel.includes('balance')) ChartComponent = InventoryLineChart;
-          else if (normLabel.includes('income')) ChartComponent = ProfitPercentLineChart;
+          // small summary value for card (latest value)
+          const dataForCard = getChartForLabel(child.label) || [];
+          const latest = dataForCard.length ? dataForCard[dataForCard.length - 1] : null;
           return (
-            <Grid item xs={12} key={index}>
-              <Card className="custom-card" sx={{ width: '100%' }}>
-                <CardActionArea onClick={() => handleCardClick(child.href)}>
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      {child.label}
-                    </Typography>
-                    <ChartComponent data={getChartForLabel(child.label)} />
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card className="custom-card" sx={{ height: '100%' }}>
+                <CardActionArea onClick={() => handleCardClick(child)}>
+                  <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    {/* icon */}
+                    {(() => {
+                      const n = normLabel;
+                      if (n.includes('balance')) return <AccountBalanceWalletTwoToneIcon sx={{ fontSize: 40, color: 'primary.main' }} />;
+                      if (n.includes('income')) return <SummarizeTwoToneIcon sx={{ fontSize: 40, color: 'primary.main' }} />;
+                      if (n.includes('cashflow')) return <CurrencyExchangeTwoToneIcon sx={{ fontSize: 40, color: 'primary.main' }} />;
+                      return <SummarizeTwoToneIcon sx={{ fontSize: 40, color: 'primary.main' }} />;
+                    })()}
+                    <div>
+                      <Typography variant="h6" component="div" gutterBottom>
+                        {child.label}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {latest ? `${latest.label}: ${latest.value}` : 'No data available'}
+                      </Typography>
+                    </div>
                   </CardContent>
                 </CardActionArea>
               </Card>
@@ -135,6 +150,8 @@ function GameDashboard() {
           );
         })}
       </Grid>
+
+      {/* charts are rendered on their respective pages (above tables) */}
       <ToastMessage
         open={alertData.isVisible}
         severity={alertData.severity}

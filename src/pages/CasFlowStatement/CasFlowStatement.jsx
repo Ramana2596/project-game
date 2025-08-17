@@ -5,15 +5,20 @@ import { useUser } from "../../core/access/userContext.js";
 import { useEffect, useState } from "react";
 import { getCashFlowStatement } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
+import CashFlowChart from "../GameDashboard/components/CashFlowChart.jsx";
+import { getChartInfo } from "../GameDashboard/services/gameDashboard.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 export default function CasFlowStatement() {
   const { userInfo } = useUser();
+  const { setIsLoading } = useLoading();
   let getTableDataPayload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
   };
   const [tableData, setTableData] = useState([]);
+  const [chartData, setChartData] = useState([]);
   useEffect(() => {
     getCashFlowStatement(getTableDataPayload).then((response) => {
       if (response) {
@@ -21,6 +26,36 @@ export default function CasFlowStatement() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!userInfo?.gameId || !userInfo?.gameBatch || !userInfo?.gameTeam) return;
+      setIsLoading(true);
+      try {
+        const params = {
+          gameId: userInfo.gameId,
+          gameBatch: userInfo.gameBatch,
+          gameTeam: userInfo.gameTeam,
+          cmdLine: 'Cash_Flow',
+        };
+        const resp = await getChartInfo(params);
+        const mapped = (resp?.data || []).map(item => ({
+          label: item.Period,
+          value: item.Value,
+          legend: item.Legend,
+          team: item.Team,
+          chartType: item.Chart_Type,
+          chart: item.Chart,
+        }));
+        setChartData(mapped);
+      } catch (e) {
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetch();
+    // eslint-disable-next-line
+  }, [userInfo]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -32,6 +67,11 @@ export default function CasFlowStatement() {
           {pageConstants.gameTeam}: {userInfo?.gameTeam}
         </h3>
       </Grid>
+      {chartData && chartData.length > 0 && (
+        <Box sx={{ mb: 2 }}>
+          <CashFlowChart data={chartData} />
+        </Box>
+      )}
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
