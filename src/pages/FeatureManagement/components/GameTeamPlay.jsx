@@ -14,7 +14,11 @@ export default function GameTeamPlay() {
     });
 
     const onPlayButtonClick = () => {
-        updateGameTeamPlay({ gameId: userInfo.gameId, gameBatch: userInfo.gameBatch, gameTeam: userInfo.gameTeam })
+        updateGameTeamPlay({ 
+                gameId: userInfo.gameId, 
+                gameBatch: userInfo.gameBatch, 
+                gameTeam: userInfo.gameTeam,
+                cmdLine: userInfo.cmdLine })
             .then(() => {
                 setAlertData({
                     severity: "success",
@@ -34,7 +38,11 @@ export default function GameTeamPlay() {
     }
 
     const onRollBackButtonClick = () => {
-        rollBackPeriod({ gameId: userInfo.gameId, gameBatch: userInfo.gameBatch, gameTeam: userInfo.gameTeam })
+        rollBackPeriod({ 
+                gameId: userInfo.gameId,
+                gameBatch: userInfo.gameBatch,
+                gameTeam: userInfo.gameTeam,
+                cmdLine: userInfo.cmdLine})
             .then(() => {
                 setAlertData({
                     severity: "success",
