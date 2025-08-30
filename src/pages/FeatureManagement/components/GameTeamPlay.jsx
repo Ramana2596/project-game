@@ -19,10 +19,10 @@ export default function GameTeamPlay() {
                 gameBatch: userInfo.gameBatch, 
                 gameTeam: userInfo.gameTeam,
                 cmdLine: userInfo.cmdLine })
-            .then(() => {
+            .then((response) => {
                 setAlertData({
                     severity: "success",
-                    message: "Team Play Successful",
+                    message: response?.message || "Team Play Successful",
                     isVisible: true,
                 });
             })
