@@ -522,7 +522,7 @@ export const componentList = [
   },
   {
     iconPath: softwareIcon,
-    id: "UI 001",
+    id: "UI 99 970",
     label: "System Info Desk",
     path: "/SystemInfoDesk",
     href: "/operationGame/SystemInfoDesk",
@@ -537,13 +537,13 @@ export const componentList = [
         routeElement: <StdOperationInput />
       },
       {
-  iconPath: choiceIcon,
-  id: "UI 22 220",
-  label: "Valid Market Vs Operation Codes",
-  path: "/ValidInputCodes",
-  href: "/operationGame/ValidInputCodes",
-  routeElement: <ValidInputCodes />
-},
+        iconPath: choiceIcon,
+        id: "UI 22 220",
+        label: "Valid Market Vs Operation Codes",
+        path: "/ValidInputCodes",
+        href: "/operationGame/ValidInputCodes",
+        routeElement: <ValidInputCodes />
+      },
       {
         iconPath: factoryIcon,
         id: "UI 22 110",
@@ -612,7 +612,7 @@ export const componentList = [
   },
   {
     iconPath: secureAccessIcon,
-    id: "UI 001",
+    id: "UI 99 980",
     label: "User Mgt Desk",
     path: "/UserMgtDesk",
     href: "/operationGame/UserMgtDesk",
