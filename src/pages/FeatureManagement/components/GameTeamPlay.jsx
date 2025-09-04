@@ -22,7 +22,7 @@ export default function GameTeamPlay() {
             .then((response) => {
                 setAlertData({
                     severity: "success",
-                    message: response?.message || "Team Play Successful",
+                    message: response?.data?.message || "Team Play Successful",
                     isVisible: true,
                 });
             })
