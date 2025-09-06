@@ -126,7 +126,7 @@ import OperationInputError from '../pages/OperationInputError/OperationInputErro
 import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
 import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
-import MarketInfo from "../pages/MarketInfo/MarketInfo.jsx";
+import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
@@ -212,9 +212,9 @@ export const componentList = [
         iconPath: marketfactorInfoIcon,
         id: "UI 21 090",
         label: "Market Info",
-        path: "/marketInfo",
-        href: "/operationGame/marketInfo",
-        routeElement: <MarketInfo />
+        path: "/marketInfoTeam",
+        href: "/operationGame/marketInfoTeam",
+        routeElement: <MarketInfoTeam />
       },
       {
         iconPath: operationalDecisionIcon,

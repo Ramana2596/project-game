@@ -106,7 +106,7 @@ import MarketInputError from '../MarketInputError/MarketInputError.jsx';
 import StdMarketInput from '../StdMarketInput/StdMarketInput.jsx';
 import StdOperationInput from '../StdOperationInput/StdOperationInput.jsx';
 import omgLogo from '../../assets/omg-logo.png';
-import MarketInfo from '../MarketInfo/MarketInfo.jsx';
+import MarketInfoTeam from '../MarketInfoTeam/MarketInfoTeam.jsx';
 import { enrollUser } from './services/indexService.js';
 import ToastMessage from '../../components/ToastMessage.jsx';
 import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
@@ -337,7 +337,7 @@ export default function MiniDrawer() {
           <Route path='/MarketInputError' element={<MarketInputError />} />
           <Route path='/StdMarketInput' element={<StdMarketInput />} />
           <Route path='/StdOperationInput' element={<StdOperationInput />} />
-          <Route path='/MarketInfo' element={<MarketInfo />} />
+          <Route path='/MarketInfoTeam' element={<MarketInfoTeam />} />
           <Route path='/AssetCatalogTeam' element={<AssetCatalogTeam />} />
           <Route path='/AssetCatalogBatch' element={<AssetCatalogBatch />} />
           {/*<Route path='/AssetCatalog' element={<AssetCatalog />} /> */}

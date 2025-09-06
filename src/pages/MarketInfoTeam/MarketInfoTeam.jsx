@@ -3,10 +3,10 @@ import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.js";
 import { useEffect, useState } from "react";
-import { getMarketInfo} from "./services/service.js";
+import { getMarketInfoTeam} from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function MarketInfo() {
+export default function MarketInfoTeam() {
   const { userInfo } = useUser();
   let getTableDataPayload = {
     gameId: userInfo?.gameId,
@@ -15,7 +15,7 @@ export default function MarketInfo() {
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getMarketInfo(getTableDataPayload).then((response) => {
+    getMarketInfoTeam(getTableDataPayload).then((response) => {
       if (response) {
         setTableData(response.data);
       }
