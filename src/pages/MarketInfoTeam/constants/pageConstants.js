@@ -12,6 +12,7 @@ export const pageConstants = {
       "Unit Price",
       "Currency",
       "Price Info"
-  ]
+    ],
+      hiddenColumns: ["Part_No"],
 };
 
