@@ -22,7 +22,7 @@ export default function GameTeamPlay() {
             .then((response) => {
                 setAlertData({
                     severity: "success",
-                    message: response?.data?.message || " Cheeck logs ?",
+                    message: response?.data?.message || " Cheeck Batch/Team !",
                     isVisible: true,
                 });
             })
@@ -46,7 +46,7 @@ export default function GameTeamPlay() {
             .then((response) => {
                 setAlertData({
                    severity: "success",
-                   message: response?.data?.message || " Check logs ?",
+                   message: response?.data?.message || " Check Batch/team !",
                    isVisible: true,
                 });
             })
