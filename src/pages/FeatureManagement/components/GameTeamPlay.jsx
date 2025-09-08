@@ -22,7 +22,7 @@ export default function GameTeamPlay() {
             .then((response) => {
                 setAlertData({
                     severity: "success",
-                    message: response?.data?.message || "Team Play Successful",
+                    message: response?.data?.message || " Cheeck logs ?",
                     isVisible: true,
                 });
             })
@@ -43,11 +43,11 @@ export default function GameTeamPlay() {
                 gameBatch: userInfo.gameBatch,
                 gameTeam: userInfo.gameTeam,
                 cmdLine: userInfo.cmdLine})
-            .then(() => {
+            .then((response) => {
                 setAlertData({
-                    severity: "success",
-                    message: "Rollback A Period Successful",
-                    isVisible: true,
+                   severity: "success",
+                   message: response?.data?.message || " Check logs ?",
+                   isVisible: true,
                 });
             })
             .catch((error) => {
