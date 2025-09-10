@@ -2,10 +2,12 @@ export const pageConstants = {
 //  gameBatch: "Batch",
 //  gameTeam: "Team",
   tableHeading: [
+      // "Game_Id",
       "Team",
       "Period",
       "Category",
-      "Description",
+      // "Part_No",
+      "Part_Description",
       "UOM",
       "Quantity",
       "Market Info",
@@ -13,6 +15,7 @@ export const pageConstants = {
       "Currency",
       "Price Info"
     ],
-      hiddenColumns: ["Part_No"],
+      hiddenColumns: ["Game_Id",
+                      "Part_No"],
 };
 
