@@ -4,7 +4,7 @@ export const pageConstants = {
     toolBarSections: [
         {
             key: 'aboutSimulation',
-            title: 'Welcome to OMG',
+            title: 'Welcome to Operations Management Game (OMG)',
             content: (<><Typography variant="h6" sx={{ textAlign: 'center' }}>Experience the Real World of Business Operations</Typography><Typography variant="body1" paragraph>The Operations Management Game is an immersive learning platform designed to put you in the driver’s seat of managing a manufacturing or service-based business. Whether you’re overseeing a production line or managing service delivery, this game provides a real-world experience where every operational and strategic decision directly impacts your company’s financial health. It provides a learning platform to young business students, entrepreneurs, young professionals, consultants and Academia who are teaching operations management</Typography><Typography variant="body1" paragraph>Through this interactive Game, you will:</Typography><ul>
                 <li>Make critical strategic and operational decisions that affect business performance.</li>
                 <li>Analyse financial statements to see the real impact of your choices.</li>
@@ -28,7 +28,7 @@ export const pageConstants = {
         },
         {
             key: 'aboutApp',
-            title: 'What is OMG',
+            title: 'What is OMG ?',
             content: (
                 <Box>
                     <Typography variant="body1" paragraph>
