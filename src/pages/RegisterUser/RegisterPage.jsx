@@ -127,7 +127,7 @@ const Register = () => {
                 <Card sx={{ boxShadow: 3, width: 500, maxWidth: 800, padding: 2 }}>
                     <CardContent>
                         <Typography variant="h4" component="h1" gutterBottom className='standard-title-color'>
-                            Register
+                            Register User Profile
                         </Typography>
                         <form onSubmit={handleSubmit}>
                             <Box sx={{ mb: 2 }}>
@@ -188,8 +188,8 @@ const Register = () => {
                             <Button type="submit" className='standard-button-primary-button' color="primary">
                                 Register
                             </Button>
-                            <Button sx={{ marginLeft: 5 }} className='standard-button-secondary-button' onClick={() => routeHistory("/")}>
-                                Go Back to Welcome
+                            <Button sx={{ marginLeft: 30 }} className='standard-button-secondary-button' onClick={() => routeHistory("/")}>
+                                Back
                             </Button>
                         </form>
                     </CardContent>
