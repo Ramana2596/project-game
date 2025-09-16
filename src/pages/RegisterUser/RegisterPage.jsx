@@ -6,22 +6,33 @@ import ToastMessage from '../../components/ToastMessage.jsx';
 import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
 const Register = () => {
+
+    // 🔹 Local state for user inputs
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [profession, setProfession] = useState('');
     const [learningMode, setLearningMode] = useState('');
+    
+    // 🔹 Dropdown options from backend
     const [learningModes, setLearningModes] = useState([]);
-    const [error, setError] = useState(false);
     const [professionInfo, setProfessionData] = useState([]);
+
+   // 🔹 Validation and feedback
+    const [error, setError] = useState(false);
     const [alertData, setAlertData] = useState({
         severity: "",
         message: "",
         isVisible: false,
     });
+
+    // 🔹 State for enrollment dialog
     const [showEnrollDialog, setShowEnrollDialog] = useState(false);
     const [registeredUserId, setRegisteredUserId] = useState(null);
+    
+    // 🔹 Hook for showing global loading spinner
     const { setIsLoading } = useLoading(); // <-- Use loading context
 
+    // 🔹 Prepare payload for register API
     let registerUserPayload = {
         name: name,
         email: email,
@@ -31,6 +42,7 @@ const Register = () => {
 
     const routeHistory = useNavigate();
 
+    // 🔹 Validate email input while typing
     const handleChange = (e) => {
         const value = e.target.value;
         setEmail(value);
@@ -40,12 +52,15 @@ const Register = () => {
         setError(!emailRegex.test(value));
     };
 
+    // 🔹 On mount → fetch Profession and Learn Mode options
     useEffect(() => {
         setIsLoading(true);
         Promise.all([
-            getUserProfile({ cmdLine: 'Profession', gameId: null }),
+            getUserProfile({ cmdLine: 'Profession', gameId: 'OpsMgt' }),
             getUserProfile({ cmdLine: 'Learn_Mode', gameId: 'OpsMgt' })
         ]).then(([profResponse, learnModeResponse]) => {
+        //    console.log("Professions API:", profResponse);      // 🔹 Check what is returned
+        //    console.log("Learn Modes API:", learnModeResponse); // 🔹 Just to confirm
             if (profResponse) {
                 setProfessionData(profResponse.data);
             }
@@ -65,61 +80,155 @@ const Register = () => {
             return () => clearTimeout(timer);
         }
     }, [alertData.isVisible]);
+ 
+// REGISTER USER
+    // Named codes for registerUser return values
+    const REGISTER_STATUS = {
+    SUCCESS: 0,
+    BUSINESS_ERROR: 1,
+    SYSTEM_ERROR: -1,
+    };
 
+    // Map each return code to its alert severity and default message
+    const REGISTER_STATUS_MAP = {
+    [REGISTER_STATUS.SUCCESS]: {
+        severity: 'success',
+        defaultMsg: 'User registered successfully!',
+    },
+    [REGISTER_STATUS.BUSINESS_ERROR]: {
+        severity: 'warning',
+        defaultMsg: 'Email already used.',
+    },
+    [REGISTER_STATUS.SYSTEM_ERROR]: {
+        severity: 'error',
+        defaultMsg: 'System error while registering!',
+    },
+    };
+
+    // 🔹 Submit form → Call API to register user
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        try {
-            const response = await registerUser({ ...registerUserPayload, cmdLine: 'Add_User' });
-            if (response) {
-                setAlertData({
-                    severity: "success",
-                    message: "User registered successfully!",
-                    isVisible: true,
-                });
-                setRegisteredUserId(response.data.userID || null); // Adjust according to your API response
-                setShowEnrollDialog(true);
-            } else {
-                setAlertData({
-                    severity: "error",
-                    message: response?.error || "Failed to register user.",
-                    isVisible: true,
-                });
-            }
-        } catch (err) {
-            setAlertData({
-                severity: "error",
-                message: "Failed to register user.",
-                isVisible: true,
-            });
-        } finally {
-            setIsLoading(false);
+    // Prevent the browser’s default form submission
+    e.preventDefault();
+
+    // Show a loading spinner
+    setIsLoading(true);
+
+    try {
+        // Call the registerUser API and grab the full response
+        const res = await registerUser({
+        ...registerUserPayload,
+        cmdLine: 'Add_User',
+        });
+
+        // Extract returnValue, userId, and message from the API’s data
+        const { returnValue, userId, message } = res.data;
+
+        // Lookup severity and default message, fallback to system error mapping
+        const { severity, defaultMsg } =
+        REGISTER_STATUS_MAP[returnValue] ||
+        REGISTER_STATUS_MAP[REGISTER_STATUS.SYSTEM_ERROR];
+
+        // Display an alert with the chosen severity and message
+        setAlertData({
+        severity,
+        message: message || defaultMsg,
+        isVisible: true,
+        });
+
+        // On success, save the new userId and open the enroll dialog
+        if (returnValue === REGISTER_STATUS.SUCCESS) {
+        setRegisteredUserId(userId || null);
+        setShowEnrollDialog(true);
         }
+
+    } catch (err) {
+        // Handle network failures or unexpected exceptions
+        console.error('Registration error:', err);
+
+        // Show a generic error alert for unexpected failures
+        setAlertData({
+        severity: 'error',
+        message: 'Unexpected error while registering! Please try again.',
+        isVisible: true,
+        });
+
+    } finally {
+        // Always hide the loading spinner and log completion
+        setIsLoading(false);
+        console.log('Registration flow completed. Loading stopped.');
+    }
     };
 
-    const handleEnroll = async () => {
-        setShowEnrollDialog(false);
-        if (!registeredUserId) return;
-        setIsLoading(true);
-        try {
-            const enrollResponse = await enrollUser({ userId: registeredUserId, learnMode: learningMode });
-            if (enrollResponse) {
-                setAlertData({
-                    severity: "success",
-                    message: "Enrolled for the game successfully!",
-                    isVisible: true,
-                });
-            }
-        } catch (err) {
-            setAlertData({
-                severity: "error",
-                message: "Failed to enroll for the game.",
-                isVisible: true,
-            });
-        } finally {
-            setIsLoading(false);
-        }
+// ENROLL USER
+    // Define named codes for API return values
+    const ENROLL_STATUS = {
+    SUCCESS: 0,
+    BUSINESS_ERROR: 1,
+    SYSTEM_ERROR: -1,
     };
+
+    // Map each return code to its alert severity and default message
+    const STATUS_MAP = {
+    [ENROLL_STATUS.SUCCESS]: {
+        severity: 'success',
+        defaultMsg: 'User enrolled successfully!',
+    },
+    [ENROLL_STATUS.BUSINESS_ERROR]: {
+        severity: 'warning',
+        defaultMsg: 'Enrollment failed – check your Learn Mode!',
+    },
+    [ENROLL_STATUS.SYSTEM_ERROR]: {
+        severity: 'error',
+        defaultMsg: 'System error while enrolling!',
+    },
+    };
+
+    // 🔹 Submit → Call API to register user
+    const handleEnroll = async () => {
+    setShowEnrollDialog(false);
+    if (!registeredUserId) return;
+    setIsLoading(true);
+
+    try {
+        // Call the enrollUser API and grab the full response
+        const res = await enrollUser({
+        gameId: 'OpsMgt',
+        userId: registeredUserId,
+        learnMode: learningMode,
+        });
+
+        // Extract the API’s returnValue code and optional message
+        const { returnValue, message } = res.data;
+
+        // Lookup severity and default message, fallback to system error
+        const { severity, defaultMsg } =
+        STATUS_MAP[returnValue] || STATUS_MAP[ENROLL_STATUS.SYSTEM_ERROR];
+
+        // Display an alert with the chosen severity and message
+        setAlertData({
+        severity,
+        message: message || defaultMsg,
+        isVisible: true,
+        });
+
+        console.log(`Enrollment result: ${severity}`);
+    } catch (err) {
+        // Handle network failures or unexpected exceptions
+        console.error('Enrollment error:', err);
+
+        // Show a generic error alert for unexpected failures
+        setAlertData({
+        severity: 'error',
+        message: 'Unexpected error while enrolling! Please try again.',
+        isVisible: true,
+        });
+    } finally {
+        // Always hide the loading spinner and log completion
+        setIsLoading(false);
+        console.log('Enrollment flow completed.');
+    }
+    };
+
 
     return (
         <Container>
@@ -161,7 +270,7 @@ const Register = () => {
                                         label="Profession"
                                     >
                                         {professionInfo.map((prof) => (
-                                            <MenuItem key={prof.profession} value={prof.PF_Id}>
+                                            <MenuItem key={prof.PF_Id} value={prof.PF_Id}>
                                                 {prof.Profession}
                                             </MenuItem>
                                         ))}
