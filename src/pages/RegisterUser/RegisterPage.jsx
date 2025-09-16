@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { getUserProfile, registerUser, enrollUser } from "./services/service.js"; // <-- updated import
 import ToastMessage from '../../components/ToastMessage.jsx';
 import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import RegistrationForm from './RegistrationForm.jsx';
+import { API_STATUS, API_STATUS_MAP } from '../../utils/statusCodes.js';
+import EnrollDialog from './EnrollDialog.jsx';
 
 const Register = () => {
 
@@ -59,8 +62,6 @@ const Register = () => {
             getUserProfile({ cmdLine: 'Profession', gameId: 'OpsMgt' }),
             getUserProfile({ cmdLine: 'Learn_Mode', gameId: 'OpsMgt' })
         ]).then(([profResponse, learnModeResponse]) => {
-        //    console.log("Professions API:", profResponse);      // 🔹 Check what is returned
-        //    console.log("Learn Modes API:", learnModeResponse); // 🔹 Just to confirm
             if (profResponse) {
                 setProfessionData(profResponse.data);
             }
@@ -81,29 +82,6 @@ const Register = () => {
         }
     }, [alertData.isVisible]);
  
-// REGISTER USER
-    // Named codes for registerUser return values
-    const REGISTER_STATUS = {
-    SUCCESS: 0,
-    BUSINESS_ERROR: 1,
-    SYSTEM_ERROR: -1,
-    };
-
-    // Map each return code to its alert severity and default message
-    const REGISTER_STATUS_MAP = {
-    [REGISTER_STATUS.SUCCESS]: {
-        severity: 'success',
-        defaultMsg: 'User registered successfully!',
-    },
-    [REGISTER_STATUS.BUSINESS_ERROR]: {
-        severity: 'warning',
-        defaultMsg: 'Email already used.',
-    },
-    [REGISTER_STATUS.SYSTEM_ERROR]: {
-        severity: 'error',
-        defaultMsg: 'System error while registering!',
-    },
-    };
 
     // 🔹 Submit form → Call API to register user
     const handleSubmit = async (e) => {
@@ -123,10 +101,10 @@ const Register = () => {
         // Extract returnValue, userId, and message from the API’s data
         const { returnValue, userId, message } = res.data;
 
-        // Lookup severity and default message, fallback to system error mapping
-        const { severity, defaultMsg } =
-        REGISTER_STATUS_MAP[returnValue] ||
-        REGISTER_STATUS_MAP[REGISTER_STATUS.SYSTEM_ERROR];
+    // Lookup severity and default message, fallback to system error mapping
+    const { severity, defaultMsg } =
+    API_STATUS_MAP[returnValue] ||
+    API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
 
         // Display an alert with the chosen severity and message
         setAlertData({
@@ -136,19 +114,19 @@ const Register = () => {
         });
 
         // On success, save the new userId and open the enroll dialog
-        if (returnValue === REGISTER_STATUS.SUCCESS) {
+        if (returnValue === API_STATUS.SUCCESS) {
         setRegisteredUserId(userId || null);
         setShowEnrollDialog(true);
         }
 
     } catch (err) {
         // Handle network failures or unexpected exceptions
-        console.error('Registration error:', err);
+        console.error('Unhandled error:', err);
 
         // Show a generic error alert for unexpected failures
         setAlertData({
         severity: 'error',
-        message: 'Unexpected error while registering! Please try again.',
+        message: 'Unhandled error ! Please try again',
         isVisible: true,
         });
 
@@ -157,30 +135,6 @@ const Register = () => {
         setIsLoading(false);
         console.log('Registration flow completed. Loading stopped.');
     }
-    };
-
-// ENROLL USER
-    // Define named codes for API return values
-    const ENROLL_STATUS = {
-    SUCCESS: 0,
-    BUSINESS_ERROR: 1,
-    SYSTEM_ERROR: -1,
-    };
-
-    // Map each return code to its alert severity and default message
-    const STATUS_MAP = {
-    [ENROLL_STATUS.SUCCESS]: {
-        severity: 'success',
-        defaultMsg: 'User enrolled successfully!',
-    },
-    [ENROLL_STATUS.BUSINESS_ERROR]: {
-        severity: 'warning',
-        defaultMsg: 'Enrollment failed – check your Learn Mode!',
-    },
-    [ENROLL_STATUS.SYSTEM_ERROR]: {
-        severity: 'error',
-        defaultMsg: 'System error while enrolling!',
-    },
     };
 
     // 🔹 Submit → Call API to register user
@@ -202,7 +156,7 @@ const Register = () => {
 
         // Lookup severity and default message, fallback to system error
         const { severity, defaultMsg } =
-        STATUS_MAP[returnValue] || STATUS_MAP[ENROLL_STATUS.SYSTEM_ERROR];
+        API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
 
         // Display an alert with the chosen severity and message
         setAlertData({
@@ -214,12 +168,12 @@ const Register = () => {
         console.log(`Enrollment result: ${severity}`);
     } catch (err) {
         // Handle network failures or unexpected exceptions
-        console.error('Enrollment error:', err);
+        console.error('Unhandled error:', err);
 
         // Show a generic error alert for unexpected failures
         setAlertData({
         severity: 'error',
-        message: 'Unexpected error while enrolling! Please try again.',
+        message: 'Unhandled error ! Please try again.',
         isVisible: true,
         });
     } finally {
@@ -238,95 +192,38 @@ const Register = () => {
                         <Typography variant="h4" component="h1" gutterBottom className='standard-title-color'>
                             Register User Profile
                         </Typography>
-                        <form onSubmit={handleSubmit}>
-                            <Box sx={{ mb: 2 }}>
-                                <TextField
-                                    label="Name"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={name}
-                                    required
-                                    onChange={(e) => setName(e.target.value)}
-                                />
-                            </Box>
-                            <Box sx={{ mb: 2 }}>
-                                <TextField
-                                    label="Email"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={email}
-                                    required
-                                    onChange={handleChange}
-                                    error={error}
-                                    helperText={error ? "Please enter a valid email address" : ""}
-                                />
-                            </Box>
-                            <Box sx={{ mb: 2 }}>
-                                <FormControl fullWidth variant="outlined" required>
-                                    <InputLabel>Profession</InputLabel>
-                                    <Select
-                                        value={profession}
-                                        onChange={(e) => setProfession(e.target.value)}
-                                        label="Profession"
-                                    >
-                                        {professionInfo.map((prof) => (
-                                            <MenuItem key={prof.PF_Id} value={prof.PF_Id}>
-                                                {prof.Profession}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Box>
-                            <Box sx={{ mb: 2 }}>
-                                <FormControl fullWidth variant="outlined" required>
-                                    <InputLabel>Learning Mode</InputLabel>
-                                    <Select
-                                        value={learningMode}
-                                        onChange={(e) => setLearningMode(e.target.value)}
-                                        label="Learning Mode"
-                                    >
-                                        {learningModes.map((mode) => (
-                                            <MenuItem key={mode.Learn_Mode} value={mode.Learn_Mode}>
-                                                {mode.Learn_Mode}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Box>
-
-                            <Button type="submit" className='standard-button-primary-button' color="primary">
-                                Register
-                            </Button>
-                            <Button sx={{ marginLeft: 30 }} className='standard-button-secondary-button' onClick={() => routeHistory("/")}>
-                                Back
-                            </Button>
-                        </form>
+                        <RegistrationForm
+                            name={name}
+                            email={email}
+                            profession={profession}
+                            learningMode={learningMode}
+                            professionInfo={professionInfo}
+                            learningModes={learningModes}
+                            error={error}
+                            onNameChange={(e) => setName(e.target.value)}
+                            onEmailChange={handleChange}
+                            onProfessionChange={(e) => setProfession(e.target.value)}
+                            onLearningModeChange={(e) => setLearningMode(e.target.value)}
+                            onSubmit={handleSubmit}
+                            onBack={() => routeHistory("/")}
+                            />
                     </CardContent>
                 </Card>
             </Box>
-            <Dialog open={showEnrollDialog} onClose={() => setShowEnrollDialog(false)}>
-                <DialogTitle>Alert</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Do you want to enroll for the game?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setShowEnrollDialog(false)} color="secondary">
-                        No
-                    </Button>
-                    <Button onClick={handleEnroll} color="primary" autoFocus>
-                        Yes
-                    </Button>
-                </DialogActions>
-            </Dialog>
+//  Enroll User Daialog 
+            <EnrollDialog
+                open={showEnrollDialog}
+                onClose={() => setShowEnrollDialog(false)}
+                onEnroll={handleEnroll}
+            />
             <ToastMessage
                 open={alertData.isVisible}
                 severity={alertData.severity}
                 message={alertData.message}
-            />
+            />         
         </Container>
     );
+
 };
 
 export default Register;
