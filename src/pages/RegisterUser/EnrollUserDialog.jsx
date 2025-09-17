@@ -69,7 +69,7 @@ const EnrollUserDialog = ({
       <DialogTitle>Confirm Enrollment</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Do you want to enroll this user into the learning program?
+          Do you want to enroll in the learning program?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
