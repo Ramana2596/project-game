@@ -126,7 +126,6 @@ export default function MiniDrawer() {
     message: "",
     isVisible: false,
   });
-
   useEffect(() => {
     if (user?.role) {
       setIsLoading(true);
@@ -161,34 +160,67 @@ export default function MiniDrawer() {
 
   // Show enroll button if user is logged in and does not have a gameId
   const showEnrollButton = user && !userInfo?.gameBatch;
+  console.log("Bef Show_Enrol :", userInfo);
 
   const handleEnrollClick = () => {
     setShowEnrollDialog(true);
   };
 
   const handleEnroll = async () => {
+    console.log("Enroll clicked", userInfo.loginId );
     setShowEnrollDialog(false);
     if (!userInfo.loginId) return;
     setIsLoading(true);
     try {
-      console.log(userInfo);
-      const enrollResponse = await enrollUser({ userId: userInfo.userId, learnMode: userInfo?.learnMode });
-      if (enrollResponse) {
-        setAlertData({
-          severity: "success",
-          message: "Enrolled for the game successfully!",
-          isVisible: true,
+      console.log("Bef API: ", userInfo);
+      const enrollResponse = await enrollUser({
+        gameId: 'OpsMgt',
+        userId: userInfo.userId, 
+        learnMode: userInfo?.learnMode 
         });
-      }
-    } catch (err) {
+        
+      const { returnValue, message } = enrollResponse.data;
+      console.log("Enroll API response:", enrollResponse);
+      console.log("👉 Parsed Enroll Values:", { returnValue, message });
+
+      console.log("📌 Enrolled userId:", userInfo.userId);
+      console.log("📌 Selected Learning Mode:", userInfo?.learnMode);
+      //
+      console.log("👉 Parsed Enroll Values:", { returnValue, message });
+
+      if (returnValue === 0) { // ✅ Success
+          console.log("✅ Enrollment Success");
+          setAlertData({
+              severity: "success",
+              message: message || "User Enrolled successfully!",
+              isVisible: true,
+          });
+      } else if (returnValue === 1) { // ⚠️ Business rule error
+          console.warn("⚠️ Enrollment Business Rule Error");
+          setAlertData({
+              severity: "warning",
+              message: message || "Enrolment failed - Check Learn Mode !",
+              isVisible: true,
+          });
+      } else if (returnValue === -1) { // ❌ DB / system-level error
       setAlertData({
-        severity: "error",
-        message: "Failed to enroll for the game.",
-        isVisible: true,
+          severity: "error",
+          message: message || "System error while enrolling!",
+          isVisible: true,
       });
-    } finally {
-      setIsLoading(false);
-    }
+      }
+
+      } catch (err) {  // ❌ System / API error (returnValue = -1 or network error)
+          console.error("❌ Enrollment Exception:", err);
+          setAlertData({
+              severity: "error",
+              message: "Unexpected error while Enrolling!",
+              isVisible: true,
+          });
+      } finally {
+          console.log("⏹ Enrollment flow completed. Loading stopped.");
+          setIsLoading(false);
+      }  
   };
 
   return (
