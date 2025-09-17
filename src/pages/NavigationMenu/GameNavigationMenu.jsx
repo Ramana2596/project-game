@@ -107,10 +107,11 @@ import StdMarketInput from '../StdMarketInput/StdMarketInput.jsx';
 import StdOperationInput from '../StdOperationInput/StdOperationInput.jsx';
 import omgLogo from '../../assets/omg-logo.png';
 import MarketInfoTeam from '../MarketInfoTeam/MarketInfoTeam.jsx';
-import { enrollUser } from './services/indexService.js';
 import ToastMessage from '../../components/ToastMessage.jsx';
 import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
 import AssetCatalogBatch from '../AssetCatalogBatch/AssetCatalogBatch.jsx';
+import EnrollUserDialog from '../RegisterUser/EnrollUserDialog.jsx';
+
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
 
@@ -158,71 +159,6 @@ export default function MiniDrawer() {
 
   const currentRoute = location.pathname;
 
-  // Show enroll button if user is logged in and does not have a gameId
-  const showEnrollButton = user && !userInfo?.gameBatch;
-  console.log("Bef Show_Enrol :", userInfo);
-
-  const handleEnrollClick = () => {
-    setShowEnrollDialog(true);
-  };
-
-  const handleEnroll = async () => {
-    console.log("Enroll clicked", userInfo.loginId );
-    setShowEnrollDialog(false);
-    if (!userInfo.loginId) return;
-    setIsLoading(true);
-    try {
-      console.log("Bef API: ", userInfo);
-      const enrollResponse = await enrollUser({
-        gameId: 'OpsMgt',
-        userId: userInfo.userId, 
-        learnMode: userInfo?.learnMode 
-        });
-        
-      const { returnValue, message } = enrollResponse.data;
-      console.log("Enroll API response:", enrollResponse);
-      console.log("👉 Parsed Enroll Values:", { returnValue, message });
-
-      console.log("📌 Enrolled userId:", userInfo.userId);
-      console.log("📌 Selected Learning Mode:", userInfo?.learnMode);
-      //
-      console.log("👉 Parsed Enroll Values:", { returnValue, message });
-
-      if (returnValue === 0) { // ✅ Success
-          console.log("✅ Enrollment Success");
-          setAlertData({
-              severity: "success",
-              message: message || "User Enrolled successfully!",
-              isVisible: true,
-          });
-      } else if (returnValue === 1) { // ⚠️ Business rule error
-          console.warn("⚠️ Enrollment Business Rule Error");
-          setAlertData({
-              severity: "warning",
-              message: message || "Enrolment failed - Check Learn Mode !",
-              isVisible: true,
-          });
-      } else if (returnValue === -1) { // ❌ DB / system-level error
-      setAlertData({
-          severity: "error",
-          message: message || "System error while enrolling!",
-          isVisible: true,
-      });
-      }
-
-      } catch (err) {  // ❌ System / API error (returnValue = -1 or network error)
-          console.error("❌ Enrollment Exception:", err);
-          setAlertData({
-              severity: "error",
-              message: "Unexpected error while Enrolling!",
-              isVisible: true,
-          });
-      } finally {
-          console.log("⏹ Enrollment flow completed. Loading stopped.");
-          setIsLoading(false);
-      }  
-  };
-
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
@@ -241,30 +177,76 @@ export default function MiniDrawer() {
           </IconButton>
           <BreadCrumb currentRoute={currentRoute} />
           <div style={{ marginLeft: "auto", display: 'flex', alignItems: 'center', gap: 2 }}>
-            {showEnrollButton && (
-              <Button className='standard-button-secondary-button' sx={{ marginRight: 1 }} onClick={handleEnrollClick}>
-                Enroll
-              </Button>
-            )}
-            <Button className="hover-effect" onClick={handleMenu} color="inherit" sx={{ display: "flex", alignItems: "center", textTransform: "none", border: "1px solid", borderRadius: "30px", padding: "5px 20px", backgroundColor: "#FFFFFF", color: "#180081" }}>
-              <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
-            </Button>
-            <Dialog open={showEnrollDialog} onClose={() => setShowEnrollDialog(false)}>
-              <DialogTitle>Alert</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  Do you want to enroll for the game?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => setShowEnrollDialog(false)} color="secondary">
-                  No
+
+            <EnrollUserDialog
+              open={showEnrollDialog}
+              onClose={() => setShowEnrollDialog(false)}
+              userId={userInfo?.userId}
+              learnMode={userInfo?.learnMode}   // can be null; dialog handles default
+              onResult={(result) => {
+                setAlertData({
+                  severity: result.severity,
+                  message: result.message,
+                  isVisible: true,
+                });
+              }}
+            />
+
+            <div>
+              {userInfo ? (
+                <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", width: "100%" }}>
+                  {/* Show Enroll button only if NOT enrolled */}
+                  {!userInfo?.gameBatch && (
+                    <Button
+                      className="standard-button-secondary-button"
+                      sx={{ marginRight: 1 }}
+                      onClick={() => setShowEnrollDialog(true)}
+                    >
+                      Enroll
+                    </Button>
+                  )}
+
+                  {/* Always show AccountCircle */}
+                  <Button
+                    className="hover-effect"
+                    onClick={handleMenu}
+                    color="inherit"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      textTransform: "none",
+                      border: "1px solid",
+                      borderRadius: "30px",
+                      padding: "5px 20px",
+                      backgroundColor: "#FFFFFF",
+                      color: "#180081"
+                    }}
+                  >
+                    <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
+                  </Button>
+                </Box>
+              ) : (
+                <Button
+                  className="hover-effect"
+                  onClick={handleMenu}
+                  color="inherit"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    textTransform: "none",
+                    border: "1px solid",
+                    borderRadius: "30px",
+                    padding: "5px 20px",
+                    backgroundColor: "#FFFFFF",
+                    color: "#180081"
+                  }}
+                >
+                  <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
                 </Button>
-                <Button onClick={handleEnroll} color="primary" autoFocus>
-                  Yes
-                </Button>
-              </DialogActions>
-            </Dialog>
+              )}
+
+            </div>
+ 
             <Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right", }} keepMounted transformOrigin={{ vertical: "top", horizontal: "right", }} open={Boolean(anchorEl)} onClose={handleClose} sx={{ "& .MuiPaper-root": { borderRadius: "10px", padding: "10px", width: "250px", backgroundColor: "#FFFFFF", }, }} >
               <Typography className="standard-text-color" disabled>{userInfo?.loginId}</Typography>
               <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
