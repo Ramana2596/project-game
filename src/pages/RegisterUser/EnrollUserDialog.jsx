@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -7,41 +7,79 @@ import {
   DialogActions,
   Button,
   CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import { enrollUser } from "./services/service.js";
+import { enrollUser, getUserProfile } from "./services/service.js";
 import { API_STATUS, API_STATUS_MAP } from "../../utils/statusCodes.js";
+import { useUser } from "../../core/access/userContext";
 
 /**
- * EnrollUserDialog Component
+ * EnrollUserDialog
  *
  * Props:
  * - open (boolean): Controls dialog visibility
- * - onClose (function): Callback to close the dialog
- * - userId (string): The user ID to enroll
- * - learnMode (string, optional): If null, set default value ("Class_Room")
- * - onResult (function): Callback to return API result { severity, message }
+ * - onClose (function): Closes the dialog
+ * - userId (string): ID of the user to enroll ✅
+ * - gameId (string): Game context for enrollment ✅
+ * - learnMode (string): Optional preselected mode ✅
+ * - onResult (function): Callback with { severity, message }
  */
-const EnrollUserDialog = ({ 
-  open, 
-  onClose, 
-  userId, 
-  learnMode,        // If null, set default value
-  onResult 
+const EnrollUserDialog = ({
+  open,
+  onClose,
+  onResult,
+  userId: propUserId,       // ✅ Accept userId via props
+  gameId: propGameId,       // ✅ Accept gameId via props
+  learnMode: propLearnMode  // ✅ Accept learnMode via props
 }) => {
+
+  const { userInfo } = useUser(); // Context for authenticated users
+  console.log("✅ EnrollUserDialog: Received propUserId:", propUserId);
+  console.log("✅ EnrollUserDialog: Context userInfo.userId:", userInfo?.userId);
+  const isPropMode = !!propUserId; // ✅ Determine mode based on presence of prop userId
+
+  const gameId = userInfo?.gameId || "OpsMgt"; // ✅ Use context/default
+ 
+  const userId = isPropMode ? propUserId : userInfo?.userId;             // ✅ Use prop or context
+  const defaultMode = isPropMode ? propLearnMode : userInfo?.learnMode || "Class_Room"; // ✅ Initial mode
+
+  const [learnModes, setLearnModes] = useState([]);
+  const [selectedMode, setSelectedMode] = useState(defaultMode); // ✅ Initialize with defaultMode
   const [loading, setLoading] = useState(false);
 
+  console.log("Eff. Enroll mode:", isPropMode ? "Prop-driven" : "Context-driven");
+  console.log("Eff. userId:", userId);
+  console.log("Eff. gameId:", gameId);
+
+  useEffect(() => {
+    if (open && gameId) {
+      getUserProfile({ cmdLine: "Learn_Mode", gameId })
+        .then((res) => {
+          const modes = res.data || [];
+          setLearnModes(modes);
+
+          // ✅ Select first mode from API response if none selected
+          if (modes.length > 0 && !selectedMode) {
+            setSelectedMode(modes[0].Learn_Mode);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch learn modes:", err);
+          setLearnModes([]);
+        });
+    }
+  }, [open, gameId]); // ✅ Added gameId to dependency list
+
   const handleEnroll = async () => {
-    if (!userId) return;
-
-    // If null, set default value
-    const modeToSend = learnMode || "Class_Room";
-
     setLoading(true);
     try {
       const res = await enrollUser({
-        gameId: "OpsMgt",
-        userId,
-        learnMode: modeToSend,
+        gameId: gameId,
+        userId: userId,
+        learnMode: selectedMode,
       });
 
       const { returnValue, message } = res.data;
@@ -49,14 +87,14 @@ const EnrollUserDialog = ({
         API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
 
       onResult({
-        severity,
+        severity: severity,
         message: message || defaultMsg,
       });
     } catch (err) {
       console.error("Unhandled error:", err);
       onResult({
         severity: "error",
-        message: "Unhandled error! Please try again.",
+        message: "Unhandled error: Please try again.",
       });
     } finally {
       setLoading(false);
@@ -69,8 +107,26 @@ const EnrollUserDialog = ({
       <DialogTitle>Confirm Enrollment</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Do you want to enroll in the learning program?
+          Please select a learning mode !
         </DialogContentText>
+
+        {/* 🔹 Dropdown for Learning Mode */}
+        <FormControl fullWidth margin="normal">
+          <Select
+            value={selectedMode}
+            onChange={(e) => setSelectedMode(e.target.value)}
+          >
+            {learnModes.map((modeObj) => {
+              const value = modeObj.Learn_Mode;
+              const label = value.replace(/_/g, " ");
+              return (
+                <MenuItem key={value} value={value}>
+                  {label}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} disabled={loading}>
@@ -80,7 +136,8 @@ const EnrollUserDialog = ({
           onClick={handleEnroll}
           variant="contained"
           color="primary"
-          disabled={loading}
+          disabled={loading || !selectedMode}
+          autoFocus // ✅ Ensures this button gets focus immediately
         >
           {loading ? <CircularProgress size={20} /> : "Enroll"}
         </Button>
