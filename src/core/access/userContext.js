@@ -5,7 +5,15 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState({ role: null });
-    const [userInfo, setGameInfo] = useState({ gameId: null, gameBatch: null, gameTeam: null, isGameLeader: null });
+    const [userInfo, setGameInfo] 
+        = useState({ gameId: 'OpsMgt', // default 
+                     gameBatch: null,
+                     gameTeam: null,
+                     isGameLeader: null,
+                     userId: null,
+                     loginId: null,
+                     learnMode: 'Class_Room' // default learning mode
+         });
     const [userAccessablePageIds, setUserAccessablePageIds] = useState(null);
     const [userAccessiblePages, setUserAccessiblePages] = useState(null);
 
