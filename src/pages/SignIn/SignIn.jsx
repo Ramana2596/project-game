@@ -68,7 +68,7 @@ export default function SignIn(props) {
   const { login, setUserInfo, userInfo } = useUser();
   const [userDetailsData, setUserDetailsData] = React.useState(null);
 
-  // ✅ API Call Trigger
+  // ✅ API Call Trigger: get authentic-user, based on email
   React.useEffect(() => {
     if (shouldTriggerApiCall) {
       setIsLoading(true);
@@ -83,7 +83,7 @@ export default function SignIn(props) {
     }
   }, [shouldTriggerApiCall]);
 
-  // ✅ Effect 1: Handle API Response (only sets state)
+  // ✅ Effect 1: Handle API Response (set state: Role,UserInfo,validUser flag)
   React.useEffect(() => {
     if (userDetailsData && userDetailsData.length > 0) {
       login(userDetailsData[0]?.Role);
@@ -95,7 +95,7 @@ export default function SignIn(props) {
     setShouldTriggerApiCall(false);
   }, [userDetailsData]);  // ❌ removed isValidUser from deps
 
-  // ✅ Effect 2: Runs when isValidUser updates 
+  // ✅ Effect 2: Runs initialisation of tables when isValidUser is true and userInfo is set
   React.useEffect(() => {
     if (isValidUser && userInfo) {   // user is valid AND we have user details ready.
       intiateTeamPlay({
@@ -109,6 +109,9 @@ export default function SignIn(props) {
     }
   }, [isValidUser, userInfo]);   // ✅ new effect
 
+
+  // ✅ Direct authentic user to homepage
+
   const handleSubmit = (event) => {
     event.preventDefault();
     if (emailError) return;
@@ -118,6 +121,7 @@ export default function SignIn(props) {
     }
   };
 
+  // ✅ OnClick handler for SignIn button // validate email and set states
   const onLoginClick = () => {
     const email = document.getElementById("email");
 
