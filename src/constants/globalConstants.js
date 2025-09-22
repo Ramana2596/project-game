@@ -129,6 +129,8 @@ import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx"
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
+import GameBatchDetails from "../pages/GameBatchMaster/GameBatchDetails";
+
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
 
@@ -136,7 +138,7 @@ import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx"
 export const componentList = [
   {
     iconPath: homeIcon,
-    id: "UI 001",
+    id: "UI 99 900",
     label: "Game Dashboard",
     path: "/homePage",
     href: "/operationGame/homePage",
@@ -170,7 +172,7 @@ export const componentList = [
   },
   {
     iconPath: infoIcon,
-    id: "UI 001",
+    id: "UI 99 910",
     label: "Info Desk",
     path: "/infoDesk",
     href: "/operationGame/infoDesk",
@@ -422,7 +424,7 @@ export const componentList = [
   },
   {
     iconPath: marketIcon,
-    id: "UI 001",
+    id: "UI 99 920",
     label: "Market Scenario",
     path: "/MarketScenario",
     href: "/operationGame/MarketScenario",
@@ -480,7 +482,7 @@ export const componentList = [
   },
   {
     iconPath: operationsIcon,
-    id: "UI 001",
+    id: "UI 99 930",
     label: "Operations",
     path: "/operations",
     href: "/operationGame/operations",
@@ -665,7 +667,15 @@ export const componentList = [
         path: "/UserProfileInfo",
         href: "/operationGame/UserProfileInfo",
         routeElement: <UserProfileInfo />
-      }
+      },
+      {
+          iconPath: asterikIcon,
+          id: "UI 14 020",
+          label: "Game Batch Details",
+          path: "/gameBatchDetails",
+          href: "/operationGame/gameBatchDetails",
+          routeElement: <GameBatchDetails />
+        },
     ],
   }
 
