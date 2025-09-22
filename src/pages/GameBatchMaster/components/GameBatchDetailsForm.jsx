@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Grid, TextField, MenuItem } from "@mui/material";
 import { pageConstants } from "../constants/pageConstants";
+import { useUser } from "../../../core/access/userContext.js";
+
+
 import { fetchGameBatchDetails } from "../services/getBatchQuery";
+
 
 // Props:
 //   details: object with batch details
@@ -11,6 +15,7 @@ import { fetchGameBatchDetails } from "../services/getBatchQuery";
 export default function GameBatchDetailsForm({ details, selectOptions, onSave, onCancel }) {
   const [form, setForm] = useState(details || {});
   const [editMode, setEditMode] = useState(false);
+  const { gameId } = useUser();
 
   useEffect(() => {
     setForm(details || {});
@@ -27,16 +32,28 @@ export default function GameBatchDetailsForm({ details, selectOptions, onSave, o
     setEditMode(false);
     if (onCancel) onCancel();
   };
+
   const handleSave = () => {
-    if (onSave) onSave(form);
-    setEditMode(false);
+    const updatedForm = { ...form, Game_id: gameId }; // ✅ inject from context
+  if (onSave) onSave(updatedForm);
+  setEditMode(false);
   };
 
-  if (!form || !form.Game_id) return null;
+
+if (!form) return null;
 
   return (
     <form>
       <Grid container spacing={2}>
+        <Grid item xs={12} sm={6} md={4}>
+          <TextField
+            label="Game ID"
+            value={gameId}
+            fullWidth
+            disabled
+          />
+        </Grid>
+
         {pageConstants.contentSection.inputTypes.map(input => {
           const { columnName, inputType, readOnly } = input;
           let value = form[columnName] || "";

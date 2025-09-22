@@ -20,6 +20,8 @@ import InfoDesk from "../pages/InfoDesk/InfoDesk";
 import SystemInfoDesk from "../pages/SystemInfoDesk/SystemInfoDesk.jsx";
 import UserMgtDesk from "../pages/UserMgtDesk/UserMgtDesk.jsx";
 import UserRoleManagement from "../pages/UserRoleManagement/UserRoleManagement";
+import Simulation from "../pages/Simulation/Simulation";
+import BatchMgt from "../pages/BatchMgt/BatchMgt.jsx";
 
 // start of png
 import homeIcon from '../assets/navigation-menu/home.png';
@@ -80,6 +82,9 @@ import userIcon from '../assets/navigation-menu/user.png'
 import verifiedIcon from '../assets/navigation-menu/verified.png'
 import operationInputIcon from '../assets/navigation-menu/potential.png'
 import marketInputIcon from '../assets/navigation-menu/marketInput.png'
+import peopleIcon from '../assets/navigation-menu/people.png'
+import schoolIcon from '../assets/navigation-menu/school.png'
+import manufacturingIcon from '../assets/navigation-menu/manufacturing.png'
 
 // end of png 
 
@@ -173,7 +178,7 @@ export const componentList = [
   {
     iconPath: infoIcon,
     id: "UI 99 910",
-    label: "Info Desk",
+    label: "Information Desk",
     path: "/infoDesk",
     href: "/operationGame/infoDesk",
     routeElement: <InfoDesk />,
@@ -197,7 +202,7 @@ export const componentList = [
       {
         iconPath: budgetIcon,
         id: "UI 21 040",
-        label: "Budget Plan for Strategy",
+        label: "Budget for Strategy",
         path: "/StrategyBudgetInfo",
         href: "/operationGame/StrategyBudgetInfo",
         routeElement: <StrategyBudgetInfo />
@@ -469,14 +474,6 @@ export const componentList = [
         path: "/strategyMaster",
         href: "/operationGame/strategyMaster",
         routeElement: <StrategyMaster />
-      },
-      {
-        iconPath: appSettings,
-        id: "UI 21 260",
-        label: "Team Play",
-        path: "/teamPlay",
-        href: "/operationGame/teamPlay",
-        routeElement: <FeatureManagement />
       }
     ]
   },
@@ -515,103 +512,42 @@ export const componentList = [
     ],
   },
   {
-    iconPath: verifiedIcon,
-    id: "UI 15 030",
-    label: "User Role Management",
-    path: "/userRoleManagement",
-    href: "/operationGame/userRoleManagement",
-    routeElement: <UserRoleManagement />
-  },
-  {
-    iconPath: softwareIcon,
-    id: "UI 99 970",
-    label: "System Info Desk",
-    path: "/SystemInfoDesk",
-    href: "/operationGame/SystemInfoDesk",
-    routeElement: <SystemInfoDesk />,
+    iconPath: manufacturingIcon,
+    id: "UI 99 940",
+    label: "Simulation",
+    path: "/Simulation",
+    href: "/operationGame/Simulation",
+    routeElement: <Simulation />,
     children: [
       {
-        iconPath: operationInputIcon,
-        id: "UI 22 210",
-        label: "Release Std Operation Input",
-        path: "/StdOperationInput",
-        href: "/operationGame/StdOperationInput",
-        routeElement: <StdOperationInput />
-      },
-      {
-        iconPath: choiceIcon,
-        id: "UI 22 220",
-        label: "Valid Market Vs Operation Codes",
-        path: "/ValidInputCodes",
-        href: "/operationGame/ValidInputCodes",
-        routeElement: <ValidInputCodes />
-      },
-      {
-        iconPath: factoryIcon,
-        id: "UI 22 110",
-        label: "Manufacturing Work Centre List",
-        path: "/MfgWorkCentreInfo",
-        href: "/operationGame/MfgWorkCentreInfo",
-        routeElement: <MfgWorkCentreInfo />
-      },
-      {
-        iconPath: referenceIcon,
-        id: "UI 22 160",
-        label: "Reference Terms",
-        path: "/ReferenceInfo",
-        href: "/operationGame/ReferenceInfo",
-        routeElement: <ReferenceInfo />
-      },
-      {
-        iconPath: costIcon,
-        id: "UI 22 140",
-        label: "Cost Norm Info",
-        path: "/CostNormInfo",
-        href: "/operationGame/CostNormInfo",
-        routeElement: <CostNormInfo />
-      },
-      {
-        iconPath: standardIcon,
-        id: "UI 22 150",
-        label: "Standard Norms Info",
-        path: "/StdNormInfo",
-        href: "/operationGame/StdNormInfo",
-        routeElement: <StdNormInfo />
-      },
-      {
-        iconPath: benefitsIcon,
-        id: "UI 22 180",
-        label: "Strategy Benefits",
-        path: "/BenefitInfo",
-        href: "/operationGame/BenefitInfo",
-        routeElement: <BenefitInfo />
-      },
-      {
-        iconPath: resultIcon,
-        id: "UI 22 190",
-        label: "Strategy Outcome / Resultant",
-        path: "/ResultantInfo",
-        href: "/operationGame/ResultantInfo",
-        routeElement: <ResultantInfo />
-      },
-      {
-        iconPath: valueStreamIcon,
-        id: "UI 22 230",
-        label: "Value Stream Details",
-        path: "/ValueStream",
-        href: "/operationGame/ValueStream",
-        routeElement: <ValueStream />
-      },
-      {
-        iconPath: actionableIcon,
-        id: "UI 22 240",
-        label: "Resultant - Value Stream Map",
-        path: "/ValueStreamMap",
-        href: "/operationGame/ValueStreamMap",
-        routeElement: <ValueStreamMap />
+        iconPath: appSettings,
+        id: "UI 21 260",
+        label: "Team Play",
+        path: "/teamPlay",
+        href: "/operationGame/teamPlay",
+        routeElement: <FeatureManagement />
       }
     ],
   },
+  {
+    iconPath: schoolIcon,
+    id: "UI 99 970",
+    label: "Batch Management",
+    path: "/BatchMgt",
+    href: "/operationGame/BatchMgt",
+    routeElement: <BatchMgt />,
+    children: [
+      {
+          iconPath: peopleIcon,
+          id: "UI 14 020",
+          label: "Game Batch Details",
+          path: "/gameBatchDetails",
+          href: "/operationGame/gameBatchDetails",
+          routeElement: <GameBatchDetails />
+      }
+    ],
+  },
+
   {
     iconPath: secureAccessIcon,
     id: "UI 99 980",
@@ -669,6 +605,14 @@ export const componentList = [
         routeElement: <UserProfileInfo />
       },
       {
+        iconPath: verifiedIcon,
+        id: "UI 15 030",
+        label: "User Role Management",
+        path: "/userRoleManagement",
+        href: "/operationGame/userRoleManagement",
+        routeElement: <UserRoleManagement />
+      },
+      {
           iconPath: asterikIcon,
           id: "UI 14 020",
           label: "Game Batch Details",
@@ -677,7 +621,97 @@ export const componentList = [
           routeElement: <GameBatchDetails />
         },
     ],
-  }
+  },
+  {
+  iconPath: softwareIcon,
+  id: "UI 99 990",
+  label: "System Info Desk",
+  path: "/SystemInfoDesk",
+  href: "/operationGame/SystemInfoDesk",
+  routeElement: <SystemInfoDesk />,
+  children: [
+    {
+      iconPath: operationInputIcon,
+      id: "UI 22 210",
+      label: "Release Std Operation Input",
+      path: "/StdOperationInput",
+      href: "/operationGame/StdOperationInput",
+      routeElement: <StdOperationInput />
+    },
+    {
+      iconPath: choiceIcon,
+      id: "UI 22 220",
+      label: "Valid Market Vs Operation Codes",
+      path: "/ValidInputCodes",
+      href: "/operationGame/ValidInputCodes",
+      routeElement: <ValidInputCodes />
+    },
+    {
+      iconPath: factoryIcon,
+      id: "UI 22 110",
+      label: "Manufacturing Work Centre List",
+      path: "/MfgWorkCentreInfo",
+      href: "/operationGame/MfgWorkCentreInfo",
+      routeElement: <MfgWorkCentreInfo />
+    },
+    {
+      iconPath: referenceIcon,
+      id: "UI 22 160",
+      label: "Reference Terms",
+      path: "/ReferenceInfo",
+      href: "/operationGame/ReferenceInfo",
+      routeElement: <ReferenceInfo />
+    },
+    {
+      iconPath: costIcon,
+      id: "UI 22 140",
+      label: "Cost Norm Info",
+      path: "/CostNormInfo",
+      href: "/operationGame/CostNormInfo",
+      routeElement: <CostNormInfo />
+    },
+    {
+      iconPath: standardIcon,
+      id: "UI 22 150",
+      label: "Standard Norms Info",
+      path: "/StdNormInfo",
+      href: "/operationGame/StdNormInfo",
+      routeElement: <StdNormInfo />
+    },
+    {
+      iconPath: benefitsIcon,
+      id: "UI 22 180",
+      label: "Strategy Benefits",
+      path: "/BenefitInfo",
+      href: "/operationGame/BenefitInfo",
+      routeElement: <BenefitInfo />
+    },
+    {
+      iconPath: resultIcon,
+      id: "UI 22 190",
+      label: "Strategy Outcome / Resultant",
+      path: "/ResultantInfo",
+      href: "/operationGame/ResultantInfo",
+      routeElement: <ResultantInfo />
+    },
+    {
+      iconPath: valueStreamIcon,
+      id: "UI 22 230",
+      label: "Value Stream Details",
+      path: "/ValueStream",
+      href: "/operationGame/ValueStream",
+      routeElement: <ValueStream />
+    },
+    {
+      iconPath: actionableIcon,
+      id: "UI 22 240",
+      label: "Resultant - Value Stream Map",
+      path: "/ValueStreamMap",
+      href: "/operationGame/ValueStreamMap",
+      routeElement: <ValueStreamMap />
+    }
+  ],
+}
 
 ];
 
