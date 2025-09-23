@@ -34,7 +34,8 @@ function GameDashboard() {
   });
 
   // Find the "Game Dashboard" item and get its children
-  const gameDashboardItem = componentList.find(item => item.label === 'Game Dashboard');
+  //const gameDashboardItem = componentList.find(item => item.label === 'Game Dashboard');
+  const gameDashboardItem = componentList.find(item => item.id === 'UI 99 900');
   const children = gameDashboardItem ? gameDashboardItem.children : [];
 
   useEffect(() => {

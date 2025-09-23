@@ -12,8 +12,8 @@ function MarketScenario() {
     const handleCardClick = (href) => {
         navigate(href);
     };
-
-    const infoDeskItem = userAccessiblePages?.find(item => item.label === 'Market Scenario');
+    //const infoDeskItem = userAccessiblePages?.find(item => item.label === 'Market Scenario');
+    const infoDeskItem = userAccessiblePages?.find(item => item.id === 'UI 99 920');
     const children = infoDeskItem ? infoDeskItem.children : [];
 
     return (

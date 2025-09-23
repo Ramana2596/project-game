@@ -13,7 +13,8 @@ function Operations() {
         navigate(href);
     };
 
-    const infoDeskItem = userAccessiblePages?.find(item => item.label === 'Operations');
+    //const infoDeskItem = userAccessiblePages?.find(item => item.label === 'Operations');
+    const infoDeskItem = userAccessiblePages?.find(item => item.id === 'UI 99 930');
     const children = infoDeskItem ? infoDeskItem.children : [];
 
     return (
