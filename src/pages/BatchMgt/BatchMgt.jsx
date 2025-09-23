@@ -13,7 +13,8 @@ function BatchMgt() {
         navigate(href);
     };
 
-    const BatchMgtItem = userAccessiblePages?.find(item => item.label === 'Batch Management');
+    // const BatchMgtItem = userAccessiblePages?.find(item => item.label === 'Batch Management');
+    const BatchMgtItem = userAccessiblePages?.find(item => item.id === 'UI 99 970');
     const children = BatchMgtItem ? BatchMgtItem.children : [];
 
     return (

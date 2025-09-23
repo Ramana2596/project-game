@@ -12,8 +12,8 @@ function InfoDesk() {
     const handleCardClick = (href) => {
         navigate(href);
     };
-
-    const infoDeskItem = userAccessiblePages?.find(item => item.label === 'Info Desk');
+   // const infoDeskItem = userAccessiblePages?.find(item => item.label === 'Information Desk');
+    const infoDeskItem = userAccessiblePages?.find(item => item.id === 'UI 99 910');
     const children = infoDeskItem ? infoDeskItem.children : [];
 
     return (

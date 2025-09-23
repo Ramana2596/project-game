@@ -12,8 +12,9 @@ function Simulation() {
     const handleCardClick = (href) => {
         navigate(href);
     };
-
-    const SimulationItem = userAccessiblePages?.find(item => item.label === 'Simulation');
+    
+    //const SimulationItem = userAccessiblePages?.find(item => item.label === 'Simulation');
+    const SimulationItem = userAccessiblePages?.find(item => item.id === 'UI 99 940');
     const children = SimulationItem ? SimulationItem.children : [];
 
     return (

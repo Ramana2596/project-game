@@ -13,7 +13,8 @@ function UserMgtDesk() {
         navigate(href);
     };
 
-    const UserMgtDeskItem = userAccessiblePages?.find(item => item.label === 'User Mgt Desk');
+    //const UserMgtDeskItem = userAccessiblePages?.find(item => item.label === 'User Mgt Desk');
+    const UserMgtDeskItem = userAccessiblePages?.find(item => item.id === 'UI 99 980');
     const children = UserMgtDeskItem ? UserMgtDeskItem.children : [];
 
     return (

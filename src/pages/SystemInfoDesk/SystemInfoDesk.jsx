@@ -12,8 +12,9 @@ function SystemInfoDesk() {
     const handleCardClick = (href) => {
         navigate(href);
     };
-
-    const SystemInfoDeskItem = userAccessiblePages?.find(item => item.label === 'System Info Desk');
+    
+    //const SystemInfoDeskItem = userAccessiblePages?.find(item => item.label === 'System Info Desk');
+    const SystemInfoDeskItem = userAccessiblePages?.find(item => item.id === 'UI 99 990');
     const children = SystemInfoDeskItem ? SystemInfoDeskItem.children : [];
 
     return (
