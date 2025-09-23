@@ -2,6 +2,8 @@
 import BreadCrumb from '../../components/BreadCrumb.jsx';
 import CasFlowStatement from '../CasFlowStatement/CasFlowStatement.jsx';
 import InfoDesk from '../InfoDesk/InfoDesk.jsx';
+import Simulation from '../Simulation/Simulation.jsx';
+import BatchMgt from '../BatchMgt/BatchMgt.jsx';
 import ProductionRecordInfo from '../ProductionRecordInfo/ProductionRecordInfo.jsx';
 import SalesRecordInfo from '../SalesRecordInfo/SalesRecordInfo.jsx';
 import {
@@ -111,6 +113,7 @@ import ToastMessage from '../../components/ToastMessage.jsx';
 import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
 import AssetCatalogBatch from '../AssetCatalogBatch/AssetCatalogBatch.jsx';
 import EnrollUserDialog from '../RegisterUser/EnrollUserDialog.jsx';
+import GameBatchDetails from "../GameBatchMaster/GameBatchDetails";
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
@@ -289,6 +292,7 @@ export default function MiniDrawer() {
           <Route path="/homePage" element={<GameDashboard />} />
           <Route path="/userRoleManagement" element={<UserRoleManagement />} />
           <Route path="/infoDesk" element={<InfoDesk />} />
+          <Route path="/simulation" element={<Simulation />} />
           <Route path="/gameMaster" element={<GameMaster />} />
           <Route path="/gameBatch" element={<GameBatch />} />
           <Route path="/gameSession" element={<GameSession />} />
@@ -354,6 +358,8 @@ export default function MiniDrawer() {
           <Route path='/MarketInfoTeam' element={<MarketInfoTeam />} />
           <Route path='/AssetCatalogTeam' element={<AssetCatalogTeam />} />
           <Route path='/AssetCatalogBatch' element={<AssetCatalogBatch />} />
+          <Route path='/gameBatchDetails' element={<GameBatchDetails />} />
+          <Route path='/BatchMgt' element={<BatchMgt />} />
           {/*<Route path='/AssetCatalog' element={<AssetCatalog />} /> */}
           
         </Routes>
