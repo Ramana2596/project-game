@@ -5,7 +5,7 @@ export const pageConstants = {
     "Team",
     "Loan Type",
     'Loan Date',
-    "ROI %",
+    "Interest Rate %",
     "Currency",
     "Loan Amount",
     "Cum Repayment",
