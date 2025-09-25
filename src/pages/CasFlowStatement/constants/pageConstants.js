@@ -18,4 +18,12 @@ export const pageConstants = {
     "Period_11",
     "Period_12",
   ],
+  vitalRows: [
+    "Net Cash Flow from Operation",
+    "Net Cash Inflow from Investing Activities",
+    "Net Cash Inflow from Financing Activities",
+    "Net Cash Flow from Operation,Investing & Financing",
+    "Cash Balance at the beginning of the period",
+    "Cash Balance at the End of the period",
+  ],
 };
