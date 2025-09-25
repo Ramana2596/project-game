@@ -79,6 +79,7 @@ export default function BalanceSheetInfo() {
         inputTableData={tableData}
         ifNoData={null}
         hiddenColumns={[]}
+        highlightRowsByDetail={pageConstants.vitalRows}
       ></GenericTable>
     </Box>
   );
