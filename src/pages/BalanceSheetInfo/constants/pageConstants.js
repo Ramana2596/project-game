@@ -18,4 +18,18 @@ export const pageConstants = {
     "Period_11",
     "Period_12",
   ],
+  vitalRows: [
+    "Equity",
+    "Reserve & Surplus",
+    "Secured Loan",
+    "Unscured Loan",
+    "Current Liability",
+    "Total Liability",
+    "Fixed Assets",
+    "Cash Balance",
+    "Total Inventory",
+    "Ac Receivable",
+    "Current Asset",
+    "Total Assets"
+  ],
 };
