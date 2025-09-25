@@ -12,6 +12,8 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { dateColumns } from "../constants/globalConstants.js";
 import { formatDate } from "../utils/formatDate";
 
+
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -39,6 +41,7 @@ function GenericTable({
   ifNoData,
   isAnEditableTable = false,
   hiddenColumns = [],
+  highlightRowsByDetail = [],        // ✅ new prop. Ensures safe operation even if no rows are passed.
 }) {
   let tableValueSet = inputTableData?.map((tableDataObj) => {
     return Object.values(tableDataObj);
@@ -140,7 +143,7 @@ function GenericTable({
                 })}
               </TableRow>
             </TableHead>
-            <TableBody>
+ {/*           <TableBody>
               {inputTableData?.map((valueObj) => {
                 return (
                   <StyledTableRow align="right">
@@ -161,6 +164,36 @@ function GenericTable({
                 );
               })}
             </TableBody>
+  */}
+              <TableBody>
+              {inputTableData?.map((valueObj) => {
+                  const isVital = highlightRowsByDetail.includes(valueObj["Details"]); // ✅ use prop
+                return (
+                  <StyledTableRow align="right">
+                    {Object.keys(valueObj).map((key) => {
+                      if (!hiddenColumns.includes(key)) {
+                        return (
+                          <StyledTableCell
+                            align="right"
+                            sx={{
+                              fontWeight: isVital ? "bold" : "normal",
+                            }}
+                          >
+                            {dateColumns.some(
+                              (column) =>
+                                column === key.toLowerCase() || column === key
+                            ) || key.toLowerCase().includes("date")
+                              ? formatDate(valueObj[key])
+                              : valueObj[key]}
+                          </StyledTableCell>
+                        );
+                      }
+                    })}
+                  </StyledTableRow>
+                );
+              })}
+            </TableBody>
+
           </Table>
         </TableContainer>
       </Box>
