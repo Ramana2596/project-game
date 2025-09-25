@@ -14,7 +14,7 @@ export default function IncomeStatementInfo() {
   const { setIsLoading } = useLoading();
   let getOperationalPlanInfoParam = {
     gameId: userInfo?.gameId,
-    gameBatch: userInfo?.gameBatch,
+    gameBatch: Number(userInfo?.gameBatch),
     gameTeam: userInfo?.gameTeam,
   };
   const [tableData, setTableData] = useState([]);
@@ -34,7 +34,7 @@ export default function IncomeStatementInfo() {
       try {
         const params = {
           gameId: userInfo.gameId,
-          gameBatch: userInfo.gameBatch,
+          gameBatch: Number(userInfo.gameBatch),
           gameTeam: userInfo.gameTeam,
           cmdLine: 'Profit_%',
         };
@@ -77,6 +77,7 @@ export default function IncomeStatementInfo() {
         inputTableData={tableData}
         ifNoData={null}
         hiddenColumns={[]}
+        highlightRowsByDetail={pageConstants.vitalRows}
       ></GenericTable>
     </Box>
   );
