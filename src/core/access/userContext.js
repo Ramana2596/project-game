@@ -24,7 +24,7 @@ export const UserProvider = ({ children }) => {
 
     const setUserInfo = (userInfo) => {
         setGameInfo({
-            gameId: userInfo?.Game_id,
+            gameId: userInfo?.Game_Id,
             gameBatch: userInfo?.Game_Batch,
             gameTeam: userInfo?.Game_Team,
             isGameLeader: userInfo?.Team_Leader,
