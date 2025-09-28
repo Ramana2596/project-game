@@ -86,7 +86,6 @@ const Register = () => {
       });
 
       const { returnValue, userId, message } = res.data;
-            console.log("Reg User Id: ", userId);
       const { severity, defaultMsg } =
         API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
 
@@ -98,7 +97,6 @@ const Register = () => {
 
       // 🔹 On success → save userId and open EnrollUserDialog
       if (returnValue === API_STATUS.SUCCESS) {
-         console.log("✅ RegisterPage: Received userId from API:", userId); //
         setRegisteredUserId(userId || null);
         setShowEnrollDialog(true);
       }
@@ -143,7 +141,6 @@ const Register = () => {
       </Box>
 
       {/* 🔹 Enroll User Dialog Component */}
-      console.log("✅ RegisterPage: Passing userId to EnrollUserDialog:", registeredUserId);
 
       <EnrollUserDialog
         open={showEnrollDialog}
