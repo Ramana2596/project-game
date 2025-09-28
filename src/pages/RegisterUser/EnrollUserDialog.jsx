@@ -22,37 +22,32 @@ import { useUser } from "../../core/access/userContext";
  * Props:
  * - open (boolean): Controls dialog visibility
  * - onClose (function): Closes the dialog
- * - userId (string): ID of the user to enroll ✅
- * - gameId (string): Game context for enrollment ✅
- * - learnMode (string): Optional preselected mode ✅
+ * - userId (string): ID of the user to enroll 
+ * - gameId (string): Game context for enrollment 
+ * - learnMode (string): Optional preselected mode 
  * - onResult (function): Callback with { severity, message }
  */
 const EnrollUserDialog = ({
   open,
   onClose,
   onResult,
-  userId: propUserId,       // ✅ Accept userId via props
-  gameId: propGameId,       // ✅ Accept gameId via props
-  learnMode: propLearnMode  // ✅ Accept learnMode via props
+  userId: propUserId,       //  Accept userId via props
+  gameId: propGameId,       //  Accept gameId via props
+  learnMode: propLearnMode  //  Accept learnMode via props
 }) => {
 
   const { userInfo } = useUser(); // Context for authenticated users
-  console.log("✅ EnrollUserDialog: Received propUserId:", propUserId);
-  console.log("✅ EnrollUserDialog: Context userInfo.userId:", userInfo?.userId);
-  const isPropMode = !!propUserId; // ✅ Determine mode based on presence of prop userId
+  
+  const isPropMode = !!propUserId; //  Determine mode based on presence of prop userId
 
-  const gameId = userInfo?.gameId || "OpsMgt"; // ✅ Use context/default
+  const gameId = userInfo?.gameId || "OpsMgt"; //  Use context/default
  
-  const userId = isPropMode ? propUserId : userInfo?.userId;             // ✅ Use prop or context
-  const defaultMode = isPropMode ? propLearnMode : userInfo?.learnMode || "Class_Room"; // ✅ Initial mode
+  const userId = isPropMode ? propUserId : userInfo?.userId;             //  Use prop or context
+  const defaultMode = isPropMode ? propLearnMode : userInfo?.learnMode || "Class_Room"; //  Initial mode
 
   const [learnModes, setLearnModes] = useState([]);
-  const [selectedMode, setSelectedMode] = useState(defaultMode); // ✅ Initialize with defaultMode
+  const [selectedMode, setSelectedMode] = useState(defaultMode); //  Initialize with defaultMode
   const [loading, setLoading] = useState(false);
-
-  console.log("Eff. Enroll mode:", isPropMode ? "Prop-driven" : "Context-driven");
-  console.log("Eff. userId:", userId);
-  console.log("Eff. gameId:", gameId);
 
   useEffect(() => {
     if (open && gameId) {
@@ -61,7 +56,7 @@ const EnrollUserDialog = ({
           const modes = res.data || [];
           setLearnModes(modes);
 
-          // ✅ Select first mode from API response if none selected
+          //  Select first mode from API response if none selected
           if (modes.length > 0 && !selectedMode) {
             setSelectedMode(modes[0].Learn_Mode);
           }
@@ -71,7 +66,7 @@ const EnrollUserDialog = ({
           setLearnModes([]);
         });
     }
-  }, [open, gameId]); // ✅ Added gameId to dependency list
+  }, [open, gameId]); //  Added gameId to dependency list
 
   const handleEnroll = async () => {
     setLoading(true);
@@ -137,7 +132,7 @@ const EnrollUserDialog = ({
           variant="contained"
           color="primary"
           disabled={loading || !selectedMode}
-          autoFocus // ✅ Ensures this button gets focus immediately
+          autoFocus //  Ensures this button gets focus immediately
         >
           {loading ? <CircularProgress size={20} /> : "Enroll"}
         </Button>
