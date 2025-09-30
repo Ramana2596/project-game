@@ -1,107 +1,187 @@
 import React, { useEffect, useState } from "react";
-import GameBatchSelector from "./components/GameBatchSelector";
-import GameBatchDetailsForm from "./components/GameBatchDetailsForm";
-import { fetchGameIdList, fetchGameBatchList, fetchGameBatchDetails } from "./services/getBatchQuery";
-import { fetchFacultyList, fetchFacilitatorList, fetchUOMList, fetchBatchStatusList, fetchCentreList } from "./services/getListBoxOptions";
-import { pageConstants } from "./constants/pageConstants";
-import { updateGameBatch } from "./services/service";
+import GameBatchSelector from "./components/GameBatchSelector.jsx";
+import GameBatchDetailsForm from "./components/GameBatchDetailsForm.jsx";
+import {
+  getGameBatch,
+  getGameBatchDetails,
+  getAdminCentre,
+  getBatchStatus,
+  getFacilitator,
+  getFaculty,
+  getUOM
+} from "./services/getBatchQuery.js";
+import { updateGameBatch } from "./services/service.js";
+import { useUser } from "../../core/access/userContext.js";
 
 export default function GameBatchDetails() {
-  const [gameIdList, setGameIdList] = useState([]);
-  const [gameBatchList, setGameBatchList] = useState([]);
-  const [selected, setSelected] = useState({ gameId: "", gameBatch: "" });
-  const [batchDetails, setBatchDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [updateMessage, setUpdateMessage] = useState("");
-  const [selectOptions, setSelectOptions] = useState({ Faculty: [], Facilitator: [], UOM: [], Batch_Status: [], Centre_Id: [] });
+  const { userInfo } = useUser();
+  const gameId = userInfo?.gameId || "OpsMgt"; //  fallback
 
-  // Fetch Game_Id list on mount
-  useEffect(() => {
-    fetchGameIdList()
-      .then(res => setGameIdList(res.data || []))
-      .catch(() => setError("Failed to load Game Id list"));
-  }, []);
+  // Selected batch
+  const [selected, setSelected] = useState({ gameId, gameBatch: "" }); 
 
-  // Fetch Game_Batch list when Game_Id changes
-  useEffect(() => {
-    if (selected.gameId) {
-      fetchGameBatchList(selected.gameId)
-        .then(res => setGameBatchList(res.data || []))
-        .catch(() => setError("Failed to load Game Batch list"));
-    } else {
-      setGameBatchList([]);
-    }
-  }, [selected.gameId]);
+  // UI states
+  const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState(""); 
+  const [updateMessage, setUpdateMessage] = useState(""); 
 
-  // Fetch list box options on mount
+  // Dropdown options for form
+  const [selectOptions, setSelectOptions] = useState({ 
+    Centre_Id: [],
+    Faculty: [],
+    Facilitator: [],
+    UOM: [],
+    Batch_Status: [],
+    Learn_Mode: [],   
+    Team_Theme: []   
+  });
+
+  // Single row of batch details
+  const [batchDetails, setBatchDetails] = useState(null); 
+
+  // List of batches for the game
+  const [gameBatchList, setGameBatchList] = useState([]); 
+
+  // -------------------------------
+  // Fetch Game_Batch list
+  // -------------------------------
   useEffect(() => {
+    if (!gameId) return;
+    console.log('In Fetch Game_batch; ', gameId)
+    getGameBatch({ gameId })
+      .then(res => {
+        const mappedBatches = (res.data || []).map(item => ({ 
+          value: item.Game_Batch,
+          label: String(item.Game_Batch)
+        }));
+        setGameBatchList(mappedBatches); 
+      })
+      .catch(() => setError("Failed to load Game Batch list")); 
+  }, [gameId]);
+
+  // -------------------------------
+  // Fetch listbox options when batch selected
+  // -------------------------------
+  useEffect(() => {
+    const { gameBatch } = selected;
+    console.log('In Select-Batch: ', gameBatch);
+    if (!gameBatch) return; // skip if no batch selected 
+
+    const queryParams = { gameId, gameBatch }; 
+    console.log('queryParams List: ', queryParams)
     Promise.all([
-      fetchFacultyList(),
-      fetchFacilitatorList(),
-      fetchUOMList(),
-      fetchBatchStatusList(),
-      fetchCentreList()
-    ]).then(([faculty, facilitator, uom, batchStatus, centre]) => {
-      setSelectOptions({
-        Faculty: faculty.data || [],
-        Facilitator: facilitator.data || [],
-        UOM: uom.data || [],
-        Batch_Status: batchStatus.data || [],
-        Centre_Id: centre.data || []
-      });
-    }).catch(() => setError("Failed to load list box options"));
-  }, []);
+      getFaculty(queryParams),
+      getFacilitator(queryParams),
+      getUOM(queryParams),
+      getBatchStatus(queryParams),
+      getAdminCentre(queryParams)
+    ])
+      .then(([faculty, facilitator, uom, batchStatus, centre]) => {
+        //  Modular and readable mapping
+        setSelectOptions(prev => ({
+          ...prev,
 
-  // Handler for selector submit
+          // Faculty: store User_Id (DB), display User_Name (Role)
+          Faculty: (faculty.data || []).map(i => ({
+            value: i.User_Id,                                // DB
+            label: `${i.User_Name}${i.Role ? " (" + i.Role + ")" : ""}` // User
+          })),
+
+          // Facilitator: store User_Id (DB), display User_Name (Role)
+          Facilitator: (facilitator.data || []).map(i => ({
+            value: i.User_Id,                                // DB
+            label: `${i.User_Name}${i.Role ? " (" + i.Role + ")" : ""}` // User
+          })),
+
+          // UOM: same field for user and DB
+          UOM: (uom.data || []).map(i => ({
+            value: i.UOM,
+            label: i.UOM
+          })),
+
+          // Batch_Status: same field for user and DB
+          Batch_Status: (batchStatus.data || []).map(i => ({
+            value: i.Batch_Status,
+            label: i.Batch_Status
+          })),
+
+          // Admin Centre: DB = Centre_Id, User = Centre_Name (fallback Admin_Centre if missing)
+          Centre_Id: (centre.data || []).map(i => ({
+            value: i.Centre_Id,     // DB
+            label: i.Centre_Name    // User
+          }))
+        }));
+
+      })
+      .catch(() => setError("Failed to load list box options")); 
+  }, [gameId, selected.gameBatch]);
+
+  // -------------------------------
+  // Handle selector submit
+  // -------------------------------
   const handleSelectorSubmit = ({ gameId, gameBatch }) => {
-    setSelected({ gameId, gameBatch });
-    setLoading(true);
-    setError("");
-    fetchGameBatchDetails({ gameId, gameBatch })
-      .then(res => setBatchDetails(res.data || null))
-      .catch(() => setError("Failed to load batch details"))
-      .finally(() => setLoading(false));
+    setSelected({ gameId, gameBatch }); 
+    setLoading(true); 
+    setError(""); 
+
+    getGameBatchDetails({ gameId, gameBatch })
+      .then(res => setBatchDetails((res.data && res.data[0]) || null))
+      .catch(() => setError("Failed to load batch details")) 
+      .finally(() => setLoading(false)); 
   };
 
-  // Handler for save (update)
-  const handleSave = async (updatedDetails) => {
-    setLoading(true);
-    setError("");
-    setUpdateMessage("");
+  // -------------------------------
+  // Handle Save
+  // -------------------------------
+  const handleSave = async updatedDetails => {
+    setLoading(true); 
+    setError(""); 
+    setUpdateMessage(""); 
+
     try {
-      // Call update API (UI_Batch_Mgt_Trans) with all fields as parameters
-      const res = await updateGameBatch({ ...updatedDetails, CMD_Line: "Update" });
-      // Assume message is in res.data.message or res.data (adjust as per backend)
-      const msg = res?.data?.message || res?.data || "Batch updated successfully.";
-      setUpdateMessage(msg);
-      setBatchDetails(updatedDetails); // Optionally refresh details
+      const res = await updateGameBatch({ ...updatedDetails, CMD_Line: "Update" }); 
+      const msg = res?.data?.message || res?.data || "Batch updated successfully."; 
+      setUpdateMessage(msg); 
+      setBatchDetails(updatedDetails); 
     } catch (e) {
-      setError("Failed to update batch.");
+      setError("Failed to update batch."); 
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
 
   return (
     <div>
       <h2>Game Batch Details</h2>
+
+      {/* Selector */}
       <GameBatchSelector
-        gameIdList={gameIdList}
+        gameId={gameId}
         gameBatchList={gameBatchList}
         onSubmit={handleSelectorSubmit}
       />
-      {loading && <div>Loading batch details...</div>}
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+
+      {/* Loading / Error */}
+      {loading && <div>Loading batch details...</div>} 
+      {error && <div style={{ color: "red" }}>{error}</div>} 
+
+      {/* Form */}
       {batchDetails && (
         <GameBatchDetailsForm
           details={batchDetails}
           selectOptions={selectOptions}
           onSave={handleSave}
-          onCancel={() => setBatchDetails(null)}
+          onCancel={() => {
+            setBatchDetails(null);                  //  Clear form
+            setSelected({ gameId, gameBatch: "" }); //  Reset selector
+          }}
         />
       )}
-      {updateMessage && <div style={{ color: 'green', marginTop: 8 }}>{updateMessage}</div>}
+
+      {/* Update message */}
+      {updateMessage && (
+        <div style={{ color: "green", marginTop: 8 }}>{updateMessage}</div> 
+      )}
     </div>
   );
 }

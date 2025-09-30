@@ -1,27 +1,93 @@
 import api from "../../../core/interceptor/api-interceptor";
 
-// Fetch list of Game_Id for dropdown
-export function fetchGameIdList() {
-  // CMD_Line: 'Game_Id_List' (assumed, adjust if your backend expects a different value)
-  return api.get("/api/UI_Batch_Query", { params: { CMD_Line: "Game_Id_List" } });
-}
 
-// Fetch list of Game_Batch for dropdown (optionally filtered by Game_Id)
-export function fetchGameBatchList(gameId) {
-  // CMD_Line: 'Game_Batch_List' (assumed, adjust as needed)
-  // If Game_Id is required as a filter, include it
-  const params = { CMD_Line: "Game_Batch_List" };
-  if (gameId) params.Game_Id = gameId;
-  return api.get("/api/UI_Batch_Query", { params });
-}
+//  Note: queryParams is object.
 
-// Fetch details for a specific Game_Id and Game_Batch
-export function fetchGameBatchDetails({ gameId, gameBatch }) {
-  return api.get("/api/UI_Batch_Query", {
+// Fetch Game_Batch
+export function getGameBatch(queryParams) {
+  return api.get("/api/getBatchQuery", {
     params: {
-      CMD_Line: "Batch_Info",
-      Game_Id: gameId,
-      Game_Batch: gameBatch
-    }
+      ...queryParams,
+      cmdLine: "Game_Batch",
+    },
+  })
+}
+
+// Fetch Game Batch Info
+export function getGameBatchDetails(queryParams) {
+  return api.get("/api/getBatchQuery", {
+    params: {
+      ...queryParams,
+      cmdLine: "Batch_Details",
+    },
+  })
+}
+
+// Fetch Admin_Centre
+export function getAdminCentre(queryParams) {
+  return api.get("/api/getBatchQuery", {
+    params: {
+      ...queryParams,
+      cmdLine: "Admin_Centre",
+    },
+  })
+}
+
+/*
+// Fetch Admin_Centre with LOG
+export function getAdminCentre(queryParams) {
+  console.log('In Admin Centre ', queryParams);
+  return api.get("/api/getBatchQuery", {
+    params: {
+      ...queryParams,
+      cmdLine: "Admin_Centre",
+    },
+  }).then(response => {
+    console.log("Admin response:", response.data);
+    return response;
+  }).catch(error => {
+    console.error("API error:", error);
+    throw error;
   });
+}
+*/
+
+// Fetch Batch Status
+export function getBatchStatus(queryParams) {
+  return api.get("/api/getBatchQuery", {
+    params: {
+      ...queryParams,
+      cmdLine: "Batch_Status",
+    },
+  })
+}
+
+// Fetch Facilitator
+export function getFacilitator(queryParams) {
+  return api.get("/api/getBatchQuery", {
+    params: {
+      ...queryParams,
+      cmdLine: "Facilitator",
+    },
+  })
+}
+
+// Fetch Faculty
+export function getFaculty(queryParams) {
+  return api.get("/api/getBatchQuery", {
+    params: {
+      ...queryParams,
+      cmdLine: "Faculty",
+    },
+  })
+}
+
+// Fetch UOM
+export function getUOM(queryParams) {
+  return api.get("/api/getBatchQuery", {
+    params: {
+      ...queryParams,
+      cmdLine: "UOM",
+    },
+  })
 }
