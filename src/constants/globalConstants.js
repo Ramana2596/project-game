@@ -303,16 +303,6 @@ export const componentList = [
         href: "/operationGame/assetCatalogTeam",
         routeElement: <AssetCatalogTeam />
       },
-      /*
-      {
-        iconPath: partIcon,
-        id: "UI 22 010",
-        label: "Capital Asset Catalog",
-        path: "/assetCatalog",
-        href: "/operationGame/assetCatalog",
-        routeElement: <AssetCatalog />
-       },
-       */
       {
         iconPath: partIcon,
         id: "UI 22 050",
@@ -612,14 +602,6 @@ export const componentList = [
         href: "/operationGame/userRoleManagement",
         routeElement: <UserRoleManagement />
       },
-      {
-          iconPath: asterikIcon,
-          id: "UI 14 020",
-          label: "Game Batch Details",
-          path: "/gameBatchDetails",
-          href: "/operationGame/gameBatchDetails",
-          routeElement: <GameBatchDetails />
-        },
     ],
   },
   {
