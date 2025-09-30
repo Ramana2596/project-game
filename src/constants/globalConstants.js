@@ -134,7 +134,7 @@ import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx"
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
-import GameBatchDetails from "../pages/GameBatchMaster/GameBatchDetails";
+import GameBatchDetails from "../pages/GameBatchMaster/GameBatchDetails.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
