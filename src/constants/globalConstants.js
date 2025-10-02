@@ -194,7 +194,7 @@ export const componentList = [
       {
         iconPath: businessStrategyIcon,
         id: "UI 21 020",
-        label: "Strategy for You",
+        label: "Strategies for You",
         path: "/StrategyPlanInfo",
         href: "/operationGame/StrategyPlanTeam",
         routeElement: <StrategyPlanTeam />
