@@ -74,7 +74,7 @@ export default function StrategyPlanApproval() {
       updateStrategyPlan(strategyPlanRequestBody).then((response) => {
         setAlertData({
           severity: "success",
-          message: "Strategy Plan Decision updated successfully",
+          message: "Strategy Plan Decision completed successfully",
           isVisible: true,
         });
       })
