@@ -189,13 +189,29 @@ export default function OperationalPlanInfoInput() {
     <Box sx={{ flexGrow: 1, padding: 2 }}>
 
 {/* Header: Game Batch & Team */}
+{/*}
       <Grid container spacing={2}>
         <h3 className="standard-title-color">{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
         <h3 className="standard-title-color">{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
       </Grid>
+*/}
+      <Grid container spacing={2} alignItems="center" sx={{ marginBottom: 1 }} >
+        <Grid item>
+          <h3 className="standard-title-color" style={{ margin: 0 }}>
+            {pageConstants.gameBatch}: {userInfo?.gameBatch}
+          </h3>
+        </Grid>
+        <Grid item>
+          <h3 className="standard-title-color" style={{ margin: 0 }}>
+            {pageConstants.gameTeam}: {userInfo?.gameTeam}
+          </h3>
+        </Grid>
+      </Grid>
+
 
 {/* Form Section */}
-      <Grid sx={{ marginBottom: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+
+      <Grid sx={{ marginBottom: 0}} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
         <OperationalPlanInfoType operationalPlanType={getOperationalPlanInfoInput.operationalPlanId}
           onFormControlUpdate={formControlUpdate}
           isDisabled={isDisableHeaderSection} />
@@ -204,14 +220,28 @@ export default function OperationalPlanInfoInput() {
           marketType={getOperationalPlanInfoInput.productionMonth}
           onFormControlUpdate={formControlUpdate} />
       </Grid>
+
+{/*
       <Divider />
+*/}
+      <Divider sx={{ my: 1 }} />
 
 {/* Table Section */}
+{/*}
       <OperationalPlanInputTable tableData={operationalPlanInfoTableData}
         isEnableTableActions={isTableActionsEnable}
         setDisableHeaderSection={updateHeaderSectionState}
         onSubmitApiCall={onSubmitApiCall}
         selectedOperationalInput={getOperationalPlanInfoInput} />
+*/}
+      <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+        <OperationalPlanInputTable 
+          tableData={operationalPlanInfoTableData}
+          isEnableTableActions={isTableActionsEnable}
+          setDisableHeaderSection={updateHeaderSectionState}
+          onSubmitApiCall={onSubmitApiCall}
+          selectedOperationalInput={getOperationalPlanInfoInput} />
+      </Box>
 
 {/* Toast Notifications */}
       <ToastMessage open={alertData.isVisible}
@@ -282,7 +312,7 @@ export default function OperationalPlanInfoInput() {
           })
       );
     }
-    
+
     if (deletedTableData && deletedTableData.length > 0) {
       const operationalInfoInputPayload = {
         operationalPlanInfoArray: getFramedPayload(deletedTableData, false),
