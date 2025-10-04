@@ -1,3 +1,6 @@
+// ----------------------------
+// Imports
+// ----------------------------
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
@@ -18,10 +21,14 @@ import { pageConstants } from "./constants/pageConstants.js";
 import DatePeriod from "./components/DatePeriod.jsx";
 import { useLoading } from "../../hooks/loadingIndicatorContext.js";
 
+// ----------------------------
+// Component
+// ----------------------------
 export default function OperationalPlanInfoInput() {
   const { setIsLoading } = useLoading();
   const { userInfo } = useUser();
 
+// Initial form state
   const initGetOperationalPlanInfo = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
@@ -35,6 +42,7 @@ export default function OperationalPlanInfoInput() {
     cmdLine: "Get_Info",
   };
 
+// State
   const [isTableActionsEnable, setIsTableActionsEnable] = useState(false);
   const [isDisableHeaderSection, setIsDisableHeaderSection] = useState(false);
   const [shouldTriggerGetApi, setShouldTriggerApi] = useState(false);
@@ -49,6 +57,10 @@ export default function OperationalPlanInfoInput() {
     initGetOperationalPlanInfo
   );
 
+// ----------------------------
+// Effects
+// ----------------------------
+// Fetch table data
   useEffect(() => {
     if (shouldTriggerGetApi) {
       setIsLoading(true);
@@ -65,6 +77,7 @@ export default function OperationalPlanInfoInput() {
     }
   }, [shouldTriggerGetApi]);
 
+// Fetch param values
   useEffect(() => {
     if (getOperationalPlanInfoInput.operationsInputId) {
       setIsLoading(true);
@@ -90,12 +103,14 @@ export default function OperationalPlanInfoInput() {
     }
   }, [getOperationalPlanInfoInput.operationsInputId]);
 
+// Disable trigger if table actions enabled
   useEffect(() => {
     if (isTableActionsEnable) {
       setShouldTriggerApi(false);
     }
   }, [isTableActionsEnable]);
-
+  
+// Trigger API if all fields set
   useEffect(() => {
     if (
       getOperationalPlanInfoInput.gameId &&
@@ -109,6 +124,7 @@ export default function OperationalPlanInfoInput() {
     }
   }, [getOperationalPlanInfoInput]);
 
+// Auto-hide toast messages
   useEffect(() => {
     if (alertData.isVisible) {
       const timer = setTimeout(() => {
@@ -121,6 +137,10 @@ export default function OperationalPlanInfoInput() {
     }
   }, [alertData.isVisible]);
 
+
+// ----------------------------
+// Helpers
+// ----------------------------
   const formControlUpdate = (value) => {
     setShouldTriggerApi(false);
     setFormData({ ...getOperationalPlanInfoInput, ...value });
@@ -162,12 +182,19 @@ export default function OperationalPlanInfoInput() {
     return [];
   };
 
+// ----------------------------
+// Render
+// ----------------------------
   return (
     <Box sx={{ flexGrow: 1, padding: 2 }}>
+
+{/* Header: Game Batch & Team */}
       <Grid container spacing={2}>
         <h3 className="standard-title-color">{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
         <h3 className="standard-title-color">{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
       </Grid>
+
+{/* Form Section */}
       <Grid sx={{ marginBottom: 5 }} container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
         <OperationalPlanInfoType operationalPlanType={getOperationalPlanInfoInput.operationalPlanId}
           onFormControlUpdate={formControlUpdate}
@@ -178,17 +205,26 @@ export default function OperationalPlanInfoInput() {
           onFormControlUpdate={formControlUpdate} />
       </Grid>
       <Divider />
+
+{/* Table Section */}
       <OperationalPlanInputTable tableData={operationalPlanInfoTableData}
         isEnableTableActions={isTableActionsEnable}
         setDisableHeaderSection={updateHeaderSectionState}
         onSubmitApiCall={onSubmitApiCall}
         selectedOperationalInput={getOperationalPlanInfoInput} />
+
+{/* Toast Notifications */}
       <ToastMessage open={alertData.isVisible}
         severity={alertData.severity}
         message={alertData.message} />
     </Box>
   );
 
+// ----------------------------
+// Table API: Add / Update / Delete
+// ----------------------------
+
+// Add new table data
   function addTableData(updatedData) {
     const promises = [];
     if (updatedData && updatedData.length > 0) {
@@ -200,7 +236,7 @@ export default function OperationalPlanInfoInput() {
           .then(() => {
             setAlertData({
               severity: "success",
-              message: "Operational factor info added successfully",
+              message: "Operation-Input added successfully",
               isVisible: true,
             });
           })
@@ -219,6 +255,7 @@ export default function OperationalPlanInfoInput() {
     return Promise.all(promises);
   }
 
+// Update or delete existing table data  
   function updateTableData(updatedData, deletedTableData) {
     const promises = [];
     if (updatedData && updatedData.length > 0) {
@@ -230,7 +267,7 @@ export default function OperationalPlanInfoInput() {
           .then(() => {
             setAlertData({
               severity: "success",
-              message: "Operational factor info updated successfully",
+              message: "Operation-Input updated successfully",
               isVisible: true,
             });
           })
@@ -245,6 +282,7 @@ export default function OperationalPlanInfoInput() {
           })
       );
     }
+    
     if (deletedTableData && deletedTableData.length > 0) {
       const operationalInfoInputPayload = {
         operationalPlanInfoArray: getFramedPayload(deletedTableData, false),
@@ -254,7 +292,7 @@ export default function OperationalPlanInfoInput() {
           .then(() => {
             setAlertData({
               severity: "success",
-              message: "Operational factor info deleted successfully",
+              message: "Operation-Input line deleted successfully",
               isVisible: true,
             });
           })
