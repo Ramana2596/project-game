@@ -253,7 +253,7 @@ export default function OperationalPlanInputTable({
 
   return (
     <div>
-      <Grid margin={5} container spacing={2} justifyContent="center" alignItems="center">
+      <Grid margin={2} container spacing={2} justifyContent="center" alignItems="center">
         <Button disabled={isDisableActionBtns}
           type="button" className="standard-button-primary-button" onClick={onAddBtnClick}
           sx={{
