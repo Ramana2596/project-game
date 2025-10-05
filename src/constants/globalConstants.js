@@ -135,6 +135,7 @@ import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
 import GameBatchDetails from "../pages/GameBatchMaster/GameBatchDetails.jsx";
+import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -509,6 +510,7 @@ export const componentList = [
     href: "/operationGame/Simulation",
     routeElement: <Simulation />,
     children: [
+    /*
       {
         iconPath: appSettings,
         id: "UI 21 260",
@@ -516,7 +518,17 @@ export const componentList = [
         path: "/teamPlay",
         href: "/operationGame/teamPlay",
         routeElement: <FeatureManagement />
+      },
+    */
+      {
+        iconPath: appSettings,
+        id: "UI 21 270",
+        label: "Simulation Play",
+        path: "/simulationPlay",
+        href: "/operationGame/SimulationPlay",
+        routeElement: <SimulationPlay />
       }
+
     ],
   },
   {
