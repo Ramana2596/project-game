@@ -114,6 +114,8 @@ import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
 import AssetCatalogBatch from '../AssetCatalogBatch/AssetCatalogBatch.jsx';
 import EnrollUserDialog from '../RegisterUser/EnrollUserDialog.jsx';
 import GameBatchDetails from "../GameBatchMaster/GameBatchDetails";
+import SimulationPlay from '../SimulationPlay/SimulationPlay.jsx';
+
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
@@ -360,6 +362,8 @@ export default function MiniDrawer() {
           <Route path='/AssetCatalogBatch' element={<AssetCatalogBatch />} />
           <Route path='/gameBatchDetails' element={<GameBatchDetails />} />
           <Route path='/BatchMgt' element={<BatchMgt />} />
+          <Route path='/SimulationPlay' element={<SimulationPlay />} />
+          
           {/*<Route path='/AssetCatalog' element={<AssetCatalog />} /> */}
           
         </Routes>
