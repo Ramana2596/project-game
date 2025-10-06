@@ -68,7 +68,7 @@ export default function SignIn(props) {
   const { login, setUserInfo, userInfo } = useUser();
   const [userDetailsData, setUserDetailsData] = React.useState(null);
 
-  // ✅ API Call Trigger: get authentic-user, based on email
+  // API Call Trigger: get authentic-user, based on email
   React.useEffect(() => {
     if (shouldTriggerApiCall) {
       setIsLoading(true);
@@ -83,19 +83,20 @@ export default function SignIn(props) {
     }
   }, [shouldTriggerApiCall]);
 
-  // ✅ Effect 1: Handle API Response (set state: Role,UserInfo,validUser flag)
+  // Effect 1: Handle API Response (set state: Role,UserInfo,validUser flag)
   React.useEffect(() => {
     if (userDetailsData && userDetailsData.length > 0) {
       login(userDetailsData[0]?.Role);
       setUserInfo(userDetailsData[0]);
-      setValidUser(true);   // ✅ state update only
+      setValidUser(true);   // state update only
     } else {
       setValidUser(false);
     }
     setShouldTriggerApiCall(false);
   }, [userDetailsData]);  // ❌ removed isValidUser from deps
 
-  // ✅ Effect 2: Runs initialisation of tables when isValidUser is true and userInfo is set
+/* NOT Required since Initialisation is part of Simulation
+  // Effect 2: Runs initialisation of tables when isValidUser is true and userInfo is set
   React.useEffect(() => {
     if (isValidUser && userInfo) {   // user is valid AND we have user details ready.
       intiateTeamPlay({
@@ -107,11 +108,20 @@ export default function SignIn(props) {
       });
       routeHistory("/operationGame/homePage");
     }
-  }, [isValidUser, userInfo]);   // ✅ new effect
+  }, [isValidUser, userInfo]);   // new effect
 
+*/
 
-  // ✅ Direct authentic user to homepage
+  // Effect 2 : Direct authentic user to homepage
+  React.useEffect(() => {
+    if (isValidUser && userInfo) {
+      routeHistory("/operationGame/homePage");
+    }
+  }, [isValidUser, userInfo]);
 
+/* Not executed since onLoginClick user is directed to homepage
+  // Form Submit handler
+  // Direct authentic user to homepage
   const handleSubmit = (event) => {
     event.preventDefault();
     if (emailError) return;
@@ -120,8 +130,9 @@ export default function SignIn(props) {
       routeHistory("/operationGame/homePage");
     }
   };
+*/
 
-  // ✅ OnClick handler for SignIn button // validate email and set states
+  // OnClick handler for SignIn button // validate email and set states
   const onLoginClick = () => {
     const email = document.getElementById("email");
 
@@ -154,7 +165,7 @@ export default function SignIn(props) {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            // onSubmit={handleSubmit}  // ❌ commented since not executed
             noValidate
             sx={{
               display: "flex",
