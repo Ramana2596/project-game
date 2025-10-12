@@ -134,8 +134,8 @@ import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx"
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
-import GameBatchDetails from "../pages/GameBatchMaster/GameBatchDetails.jsx";
 import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
+import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -542,10 +542,10 @@ export const componentList = [
       {
           iconPath: peopleIcon,
           id: "UI 14 020",
-          label: "Game Batch Details",
-          path: "/gameBatchDetails",
-          href: "/operationGame/gameBatchDetails",
-          routeElement: <GameBatchDetails />
+          label: "Batch Master Details",
+          path: "/BatchMaster",
+          href: "/operationGame/BatchMaster",
+          routeElement: <BatchMstDetails />
       }
     ],
   },
