@@ -12,18 +12,20 @@ import {
 } from "./services/getBatchQuery.js";
 import { updateBatchMst } from "./services/service.js";
 import { useUser } from "../../core/access/userContext.js";
+import { API_STATUS, API_STATUS_MAP } from "../../utils/statusCodes"; // ✅
+import ToastMessage from "../../components/ToastMessage"; // ✅
 
 export default function GameBatchDetails() {
   const { userInfo } = useUser();
-  const gameId = userInfo?.gameId || "OpsMgt"; //  fallback
+  const gameId = userInfo?.gameId || "OpsMgt"; // fallback
 
   // Selected batch
   const [selected, setSelected] = useState({ gameId, gameBatch: "" }); 
-
+  
   // UI states
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(""); 
-  const [updateMessage, setUpdateMessage] = useState(""); 
+  const [toast, setToast] = useState({ open: false, message: "", severity: "info" }); // ✅
 
   // Dropdown options for form
   const [selectOptions, setSelectOptions] = useState({ 
@@ -38,11 +40,11 @@ export default function GameBatchDetails() {
 
   // Single row of batch details
   const [batchDetails, setBatchDetails] = useState(null); 
-
-  // Declare Batch-list state (a trigger variable)
+ 
+ // Declare Batch-list state (a trigger variable)
   const [gameBatchList, setGameBatchList] = useState([]); 
 
-  // Fetch Batch list
+  // Fetch batch list on gameId change
   useEffect(() => {
     if (!gameId) return;
 
@@ -57,14 +59,13 @@ export default function GameBatchDetails() {
       .catch(() => setError("Failed to load Batch list")); 
   }, [gameId]);
 
-
-  // Fetch listbox Values for Other Fields
+// Fetch listbox Values for Other Fields
   useEffect(() => {
     const { gameBatch } = selected;
-    if (!gameBatch) return; // skip if no batch selected 
+    if (!gameBatch) return;
 
     const queryParams = { gameId, gameBatch }; 
-    console.log('queryParams List: ', queryParams)
+
     Promise.all([
       getFaculty(queryParams),
       getFacilitator(queryParams),
@@ -73,78 +74,92 @@ export default function GameBatchDetails() {
       getAdminCentre(queryParams)
     ])
       .then(([faculty, facilitator, uom, batchStatus, centre]) => {
-        //  Modular and readable mapping
+ // Modular and readable mapping
         setSelectOptions(prev => ({
           ...prev,
 
-          // Faculty: store User_Id (DB), display User_Name (Role)
+// Faculty: store User_Id (DB), display User_Name (Role)
           Faculty: (faculty.data || []).map(i => ({
-            value: i.User_Id,                                // DB
-            label: `${i.User_Name}${i.Role ? " (" + i.Role + ")" : ""}` // User
+            value: i.User_Id,
+            label: `${i.User_Name}${i.Role ? " (" + i.Role + ")" : ""}`
           })),
 
-          // Facilitator: store User_Id (DB), display User_Name (Role)
+// Facilitator: store User_Id (DB), display User_Name (Role)
           Facilitator: (facilitator.data || []).map(i => ({
-            value: i.User_Id,                                // DB
-            label: `${i.User_Name}${i.Role ? " (" + i.Role + ")" : ""}` // User
+            value: i.User_Id,
+            label: `${i.User_Name}${i.Role ? " (" + i.Role + ")" : ""}`
           })),
 
-          // UOM: same field for value and Label
+// UOM: both value and label are UOM
           UOM: (uom.data || []).map(i => ({
             value: i.UOM,
             label: i.UOM
           })),
 
-          // Batch_Status: same field for Value and Label
+// Batch_Status: both value and label are Batch_Status
           Batch_Status: (batchStatus.data || []).map(i => ({
             value: i.Batch_Status,
             label: i.Batch_Status
           })),
 
-          // Admin Centre: Value = Centre_Id, Label = Centre_Name (fallback Admin_Centre if missing)
+// Centre_Id: store Centre_Id (DB), display Centre_Name
           Centre_Id: (centre.data || []).map(i => ({
-            value: i.Centre_Id,     // From DB
-            label: i.Centre_Name    // Label
+            value: i.Centre_Id,
+            label: i.Centre_Name
           }))
         }));
-
       })
       .catch(() => setError("Failed to load list-box options")); 
   }, [gameId, selected.gameBatch]);
 
-  // -------------------------------
-  // Handle selector submit: fetch batch details
-  // -------------------------------
+  // Handler when a batch is selected from the dropdown
   const handleSelectorSubmit = ({ gameId, gameBatch }) => {
     setSelected({ gameId, gameBatch }); 
     setLoading(true); 
     setError(""); 
 
-
-  // Note: Field names = DB column names, not camelCase.
+// Note: API Call returns SP Field names, in Snake_Case - not camelCase.
     getGameBatchDetails({ gameId, gameBatch })
       .then(res => setBatchDetails((res.data && res.data[0]) || null))
       .catch(() => setError("Failed to load batch details")) 
       .finally(() => setLoading(false)); 
   };
 
-  // -------------------------------
   // Handle Save
-  // -------------------------------
   const handleSave = async updatedDetails => {
-    setLoading(true); 
-    setError(""); 
-    setUpdateMessage(""); 
+    setLoading(true);
+    setError("");
 
     try {
-      const res = await updateBatchMst(updatedDetails); 
-      const msg = res?.data?.message || res?.data || "Batch updated successfully."; 
-      setUpdateMessage(msg); 
-      setBatchDetails(updatedDetails); 
+      const res = await updateBatchMst(updatedDetails);
+      const { status, message } = res?.data || {};
+      const mapped = API_STATUS_MAP[status] || {
+        severity: "info",
+        defaultMsg: "Unknown response"
+      };
+
+      // Force toast to reset before showing again
+      setToast(prev => ({ ...prev, open: false })); // copy current prop & Close if already open
+      setTimeout(() => {
+        setToast({
+          open: true,
+          message: message || mapped.defaultMsg,
+          severity: mapped.severity
+        });
+      }, 50); // Small delay to ensure re-render
+
+      if (status === API_STATUS.SUCCESS) {
+        setBatchDetails(updatedDetails); // update local state
+      }
     } catch (e) {
-      setError("Failed to update batch."); 
+      const mapped = API_STATUS_MAP[API_STATUS.SYSTEM_ERROR]; // fallback for catch
+      setToast({
+        open: true,
+        message: mapped.defaultMsg,
+        severity: mapped.severity
+      });
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -152,34 +167,34 @@ export default function GameBatchDetails() {
     <div>
       <h2>Batch Details</h2>
 
-      {/* Selector */}
       <BatchMstSelector
         gameId={gameId}
         gameBatchList={gameBatchList}
         onSubmit={handleSelectorSubmit}
       />
 
-      {/* Loading / Error */}
       {loading && <div>Loading batch details...</div>} 
       {error && <div style={{ color: "red" }}>{error}</div>} 
 
-      {/* Form */}
       {batchDetails && (
         <BatchMstForm
           details={batchDetails}
           selectOptions={selectOptions}
           onSave={handleSave}
           onCancel={() => {
-            setBatchDetails(null);                  //  Clear form
-            setSelected({ gameId, gameBatch: "" }); //  Reset selector
+            setBatchDetails(null);
+            setSelected({ gameId, gameBatch: "" });
           }}
         />
       )}
 
-      {/* Update message */}
-      {updateMessage && (
-        <div style={{ color: "green", marginTop: 8 }}>{updateMessage}</div> 
-      )}
+      {/* Toast Message */}
+      <ToastMessage
+        open={toast.open}
+        message={toast.message}
+        severity={toast.severity}
+        onClose={() => setToast(prev => ({ ...prev, open: false }))}
+      />
     </div>
   );
 }
