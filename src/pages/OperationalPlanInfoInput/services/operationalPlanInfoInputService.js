@@ -15,25 +15,25 @@ export function getParamValues(queryParams) {
   });
 }
 
-export function addOperationalPlanInfo(marketFactorInfoInputPayload) {
+export function addOperationalPlanInfo(getFramedPayload) {
   let payload = {
-    ...marketFactorInfoInputPayload,
+    ...getFramedPayload,
     cmdLine: "Add_Operation_Plan",
   };
   return api.post("/api/updateOperationalDecisionInput", payload);
 }
 
-export function updateOperationalPlanInfoInput(marketFactorInfoInputPayload) {
+export function updateOperationalPlanInfoInput(getFramedPayload) {
   let payload = {
-    ...marketFactorInfoInputPayload,
+    ...getFramedPayload,
     cmdLine: "Update_Operation_Plan",
   };
   return api.post("/api/updateOperationalDecisionInput", payload);
 }
 
-export function deleteOperationalPlanInfo(marketFactorInfoInputPayload) {
+export function deleteOperationalPlanInfo(getFramedPayload) {
   let payload = {
-    ...marketFactorInfoInputPayload,
+    ...getFramedPayload,
     cmdLine: "Delete_Operation_Plan",
   };
   return api.post("/api/updateOperationalDecisionInput", payload);
