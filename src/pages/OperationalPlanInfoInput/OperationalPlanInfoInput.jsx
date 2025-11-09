@@ -1,10 +1,11 @@
-// ----------------------------
-// Imports
-// ----------------------------
+// ----------- Imports ---------------
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import Divider from "@mui/material/Divider";
+import { useUser } from "../../core/access/userContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { API_STATUS, API_STATUS_MAP } from "../../utils/statusCodes";
 import Period from "./components/Period";
 import {
   getOperationalPlanInfoTableData,
@@ -15,15 +16,11 @@ import {
 } from "./services/operationalPlanInfoInputService.js";
 import OperationalPlanInfoType from "./components/OperationalPlanInfo";
 import OperationalPlanInputTable from "./components/OperationalPlanInputTable";
-import { useUser } from "../../core/access/userContext.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
-import { pageConstants } from "./constants/pageConstants.js";
 import DatePeriod from "./components/DatePeriod.jsx";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { pageConstants } from "./constants/pageConstants.js";
 
-// ----------------------------
-// Component
-// ----------------------------
+// ---------- Component ----------
 export default function OperationalPlanInfoInput() {
   const { setIsLoading } = useLoading();
   const { userInfo } = useUser();
@@ -51,15 +48,10 @@ export default function OperationalPlanInfoInput() {
     message: "",
     isVisible: false,
   });
-  const [operationalPlanInfoTableData, setOperationalPlanInfoTableData] =
-    useState([]);
-  const [getOperationalPlanInfoInput, setFormData] = useState(
-    initGetOperationalPlanInfo
-  );
+  const [operationalPlanInfoTableData, setOperationalPlanInfoTableData] = useState([]);
+  const [getOperationalPlanInfoInput, setFormData] = useState(initGetOperationalPlanInfo);
 
-// ----------------------------
-// Effects
-// ----------------------------
+// ----------Effects----------
 // Fetch table data
   useEffect(() => {
     if (shouldTriggerGetApi) {
@@ -137,10 +129,7 @@ export default function OperationalPlanInfoInput() {
     }
   }, [alertData.isVisible]);
 
-
-// ----------------------------
-// Helpers
-// ----------------------------
+// ----------Helpers----------
   const formControlUpdate = (value) => {
     setShouldTriggerApi(false);
     setFormData({ ...getOperationalPlanInfoInput, ...value });
@@ -182,9 +171,7 @@ export default function OperationalPlanInfoInput() {
     return [];
   };
 
-// ----------------------------
-// Render
-// ----------------------------
+// ----- Rendering -----
   return (
     <Box sx={{ flexGrow: 1, padding: 2 }}>
 
@@ -250,9 +237,7 @@ export default function OperationalPlanInfoInput() {
     </Box>
   );
 
-// ----------------------------
-// Table API: Add / Update / Delete
-// ----------------------------
+// ---------- Table API: Add / Update / Delete ----------
 
 // Add new table data
   function addTableData(updatedData) {
@@ -260,13 +245,18 @@ export default function OperationalPlanInfoInput() {
     if (updatedData && updatedData.length > 0) {
       const operationalPlanPayLoad = {
         operationalPlanInfoArray: getFramedPayload(updatedData, true),
+        cmdLine: "Add",
       };
       promises.push(
         addOperationalPlanInfo(operationalPlanPayLoad)
-          .then(() => {
+          .then((res) => {
+            const { returnValue, message } = res.data;
+            const { severity, defaultMsg } =
+              API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
+
             setAlertData({
-              severity: "success",
-              message: "Operation-Input added successfully",
+              severity,
+              message: message || defaultMsg,
               isVisible: true,
             });
           })
@@ -274,18 +264,18 @@ export default function OperationalPlanInfoInput() {
             setAlertData({
               severity: "error",
               message:
-                "Error adding operational factor info: " +
+                "Error: Input Not Added !" +
                 error?.response?.data?.error,
               isVisible: true,
             });
-            console.error("Error adding operational factor info:", error);
+            console.error("Error: Input Not Added !", error);
           })
       );
     }
     return Promise.all(promises);
   }
 
-// Update or delete existing table data  
+// Update or delete existing table data
   function updateTableData(updatedData, deletedTableData) {
     const promises = [];
     if (updatedData && updatedData.length > 0) {
@@ -294,49 +284,56 @@ export default function OperationalPlanInfoInput() {
       };
       promises.push(
         updateOperationalPlanInfoInput(operationalPlanPayLoad)
-          .then(() => {
-            setAlertData({
-              severity: "success",
-              message: "Operation-Input updated successfully",
-              isVisible: true,
-            });
-          })
-          .catch((error) => {
-            setAlertData({
-              severity: "error",
-              message:
-                "Error updating operational factor info: " +
-                error?.response?.data?.error,
-              isVisible: true,
-            });
-          })
-      );
-    }
+        .then((res) => {
+          const { returnValue, message } = res.data;
+          const { severity, defaultMsg } =
+            API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
 
-    if (deletedTableData && deletedTableData.length > 0) {
-      const operationalInfoInputPayload = {
-        operationalPlanInfoArray: getFramedPayload(deletedTableData, false),
-      };
-      promises.push(
-        deleteOperationalPlanInfo(operationalInfoInputPayload)
-          .then(() => {
-            setAlertData({
-              severity: "success",
-              message: "Operation-Input line deleted successfully",
-              isVisible: true,
-            });
-          })
-          .catch((error) => {
-            setAlertData({
-              severity: "error",
-              message:
-                "Error deleting operational factor info: " +
-                error?.response?.data?.error,
-              isVisible: true,
-            });
-          })
+          setAlertData({
+            severity,
+            message: message || defaultMsg,
+            isVisible: true,
+          });
+        })
+        .catch((error) => {
+          setAlertData({
+            severity: "error",
+            message:
+              "Error: Not Updated !" +
+              error?.response?.data?.error,
+            isVisible: true,
+          });
+        })
       );
+      if (deletedTableData && deletedTableData.length > 0) {
+        const operationalInfoInputPayload = {
+          operationalPlanInfoArray: getFramedPayload(deletedTableData, false),
+        };
+        promises.push(
+          deleteOperationalPlanInfo(operationalInfoInputPayload)
+          .then((res) => {
+            const { returnValue, message } = res.data;
+            const { severity, defaultMsg } =
+              API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
+
+            setAlertData({
+              severity,
+              message: message || defaultMsg,
+              isVisible: true,
+            });
+          })
+            .catch((error) => {
+              setAlertData({
+                severity: "error",
+                message:
+                  "Error: Not Deleted ! " +
+                  error?.response?.data?.error,
+                isVisible: true,
+              });
+            })
+        );
+      } 
+      return Promise.all(promises);
     }
-    return Promise.all(promises);
   }
 }
