@@ -245,7 +245,6 @@ export default function OperationalPlanInfoInput() {
     if (updatedData && updatedData.length > 0) {
       const operationalPlanPayLoad = {
         operationalPlanInfoArray: getFramedPayload(updatedData, true),
-        cmdLine: "Add",
       };
       promises.push(
         addOperationalPlanInfo(operationalPlanPayLoad)
@@ -253,7 +252,6 @@ export default function OperationalPlanInfoInput() {
             const { returnValue, message } = res.data;
             const { severity, defaultMsg } =
               API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
-
             setAlertData({
               severity,
               message: message || defaultMsg,
@@ -288,7 +286,6 @@ export default function OperationalPlanInfoInput() {
           const { returnValue, message } = res.data;
           const { severity, defaultMsg } =
             API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
-
           setAlertData({
             severity,
             message: message || defaultMsg,
@@ -305,35 +302,35 @@ export default function OperationalPlanInfoInput() {
           });
         })
       );
-      if (deletedTableData && deletedTableData.length > 0) {
-        const operationalInfoInputPayload = {
-          operationalPlanInfoArray: getFramedPayload(deletedTableData, false),
-        };
-        promises.push(
-          deleteOperationalPlanInfo(operationalInfoInputPayload)
-          .then((res) => {
-            const { returnValue, message } = res.data;
-            const { severity, defaultMsg } =
-              API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
+    }
+    if (deletedTableData && deletedTableData.length > 0) {
+      const operationalInfoInputPayload = {
+        operationalPlanInfoArray: getFramedPayload(deletedTableData, false),
+      };
+      promises.push(
+        deleteOperationalPlanInfo(operationalInfoInputPayload)
+        .then((res) => {
+          const { returnValue, message } = res.data;
+          const { severity, defaultMsg } =
+            API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
 
+          setAlertData({
+            severity,
+            message: message || defaultMsg,
+            isVisible: true,
+          });
+        })
+          .catch((error) => {
             setAlertData({
-              severity,
-              message: message || defaultMsg,
+              severity: "error",
+              message:
+                "Error: Not Deleted ! " +
+                error?.response?.data?.error,
               isVisible: true,
             });
           })
-            .catch((error) => {
-              setAlertData({
-                severity: "error",
-                message:
-                  "Error: Not Deleted ! " +
-                  error?.response?.data?.error,
-                isVisible: true,
-              });
-            })
-        );
-      } 
-      return Promise.all(promises);
-    }
+      );
+    } 
+    return Promise.all(promises);
   }
 }
