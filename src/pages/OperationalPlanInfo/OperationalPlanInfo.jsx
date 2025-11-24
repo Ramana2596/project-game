@@ -1,14 +1,14 @@
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable";
-import { useUser } from "../../core/access/userContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
 import { pageConstants } from "./constants/pageConstants.js";
 import { useEffect, useState } from "react";
 import {
   getDashboardData,
   getOperationalDecisionData,
 } from "./services/operationalDecisionService.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 
 export default function OperationalPlanInfo() {
   const { setIsLoading } = useLoading();

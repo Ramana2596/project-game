@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { getMarketFactorInfoTableData } from "../services/marketFactorInputService";
-import { useUser } from "../../../core/access/userContext.js";
+import { useUser } from "../../../core/access/userContext.jsx";
 
 export default function MarketType({
   marketType,

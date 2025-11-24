@@ -8,10 +8,10 @@ import {
   // getParamValues,
 } from "./services/service.js";
 import PageTable from "./components/PageTable.jsx";
-import { useUser } from "../../core/access/userContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
 import { pageConstants } from "./constants/pageConstants.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 
 export default function StrategyMaster() {
   const { setIsLoading } = useLoading();

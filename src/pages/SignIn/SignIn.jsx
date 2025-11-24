@@ -10,9 +10,9 @@ import MuiCard from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
 import ColorModeSelect from "./theme/ColorModeSelect";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../../core/access/userContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails, intiateTeamPlay } from "./services/signInServices.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",

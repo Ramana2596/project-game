@@ -4,13 +4,13 @@ import Grid from "@mui/material/Grid2";
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import EditableTable from "../../components/EditableTable.jsx";
-import { useUser } from "../../core/access/userContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
 import { pageConstants } from "./constants/pageConstants.js";
 import {
   getStrategyPlan,
   updateStrategyPlan,
 } from "./services/strategyPlanApprovalService.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import NotificationMessage from "../../components/NotificationMessage.jsx";
 

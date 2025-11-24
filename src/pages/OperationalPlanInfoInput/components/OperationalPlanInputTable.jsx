@@ -6,7 +6,7 @@ import AddTableData from "../../../components/AddTableData";
 import EditableTableData from "../../../components/EditableTableData";
 import { pageConstants } from "../constants/pageConstants.js";
 import { getOperationalPlanInfoTableData } from "../services/operationalPlanInfoInputService";
-import { useLoading } from "../../../hooks/loadingIndicatorContext.js";
+import { useLoading } from "../../../hooks/loadingIndicatorContext.jsx";
 import AddTableCascading from "../../../components/AddTableCascading.jsx";
 
 export default function OperationalPlanInputTable({

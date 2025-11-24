@@ -1,11 +1,15 @@
 // ----------- Imports ---------------
+// MUI components
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import Divider from "@mui/material/Divider";
-import { useUser } from "../../core/access/userContext.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+// App context & hooks
+import { useUser } from "../../core/access/userContext.jsx";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
+// API Status Maps
 import { API_STATUS, API_STATUS_MAP } from "../../utils/statusCodes.js";
+// API services
 import {
   getOpsPlanId,
   addOpsPlanInput,
@@ -13,10 +17,12 @@ import {
   deleteOpsPlanInput,
   getParamValues,
 } from "./services/service.js";
+// Child components
 import OpsPlanOption from "./components/OpsPlanOption.jsx";
 import OpsPlanInputTable from "./components/OpsPlanInputTable.jsx";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import DatePeriod from "./components/DatePeriod.jsx";
+//UI constants
 import { pageConstants } from "./constants/pageConstants.js";
 
 // ---------- Component ----------
@@ -52,7 +58,6 @@ export default function OpsPlanInput() {
   const [opsPlanData, setOpsPlanData] = useState([]); // table display data
 
   // ---------- Effects ----------
-
   // Fetch table data
   useEffect(() => {
     if (shouldTriggerGetApi) {
@@ -138,21 +143,29 @@ export default function OpsPlanInput() {
 
   const onSubmitApiCall = (updatedData, deletedTableData, isEdit) => {
     setShouldTriggerApi(false);
+
     if (isTableActionsEnable) {
       if (isEdit) {
+  // SAVE modifies or deletes rows      
         updateTableData(updatedData, deletedTableData).then(() =>
           setShouldTriggerApi(true)
         ); // Trigger API after update
       } else {
+  // SAVE adds rows      
         addTableData(updatedData).then(() => setShouldTriggerApi(true)); // Trigger API after addition
       }
     }
   };
 
+  // Disable/Enable header when table editing begins or ends
   const updateHeaderSectionState = (isDisable) => {
     setIsDisableHeaderSection(isDisable);
   };
-
+/**
+   * Prepare each table row into backend payload structure
+   * isAdd = true  → uses Quantity_Info and Info_Price
+   * isAdd = false → uses existing Qty_Id and Price_Id
+   */
   const getFramedPayload = (updatedData, isAdd) => {
     if (updatedData && updatedData.length > 0) {
       return updatedData.map((obj) => ({
@@ -231,101 +244,86 @@ export default function OpsPlanInput() {
     </Box>
   );
 
-  // ---------- Table API: Add / Update / Delete ----------
+// ---------- Table API: Add / Update / Delete ----------
+
+// ---------- Helper for showing summary ----------
+  function showOpsInputSummary(responses, actionLabel) {
+    const results = responses.map(res => res.data);
+    const total = results.length;
+    const successCount = results.filter(r => r.returnValue === 0).length;
+    const overallSuccess = successCount === total;
+    const { severity } =
+      API_STATUS_MAP[overallSuccess ? API_STATUS.SUCCESS : API_STATUS.BUSINESS_ERROR];
+    const message = `${successCount} of ${total} ${actionLabel}`;
+
+    setAlertData({
+      severity,
+      message,
+      isVisible: true,
+    });
+  }
 
   // Add new table data
   function addTableData(updatedData) {
-    const promises = [];
-    if (updatedData && updatedData.length > 0) {
-      const opsPlanPayload = {
-        opsPlanInfoArray: getFramedPayload(updatedData, true),
-      };
-      promises.push(
-        addOpsPlanInput(opsPlanPayload)
-          .then((res) => {
-            const { returnValue, message } = res.data;
-            const { severity, defaultMsg } =
-              API_STATUS_MAP[returnValue] ||
-              API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
+    if (!updatedData?.length) return Promise.resolve();
 
-            setAlertData({
-              severity,
-              message: message || defaultMsg,
-              isVisible: true,
-            });
-          })
-          .catch((error) => {
-            setAlertData({
-              severity: "error",
-              message:
-                "Error: Input Not Added !" + error?.response?.data?.error,
-              isVisible: true,
-            });
-            console.error("Error: Input Not Added !", error);
-          })
-      );
-    }
-    return Promise.all(promises);
+    const payloadArray = getFramedPayload(updatedData, true);
+  // Each row triggers its own add API call
+    const promises = payloadArray.map((payload) => addOpsPlanInput({ opsPlanInfoArray: [payload] }));
+
+    return Promise.all(promises)
+      .then((responses) => {
+        showOpsInputSummary(responses, "Added");
+      })
+      .catch((error) => {
+        setAlertData({
+          severity: "error",
+          message: "Error: Input Not Added! " + (error?.response?.data?.error || ""),
+          isVisible: true,
+        });
+        console.error("Error: Input Not Added!", error);
+      });
   }
 
-  // Update or delete existing table data
+  // UPDATE + DELETE operations
   function updateTableData(updatedData, deletedTableData) {
     const promises = [];
-    if (updatedData && updatedData.length > 0) {
-      const opsPlanPayload = {
-        opsPlanInfoArray: getFramedPayload(updatedData, false),
-      };
-      promises.push(
-        updateOpsPlanInput(opsPlanPayload)
-          .then((res) => {
-            const { returnValue, message } = res.data;
-            const { severity, defaultMsg } =
-              API_STATUS_MAP[returnValue] ||
-              API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
-
-            setAlertData({
-              severity,
-              message: message || defaultMsg,
-              isVisible: true,
-            });
-          })
-          .catch((error) => {
-            setAlertData({
-              severity: "error",
-              message: "Error: Not Updated !" + error?.response?.data?.error,
-              isVisible: true,
-            });
-          })
+  
+    // Handle modified rows
+    if (updatedData?.length > 0) {
+      const payloadArray = getFramedPayload(updatedData, false);
+      const updatePromises = payloadArray.map((payload) =>
+        updateOpsPlanInput({ opsPlanInfoArray: [payload] })
       );
-      if (deletedTableData && deletedTableData.length > 0) {
-        const opsPlanPayload = {
-          opsPlanInfoArray: getFramedPayload(deletedTableData, false),
-        };
-        promises.push(
-          deleteOpsPlanInput(opsPlanPayload)
-            .then((res) => {
-              const { returnValue, message } = res.data;
-              const { severity, defaultMsg } =
-                API_STATUS_MAP[returnValue] ||
-                API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
-
-              setAlertData({
-                severity,
-                message: message || defaultMsg,
-                isVisible: true,
-              });
-            })
-            .catch((error) => {
-              setAlertData({
-                severity: "error",
-                message:
-                  "Error: Not Deleted ! " + error?.response?.data?.error,
-                isVisible: true,
-              });
-            })
-        );
-      }
-      return Promise.all(promises);
+      promises.push(...updatePromises);
     }
+  
+    // Handle deleted rows
+    if (deletedTableData?.length > 0) {
+      const payloadArray = getFramedPayload(deletedTableData, false);
+      const deletePromises = payloadArray.map((payload) =>
+        deleteOpsPlanInput({ opsPlanInfoArray: [payload] })
+      );
+      promises.push(...deletePromises);
+    }
+  return Promise.all(promises)
+      .then((responses) => {
+        const hasDelete = deletedTableData?.length > 0;
+        const hasUpdate = updatedData?.length > 0;
+        const actionLabel = hasDelete && !hasUpdate
+          ? "Deleted"
+          : hasUpdate && !hasDelete
+          ? "Modified"
+          : "Processed";
+        showOpsInputSummary(responses, actionLabel);
+      })
+      .catch((error) => {
+        setAlertData({
+          severity: "error",
+          message: "Error: Operation Failed! " + (error?.response?.data?.error || ""),
+          isVisible: true,
+        });
+        console.error("Error in Update/Delete:", error);
+      });
   }
 }

@@ -3,8 +3,8 @@ import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import Divider from "@mui/material/Divider";
-import { useUser } from "../../core/access/userContext.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import { API_STATUS, API_STATUS_MAP } from "../../utils/statusCodes";
 import Period from "./components/Period";
 import {
