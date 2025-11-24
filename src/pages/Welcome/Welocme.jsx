@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import '../Welcome/styles/pageStyle.css';
 import { pageConstants } from './constants/pageConstants';
 import omgLogo from '../../assets/omg-logo.png';
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
-import { useUser } from "../../core/access/userContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
+import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from './services/service.js';
 import { useNavigate } from "react-router-dom";
 
