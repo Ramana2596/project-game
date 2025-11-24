@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { fetchAvailableUsers, fetchRoles, updateUserRole, fetchApprovedRoles } from './services/userRoleManagementService';
 import { Container, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, Box, Button } from '@mui/material';
 import ToastMessage from '../../components/ToastMessage.jsx';
-import { useUser } from "../../core/access/userContext.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 
 const UserRoleManagement = () => {
     const { userInfo } = useUser();

@@ -15,12 +15,12 @@ export function getParamValues(queryParams) {
   });
 }
 
-export function addOpsPlanInfo(getFramedPayload) {
+export function addOpsPlanInput(getFramedPayload) {
   let payload = {
     ...getFramedPayload,
     cmdLine: "Add_Operation_Plan",
   };
-  return api.post("/api/updateOperationalDecisionInput", payload);
+  return api.post("/api/updateOpsPlanInput", payload);
 }
 
 export function updateOpsPlanInput(getFramedPayload) {
@@ -28,13 +28,13 @@ export function updateOpsPlanInput(getFramedPayload) {
     ...getFramedPayload,
     cmdLine: "Update_Operation_Plan",
   };
-  return api.post("/api/updateOperationalDecisionInput", payload);
+  return api.post("/api/updateOpsPlanInput", payload);
 }
 
-export function deleteOpsPlanInfo(getFramedPayload) {
+export function deleteOpsPlanInput(getFramedPayload) {
   let payload = {
     ...getFramedPayload,
     cmdLine: "Delete_Operation_Plan",
   };
-  return api.post("/api/updateOperationalDecisionInput", payload);
+  return api.post("/api/updateOpsPlanInput", payload);
 }

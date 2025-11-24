@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Card, CardActionArea, CardContent, Typography, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Box } from "@mui/material";
-import { useUser } from '../../core/access/userContext.js';
+import { useUser } from '../../core/access/userContext.jsx';
 import './styles/style.css';
 
 function SystemInfoDesk() {

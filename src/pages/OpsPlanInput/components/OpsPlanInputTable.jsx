@@ -8,8 +8,8 @@ import GenericTable from "../../../components/GenericTable.jsx";
 import EditableTableData from "../../../components/EditableTableData.jsx";
 import AddTableCascading from "../../../components/AddTableCascading.jsx";
 import { pageConstants } from "../constants/pageConstants.js";
-import { getOperationalPlanInfoTableData } from "../services/service.js";
-import { useLoading } from "../../../hooks/loadingIndicatorContext.js";
+import { getOpsPlanId } from "../services/service.js";
+import { useLoading } from "../../../hooks/loadingIndicatorContext.jsx";
 
 // ----------------------------
 // Main Component
@@ -61,7 +61,7 @@ export default function OpsPlanInputTable({
 
         // Helper function for cascading dropdowns
         const fetchAndAssign = async (cmd, col, mapFn) => {
-          const data = await getOperationalPlanInfoTableData({ ...selectedOpsInput, cmdLine: cmd });
+          const data = await getOpsPlanId({ ...selectedOpsInput, cmdLine: cmd });
           pageConstants.contentSection.inputTypesForAdd.forEach((obj) => {
             if (obj.columnName === col) obj.data = data.data.map(mapFn);
           });
@@ -97,7 +97,7 @@ export default function OpsPlanInputTable({
     const { Description, Quantity_Info, Info_Price } = currentRow;
     if (!Description?.value || !Quantity_Info?.value || !Info_Price?.value) return;
 
-    getOperationalPlanInfoTableData({
+    getOpsPlanId({
       ...selectedOpsInput,
       partNo: Description.value,
       quantityId: Quantity_Info.value,

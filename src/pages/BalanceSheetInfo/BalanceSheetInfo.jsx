@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
-import { useUser } from "../../core/access/userContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
 import { useEffect, useState } from "react";
 import { getBalanceSheetInfo } from "./services/balanceSheetInfoService.js";
 import { pageConstants } from "./constants/pageConstants.js";
 import InventoryLineChart from "../GameDashboard/components/InventoryLineChart.jsx";
 import { getChartInfo } from "../GameDashboard/services/gameDashboard.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 
 export default function BalanceSheetInfo() {
   const { userInfo } = useUser();

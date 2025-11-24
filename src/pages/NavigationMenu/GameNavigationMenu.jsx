@@ -115,6 +115,7 @@ import AssetCatalogBatch from '../AssetCatalogBatch/AssetCatalogBatch.jsx';
 import EnrollUserDialog from '../RegisterUser/EnrollUserDialog.jsx';
 import SimulationPlay from '../SimulationPlay/SimulationPlay.jsx';
 import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
+import OpsPlanInput from '../OpsPlanInput/OpsPlanInput.jsx';
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
@@ -362,6 +363,7 @@ export default function MiniDrawer() {
           <Route path='/BatchMgt' element={<BatchMgt />} />
           <Route path='/SimulationPlay' element={<SimulationPlay />} />
           <Route path='/BatchMaster' element={<BatchMstDetails />} />
+          <Route path='/opsPlanInput' element={<OpsPlanInput />} />
           {/*<Route path='/AssetCatalog' element={<AssetCatalog />} /> */}
           
         </Routes>

@@ -8,7 +8,7 @@ import {
   Alert,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { useUser } from "../../../core/access/userContext.js";
+import { useUser } from "../../../core/access/userContext.jsx";
 import { getOperationalPlanInfoTableData } from "../services/operationalPlanInfoInputService.js";
 
 export default function Period({ period, onFormControlUpdate, isDisabled }) {

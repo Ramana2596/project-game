@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useLoading } from '../../hooks/loadingIndicatorContext.js';
+import { useLoading } from '../../hooks/loadingIndicatorContext.jsx';
 import ToastMessage from '../../components/ToastMessage.jsx';
 import { pageConstants } from './constants/pageConstants.js';
 import { Box } from "@mui/material";

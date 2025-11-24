@@ -4,14 +4,14 @@ import { Box, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Button from "@mui/material/Button";
 import GenericTable from "../../components/GenericTable.jsx";
-import { useUser } from "../../core/access/userContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
 import { useEffect, useState } from "react";
 import { pageConstants } from "./constants/pageConstants.js";
 import { 
   getGameBatch,
   getStdMarketInput,
 } from "./services/service.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import ToastMessage from "../../components/ToastMessage.jsx";
 
 // StdMarketInput Component

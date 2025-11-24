@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { getMarketFactorInfoTableData } from "../services/marketFactorInputService";
-import { useUser } from "../../../core/access/userContext.js";
-import { useLoading } from "../../../hooks/loadingIndicatorContext.js";
+import { useUser } from "../../../core/access/userContext.jsx";
+import { useLoading } from "../../../hooks/loadingIndicatorContext.jsx";
 
 export default function GameBatch({
   gameBatch,

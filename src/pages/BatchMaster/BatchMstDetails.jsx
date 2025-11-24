@@ -11,7 +11,7 @@ import {
   getUOM
 } from "./services/getBatchQuery.js";
 import { updateBatchMst } from "./services/service.js";
-import { useUser } from "../../core/access/userContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
 import { API_STATUS, API_STATUS_MAP } from "../../utils/statusCodes"; // ✅
 import ToastMessage from "../../components/ToastMessage"; // ✅
 
