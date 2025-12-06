@@ -83,10 +83,11 @@ export default function SignIn(props) {
     // Fetch user details
     getUserDetails({ userEmail: email })
       .then((response) => {
-        const userData = response?.data?.[0];
-        if (userData) {
-          login(userData.Role);
-          setUserInfo(userData);
+        // response.data contains the API response: { returnStatus, message, data: [...] }
+        const apiData = response?.data?.data?.[0];
+        if (apiData) {
+          login(apiData.Role);
+          setUserInfo(apiData);
           navigate("/operationGame/homePage");
         } else {
           setEmailError(true);
