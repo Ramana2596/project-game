@@ -12,7 +12,6 @@ export default function GameMaster() {
         discipline: '',
         subject: '',
         faculty: '',
-        subject: '',
         durationHours: '',
         maxSeats: '',
         maxSessions: ''

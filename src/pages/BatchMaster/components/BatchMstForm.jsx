@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Grid, TextField, MenuItem } from "@mui/material";
 import { pageConstants } from "../constants/pageConstants.js";
-import { useUser } from "../../../core/access/userContext.js";
+import { useUser } from "../../../core/access/userContext.jsx";
 
 /**
  * Component: BatchMstForm

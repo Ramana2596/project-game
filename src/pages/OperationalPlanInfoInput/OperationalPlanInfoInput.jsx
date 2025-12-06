@@ -3,8 +3,8 @@ import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import Divider from "@mui/material/Divider";
-import { useUser } from "../../core/access/userContext.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import { API_STATUS, API_STATUS_MAP } from "../../utils/statusCodes";
 import Period from "./components/Period";
 import {
@@ -236,7 +236,7 @@ export default function OperationalPlanInfoInput() {
         message={alertData.message} />
     </Box>
   );
-
+/*
 // ---------- Table API: Add / Update / Delete ----------
 
 // Add new table data
@@ -245,7 +245,6 @@ export default function OperationalPlanInfoInput() {
     if (updatedData && updatedData.length > 0) {
       const operationalPlanPayLoad = {
         operationalPlanInfoArray: getFramedPayload(updatedData, true),
-        cmdLine: "Add",
       };
       promises.push(
         addOperationalPlanInfo(operationalPlanPayLoad)
@@ -253,7 +252,6 @@ export default function OperationalPlanInfoInput() {
             const { returnValue, message } = res.data;
             const { severity, defaultMsg } =
               API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
-
             setAlertData({
               severity,
               message: message || defaultMsg,
@@ -288,7 +286,6 @@ export default function OperationalPlanInfoInput() {
           const { returnValue, message } = res.data;
           const { severity, defaultMsg } =
             API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
-
           setAlertData({
             severity,
             message: message || defaultMsg,
@@ -305,35 +302,116 @@ export default function OperationalPlanInfoInput() {
           });
         })
       );
-      if (deletedTableData && deletedTableData.length > 0) {
-        const operationalInfoInputPayload = {
-          operationalPlanInfoArray: getFramedPayload(deletedTableData, false),
-        };
-        promises.push(
-          deleteOperationalPlanInfo(operationalInfoInputPayload)
-          .then((res) => {
-            const { returnValue, message } = res.data;
-            const { severity, defaultMsg } =
-              API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
+    }
+    if (deletedTableData && deletedTableData.length > 0) {
+      const operationalInfoInputPayload = {
+        operationalPlanInfoArray: getFramedPayload(deletedTableData, false),
+      };
+      promises.push(
+        deleteOperationalPlanInfo(operationalInfoInputPayload)
+        .then((res) => {
+          const { returnValue, message } = res.data;
+          const { severity, defaultMsg } =
+            API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
 
+          setAlertData({
+            severity,
+            message: message || defaultMsg,
+            isVisible: true,
+          });
+        })
+          .catch((error) => {
             setAlertData({
-              severity,
-              message: message || defaultMsg,
+              severity: "error",
+              message:
+                "Error: Not Deleted ! " +
+                error?.response?.data?.error,
               isVisible: true,
             });
           })
-            .catch((error) => {
-              setAlertData({
-                severity: "error",
-                message:
-                  "Error: Not Deleted ! " +
-                  error?.response?.data?.error,
-                isVisible: true,
-              });
-            })
-        );
-      } 
-      return Promise.all(promises);
+      );
+    } 
+    return Promise.all(promises);
+  }
+*/
+// ---------- Table API: Add / Update / Delete ----------
+
+// ---------- Helper for showing summary ----------
+  function showOpsInputSummary(responses, actionLabel) {
+    const results = responses.map(res => res.data);
+    const total = results.length;
+    const successCount = results.filter(r => r.returnValue === 0).length;
+    const overallSuccess = successCount === total;
+    const { severity } =
+      API_STATUS_MAP[overallSuccess ? API_STATUS.SUCCESS : API_STATUS.BUSINESS_ERROR];
+    const message = `${successCount} of ${total} ${actionLabel}`;
+
+    setAlertData({
+      severity,
+      message,
+      isVisible: true,
+    });
+  }
+
+  // Add new table data
+  function addTableData(updatedData) {
+    if (!updatedData?.length) return Promise.resolve();
+
+    const payloadArray = getFramedPayload(updatedData, true);
+    const promises = payloadArray.map((payload) => addOperationalPlanInfo({ operationalPlanInfoArray: [payload] }));
+
+    return Promise.all(promises)
+      .then((responses) => {
+        showOpsInputSummary(responses, "Added");
+      })
+      .catch((error) => {
+        setAlertData({
+          severity: "error",
+          message: "Error: Input Not Added! " + (error?.response?.data?.error || ""),
+          isVisible: true,
+        });
+        console.error("Error: Input Not Added!", error);
+      });
+  }
+
+  // Update existing table data
+  function updateTableData(updatedData, deletedTableData) {
+    const promises = [];
+
+    if (updatedData?.length > 0) {
+      const payloadArray = getFramedPayload(updatedData, false);
+      const updatePromises = payloadArray.map((payload) =>
+        updateOperationalPlanInfoInput({ operationalPlanInfoArray: [payload] })
+      );
+      promises.push(...updatePromises);
     }
+
+    if (deletedTableData?.length > 0) {
+      const payloadArray = getFramedPayload(deletedTableData, false);
+      const deletePromises = payloadArray.map((payload) =>
+        deleteOperationalPlanInfo({ operationalPlanInfoArray: [payload] })
+      );
+      promises.push(...deletePromises);
+    }
+
+    return Promise.all(promises)
+      .then((responses) => {
+        const hasDelete = deletedTableData?.length > 0;
+        const hasUpdate = updatedData?.length > 0;
+        const actionLabel = hasDelete && !hasUpdate
+          ? "Deleted"
+          : hasUpdate && !hasDelete
+          ? "Modified"
+          : "Processed";
+        showOpsInputSummary(responses, actionLabel);
+      })
+      .catch((error) => {
+        setAlertData({
+          severity: "error",
+          message: "Error: Operation Failed! " + (error?.response?.data?.error || ""),
+          isVisible: true,
+        });
+        console.error("Error in Update/Delete:", error);
+      });
   }
 }

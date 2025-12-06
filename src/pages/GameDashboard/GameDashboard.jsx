@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardActionArea, CardContent, Typography, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useLoading } from '../../hooks/loadingIndicatorContext.js';
+import { useLoading } from '../../hooks/loadingIndicatorContext.jsx';
 import ToastMessage from '../../components/ToastMessage.jsx';
 import { pageConstants } from '../GameDashboard/constants/pageConstants.js';
 import { componentList } from '../../constants/globalConstants.js';
@@ -10,7 +10,7 @@ import BarChartComponent from '../../components/BarChartComponent.jsx';
 import InventoryLineChart from './components/InventoryLineChart.jsx';
 import ProfitPercentLineChart from './components/ProfitPercentLineChart.jsx';
 import { getChartInfo } from './services/gameDashboard.js';
-import { useUser } from "../../core/access/userContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
 import CashFlowChart from './components/CashFlowChart.jsx';
 import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
 import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';

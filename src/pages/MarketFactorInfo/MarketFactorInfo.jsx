@@ -3,13 +3,13 @@ import Grid from "@mui/material/Grid2";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import GenericTable from "../../components/GenericTable.jsx";
-import { useUser } from "../../core/access/userContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
 import { pageConstants } from "./constants/pageConstants.js";
 import {
   getGameBatch,
   getMarketFactorInfo,
 } from "./services/marketFactorInfoService.js";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 
 export default function MarketFactorInfo() {
   const { setIsLoading } = useLoading();

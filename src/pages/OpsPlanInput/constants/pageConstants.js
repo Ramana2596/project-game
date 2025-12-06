@@ -1,0 +1,51 @@
+export const pageConstants = {
+  gameBatch: "Batch",
+  gameTeam: "Team",
+  contentSection: {
+    addBtnLabel: "Add",
+    modifyBtnLabel: "Modify",
+    saveBtnLabel: "Save",
+    cancelBtnLabel: "Cancel",
+    tableHeading: [
+      "Description",
+      "UOM",
+      "Quantity",
+      "Quantity_Info",
+      "Unit Price",
+      "currency",
+      "Info_Price"
+    ],
+    tableHeadingForAdd: [
+      "Description",
+      "Quantity",
+      "Quantity_Info",
+      "Unit_Price",
+      "Info_Price",
+    ],
+    hiddenTableColumns: ["Part", "Qty_Id", "Period", "Price_Id"],
+    hiddenTableColumnsForAdd: [
+      "Qty_Id",
+      "UOM",
+      "Part",
+      "Period",
+      "currency",
+      "Price_Id",
+    ],
+    inputTypes: [
+      { columnName: "Description", inputType: null },
+      { columnName: "UOM", inputType: null },
+      { columnName: "Quantity", inputType: "number" },
+      { columnName: "Quantity_Info", inputType: null },
+      { columnName: "Unit_Price", inputType: null },
+      { columnName: "currency", inputType: null },
+      { columnName: "Info_Price", inputType: null },
+    ],
+    inputTypesForAdd: [
+      { columnName: "Description", inputType: "select" },
+      { columnName: "Quantity", inputType: "number" },
+      { columnName: "Quantity_Info", inputType: "select" },
+      { columnName: "Unit_Price", inputType: 'readonly' },
+      { columnName: "Info_Price", inputType: "select" },
+    ],
+  },
+};

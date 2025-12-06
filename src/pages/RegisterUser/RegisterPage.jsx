@@ -3,7 +3,7 @@ import { Container, Box, Typography, Card, CardContent } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import { getUserProfile, registerUser } from "./services/service.js";
 import ToastMessage from '../../components/ToastMessage.jsx';
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import RegistrationForm from './RegistrationForm.jsx';
 import { API_STATUS, API_STATUS_MAP } from '../../utils/statusCodes.js';
 import EnrollUserDialog from './EnrollUserDialog.jsx';

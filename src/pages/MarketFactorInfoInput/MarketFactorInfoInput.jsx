@@ -13,9 +13,9 @@ import {
   getParamValues,
 } from "./services/marketFactorInputService.js";
 import MarketFactorInputTable from "./components/MarketFactorInputTable";
-import { useUser } from "../../core/access/userContext.js";
+import { useUser } from "../../core/access/userContext.jsx";
 import ToastMessage from "../../components/ToastMessage.jsx";
-import { useLoading } from "../../hooks/loadingIndicatorContext.js";
+import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 
 export default function MarketFactorInfoInput() {
   const { setIsLoading } = useLoading();

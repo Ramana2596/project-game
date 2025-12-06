@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { enrollUser, getUserProfile } from "./services/service.js";
 import { API_STATUS, API_STATUS_MAP } from "../../utils/statusCodes.js";
-import { useUser } from "../../core/access/userContext";
+import { useUser } from "../../core/access/userContext.jsx";
 
 /**
  * EnrollUserDialog
