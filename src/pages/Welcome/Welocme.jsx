@@ -43,16 +43,18 @@ const WelcomePage = () => {
         setIsLoading(true);
         getUserDetails({ userEmail: 'guest@guest.com' })
             .then((response) => {
-                const userData = response?.data?.[0];
+                const userData = response?.data?.data?.[0];
                 if (userData) {
                     login(userData.Role);
                     setUserInfo(userData);
                     navigate("/operationGame/homePage");
                 } else {
-                    navigate("/operationGame/homePage");
+                    console.log('Demo user not found in response.');
                 }
             })
-            .catch(() => navigate("/operationGame/homePage"))
+            .catch(() => {
+                console.log('Demo user not found in response.');
+            })
             .finally(() => setIsLoading(false));
     };
 
