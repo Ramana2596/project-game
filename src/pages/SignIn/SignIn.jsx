@@ -11,7 +11,7 @@ import { styled } from "@mui/material/styles";
 import ColorModeSelect from "./theme/ColorModeSelect";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../core/access/userContext.jsx";
-import { getUserDetails, intiateTeamPlay } from "./services/signInServices.js";
+import { getUserDetails } from "./services/signInServices.js";
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -61,90 +61,43 @@ export default function SignIn(props) {
   const { setIsLoading } = useLoading();
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [isValidUser, setValidUser] = React.useState(false);
-  const [shouldTriggerApiCall, setShouldTriggerApiCall] = React.useState(false);
-  const [userEmailValue, setUserEmailValue] = React.useState(null);
-  const routeHistory = useNavigate();
-  const { login, setUserInfo, userInfo } = useUser();
-  const [userDetailsData, setUserDetailsData] = React.useState(null);
+  const navigate = useNavigate();
+  const { login, setUserInfo } = useUser();
 
-  // API Call Trigger: get authentic-user, based on email
-  React.useEffect(() => {
-    if (shouldTriggerApiCall) {
-      setIsLoading(true);
-      getUserDetails({ userEmail: userEmailValue })
-        .then((response) => {
-          if (response) {
-            setUserDetailsData(response.data);
-          }
-        })
-        .catch(() => null)
-        .finally(() => setIsLoading(false));
-    }
-  }, [shouldTriggerApiCall]);
+  // Handle sign in with email validation
+  const handleSignIn = () => {
+    const emailInput = document.getElementById("email");
+    const email = emailInput?.value || "";
 
-  // Effect 1: Handle API Response (set state: Role,UserInfo,validUser flag)
-  React.useEffect(() => {
-    if (userDetailsData && userDetailsData.length > 0) {
-      login(userDetailsData[0]?.Role);
-      setUserInfo(userDetailsData[0]);
-      setValidUser(true);   // state update only
-    } else {
-      setValidUser(false);
-    }
-    setShouldTriggerApiCall(false);
-  }, [userDetailsData]);  // ❌ removed isValidUser from deps
-
-/* NOT Required since Initialisation is part of Simulation
-  // Effect 2: Runs initialisation of tables when isValidUser is true and userInfo is set
-  React.useEffect(() => {
-    if (isValidUser && userInfo) {   // user is valid AND we have user details ready.
-      intiateTeamPlay({
-        gameId: userInfo.gameId,
-        gameBatch: userInfo.gameBatch,
-        gameTeam: userInfo.gameTeam,
-      }).then(() => {
-        console.log("login successful");
-      });
-      routeHistory("/operationGame/homePage");
-    }
-  }, [isValidUser, userInfo]);   // new effect
-
-*/
-
-  // Effect 2 : Direct authentic user to homepage
-  React.useEffect(() => {
-    if (isValidUser && userInfo) {
-      routeHistory("/operationGame/homePage");
-    }
-  }, [isValidUser, userInfo]);
-
-/* Not executed since onLoginClick user is directed to homepage
-  // Form Submit handler
-  // Direct authentic user to homepage
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (emailError) return;
-
-    if (isValidUser) {
-      routeHistory("/operationGame/homePage");
-    }
-  };
-*/
-
-  // OnClick handler for SignIn button // validate email and set states
-  const onLoginClick = () => {
-    const email = document.getElementById("email");
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
+    // Validate email
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
       setEmailError(true);
       setEmailErrorMessage("Please enter a valid email address.");
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage("");
-      setUserEmailValue(email.value);
-      setShouldTriggerApiCall(true);
+      return;
     }
+
+    setEmailError(false);
+    setEmailErrorMessage("");
+    setIsLoading(true);
+
+    // Fetch user details
+    getUserDetails({ userEmail: email })
+      .then((response) => {
+        const userData = response?.data?.[0];
+        if (userData) {
+          login(userData.Role);
+          setUserInfo(userData);
+          navigate("/operationGame/homePage");
+        } else {
+          setEmailError(true);
+          setEmailErrorMessage("User not found. Please check your email.");
+        }
+      })
+      .catch(() => {
+        setEmailError(true);
+        setEmailErrorMessage("Sign in failed. Please try again.");
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -195,7 +148,7 @@ export default function SignIn(props) {
               type="button"
               fullWidth
               className="standard-button-primary-button"
-              onClick={onLoginClick}
+              onClick={handleSignIn}
             >
               Sign in
             </Button>

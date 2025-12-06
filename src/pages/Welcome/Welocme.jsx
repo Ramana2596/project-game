@@ -18,20 +18,11 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const WelcomePage = () => {
     const [activeSection, setActiveSection] = useState('aboutSimulation');
-    const { setIsLoading } = useLoading(); // <-- Use loading context
-    const [userDetailsData, setUserDetailsData] = React.useState(null);
+    const [displaySection, setDisplaySection] = useState(activeSection);
+    const { setIsLoading } = useLoading();
     const { login, setUserInfo } = useUser();
-    const routeHistory = useNavigate();
+    const navigate = useNavigate();
 
-    React.useEffect(() => {
-        if (userDetailsData && userDetailsData.length > 0) {
-            login(userDetailsData[0]?.Role);
-            setUserInfo(userDetailsData[0]);
-            routeHistory("/operationGame/homePage");
-        }
-    }, [userDetailsData]);
-
-    // Mapping short titles
     const shortTitles = {
         aboutSimulation: 'Welcome',
         aboutUs: 'About',
@@ -41,27 +32,32 @@ const WelcomePage = () => {
         benefits: 'Learning',
     };
 
-    const onDemoClick = () => {
-        setIsLoading(true);
-        getUserDetails({ userEmail: 'guest@guest.com' }).then((response) => {
-            if (response) {
-                setUserDetailsData(response.data);
-            }
-        })
-            .catch(() => null)
-            .finally(() => setIsLoading(false));
-    };
-
-    // pick active section object
-    const [displaySection, setDisplaySection] = React.useState(activeSection);
-    const active = pageConstants.toolBarSections.find(s => s.key === displaySection) || pageConstants.toolBarSections[0];
-
-    // Direct image imports mapped to section keys (user-provided filenames)
     const imagesByKey = {
         howitworks: imgHowItWorks,
         whatisomg: imgWhatIsOmg,
         learningoutcome: imgLearningOutcome,
     };
+
+    // Handle demo user login
+    const handleDemoLogin = () => {
+        setIsLoading(true);
+        getUserDetails({ userEmail: 'guest@guest.com' })
+            .then((response) => {
+                const userData = response?.data?.[0];
+                if (userData) {
+                    login(userData.Role);
+                    setUserInfo(userData);
+                    navigate("/operationGame/homePage");
+                } else {
+                    navigate("/operationGame/homePage");
+                }
+            })
+            .catch(() => navigate("/operationGame/homePage"))
+            .finally(() => setIsLoading(false));
+    };
+
+    // Get active section object
+    const active = pageConstants.toolBarSections.find(s => s.key === displaySection) || pageConstants.toolBarSections[0];
 
     const findImageForSection = (section) => {
         if (!section) return null;
@@ -72,41 +68,21 @@ const WelcomePage = () => {
         return null;
     };
 
-    // scroll to section by id using header offset to avoid jumping under fixed header
-    // header offset will be computed from the AppBar height so it's responsive
     const appBarRef = React.useRef(null);
     const isProgrammaticScroll = React.useRef(false);
-    const scrollToSection = (key) => {
-        const el = document.getElementById(key);
-        if (!el) return;
-        const headerOffset = appBarRef.current ? appBarRef.current.offsetHeight : 84;
-        const top = el.getBoundingClientRect().top + window.pageYOffset - headerOffset;
-        isProgrammaticScroll.current = true;
-        window.scrollTo({ top, behavior: 'smooth' });
-        // ignore observer updates for the duration of the smooth scroll
-        window.clearTimeout(window.__welcomeScrollTimer);
-        window.__welcomeScrollTimer = window.setTimeout(() => {
-            isProgrammaticScroll.current = false;
-        }, 700);
-    };
 
-    // Manual scroll logic removed per request: active section will only update on user navigation (clicks).
-
-    // set a CSS variable to match AppBar height so scroll-margin-top can use it
+    // Initialize scroll margin on mount and window resize
     React.useEffect(() => {
-        const updateMargin = () => {
-            const h = appBarRef.current ? appBarRef.current.offsetHeight : 80;
-            try {
-                document.documentElement.style.setProperty('--welcome-scroll-margin', `${h}px`);
-            } catch (e) { /* ignore */ }
+        const updateScrollMargin = () => {
+            const headerHeight = appBarRef.current?.offsetHeight || 80;
+            document.documentElement.style.setProperty('--welcome-scroll-margin', `${headerHeight}px`);
         };
-
-        updateMargin();
-        window.addEventListener('resize', updateMargin);
-        return () => window.removeEventListener('resize', updateMargin);
+        updateScrollMargin();
+        window.addEventListener('resize', updateScrollMargin);
+        return () => window.removeEventListener('resize', updateScrollMargin);
     }, []);
 
-    // Build a stable order map of sections that have images so we can alternate sides
+    // Build image order map for alternating layout
     const imageSectionsOrder = React.useMemo(() => {
         const map = {};
         let counter = 0;
@@ -116,7 +92,6 @@ const WelcomePage = () => {
             }
         });
         return map;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -188,7 +163,7 @@ const WelcomePage = () => {
                     <Box sx={{ display: 'flex', gap: 1, ml: 3 }}>
                         <Button
                             variant="text"
-                            onClick={onDemoClick}
+                            onClick={handleDemoLogin}
                             sx={{ color: '#7b1fa2', fontWeight: 600, textTransform: 'none' }}
                         >
                             Demo
@@ -264,7 +239,7 @@ const WelcomePage = () => {
                                     <Button
                                         variant="contained"
                                         size="large"
-                                        onClick={onDemoClick}
+                                        onClick={handleDemoLogin}
                                         endIcon={<ArrowForwardIcon />}
                                         sx={{
                                             background: 'linear-gradient(135deg, #7b1fa2, #512da8)',
@@ -457,7 +432,7 @@ const WelcomePage = () => {
                         <Button
                             variant="contained"
                             size="large"
-                            onClick={onDemoClick}
+                            onClick={handleDemoLogin}
                             sx={{
                                 bgcolor: 'white',
                                 color: '#7b1fa2',
