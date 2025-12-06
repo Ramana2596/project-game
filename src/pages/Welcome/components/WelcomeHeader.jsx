@@ -43,27 +43,12 @@ const WelcomeHeader = ({
                     <Box sx={{
                         width: 48,
                         height: 48,
-                        borderRadius: '12px',
-                        background: 'linear-gradient(135deg, #7b1fa2, #512da8)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        boxShadow: '0 4px 12px rgba(123, 31, 162, 0.25)'
                     }}>
-                        <img src={omgLogo} alt="OMG Logo" style={{ width: 32, height: 32 }} />
+                        <img src={omgLogo} alt="OMG Logo" style={{ width: 100, height: 100 }} />
                     </Box>
-                    <Typography
-                        variant="h6"
-                        sx={{
-                            fontWeight: 800,
-                            background: 'linear-gradient(135deg, #7b1fa2, #512da8)',
-                            backgroundClip: 'text',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent'
-                        }}
-                    >
-                        OMG
-                    </Typography>
                 </Box>
 
                 <Box sx={{ flexGrow: 1 }} />
