@@ -1,6 +1,131 @@
-/* pageStyle.css */
-.middle-left-image {
-    float: left;
-    width: 300px;
-    height: auto;
+/* footer styles */
+footer {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.welcome-footer a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+}
+
+/* Ensure sections have space under fixed header */
+.welcome-section {
+    scroll-margin-top: var(--welcome-scroll-margin, 80px);
+}
+
+/* enable native smooth scrolling for anchors */
+html {
+    scroll-behavior: smooth;
+}
+
+:root {
+    --OMG-primary: #5e2a8a;
+    --OMG-accent: #7b1fa2;
+    --OMG-bg-dark: #16072a;
+}
+
+/* Modern page background */
+.welcome-root {
+    position: relative;
+    background: linear-gradient(180deg, #fafbfc 0%, #f6f5f8 100%);
+    color: rgba(30, 30, 30, 0.95);
+}
+
+/* Modern animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Desktop fallback: ensure two-column rows don't collapse */
+@media (min-width: 900px) {
+    .section-row {
+        flex-wrap: nowrap;
+    }
+
+    .section-row>.MuiGrid-item {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+
+/* Desktop fallback: ensure two-column rows don't collapse to single column
+   This enforces 50% width for direct Grid children of .section-row at md+ widths.
+   It's a safe visual fallback if component-level props are overridden by other CSS. */
+@media (min-width: 900px) {
+    .section-row {
+        flex-wrap: nowrap;
+        /* keep items on one row */
+    }
+
+    .section-row>.MuiGrid-item {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
 }
