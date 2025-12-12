@@ -1,4 +1,5 @@
-// LoadingContext.js
+// loadingIndicatorContext.jsx
+
 import React, { createContext, useState, useContext } from 'react';
 
 const LoadingContext = createContext();
