@@ -168,12 +168,9 @@ export default function MiniDrawer() {
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} sx={{ backgroundImage: 'radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%))' }}>
-        <Toolbar sx={{ backgroundImage: 'inherit' }}>
+        <Toolbar style={{ paddingLeft: 0 }} sx={{ backgroundImage: 'inherit' }}>
           {/* Logo Image */}
-          <img src={omgLogo} alt="OMG Logo" style={{ width: 40, height: 40, marginRight: 8 }} />
-          <Typography color='black' align="left" variant="h4" noWrap component="div" sx={{ ...(open && { display: 'none' }) }}>
-            {pageConstants.companyTitleCollapsed}
-          </Typography>
+          <img src={omgLogo} alt="OMG Logo" style={{ width: 75, height: 75 }} />
           <IconButton className="hover-effect" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{ marginLeft: 1, ...(open && { display: 'none' }) }} >
             <ArrowForwardIosIcon />
           </IconButton>
@@ -251,7 +248,7 @@ export default function MiniDrawer() {
               )}
 
             </div>
- 
+
             <Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right", }} keepMounted transformOrigin={{ vertical: "top", horizontal: "right", }} open={Boolean(anchorEl)} onClose={handleClose} sx={{ "& .MuiPaper-root": { borderRadius: "10px", padding: "10px", width: "250px", backgroundColor: "#FFFFFF", }, }} >
               <Typography className="standard-text-color" disabled>{userInfo?.loginId}</Typography>
               <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
@@ -268,8 +265,7 @@ export default function MiniDrawer() {
         <DrawerHeader className="drawer-header">
           {open ? (
             <Typography color='black' align="left" variant="h6" wrap component="div">
-              {pageConstants.companyTitleExpandedFH} <br />
-              {pageConstants.companyTitleExpandedSH}
+              {pageConstants.companyTitleExpandedFH} < br /> {pageConstants.companyTitleExpandedSH}
             </Typography>
           ) : (
             <Typography color='black' align="left" variant="h4" noWrap component="div" sx={{ ...(open && { display: 'none' }) }}>
@@ -365,7 +361,7 @@ export default function MiniDrawer() {
           <Route path='/BatchMaster' element={<BatchMstDetails />} />
           <Route path='/opsPlanInput' element={<OpsPlanInput />} />
           {/*<Route path='/AssetCatalog' element={<AssetCatalog />} /> */}
-          
+
         </Routes>
       </Box>
       <ToastMessage
