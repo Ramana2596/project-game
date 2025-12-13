@@ -167,14 +167,43 @@ export default function MiniDrawer() {
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ backgroundImage: 'radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%))' }}>
-        <Toolbar style={{ paddingLeft: 0 }} sx={{ backgroundImage: 'inherit' }}>
+      <AppBar position="fixed" open={open}>
+        <Toolbar style={{ paddingLeft: 0 }} sx={{ background: 'transparent', minHeight: '64px', height: '64px' }}>
           {/* Logo Image */}
           <img src={omgLogo} alt="OMG Logo" style={{ width: 75, height: 75 }} />
-          <IconButton className="hover-effect" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{ marginLeft: 1, ...(open && { display: 'none' }) }} >
+          <IconButton 
+            className="hover-effect" 
+            aria-label="open drawer" 
+            onClick={handleDrawerOpen} 
+            edge="start" 
+            sx={{ 
+              marginLeft: 1, 
+              ...(open && { display: 'none' }),
+              color: '#7b1fa2',
+              '&:hover': {
+                backgroundColor: 'rgba(123, 31, 162, 0.08)',
+                transform: 'scale(1.1)',
+              },
+              transition: 'all 0.3s ease',
+            }} 
+          >
             <ArrowForwardIosIcon />
           </IconButton>
-          <IconButton className="hover-effect" aria-label="close drawer" onClick={handleDrawerClose} edge="start" sx={{ ...(!open && { display: 'none' }) }} >
+          <IconButton 
+            className="hover-effect" 
+            aria-label="close drawer" 
+            onClick={handleDrawerClose} 
+            edge="start" 
+            sx={{ 
+              ...(!open && { display: 'none' }),
+              color: '#7b1fa2',
+              '&:hover': {
+                backgroundColor: 'rgba(123, 31, 162, 0.08)',
+                transform: 'scale(1.1)',
+              },
+              transition: 'all 0.3s ease',
+            }} 
+          >
             <ArrowBackIosIcon />
           </IconButton>
           <BreadCrumb currentRoute={currentRoute} />
@@ -216,15 +245,25 @@ export default function MiniDrawer() {
                     sx={{
                       display: "flex",
                       alignItems: "center",
+                      justifyContent: "center",
                       textTransform: "none",
-                      border: "1px solid",
-                      borderRadius: "30px",
-                      padding: "5px 20px",
-                      backgroundColor: "#FFFFFF",
-                      color: "#180081"
+                      border: "2px solid #7b1fa2",
+                      borderRadius: "50%",
+                      minWidth: "48px",
+                      width: "48px",
+                      height: "48px",
+                      padding: 0,
+                      backgroundColor: "transparent",
+                      color: "#7b1fa2",
+                      '&:hover': {
+                        backgroundColor: 'rgba(123, 31, 162, 0.08)',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 4px 12px rgba(123, 31, 162, 0.2)',
+                      },
+                      transition: 'all 0.3s ease',
                     }}
                   >
-                    <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
+                    <AccountCircle className="account-icon" sx={{ fontSize: 32 }} />
                   </Button>
                 </Box>
               ) : (
@@ -235,25 +274,35 @@ export default function MiniDrawer() {
                   sx={{
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: "center",
                     textTransform: "none",
-                    border: "1px solid",
-                    borderRadius: "30px",
-                    padding: "5px 20px",
-                    backgroundColor: "#FFFFFF",
-                    color: "#180081"
+                    border: "2px solid #7b1fa2",
+                    borderRadius: "50%",
+                    minWidth: "48px",
+                    width: "48px",
+                    height: "48px",
+                    padding: 0,
+                    backgroundColor: "transparent",
+                    color: "#7b1fa2",
+                    '&:hover': {
+                      backgroundColor: 'rgba(123, 31, 162, 0.08)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 4px 12px rgba(123, 31, 162, 0.2)',
+                    },
+                    transition: 'all 0.3s ease',
                   }}
                 >
-                  <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
+                  <AccountCircle className="account-icon" sx={{ fontSize: 32 }} />
                 </Button>
               )}
 
             </div>
 
-            <Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right", }} keepMounted transformOrigin={{ vertical: "top", horizontal: "right", }} open={Boolean(anchorEl)} onClose={handleClose} sx={{ "& .MuiPaper-root": { borderRadius: "10px", padding: "10px", width: "250px", backgroundColor: "#FFFFFF", }, }} >
-              <Typography className="standard-text-color" disabled>{userInfo?.loginId}</Typography>
-              <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
-              <Typography className="standard-text-color" disabled>{user?.role}</Typography>
-              <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
+            <Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right", }} keepMounted transformOrigin={{ vertical: "top", horizontal: "right", }} open={Boolean(anchorEl)} onClose={handleClose} sx={{ "& .MuiPaper-root": { borderRadius: "12px", padding: "12px", width: "280px", backgroundColor: "#FFFFFF", boxShadow: "0 12px 40px rgba(123, 31, 162, 0.25)", border: "1px solid rgba(123, 31, 162, 0.1)", }, }} >
+              <Typography className="standard-text-color" disabled sx={{ color: '#1a1a1a', fontWeight: 600, fontSize: '0.95rem' }}>{userInfo?.loginId}</Typography>
+              <Divider sx={{ backgroundColor: '#D3D3D3', my: 1.5 }} />
+              <Typography className="standard-text-color" disabled sx={{ color: '#1a1a1a', fontWeight: 500, fontSize: '0.9rem' }}>{user?.role}</Typography>
+              <Divider sx={{ backgroundColor: '#D3D3D3', my: 1.5 }} />
               <Typography onClick={handleClose} sx={{ "& .MuiButton-root": { width: "100%", justifyContent: "flex-start", textTransform: "none", padding: "10px", paddingLeft: "20px", } }} >
                 <SignOutButton />
               </Typography>
@@ -264,24 +313,93 @@ export default function MiniDrawer() {
       <Drawer className="drawer-container" variant="permanent" open={open}>
         <DrawerHeader className="drawer-header">
           {open ? (
-            <Typography color='black' align="left" variant="h6" wrap component="div">
+            <Typography 
+              align="left" 
+              variant="h6" 
+              wrap 
+              component="div"
+              sx={{
+                background: 'linear-gradient(135deg, #7b1fa2, #512da8)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 700,
+                fontSize: '1.1rem',
+                lineHeight: 1.3,
+              }}
+            >
               {pageConstants.companyTitleExpandedFH} < br /> {pageConstants.companyTitleExpandedSH}
             </Typography>
           ) : (
-            <Typography color='black' align="left" variant="h4" noWrap component="div" sx={{ ...(open && { display: 'none' }) }}>
+            <Typography 
+              align="left" 
+              variant="h4" 
+              noWrap 
+              component="div" 
+              sx={{ 
+                ...(open && { display: 'none' }),
+                background: 'linear-gradient(135deg, #7b1fa2, #512da8)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 700,
+              }}
+            >
               {pageConstants.companyTitleCollapsed}
             </Typography>
           )}
         </DrawerHeader>
-        <List sx={{ backgroundImage: 'inherit' }}>
-          {userAccessiblePages?.map((componentObj) => (
-            <ListItem key={componentObj.href} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton className="hover-effect" component={Link} to={componentObj.href} sx={{ minHeight: 60, justifyContent: open ? 'initial' : 'center', px: 2.5 }} >
-                <img src={[componentObj.iconPath]} alt="Description" className="navigation-menu-item-icon" />
-                <ListItemText primary={componentObj.label} sx={{ opacity: open ? 1 : 0, wordWrap: open ? 'break-word' : 'none', whiteSpace: open ? 'normal' : 'none' }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+        <List sx={{ background: 'transparent', py: 1 }}>
+          {userAccessiblePages?.map((componentObj) => {
+            const isActive = currentRoute === componentObj.href || currentRoute.startsWith(componentObj.href + '/');
+            return (
+              <ListItem key={componentObj.href} disablePadding sx={{ display: 'block', mb: 0.5 }}>
+                <ListItemButton 
+                  className="hover-effect" 
+                  component={Link} 
+                  to={componentObj.href} 
+                  selected={isActive}
+                  sx={{ 
+                    minHeight: 56, 
+                    justifyContent: open ? 'initial' : 'center', 
+                    px: 2.5,
+                    borderRadius: '8px',
+                    mx: 1,
+                    color: isActive ? '#7b1fa2' : '#000000',
+                    backgroundColor: isActive ? 'rgba(123, 31, 162, 0.15)' : 'transparent',
+                    fontWeight: isActive ? 600 : 500,
+                    '&:hover': {
+                      backgroundColor: isActive ? 'rgba(123, 31, 162, 0.2)' : 'rgba(186, 104, 200, 0.12)',
+                      transform: 'translateX(4px)',
+                    },
+                    '&.Mui-selected': {
+                      backgroundColor: 'rgba(123, 31, 162, 0.15)',
+                      color: '#7b1fa2',
+                      fontWeight: 600,
+                      '&:hover': {
+                        backgroundColor: 'rgba(123, 31, 162, 0.2)',
+                      },
+                    },
+                    transition: 'all 0.3s ease',
+                  }} 
+                >
+                  <img src={[componentObj.iconPath]} alt="Description" className="navigation-menu-item-icon" />
+                  <ListItemText 
+                    primary={componentObj.label} 
+                    sx={{ 
+                      opacity: open ? 1 : 0, 
+                      wordWrap: open ? 'break-word' : 'none', 
+                      whiteSpace: open ? 'normal' : 'none',
+                      '& .MuiTypography-root': {
+                        fontSize: '0.95rem',
+                        fontWeight: isActive ? 600 : 500,
+                      },
+                    }} 
+                  />
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1 }}>

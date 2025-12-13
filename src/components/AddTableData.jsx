@@ -20,16 +20,34 @@ import { useState, useEffect } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: '#1a1a1a',
     color: theme.palette.common.white,
-    padding: "8px 16px", // Adjust the padding to reduce height
+    padding: "14px 16px",
+    fontWeight: 600,
+    fontSize: '0.95rem',
+    letterSpacing: '0.3px',
+    borderBottom: 'none',
   },
-  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
+  [`&.${tableCellClasses.body}`]: { 
+    fontSize: 14,
+    padding: "12px 16px",
+    color: '#333',
+    borderBottom: '1px solid rgba(123, 31, 162, 0.1)',
+  },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": { backgroundColor: theme.palette.action.hover },
-  "&:last-child td, &:last-child th": { border: 0 },
+  backgroundColor: theme.palette.common.white,
+  "&:nth-of-type(even)": {
+    backgroundColor: 'rgba(123, 31, 162, 0.03)',
+  },
+  "&:hover": {
+    backgroundColor: 'rgba(123, 31, 162, 0.08)',
+    transition: 'background-color 0.2s ease',
+  },
+  "&:last-child td": {
+    borderBottom: 'none',
+  },
 }));
 
 function AddTableData({
@@ -167,7 +185,15 @@ function AddTableData({
 
   return (
     <Box marginLeft={10} marginRight={10} sx={{ flexGrow: 1 }}>
-      <TableContainer component={Paper}>
+      <TableContainer 
+        component={Paper} 
+        sx={{ 
+          borderRadius: '12px',
+          boxShadow: '0 4px 16px rgba(123, 31, 162, 0.15)',
+          border: '1px solid rgba(123, 31, 162, 0.1)',
+          overflow: 'hidden',
+        }}
+      >
         <Table sx={{ minWidth: 500 }} aria-label="customized table">
           <TableHead>
             <TableRow>

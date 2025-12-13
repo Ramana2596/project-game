@@ -119,7 +119,7 @@ const WelcomeHeader = ({
                             boxShadow: '0 4px 12px rgba(123, 31, 162, 0.3)'
                         }}
                     >
-                        Sign In
+                        Log In
                     </Button>
                 </Box>
             </Toolbar>

@@ -4,14 +4,14 @@
 
 .drawer-container {
     .MuiPaper-root {
-        background-image: radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%)) !important;
+        background: linear-gradient(180deg, #fafbfc 0%, #f6f5f8 100%) !important;
     }
 
-    border-right: 2px solid var(--separator-gray) !important;
+    border-right: 1px solid rgba(123, 31, 162, 0.15) !important;
 }
 
 .drawer-header {
-    border-bottom: 1px solid var(--separator-gray);
+    border-bottom: 1px solid rgba(123, 31, 162, 0.15);
 }
 
 .drawer.expanded+.content,

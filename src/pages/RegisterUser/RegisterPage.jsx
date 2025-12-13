@@ -114,11 +114,50 @@ const Register = () => {
   };
 
   return (
-    <Container>
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <Card sx={{ boxShadow: 3, width: 500, maxWidth: 800, padding: 2 }}>
+    <Container sx={{
+      minHeight: '100vh',
+      background: 'linear-gradient(180deg, #fafbfc 0%, #f6f5f8 100%)',
+      position: 'relative',
+      py: 4,
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: '-50%',
+        width: '200%',
+        height: '100%',
+        background: 'radial-gradient(circle at 20% 50%, rgba(123, 31, 162, 0.08) 0%, transparent 50%)',
+        animation: 'float 20s ease-in-out infinite',
+        zIndex: 0,
+      },
+    }}>
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh',
+        position: 'relative',
+        zIndex: 1,
+      }}>
+        <Card sx={{ 
+          boxShadow: '0 20px 60px rgba(123, 31, 162, 0.25)', 
+          width: 500, 
+          maxWidth: 800, 
+          padding: 4,
+          borderRadius: '20px',
+          background: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(123, 31, 162, 0.1)',
+        }}>
           <CardContent>
-            <Typography variant="h4" component="h1" gutterBottom className='standard-title-color'>
+            <Typography variant="h4" component="h1" gutterBottom className='standard-title-color' sx={{ 
+              mb: 3,
+              fontSize: 'clamp(1.75rem, 8vw, 2.25rem)',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
+              fontWeight: 700,
+              letterSpacing: '-0.3px',
+              lineHeight: 1.2,
+            }}>
               Register User Profile
             </Typography>
             <RegistrationForm

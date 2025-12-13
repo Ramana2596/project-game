@@ -22,15 +22,14 @@ const Card = styled(MuiCard)(({ theme }) => ({
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: "auto",
+  borderRadius: "20px",
   [theme.breakpoints.up("sm")]: {
     maxWidth: "450px",
   },
-  boxShadow:
-    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-  ...theme.applyStyles("dark", {
-    boxShadow:
-      "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
-  }),
+  boxShadow: "0 20px 60px rgba(123, 31, 162, 0.25)",
+  background: "rgba(255, 255, 255, 0.95)",
+  backdropFilter: "blur(12px)",
+  border: "1px solid rgba(123, 31, 162, 0.1)",
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
@@ -46,13 +45,20 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
     position: "absolute",
     zIndex: -1,
     inset: 0,
-    backgroundImage:
-      "radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))",
+    background: "linear-gradient(180deg, #fafbfc 0%, #f6f5f8 100%)",
     backgroundRepeat: "no-repeat",
-    ...theme.applyStyles("dark", {
-      backgroundImage:
-        "radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))",
-    }),
+  },
+  "&::after": {
+    content: '""',
+    display: "block",
+    position: "absolute",
+    zIndex: -1,
+    top: 0,
+    left: "-50%",
+    width: "200%",
+    height: "100%",
+    background: "radial-gradient(circle at 20% 50%, rgba(123, 31, 162, 0.08) 0%, transparent 50%)",
+    animation: "float 20s ease-in-out infinite",
   },
 }));
 
@@ -113,9 +119,19 @@ export default function SignIn(props) {
             component="h1"
             variant="h4"
             className="standard-title-color"
-            sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
+            sx={{ 
+              width: "100%", 
+              fontSize: "clamp(1.75rem, 8vw, 2.25rem)",
+              mb: 2,
+              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
+              fontWeight: 700,
+              letterSpacing: '-0.3px',
+              lineHeight: 1.3,
+              overflow: 'visible',
+              pb: 0.5,
+            }}
           >
-            Sign in
+            Log in
           </Typography>
           <Box
             component="form"
@@ -125,7 +141,7 @@ export default function SignIn(props) {
               display: "flex",
               flexDirection: "column",
               width: "100%",
-              gap: 2,
+              gap: 2.5,
             }}
           >
             <FormControl>
@@ -142,7 +158,27 @@ export default function SignIn(props) {
                 fullWidth
                 variant="outlined"
                 color={emailError ? "error" : "primary"}
-                sx={{ ariaLabel: "email" }}
+                sx={{ 
+                  ariaLabel: "email",
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '8px',
+                    fontSize: '15px',
+                    height: '52px',
+                    padding: '0 16px',
+                    '& input': {
+                      padding: '16px 0',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#7b1fa2',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#7b1fa2',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: '14px',
+                  },
+                }}
               />
             </FormControl>
             <Button
@@ -151,7 +187,7 @@ export default function SignIn(props) {
               className="standard-button-primary-button"
               onClick={handleSignIn}
             >
-              Sign in
+              Log in
             </Button>
           </Box>
         </Card>

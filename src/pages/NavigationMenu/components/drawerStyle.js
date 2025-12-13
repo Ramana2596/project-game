@@ -29,11 +29,13 @@ const closedMixin = (theme) => ({
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-    borderBottom: `1px solid ${theme.palette.grey[400]}`,
-    borderRight: `1px solid ${theme.palette.grey[400]}`,
+    borderBottom: `1px solid rgba(123, 31, 162, 0.15)`,
+    borderRight: `1px solid rgba(123, 31, 162, 0.15)`,
     padding: theme.spacing(0, 1),
+    background: 'linear-gradient(180deg, #fafbfc 0%, #f6f5f8 100%)',
     // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
+    minHeight: '64px',
+    height: '64px',
     justifyContent: 'space-between',
 }));
 
@@ -45,9 +47,10 @@ const AppBar = styled(MuiAppBar, {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: '#ffffff',
-    boxShadow: 'none',
-    borderBottom: `1px solid ${theme.palette.grey[400]}`,
+    background: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(12px)',
+    boxShadow: '0 2px 8px rgba(123, 31, 162, 0.1)',
+    borderBottom: `1px solid rgba(123, 31, 162, 0.15)`,
     ...(open && {
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,
@@ -63,15 +66,23 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
-        borderRight: `1px solid ${theme.palette.grey[400]} !important`,
+        borderRight: `1px solid rgba(123, 31, 162, 0.15) !important`,
         boxSizing: 'border-box',
         ...(open && {
             ...openedMixin(theme),
-            '& .MuiDrawer-paper': openedMixin(theme),
+            '& .MuiDrawer-paper': {
+                ...openedMixin(theme),
+                background: 'linear-gradient(180deg, #fafbfc 0%, #f6f5f8 100%)',
+                borderRight: `1px solid rgba(123, 31, 162, 0.15)`,
+            },
         }),
         ...(!open && {
             ...closedMixin(theme),
-            '& .MuiDrawer-paper': closedMixin(theme),
+            '& .MuiDrawer-paper': {
+                ...closedMixin(theme),
+                background: 'linear-gradient(180deg, #fafbfc 0%, #f6f5f8 100%)',
+                borderRight: `1px solid rgba(123, 31, 162, 0.15)`,
+            },
         }),
     }),
 );

@@ -20,7 +20,7 @@ const RegistrationForm = ({
   <form onSubmit={onSubmit}>
     
     {/* 🔹 Name Input */}
-    <Box sx={{ mb: 2 }}>
+    <Box sx={{ mb: 2.5 }}>
       <TextField
         label="Name"
         variant="outlined"
@@ -28,11 +28,27 @@ const RegistrationForm = ({
         value={name}
         required
         onChange={onNameChange}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '12px',
+            fontSize: '15px',
+            padding: '10px 14px',
+            '&:hover fieldset': {
+              borderColor: '#7b1fa2',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#7b1fa2',
+            },
+          },
+          '& .MuiInputLabel-root': {
+            fontSize: '14px',
+          },
+        }}
       />
     </Box>
 
     {/* 🔹 Email Input with validation */}
-    <Box sx={{ mb: 2 }}>
+    <Box sx={{ mb: 2.5 }}>
       <TextField
         label="Email"
         variant="outlined"
@@ -42,20 +58,47 @@ const RegistrationForm = ({
         onChange={onEmailChange}
         error={error}
         helperText={error ? "Please enter a valid email address" : ""}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '12px',
+            fontSize: '15px',
+            padding: '10px 14px',
+            '&:hover fieldset': {
+              borderColor: '#7b1fa2',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#7b1fa2',
+            },
+          },
+          '& .MuiInputLabel-root': {
+            fontSize: '14px',
+          },
+        }}
       />
     </Box>
 
     {/* 🔹 Profession Dropdown */}
-    <Box sx={{ mb: 2 }}>
+    <Box sx={{ mb: 2.5 }}>
       <FormControl fullWidth variant="outlined" required>
-        <InputLabel>Profession</InputLabel>
+        <InputLabel sx={{ fontSize: '14px' }}>Profession</InputLabel>
         <Select
           value={profession}
           onChange={onProfessionChange}
           label="Profession"
+          sx={{
+            borderRadius: '12px',
+            fontSize: '15px',
+            padding: '10px 14px',
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#7b1fa2',
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#7b1fa2',
+            },
+          }}
         >
           {professionInfo.map((prof) => (
-            <MenuItem key={prof.PF_Id} value={prof.PF_Id}>
+            <MenuItem key={prof.PF_Id} value={prof.PF_Id} sx={{ fontSize: '14px' }}>
               {prof.Profession}
             </MenuItem>
           ))}
@@ -64,16 +107,27 @@ const RegistrationForm = ({
     </Box>
 
     {/* 🔹 Learning Mode Dropdown */}
-    <Box sx={{ mb: 2 }}>
+    <Box sx={{ mb: 2.5 }}>
       <FormControl fullWidth variant="outlined" required>
-        <InputLabel>Learning Mode</InputLabel>
+        <InputLabel sx={{ fontSize: '14px' }}>Learning Mode</InputLabel>
         <Select
           value={learningMode}
           onChange={onLearningModeChange}
           label="Learning Mode"
+          sx={{
+            borderRadius: '12px',
+            fontSize: '15px',
+            padding: '10px 14px',
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#7b1fa2',
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#7b1fa2',
+            },
+          }}
         >
           {learningModes.map((mode) => (
-            <MenuItem key={mode.Learn_Mode} value={mode.Learn_Mode}>
+            <MenuItem key={mode.Learn_Mode} value={mode.Learn_Mode} sx={{ fontSize: '14px' }}>
               {mode.Learn_Mode}
             </MenuItem>
           ))}
@@ -82,16 +136,17 @@ const RegistrationForm = ({
     </Box>
 
     {/* 🔹 Action Buttons */}
-    <Button type="submit" className="standard-button-primary-button" color="primary">
-      Register
-    </Button>
-    <Button
-      sx={{ marginLeft: 30 }}
-      className="standard-button-secondary-button"
-      onClick={onBack}
-    >
-      Back
-    </Button>
+    <Box sx={{ display: 'flex', gap: 2, mt: 3, justifyContent: 'flex-end' }}>
+      <Button
+        className="standard-button-secondary-button"
+        onClick={onBack}
+      >
+        Back
+      </Button>
+      <Button type="submit" className="standard-button-primary-button" color="primary">
+        Register
+      </Button>
+    </Box>
 
   </form>
 );

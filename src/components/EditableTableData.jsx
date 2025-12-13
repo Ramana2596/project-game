@@ -21,25 +21,38 @@ import { useState, useEffect } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: '#1a1a1a',
     color: theme.palette.common.white,
-    padding: "8px 16px", // Adjust the padding to reduce height
+    padding: "14px 16px",
+    fontWeight: 600,
+    fontSize: '0.95rem',
+    letterSpacing: '0.3px',
+    borderBottom: 'none',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+    padding: "12px 16px",
+    color: '#333',
+    borderBottom: '1px solid rgba(123, 31, 162, 0.1)',
   },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
+  backgroundColor: theme.palette.common.white,
+  "&:nth-of-type(even)": {
+    backgroundColor: 'rgba(123, 31, 162, 0.03)',
   },
-  "&:last-child td, &:last-child th": {
-    border: 0,
+  "&:hover": {
+    backgroundColor: 'rgba(123, 31, 162, 0.08)',
+    transition: 'background-color 0.2s ease',
+  },
+  "&:last-child td": {
+    borderBottom: 'none',
   },
   "&.deleted": {
-    backgroundColor: theme.palette.action.disabledBackground,
+    backgroundColor: 'rgba(123, 31, 162, 0.05)',
     textDecoration: "line-through",
+    opacity: 0.6,
   },
 }));
 

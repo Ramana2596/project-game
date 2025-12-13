@@ -57,20 +57,48 @@ const BreadCrumb = ({ currentRoute }) => {
     }, [currentRoute]);
 
     return (
-        <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
+        <Breadcrumbs 
+            separator={<NavigateNextIcon fontSize="small" sx={{ color: '#0078db' }} />} 
+            aria-label="breadcrumb"
+        >
             {breadcrumbs.map((crumb, index) => (
                 crumb.href ? (
                     <Link
                         key={index}
                         href={crumb.href}
                         onClick={(event) => handleClick(event, crumb.href)}
+                        sx={{ 
+                            textDecoration: 'none',
+                            '&:hover': {
+                                textDecoration: 'underline',
+                            },
+                        }}
                     >
-                        <Typography align='left' className="header-title" variant='h5' component="div">
+                        <Typography 
+                            align='left' 
+                            variant='h5' 
+                            component="div"
+                            sx={{ 
+                                color: '#0078db',
+                                fontWeight: 500,
+                                fontSize: '1rem',
+                            }}
+                        >
                             {crumb.label}
                         </Typography>
                     </Link>
                 ) : (
-                    <Typography key={index} align='left' className="header-title" variant='h5' component="div">
+                    <Typography 
+                        key={index} 
+                        align='left' 
+                        variant='h5' 
+                        component="div"
+                        sx={{ 
+                            color: '#0078db',
+                            fontWeight: 500,
+                            fontSize: '1rem',
+                        }}
+                    >
                         {crumb.label}
                     </Typography>
                 )

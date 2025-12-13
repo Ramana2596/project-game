@@ -1,5 +1,15 @@
 :root {
-    --pleasant-blue: #57a6ff;
+    /* Purple Theme Colors - Matching Welcome Page */
+    --OMG-primary: #5e2a8a;
+    --OMG-accent: #7b1fa2;
+    --OMG-bg-dark: #16072a;
+    --OMG-purple-gradient: linear-gradient(135deg, #7b1fa2, #512da8);
+    --OMG-purple-light: #f5f3ff;
+    --OMG-purple-lighter: #faf7ff;
+    --OMG-purple-lightest: #f0ecff;
+    
+    /* Legacy colors - keeping for backward compatibility */
+    --pleasant-blue: #7b1fa2;
     --light-gray: #D3D3D3;
     --silver: #C0C0C0;
     --dark-gray: #333333;
@@ -7,27 +17,30 @@
     --dim-gray: #696969;
     --standard-white: #FFFFFF;
     --standard-black: #000000;
-    --separator-gray: #CCCCCC;
-    --common-blue: #0078db;
-    --hover-blue: #0078db;
-    --dark-blue: #00008B;
-    --light-blue: #8dc1fa;
-    --button-primary-border-color: #1d7a56;
-    --button-primary-color: #46cd99;
+    --separator-gray: #E0E0E0;
+    --common-blue: #7b1fa2;
+    --hover-blue: #512da8;
+    --dark-blue: #5e2a8a;
+    --light-blue: #e0d4f0;
+    --button-primary-border-color: #512da8;
+    --button-primary-color: #7b1fa2;
     --button-secondary-color: #f8f8f8;
-    --button-secondary-border-color: #585757;
+    --button-secondary-border-color: #7b1fa2;
     --button-third-color: #f2ff7e;
     --button-third-border-color: #585757;
 }
 
 .accordian-title {
-    color: var(--common-blue) !important;
+    color: var(--OMG-accent) !important;
     font-weight: bold !important;
     font-size: large !important;
 }
 
 .header-title {
-    color: var(--common-blue) !important;
+    background: var(--OMG-purple-gradient) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
     font-style: italic !important;
     font-weight: bold !important;
 }
@@ -37,13 +50,22 @@
 }
 
 .standard-title-color {
-    color: var(--dark-blue) !important;
+    background: var(--OMG-purple-gradient) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-weight: 700 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+    letter-spacing: -0.5px !important;
+    line-height: 1.2 !important;
 }
 
 .hover-effect:hover {
     color: var(--standard-white) !important;
     border-color: var(--standard-white) !important;
-    background-color: var(--hover-blue) !important;
+    background: var(--OMG-purple-gradient) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(123, 31, 162, 0.35) !important;
 }
 
 .page-container {
@@ -56,34 +78,38 @@
 /* sharedStyles.css */
 .custom-card {
     border: 1px solid var(--separator-gray);
-    /* Light grey border */
-    box-shadow: none !important;
-    /* Remove default shadow */
-    transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    background: white !important;
+    padding: 8px !important;
 }
 
 .custom-card:hover {
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2) !important;
-    /* Apply shadow on hover */
-    border-color: #57a6ff;
-    /* Pleasant blue border on hover */
+    box-shadow: 0 12px 40px rgba(123, 31, 162, 0.25) !important;
+    border-color: var(--OMG-accent) !important;
+    transform: translateY(-4px) !important;
 }
 
 .standard-button-primary-button {
-    padding: 10px 20px !important;
-    font-size: 16px !important;
-    color: var(--standard-black) !important;
-    background-color: var(--button-primary-color) !important;
-    border: 2px solid var(--button-primary-border-color) !important;
-    border-radius: 5px !important;
+    padding: 10px 24px !important;
+    font-size: 15px !important;
+    color: var(--standard-white) !important;
+    background: var(--OMG-purple-gradient) !important;
+    border: none !important;
+    border-radius: 8px !important;
     cursor: pointer !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
     transition: all 0.3s ease !important;
+    box-shadow: 0 8px 24px rgba(123, 31, 162, 0.35) !important;
+    letter-spacing: 0.3px !important;
 }
 
 .standard-button-primary-button:hover {
-    box-shadow: 0 6px 12px var(--button-primary-border-color) !important;
-    font-weight: bold !important;
-    border-radius: 20px !important;
+    box-shadow: 0 12px 32px rgba(123, 31, 162, 0.45) !important;
+    transform: translateY(-2px) !important;
+    border-radius: 8px !important;
 }
 
 .standard-button-primary-button:disabled {
@@ -101,20 +127,24 @@
 }
 
 .standard-button-secondary-button {
-    padding: 10px 20px !important;
-    font-size: 16px !important;
-    color: var(--standard-black) !important;
-    background-color: var(--button-secondary-color) !important;
-    border: 2px solid var(--button-secondary-border-color) !important;
-    border-radius: 5px !important;
+    padding: 10px 24px !important;
+    font-size: 15px !important;
+    color: var(--OMG-accent) !important;
+    background-color: transparent !important;
+    border: 2px solid var(--OMG-accent) !important;
+    border-radius: 8px !important;
     cursor: pointer !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
     transition: all 0.3s ease !important;
+    letter-spacing: 0.3px !important;
 }
 
 .standard-button-secondary-button:hover {
-    box-shadow: 0 6px 12px var(--button-secondary-border-color) !important;
-    font-weight: bold !important;
-    border-radius: 20px !important;
+    border-color: var(--OMG-primary) !important;
+    background-color: rgba(123, 31, 162, 0.06) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(123, 31, 162, 0.2) !important;
 }
 
 .standard-button-secondary-button:disabled {
@@ -132,20 +162,23 @@
 }
 
 .standard-button-third-button {
-    padding: 10px 20px !important;
-    font-size: 16px !important;
+    padding: 10px 24px !important;
+    font-size: 15px !important;
     color: var(--standard-black) !important;
     background-color: var(--button-third-color) !important;
     border: 2px solid var(--button-third-border-color) !important;
-    border-radius: 5px !important;
+    border-radius: 8px !important;
     cursor: pointer !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
     transition: all 0.3s ease !important;
+    letter-spacing: 0.3px !important;
 }
 
 .standard-button-third-button:hover {
-    box-shadow: 0 6px 12px var(--button-secondary-border-color) !important;
-    font-weight: bold !important;
-    border-radius: 20px !important;
+    box-shadow: 0 6px 12px rgba(123, 31, 162, 0.25) !important;
+    border-color: var(--OMG-accent) !important;
+    transform: translateY(-2px) !important;
 }
 
 .standard-button-third-button:disabled {
@@ -160,4 +193,47 @@
     /* Remove hover effect */
     opacity: 0.6;
     /* Slight transparency */
+}
+
+/* Modern animations - matching Welcome page */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
