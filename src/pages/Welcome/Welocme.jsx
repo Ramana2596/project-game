@@ -28,7 +28,6 @@ const WelcomePage = () => {
     const shortTitles = {
         aboutSimulation: 'Welcome',
         aboutUs: 'About',
-        aboutApp: 'OMG?',
         forWhom: 'For Whom',
         howItWorks: 'How it Works',
         benefits: 'Learning',
