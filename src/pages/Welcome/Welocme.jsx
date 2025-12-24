@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import '../Welcome/styles/pageStyle.css';
 import { pageConstants } from './constants/pageConstants';
-import imgHowItWorks from '../../assets/welcome-page/how-it-works.jpg';
-import imgWhatIsOmg from '../../assets/welcome-page/what-is-omg.jpg';
-import imgLearningOutcome from '../../assets/welcome-page/learning-outcome.jpg';
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from './services/service.js';
 import { useNavigate } from "react-router-dom";
+import imgHowItWorks from '../../assets/welcome-page/how-it-works.jpg';
+import imgWhatIsOmg from '../../assets/welcome-page/what-is-omg.jpg';
+import imgLearningOutcome from '../../assets/welcome-page/learning-outcome.jpg';
+import imgforWhom from '../../assets/forWhom.png';
+import imgaboutUs from '../../assets/aboutUs.png';
+
 
 // Component imports
 import WelcomeHeader from './components/WelcomeHeader';
@@ -34,6 +37,9 @@ const WelcomePage = () => {
     };
 
     const imagesByKey = {
+        aboutsimulation: imgWhatIsOmg,
+        forwhom: imgforWhom,
+        aboutus: imgaboutUs,
         howitworks: imgHowItWorks,
         whatisomg: imgWhatIsOmg,
         learningoutcome: imgLearningOutcome,
@@ -60,6 +66,9 @@ const WelcomePage = () => {
     const findImageForSection = (section) => {
         if (!section) return null;
         const key = (section.key || '').toLowerCase();
+        if (key === 'aboutsimulation') return { name: 'welcome', src: imagesByKey.aboutsimulation };
+        if (key === 'forwhom') return { name: 'for-whom', src: imagesByKey.forwhom };
+        if (key === 'aboutus') return { name: 'about-us', src: imagesByKey.aboutus };
         if (key === 'howitworks') return { name: 'how-it-works', src: imagesByKey.howitworks };
         if (key === 'aboutapp') return { name: 'what-is-omg', src: imagesByKey.whatisomg };
         if (key === 'benefits') return { name: 'learning-outcome', src: imagesByKey.learningoutcome };
