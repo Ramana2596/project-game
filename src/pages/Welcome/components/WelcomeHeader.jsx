@@ -2,7 +2,8 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { pageConstants } from '../constants/pageConstants';
-import omgLogo from '../../../assets/omg-logo.png';
+import omgLogo from '../../../assets/OMGTree6.png';
+
 
 const WelcomeHeader = ({
     activeSection,
