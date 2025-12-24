@@ -52,7 +52,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                                     lineHeight: 1.2
                                 }}
                             >
-                                Master Business Operations
+                                Master your Operations Management Skills !
                             </Typography>
                             <Typography
                                 variant="h6"
@@ -144,7 +144,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                                 }}>
                                     <RocketLaunchIcon sx={{ fontSize: 80, color: 'white', opacity: 0.9 }} />
                                     <Typography variant="h5" sx={{ color: 'white', fontWeight: 700, textAlign: 'center' }}>
-                                        Interactive Business Simulation
+                                        Real-time Interactive Operations Management
                                     </Typography>
                                 </Box>
                             </Box>
