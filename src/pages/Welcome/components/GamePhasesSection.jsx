@@ -3,12 +3,12 @@ import { Box, Container, Grid, Typography } from '@mui/material';
 
 const GamePhasesSection = () => {
     const phases = [
-        { icon: '🎯', title: 'Strategy', description: 'Plan your approach' },
+        { icon: '🎯', title: 'Strategic Decision', description: 'Plan your Strategy' },
         { icon: '📊', title: 'Market Dynamics', description: 'Analyze market trends' },
         { icon: '⚙️', title: 'Operational Decision', description: 'Make key decisions' },
         { icon: '▶️', title: 'Simulation Run', description: 'Execute simulation' },
-        { icon: '📈', title: 'Financial Reports', description: 'Review financials' },
-        { icon: '📋', title: 'Final Report', description: 'Generate final results' }
+        { icon: '📈', title: 'Financial Reports', description: 'Review Financial Statement' },
+        { icon: '📋', title: 'Assessment Card', description: ' Assessment & Feedback' }
     ];
 
     return (
