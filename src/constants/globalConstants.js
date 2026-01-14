@@ -134,7 +134,7 @@ import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx"
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
-//import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
+import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 import OpsPlanInput from "../pages/OpsPlanInput/OpsPlanInput.jsx";
 import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";
@@ -539,16 +539,14 @@ export const componentList = [
           routeElement: <FeatureManagement />
         },
       */
-     /*
       {
         iconPath: appSettings,
-        id: "UI 21 270",
+        id: "UI 21 271",
         label: "Simulation Play",
         path: "/simulationPlay",
         href: "/operationGame/SimulationPlay",
         routeElement: <SimulationPlay />
       },
-      */
       {
         iconPath: appSettings,
         id: "UI 21 270",
