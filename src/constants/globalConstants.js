@@ -503,6 +503,7 @@ export const componentList = [
         href: "/operationGame/opsPlanInput",
         routeElement: <OpsPlanInput />
       },
+      /*
       {
         iconPath: operationalDecisionInputIcon,
         id: "UI 11 050",
@@ -511,6 +512,7 @@ export const componentList = [
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
       },
+      */
       {
         iconPath: asterikIcon,
         id: "UI 22 280",
