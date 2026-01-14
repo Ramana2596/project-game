@@ -134,10 +134,12 @@ import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx"
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
-import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
+//import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 import OpsPlanInput from "../pages/OpsPlanInput/OpsPlanInput.jsx";
+import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";
 
+// import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
 
@@ -502,6 +504,14 @@ export const componentList = [
         routeElement: <OpsPlanInput />
       },
       {
+        iconPath: operationalDecisionInputIcon,
+        id: "UI 11 050",
+        label: "Team Plan",
+        path: "/teamPlanScreen",
+        href: "/operationGame/teamPlanScreen",
+        routeElement: <TeamPlanScreen />
+      },
+      {
         iconPath: asterikIcon,
         id: "UI 22 280",
         label: "Check Minimum Operation Input",
@@ -529,6 +539,7 @@ export const componentList = [
           routeElement: <FeatureManagement />
         },
       */
+     /*
       {
         iconPath: appSettings,
         id: "UI 21 270",
@@ -536,6 +547,15 @@ export const componentList = [
         path: "/simulationPlay",
         href: "/operationGame/SimulationPlay",
         routeElement: <SimulationPlay />
+      },
+      */
+      {
+        iconPath: appSettings,
+        id: "UI 21 270",
+        label: "Demo Wizard",
+        path: "/demoWizard",
+        href: "/operationGame/DemoWizard",
+        routeElement: <DemoWizard />
       }
 
     ],
