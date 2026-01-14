@@ -113,9 +113,11 @@ import ToastMessage from '../../components/ToastMessage.jsx';
 import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
 import AssetCatalogBatch from '../AssetCatalogBatch/AssetCatalogBatch.jsx';
 import EnrollUserDialog from '../RegisterUser/EnrollUserDialog.jsx';
-import SimulationPlay from '../SimulationPlay/SimulationPlay.jsx';
+//import SimulationPlay from '../SimulationPlay/SimulationPlay.jsx';
 import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
 import OpsPlanInput from '../OpsPlanInput/OpsPlanInput.jsx';
+import DemoWizard from '../SimulationPlay/DemoWizard.jsx';
+//import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
@@ -357,9 +359,12 @@ export default function MiniDrawer() {
           <Route path='/AssetCatalogTeam' element={<AssetCatalogTeam />} />
           <Route path='/AssetCatalogBatch' element={<AssetCatalogBatch />} />
           <Route path='/BatchMgt' element={<BatchMgt />} />
-          <Route path='/SimulationPlay' element={<SimulationPlay />} />
+          {/*<Route path='/SimulationPlay' element={<SimulationPlay />} /> */}
           <Route path='/BatchMaster' element={<BatchMstDetails />} />
           <Route path='/opsPlanInput' element={<OpsPlanInput />} />
+          <Route path='/demoWizard' element={<DemoWizard />} />
+          
+          {/*<Route path='/TeamPlanScreen' element={<TeamPlanScreen />} /> */}
           {/*<Route path='/AssetCatalog' element={<AssetCatalog />} /> */}
 
         </Routes>
