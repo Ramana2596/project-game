@@ -5,7 +5,8 @@ import {
 } from "@mui/material";
 import { 
   EmojiPeople, RocketLaunch, Assignment, Insights, Settings, 
-  PlayCircle, AccountBalance, EventAvailable, SportsScore, CheckCircle, Lock, Close
+  PlayCircle, AccountBalance, EventAvailable, SportsScore, 
+  CheckCircle, Lock, Close, Visibility
 } from "@mui/icons-material";
 import confetti from "canvas-confetti";
 import { useUser } from "../../core/access/userContext";
@@ -13,15 +14,15 @@ import { updateSimulationPlay, getTeamProgressStatus } from "./services/service"
 import ToastMessage from "../../components/ToastMessage";
 import { API_STATUS } from "../../utils/statusCodes";
 
-// Finalized Steps Configuration with Developer Hints
+// Configuration
 const stepsMaster = [
   { stageNo: 1, label: "Initialization", viewLabel: "None", icon: <EmojiPeople />, color: "#6A1B9A", isLoop: false },
   { stageNo: 2, label: "Launch Strategy", viewLabel: "Draft of Strategy Proposed", icon: <RocketLaunch />, color: "#C62828", isLoop: false },
   { stageNo: 3, label: "Strategy Plan", viewLabel: "Your Strategy Plan Decision", icon: <Assignment />, color: "#AD1457", isLoop: false },
   { stageNo: 4, label: "Market Input", viewLabel: "Market Input for the Current Period", icon: <Insights />, color: "#0288D1", isLoop: true },
   { stageNo: 5, label: "Operation Decision", viewLabel: "Operation Decision for Current Period", icon: <Settings />, color: "#1565C0", isLoop: true },
-  { stageNo: 6, label: "Simulation of Operations", viewLabel: "None: (Operations Completed)", icon: <PlayCircle />, color: "#00897B", isLoop: true },
-  { stageNo: 7, label: "Financial Statement", viewLabel: "None: (reports compiled)", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
+  { stageNo: 6, label: "Simulation of Operations", viewLabel: "None", icon: <PlayCircle />, color: "#00897B", isLoop: true },
+  { stageNo: 7, label: "Financial Statement", viewLabel: "None", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
   { stageNo: 8, label: "Period Closure", viewLabel: "Financial Statement for Current Period", icon: <EventAvailable />, color: "#EF6C00", isLoop: true },
   { stageNo: 9, label: "Simulation Completion", viewLabel: "Consolidated Financial Statement", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
 ];
@@ -109,9 +110,6 @@ export default function DemoWizard() {
   };
 
   const handleStepClick = async (step) => {
-    setActiveStep(step);
-    setDrawerOpen(true); // Open Drawer with Step context
-
     setActionLoading(true);
     try {
       const response = await updateSimulationPlay({
@@ -128,10 +126,15 @@ export default function DemoWizard() {
     }
   };
 
+  const handleOpenReport = (step) => {
+    setActiveStep(step);
+    setDrawerOpen(true);
+  };
+
   if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', p: 10 }}><CircularProgress /></Box>;
 
   return (
-    <Box sx={{ maxWidth: 520, margin: "0 auto", p: 3 }}>
+    <Box sx={{ maxWidth: 600, margin: "0 auto", p: 3 }}>
       
       {/* Header & Progress */}
       <Box sx={{ mb: 3 }}>
@@ -152,34 +155,30 @@ export default function DemoWizard() {
         </Paper>
       </Box>
 
-      {/* Interactive Step Buttons */}
-      <Stack spacing={1.5}>
+      {/* Interactive Step Rows */}
+      <Stack spacing={2}>
         {stepsMaster.map((step) => {
           const status = getStageStatus(step);
           const isActive = status === "ACTIVE";
           const isDone = status === "COMPLETED" || status === "FINISHED";
-          
-          // Tooltip shows the action or the view content
-          const tooltipTitle = isActive 
-            ? `Current Action: ${step.label}` 
-            : isDone 
-            ? (step.viewLabel === "None" ? "Step Completed" : `View: ${step.viewLabel}`)
-            : "Locked: Complete previous steps";
+          const hasReport = step.viewLabel !== "None";
 
           return (
-            <Tooltip key={step.stageNo} title={tooltipTitle} arrow placement="right">
-              <span style={{ width: '100%' }}>
+            <Stack key={step.stageNo} direction="row" alignItems="center" spacing={1.5}>
+              {/* Main Step Action Button */}
+              <Tooltip title={isActive ? "Click to process this step" : "Step Status"} arrow placement="top">
                 <Button
                   fullWidth
                   disabled={!isActive || actionLoading}
                   onClick={() => handleStepClick(step)}
                   sx={{
+                    flex: 1,
                     justifyContent: "space-between", py: 2, px: 3, borderRadius: "12px", textTransform: "none",
                     backgroundColor: isActive ? step.color : isDone ? "#f0fdf4" : "#f8fafc",
                     color: isActive ? "#fff" : isDone ? "#16a34a" : "#475569",
                     opacity: !isActive && !isDone ? 0.6 : 1,
                     boxShadow: isActive ? `0 6px 15px ${step.color}66` : "none",
-                    transition: "all 0.3s ease",
+                    transition: "all 0.2s ease-in-out",
                     "&.Mui-disabled": { 
                       backgroundColor: isActive ? step.color : isDone ? "#f0fdf4" : "#f8fafc", 
                       color: isActive ? "#fff" : isDone ? "#16a34a" : "#475569" 
@@ -192,15 +191,38 @@ export default function DemoWizard() {
                       {`Step ${step.stageNo}: ${step.label}`}
                     </Typography>
                   </Stack>
-                  <Box>{isDone ? <CheckCircle /> : !isActive ? <Lock fontSize="small" /> : null}</Box>
+                  <Box>{isDone ? <CheckCircle fontSize="small" /> : !isActive ? <Lock fontSize="small" /> : null}</Box>
                 </Button>
-              </span>
-            </Tooltip>
+              </Tooltip>
+
+              {/* View Icon - Outside Button Area */}
+              <Box sx={{ width: 45, display: 'flex', justifyContent: 'center' }}>
+                {isDone && hasReport ? (
+                  <Tooltip title={`View Report: ${step.viewLabel}`} arrow>
+                    <IconButton 
+                      onClick={() => handleOpenReport(step)}
+                      sx={{ 
+                        bgcolor: "primary.main", 
+                        color: "white",
+                        "&:hover": { bgcolor: "primary.dark", transform: "scale(1.1)" },
+                        transition: "0.2s"
+                      }}
+                      size="medium"
+                    >
+                      <Visibility fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                    // Hidden placeholder for consistent alignment
+                    <IconButton disabled sx={{ opacity: 0 }}><Visibility /></IconButton>
+                )}
+              </Box>
+            </Stack>
           );
         })}
       </Stack>
 
-      {/* WORKSPACE DRAWER: Displays info based on finalized viewLabels */}
+      {/* WORKSPACE DRAWER */}
       <Drawer
         anchor="right"
         open={drawerOpen}
@@ -209,8 +231,10 @@ export default function DemoWizard() {
       >
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
           <Box>
-            <Typography variant="h5" fontWeight="900">{activeStep?.label}</Typography>
-            <Typography variant="caption" color="text.secondary">Stage ID: {activeStep?.stageNo}</Typography>
+            <Typography variant="h5" fontWeight="900">Report: {activeStep?.label}</Typography>
+            <Typography variant="caption" color="text.secondary">
+              Period {currentPeriodNo} | Stage ID: {activeStep?.stageNo}
+            </Typography>
           </Box>
           <IconButton onClick={() => setDrawerOpen(false)}><Close /></IconButton>
         </Stack>
@@ -218,20 +242,12 @@ export default function DemoWizard() {
 
         <Paper variant="outlined" sx={{ p: 4, bgcolor: "#f8fafc", borderStyle: 'dashed', textAlign: 'center', minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Box>
-            {activeStep?.viewLabel === "None" || activeStep?.viewLabel.includes("None") ? (
-                <Typography color="text.secondary">
-                    Processing complete. No specific data records to display for this stage.
-                </Typography>
-            ) : (
-                <>
-                    <Typography variant="h6" color="primary" fontWeight="bold" gutterBottom>
-                        {activeStep?.viewLabel}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mt: 2, fontStyle: 'italic', color: 'text.secondary' }}>
-                        [Developer Placeholder]: Map the API data for Period {currentPeriodNo} here.
-                    </Typography>
-                </>
-            )}
+            <Typography variant="h6" color="primary" fontWeight="bold" gutterBottom>
+              {activeStep?.viewLabel}
+            </Typography>
+            <Typography variant="body1" sx={{ mt: 2, fontStyle: 'italic', color: 'text.secondary' }}>
+              [Developer Placeholder]: Map the API data for Period {currentPeriodNo} here.
+            </Typography>
           </Box>
         </Paper>
       </Drawer>
