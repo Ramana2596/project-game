@@ -16,15 +16,15 @@ import { API_STATUS } from "../../utils/statusCodes";
 
 // Configuration
 const stepsMaster = [
-  { stageNo: 1, label: "Initialization", viewLabel: "None", icon: <EmojiPeople />, color: "#6A1B9A", isLoop: false },
-  { stageNo: 2, label: "Launch Strategy", viewLabel: "Draft of Strategy Proposed", icon: <RocketLaunch />, color: "#C62828", isLoop: false },
-  { stageNo: 3, label: "Strategy Plan", viewLabel: "Your Strategy Plan Decision", icon: <Assignment />, color: "#AD1457", isLoop: false },
-  { stageNo: 4, label: "Market Input", viewLabel: "Market Input for the Current Period", icon: <Insights />, color: "#0288D1", isLoop: true },
-  { stageNo: 5, label: "Operation Decision", viewLabel: "Operation Decision for Current Period", icon: <Settings />, color: "#1565C0", isLoop: true },
-  { stageNo: 6, label: "Simulation of Operations", viewLabel: "None", icon: <PlayCircle />, color: "#00897B", isLoop: true },
-  { stageNo: 7, label: "Financial Statement", viewLabel: "None", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
-  { stageNo: 8, label: "Period Closure", viewLabel: "Financial Statement for Current Period", icon: <EventAvailable />, color: "#EF6C00", isLoop: true },
-  { stageNo: 9, label: "Simulation Completion", viewLabel: "Consolidated Financial Statement", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
+  { stageNo: 1, label: "Company Profile", viewLabel: "Meet Your Company", icon: <EmojiPeople />, color: "#6A1B9A", isLoop: false },
+  { stageNo: 2, label: "Strategy Draft", viewLabel: "Brainstorming", icon: <RocketLaunch />, color: "#C62828", isLoop: false },
+  { stageNo: 3, label: "Action Plan", viewLabel: "Finalise Strategy", icon: <Assignment />, color: "#AD1457", isLoop: false },
+  { stageNo: 4, label: "Market Intelligence", viewLabel: "Market Trends - Current Period", icon: <Insights />, color: "#0288D1", isLoop: true },
+  { stageNo: 5, label: "Resource Planning", viewLabel: "Operation Decision - Current Period", icon: <Settings />, color: "#1565C0", isLoop: true },
+  { stageNo: 6, label: "Manufacturing - Production", viewLabel: "Manufacturing Phase", icon: <PlayCircle />, color: "#00897B", isLoop: true },
+  { stageNo: 7, label: "Financial Summary", viewLabel: "Compilation of Accounts", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
+  { stageNo: 8, label: "Performance Review", viewLabel: "Financial Statement & Performance Review- Current Period", icon: <EventAvailable />, color: "#EF6C00", isLoop: true },
+  { stageNo: 9, label: "Leaderboard & Results", viewLabel: "Consolidated Reports & Rankings", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
 ];
 
 export default function DemoWizard() {
