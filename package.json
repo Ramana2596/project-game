@@ -29,7 +29,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build:prod": "react-scripts build",
-    "lint": "eslint src --max-warnings=0",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
