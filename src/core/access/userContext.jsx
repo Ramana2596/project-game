@@ -1,27 +1,49 @@
+// File: userContext.jsx
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { componentList } from "../../constants/globalConstants.js";
 
+// Create a context to share user state across the app
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState({ role: null });
-    const [userInfo, setGameInfo] 
-        = useState({ gameId: 'OpsMgt', // default 
-                     gameBatch: null,
-                     gameTeam: null,
-                     isGameLeader: null,
-                     userId: null,
-                     loginId: null,
-                     learnMode: 'Class_Room' // default learning mode
-         });
+    // Define user identity state (used for RBAC and login info)
+    const [user, setUser] = useState({
+        userId: null,
+        loginId: null,
+        rlId: null,
+        role: null
+    });
+
+    // Define participation/game context state (used for learning session info)
+    const [userInfo, setGameInfo] = useState({
+        gameId: 'OpsMgt',
+        gameBatch: null,
+        gameTeam: null,
+        isGameLeader: null,
+        userId: null,
+        loginId: null,
+        learnMode: 'Class_Room'
+    });
+
+    // Store list of accessible page IDs for the user
     const [userAccessablePageIds, setUserAccessablePageIds] = useState(null);
+
+    // Store filtered list of accessible pages/components for rendering
     const [userAccessiblePages, setUserAccessiblePages] = useState(null);
 
-
-    const login = (role) => {
-        setUser({ role });
+    // Handle login: Update user state with backend response
+    const login = (loginResponse) => {
+        setUser(prev => ({
+            ...prev,
+            userId: loginResponse?.User_Id,
+            loginId: loginResponse?.User_Login,
+            rlId: loginResponse?.RL_Id,
+            role: loginResponse?.Role
+        }));
     };
 
+    // Update game/participation info state with backend response
     const setUserInfo = (userInfo) => {
         setGameInfo({
             gameId: userInfo?.Game_Id,
@@ -34,13 +56,17 @@ export const UserProvider = ({ children }) => {
         });
     };
 
-    const setAccessablePageIds = ((accessablePageIdList) => {
+    // Extract accessible page IDs from backend response and store them
+    const setAccessablePageIds = (accessablePageIdList) => {
         if (accessablePageIdList && accessablePageIdList.length > 0) {
-            const tempArray = accessablePageIdList?.map((accessablePageIdObj) => accessablePageIdObj?.uiId);
+            const tempArray = accessablePageIdList.map(
+                (accessablePageIdObj) => accessablePageIdObj?.uiId
+            );
             setUserAccessablePageIds(tempArray);
         }
-    });
+    };
 
+    // Recursively filter component list to include only accessible pages
     const filterComponents = (list, ids) => {
         return list
             .filter(item => ids.includes(item.id))
@@ -50,6 +76,7 @@ export const UserProvider = ({ children }) => {
             }));
     };
 
+    // Whenever accessible page IDs change, update the accessible pages list
     useEffect(() => {
         if (userAccessablePageIds && userAccessablePageIds.length > 0) {
             const filteredArray = filterComponents(componentList, userAccessablePageIds);
@@ -57,20 +84,40 @@ export const UserProvider = ({ children }) => {
         }
     }, [userAccessablePageIds]);
 
+    // Handle logout by clearing user state and accessible pages
     const logout = () => {
-        setUser({ role: null });
+        setUser({
+            userId: null,
+            loginId: null,
+            rlId: null,
+            role: null
+        });
         setUserAccessiblePages(null);
     };
 
+    // Check if user has permission for a specific page ID
     const hasPermission = (permission) => {
         return userAccessablePageIds?.includes(permission);
     };
 
+    // Provide user state and helper functions to the rest of the app
     return (
-        <UserContext.Provider value={{ user, userInfo, userAccessiblePages, login, logout, hasPermission, setAccessablePageIds, setUserInfo }}>
+        <UserContext.Provider
+            value={{
+                user,
+                userInfo,
+                userAccessiblePages,
+                login,
+                logout,
+                hasPermission,
+                setAccessablePageIds,
+                setUserInfo
+            }}
+        >
             {children}
         </UserContext.Provider>
     );
 };
 
+// Custom hook to easily access user context in components
 export const useUser = () => useContext(UserContext);
