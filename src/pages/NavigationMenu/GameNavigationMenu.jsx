@@ -134,10 +134,12 @@ export default function MiniDrawer() {
     message: "",
     isVisible: false,
   });
+
+// Parameters Game_Id and RL_Id are used to fetch user access page IDs
   useEffect(() => {
-    if (user?.role) {
+    if (userInfo?.gameId && user?.rlId) {
       setIsLoading(true);
-      getUserAccessPageIds(user.role)
+      getUserAccessPageIds(userInfo.gameId, user.rlId)
         .then((response) => {
           setAccessablePageIds(response.data);
         })
@@ -146,7 +148,7 @@ export default function MiniDrawer() {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [user?.role]);
+  }, [userInfo?.gameId, user?.rlId]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -363,8 +365,8 @@ export default function MiniDrawer() {
           <Route path='/BatchMaster' element={<BatchMstDetails />} />
           <Route path='/opsPlanInput' element={<OpsPlanInput />} />
           <Route path='/demoWizard' element={<DemoWizard />} />
-          
-          {/*<Route path='/TeamPlanScreen' element={<TeamPlanScreen />} /> */}
+ {/*        <Route path='/TeamPlanScreen' element={<TeamPlanScreen />} />*/}
+
           {/*<Route path='/AssetCatalog' element={<AssetCatalog />} /> */}
 
         </Routes>
