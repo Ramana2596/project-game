@@ -1,18 +1,10 @@
 import api from '../../../core/interceptor/api-interceptor';
-/*
-export function getUserAccessPageIds(userRole) {
-    return api.get('/api/getUserAccessPageIds',
-        {
-            params: { userRole }
-        });
-}
-*/
 
-// Pass gameId and userId instead of just userRole 
-export function getUserAccessPageIds(gameId, userId) {
+// Pass gameId and rlId instead of userRole 
+export function getUserAccessPageIds(gameId, rlId) {
     return api.get('/api/getUserAccessPageIds',
         {
-            params: { gameId, userId }
+            params: { gameId, rlId }
         });
 }
 export function enrollUser(payload) {
