@@ -83,10 +83,16 @@ export default function SignIn(props) {
     // Fetch user details
     getUserDetails({ userEmail: email })
       .then((response) => {
-        // response.data contains the API response: { returnStatus, message, data: [...] }
         const apiData = response?.data?.data?.[0];
         if (apiData) {
-          login(apiData.Role);
+          // Pass full identity info to login()
+          login({
+            User_Id: apiData.User_Id,
+            User_Login: apiData.User_Login,
+            RL_Id: apiData.RL_Id,
+            Role: apiData.Role
+          });
+          // Pass full game context to setUserInfo()
           setUserInfo(apiData);
           navigate("/operationGame/homePage");
         } else {
