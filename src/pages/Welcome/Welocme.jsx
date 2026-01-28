@@ -45,24 +45,58 @@ const WelcomePage = () => {
         learningoutcome: imgLearningOutcome,
     };
 
-    // Handle demo user login
+    // Handle demo user login 
+    // Complete info (User_Id,User_Login, RL_Id, Role)
     const handleDemoLogin = () => {
         setIsLoading(true);
-        getUserDetails({ userEmail: 'guest@guest.com' })
+        getUserDetails({ userEmail: 'guest@guest.com', gameId: 'OpsMgt' })
             .then((response) => {
-                const userData = response?.data?.data?.[0];
-                if (userData) {
-                    login(userData.Role);
+                const { returnStatus, data } = response.data;
+
+                if (returnStatus === 0 && data && data.length > 0) {
+                    const userData = data[0];
+
+                    // Pass user state: userId, loginId, rlId, role
+                    login({
+                        User_Id: userData.User_Id,
+                        User_Login: userData.User_Login,
+                        RL_Id: userData.RL_Id,
+                        Role: userData.Role
+                    });
+                    // Set Game Context (userInfo)
                     setUserInfo(userData);
+
+                    navigate("/operationGame/homePage");
+                } else {
+                    console.warn("Login failed:", response.data.message);
                     navigate("/operationGame/homePage");
                 }
             })
-            .catch(() => {
+            .catch((error) => {
+                console.error("Error during demo login:", error);
                 navigate("/operationGame/homePage");
             })
             .finally(() => setIsLoading(false));
     };
 
+    /*      // Only Role
+        const handleDemoLogin = () => {
+            setIsLoading(true);
+            getUserDetails({ userEmail: 'guest@guest.com' })
+                .then((response) => {
+                    const userData = response?.data?.data?.[0];
+                    if (userData) {
+                        login(userData.Role);
+                        setUserInfo(userData);
+                        navigate("/operationGame/homePage");
+                    }
+                })
+                .catch(() => {
+                    navigate("/operationGame/homePage");
+                })
+                .finally(() => setIsLoading(false));
+        };
+    */
     const findImageForSection = (section) => {
         if (!section) return null;
         const key = (section.key || '').toLowerCase();
