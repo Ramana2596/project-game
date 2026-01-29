@@ -72,17 +72,21 @@ export const UserProvider = ({ children }) => {
 // Extract API Call data and accessible page IDs from backend response and store them
     const setAccessablePageIds = (accessablePageIdList) => {
         if (accessablePageIdList && accessablePageIdList.length > 0) {
+            // Normalize backend fields (Snake_Case) → frontend camelCase
+            const normalizedList = accessablePageIdList.map(obj => ({
+                uiId: obj.UI_Id,          // convert to camelCase
+                shortName: obj.Short_Name // convert to camelCase
+            }));
 
-            // API Call data for RBAC screens (complete objects)
-            setUserRbacScreens(accessablePageIdList);
+            // Store full RBAC objects in camelCase
+            setUserRbacScreens(normalizedList);
 
-            // accessible page IDs only, untouched for existing logic
-            const tempArray = accessablePageIdList.map(
-                (obj) => obj?.uiId
-            );
+            // Extract just the uiIds for filtering
+            const tempArray = normalizedList.map(obj => obj.uiId);
             setUserAccessablePageIds(tempArray);
         }
     };
+
 
 
     // Recursively filter component list to include only accessible pages
