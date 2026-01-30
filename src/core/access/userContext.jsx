@@ -1,13 +1,14 @@
-// File: userContext.jsx
+// src/core/access/userContext.jsx
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { componentList } from "../../constants/globalConstants.js";
 
-// Create a context to share user state across the app
+// Create context to share user, RBAC, and game session across app
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    // Define user identity state (used for RBAC and login info)
+
+    // Store basic login identity and role information
     const [user, setUser] = useState({
         userId: null,
         loginId: null,
@@ -15,7 +16,7 @@ export const UserProvider = ({ children }) => {
         role: null
     });
 
-    // Define participation/game context state (used for learning session info)
+    // Store current game/session participation info for the user
     const [userInfo, setGameInfo] = useState({
         gameId: 'OpsMgt',
         gameBatch: null,
@@ -26,16 +27,13 @@ export const UserProvider = ({ children }) => {
         learnMode: 'Class_Room'
     });
 
-    // Store list of accessible page IDs for the user
-    const [userAccessablePageIds, setUserAccessablePageIds] = useState(null);
+    // Store list of UI IDs user has access to (RBAC)
+    const [userAccessiblePageIds, setUserAccessiblePageIds] = useState(null);
 
-    // Store filtered list of accessible pages/components for rendering
+    // Store filtered component list based on RBAC for menu/navigation
     const [userAccessiblePages, setUserAccessiblePages] = useState(null);
-    
-    // Store list of RBAC screens for the user (all fields from backend response)
-    const [userRbacScreens, setUserRbacScreens] = useState([]);
 
-    // Handle login: Update user state with backend response
+    // Update login identity after successful authentication
     const login = (loginResponse) => {
         setUser(prev => ({
             ...prev,
@@ -46,7 +44,7 @@ export const UserProvider = ({ children }) => {
         }));
     };
 
-    // Update game/participation info state with backend response
+    // Update game/team participation info after team selection
     const setUserInfo = (userInfo) => {
         setGameInfo({
             gameId: userInfo?.Game_Id,
@@ -58,56 +56,39 @@ export const UserProvider = ({ children }) => {
             learnMode: userInfo?.Learn_Mode ? userInfo?.Learn_Mode : 'Class_Room',
         });
     };
-/*
-    // Extract accessible page IDs from backend response and store them
-    const setAccessablePageIds = (accessablePageIdList) => {
-        if (accessablePageIdList && accessablePageIdList.length > 0) {
-            const tempArray = accessablePageIdList.map(
-                (accessablePageIdObj) => accessablePageIdObj?.uiId
-            );
-            setUserAccessablePageIds(tempArray);
-        }
-    };
-*/
-// Extract API Call data and accessible page IDs from backend response and store them
-    const setAccessablePageIds = (accessablePageIdList) => {
-        if (accessablePageIdList && accessablePageIdList.length > 0) {
-            // Normalize backend fields (Snake_Case) → frontend camelCase
-            const normalizedList = accessablePageIdList.map(obj => ({
-                uiId: obj.UI_Id,          // convert to camelCase
-                shortName: obj.Short_Name // convert to camelCase
+
+    // Convert backend Snake_Case RBAC response into frontend camelCase structure
+    const setAccessiblePageIds = (accessiblePageIdList) => {
+        if (accessiblePageIdList && accessiblePageIdList.length > 0) {
+
+            const normalizedList = accessiblePageIdList.map(obj => ({
+                uiId: obj.UI_Id,
+                shortName: obj.Short_Name
             }));
 
-            // Store full RBAC objects in camelCase
-            setUserRbacScreens(normalizedList);
-
-            // Extract just the uiIds for filtering
-            const tempArray = normalizedList.map(obj => obj.uiId);
-            setUserAccessablePageIds(tempArray);
+            setUserAccessiblePageIds(normalizedList); 
         }
     };
 
-
-
-    // Recursively filter component list to include only accessible pages
-    const filterComponents = (list, ids) => {
+    // Recursively filter componentList to keep only RBAC allowed pages
+    const filterComponents = (list, accessList) => {
         return list
-            .filter(item => ids.includes(item.id))
+            .filter(item => accessList.some(accessObj => accessObj.uiId === item.id))
             .map(item => ({
                 ...item,
-                children: item.children ? filterComponents(item.children, ids) : [],
+                children: item.children ? filterComponents(item.children, accessList) : [],
             }));
     };
 
-    // Whenever accessible page IDs change, update the accessible pages list
+    // Whenever RBAC list changes, recompute accessible menu/pages
     useEffect(() => {
-        if (userAccessablePageIds && userAccessablePageIds.length > 0) {
-            const filteredArray = filterComponents(componentList, userAccessablePageIds);
+        if (userAccessiblePageIds && userAccessiblePageIds.length > 0) {
+            const filteredArray = filterComponents(componentList, userAccessiblePageIds);
             setUserAccessiblePages(filteredArray);
         }
-    }, [userAccessablePageIds]);
+    }, [userAccessiblePageIds]);
 
-    // Handle logout by clearing user state and accessible pages
+    // Clear all user, RBAC, and session info on logout
     const logout = () => {
         setUser({
             userId: null,
@@ -116,27 +97,28 @@ export const UserProvider = ({ children }) => {
             role: null
         });
         setUserAccessiblePages(null);
-        setUserAccessablePageIds(null);   // added
-        setUserRbacScreens([]);          // added
+        setUserAccessiblePageIds(null);
     };
 
-    // Check if user has permission for a specific page ID
+    // Check if user has permission to access a given UI screen
     const hasPermission = (permission) => {
-        return userAccessablePageIds?.includes(permission);
+        return userAccessiblePageIds?.some(accessObj => accessObj.uiId === permission);
     };
 
-    // Provide user state and helper functions to the rest of the app
+    // Provide user, RBAC, and helper functions to entire app (with alias for old spelling)
     return (
         <UserContext.Provider
             value={{
                 user,
                 userInfo,
+                userAccessiblePageIds, // Correct name
+                userAccessablePageIds: userAccessiblePageIds, //Alias: OLD (misspelt)/ correct name 
                 userAccessiblePages,
-                userRbacScreens, // DB response for RBAC screens
                 login,
                 logout,
                 hasPermission,
-                setAccessablePageIds,
+                setAccessiblePageIds, // Correct function name
+                setAccessablePageIds: setAccessiblePageIds, // Alias function: OLD (misspelt)/ correct name
                 setUserInfo
             }}
         >
@@ -145,5 +127,5 @@ export const UserProvider = ({ children }) => {
     );
 };
 
-// Custom hook to easily access user context in components
+// Custom hook for easy access to UserContext anywhere in the app
 export const useUser = () => useContext(UserContext);
