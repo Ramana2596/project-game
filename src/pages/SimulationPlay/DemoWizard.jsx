@@ -1,142 +1,163 @@
+// src/pages/SimulationPlay/DemoWizard.jsx
+
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
-  Button, Typography, CircularProgress, Box, Stack,
-  LinearProgress, Paper, Tooltip, Drawer, IconButton, Divider
+  Button, Typography, CircularProgress, Box, Stack,LinearProgress,
+  Paper, Tooltip, IconButton
 } from "@mui/material";
-import { 
-  EmojiPeople, RocketLaunch, Assignment, Insights, Settings, 
-  PlayCircle, AccountBalance, EventAvailable, SportsScore, 
-  CheckCircle, Lock, Close, Visibility
+import {
+  EmojiPeople, RocketLaunch, Assignment, Insights, Settings,
+  PlayCircle, AccountBalance, EventAvailable, SportsScore,
+  CheckCircle, Lock, Visibility
 } from "@mui/icons-material";
 import confetti from "canvas-confetti";
 import { useUser } from "../../core/access/userContext";
+import { formatDate } from "../../utils/formatDate";
 import { updateSimulationPlay, getTeamProgressStatus } from "./services/service";
 import ToastMessage from "../../components/ToastMessage";
 import { API_STATUS } from "../../utils/statusCodes";
+import ReportDrawer from "../../wizardReports/ReportDrawer";
+import { REPORT_REGISTRY } from "../../wizardReports/reportRegistry";
 
-// Configuration
+
+// ===== Master definition of stages (UI only)
 const stepsMaster = [
-  { stageNo: 1, label: "Company Profile", viewLabel: "Meet Your Company", icon: <EmojiPeople />, color: "#6A1B9A", isLoop: false },
-  { stageNo: 2, label: "Strategy Draft", viewLabel: "Brainstorming", icon: <RocketLaunch />, color: "#C62828", isLoop: false },
-  { stageNo: 3, label: "Action Plan", viewLabel: "Finalise Strategy", icon: <Assignment />, color: "#AD1457", isLoop: false },
-  { stageNo: 4, label: "Market Intelligence", viewLabel: "Market Trends - Current Period", icon: <Insights />, color: "#0288D1", isLoop: true },
-  { stageNo: 5, label: "Resource Planning", viewLabel: "Operation Decision - Current Period", icon: <Settings />, color: "#1565C0", isLoop: true },
-  { stageNo: 6, label: "Manufacturing - Production", viewLabel: "Manufacturing Phase", icon: <PlayCircle />, color: "#00897B", isLoop: true },
-  { stageNo: 7, label: "Financial Summary", viewLabel: "Compilation of Accounts", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
-  { stageNo: 8, label: "Performance Review", viewLabel: "Financial Statement & Performance Review- Current Period", icon: <EventAvailable />, color: "#EF6C00", isLoop: true },
-  { stageNo: 9, label: "Leaderboard & Results", viewLabel: "Consolidated Reports & Rankings", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
+  { stageNo: 1, label: "Company Profile", icon: <EmojiPeople />, color: "#6A1B9A", isLoop: false },
+  { stageNo: 2, label: "Strategy Draft", icon: <RocketLaunch />, color: "#C62828", isLoop: false },
+  { stageNo: 3, label: "Strategic Plan - Input Your Decision", icon: <Assignment />, color: "#AD1457", isLoop: false },
+  { stageNo: 4, label: "Market Intelligence", icon: <Insights />, color: "#0288D1", isLoop: true },
+  { stageNo: 5, label: "Operations Plan - Input Your Decision", icon: <Settings />, color: "#1565C0", isLoop: true },
+  { stageNo: 6, label: "Simulation - Business Cycles", icon: <PlayCircle />, color: "#00897B", isLoop: true },
+  { stageNo: 7, label: "Financial Outcomes", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
+  { stageNo: 8, label: "Manufacturing Performance Review", icon: <EventAvailable />, color: "#EF6C00", isLoop: true },
+  { stageNo: 9, label: "KPI & Team Results", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
 ];
 
 export default function DemoWizard() {
-  const { userInfo } = useUser();
-  
-  // Simulation State
+
+  // ===== User context
+  const { userInfo, userAccessiblePageIds } = useUser(); // corrected camelCase
+  console.log("RBAC", userAccessiblePageIds);
+
+  // Map uiId → shortName for tooltips
+  const screenMap = useMemo(() => {
+    const map = {};
+    (userAccessiblePageIds || []).forEach(s => {
+      map[s.uiId] = s.shortName;
+    });
+    return map;
+  }, [userAccessiblePageIds]);
+
+  // Tooltip for Reports (view icon)
+  const getReportTooltip = (stageNo) => {
+    const reports = REPORT_REGISTRY[stageNo] || [];
+    const names = reports.map(uiId => screenMap[uiId]).filter(Boolean);
+    if (!names.length) return "No reports";
+    return names.length > 3 ? names.slice(0, 3).join(", ") + " ⋯" : names.join(", ");
+  };
+
+  // ===== Simulation progress state
   const [currentStage, setCurrentStage] = useState(1);
-  const [currentProgressStage, setCurrentProgressStage] = useState(""); 
+  const [currentProgressStage, setCurrentProgressStage] = useState("");
   const [currentPeriodDate, setCurrentPeriodDate] = useState(null);
   const [completedStage, setCompletedStage] = useState(0);
   const [currentPeriodNo, setCurrentPeriodNo] = useState(1);
   const [completedPeriodNo, setCompletedPeriodNo] = useState(0);
   const [totalPeriod, setTotalPeriod] = useState(1);
-  
-  // UI States
+
+  // ===== UI state
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [alertData, setAlertData] = useState({ severity: "info", message: "", isVisible: false });
 
-  // Drawer States
+  // ===== Report drawer state
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(null);
+  const [activeStageNo, setActiveStageNo] = useState(null);
 
-  const FINAL_STAGE_NO = useMemo(() => Math.max(...stepsMaster.map(s => s.stageNo)), []);
+  const FINAL_STAGE_NO = useMemo(
+    () => Math.max(...stepsMaster.map(s => s.stageNo)),
+    []
+  );
 
-  const simpleProgress = useMemo(() => {
-    if (currentStage >= FINAL_STAGE_NO) return 100;
-    return ((currentPeriodNo - 1) / totalPeriod) * 100;
-  }, [currentPeriodNo, totalPeriod, currentStage, FINAL_STAGE_NO]);
-
+  // ===== Fetch progress from API
   const fetchProgress = useCallback(async () => {
     if (!userInfo?.gameId) return;
     try {
       const response = await getTeamProgressStatus({
-        gameId: userInfo.gameId, gameBatch: userInfo.gameBatch, gameTeam: userInfo.gameTeam
+        gameId: userInfo.gameId,
+        gameBatch: userInfo.gameBatch,
+        gameTeam: userInfo.gameTeam
       });
-      if (response?.data?.data) {
-        const d = response.data.data;
+      const d = response?.data?.data;
+      if (d) {
         setCurrentStage(d.Current_Stage_No);
-        setCurrentProgressStage(d.Current_Progress_Stage || ""); 
+        setCurrentProgressStage(d.Current_Progress_Stage || "");
         setCurrentPeriodDate(d.Current_Period);
         setCompletedStage(d.Completed_Stage_No);
         setCurrentPeriodNo(d.Current_Period_No);
         setCompletedPeriodNo(d.Completed_Period_No);
         setTotalPeriod(d.Total_Period);
       }
-    } catch (error) { console.error("Database sync failed", error); } 
-    finally { setLoading(false); }
+    } catch (err) {
+      console.error("Progress fetch failed", err);
+    } finally {
+      setLoading(false);
+    }
   }, [userInfo]);
 
   useEffect(() => { fetchProgress(); }, [fetchProgress]);
 
-  // Celebration Logic
+  // ===== Confetti celebration when simulation completes
   useEffect(() => {
     if (currentStage >= FINAL_STAGE_NO) {
-      const duration = 5 * 1000;
-      const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 2000 };
-      const randomInRange = (min, max) => Math.random() * (max - min) + min;
-
-      const interval = setInterval(() => {
-        const timeLeft = animationEnd - Date.now();
-        if (timeLeft <= 0) return clearInterval(interval);
-        const particleCount = 50 * (timeLeft / duration);
-        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
-      }, 250);
-      return () => clearInterval(interval);
+      confetti({ particleCount: 200, spread: 180 });
     }
   }, [currentStage, FINAL_STAGE_NO]);
 
-  const formatDateLabel = (dateStr) => {
-    if (!dateStr) return "";
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-  };
-
+  // ===== Determine stage status
   const getStageStatus = (step) => {
     if (currentStage >= FINAL_STAGE_NO) return "FINISHED";
     if (currentStage === step.stageNo) return "ACTIVE";
-    const isDoneGlobally = completedStage >= step.stageNo;
-    return step.isLoop ? (isDoneGlobally && (currentPeriodNo === completedPeriodNo) ? "COMPLETED" : "LOCKED") : (isDoneGlobally ? "COMPLETED" : "LOCKED");
+    return completedStage >= step.stageNo ? "COMPLETED" : "LOCKED";
   };
 
+  // ===== Handle step button click
   const handleStepClick = async (step) => {
     setActionLoading(true);
     try {
       const response = await updateSimulationPlay({
-        gameId: userInfo.gameId, gameBatch: userInfo.gameBatch, gameTeam: userInfo.gameTeam,
-        currentStage: step.stageNo, currentPeriod: currentPeriodNo,
+        gameId: userInfo.gameId,
+        gameBatch: userInfo.gameBatch,
+        gameTeam: userInfo.gameTeam,
+        currentStage: step.stageNo,
+        currentPeriod: currentPeriodNo,
       });
       if (response?.data?.returnValue === API_STATUS.SUCCESS) {
         await fetchProgress();
       }
-    } catch (error) { 
-        setAlertData({ severity: "error", message: "Error updating status", isVisible: true }); 
-    } finally { 
-        setActionLoading(false); 
+    } catch {
+      setAlertData({ severity: "error", message: "Error updating status", isVisible: true });
+    } finally {
+      setActionLoading(false);
     }
   };
 
-  const handleOpenReport = (step) => {
-    setActiveStep(step);
+  // ===== Open report drawer
+  const handleOpenReport = (stageNo) => {
+    setActiveStageNo(stageNo);
     setDrawerOpen(true);
   };
 
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', p: 10 }}><CircularProgress /></Box>;
+  if (loading) return (
+    <Box sx={{ display: "flex", justifyContent: "center", p: 10 }}>
+      <CircularProgress />
+    </Box>
+  );
 
   return (
     <Box sx={{ maxWidth: 600, margin: "0 auto", p: 3 }}>
-      
-      {/* Header & Progress */}
+
+      {/* ===== Header & Progress ===== */}
       <Box sx={{ mb: 3 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
           <Typography variant="h5" fontWeight="900">Simulation Progress</Typography>
@@ -144,115 +165,104 @@ export default function DemoWizard() {
             Period {currentPeriodNo} / {totalPeriod}
           </Typography>
         </Stack>
-        <LinearProgress variant="determinate" value={simpleProgress} sx={{ height: 12, borderRadius: 6, mb: 3, bgcolor: "#e2e8f0" }} />
 
+        {/* Stage number above progress bar */}
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 0.5 }}>
+          <Typography variant="caption" color="text.secondary">
+            Stage {currentStage} of {FINAL_STAGE_NO}
+          </Typography>
+        </Box>
+
+        {/* Horizontal progress */}
+        <LinearProgress
+          variant="determinate"
+          value={(completedStage / FINAL_STAGE_NO) * 100}
+          sx={{ height: 12, borderRadius: 6, mb: 3, bgcolor: "#e2e8f0" }}
+        />
+
+        {/* Status panel */}
         <Paper elevation={0} sx={{ p: 2, bgcolor: "#f8fafc", borderRadius: 2, border: "1px solid #cbd5e1" }}>
           <Typography variant="h6" fontWeight="700" color="primary.dark" textAlign="center">
-            {currentStage >= FINAL_STAGE_NO 
-              ? "🏆 Simulation Completed! 🏆" 
-              : `Team-Progress: ${formatDateLabel(currentPeriodDate)} ${currentProgressStage}`}
+            {currentStage >= FINAL_STAGE_NO
+              ? "🏆 Simulation Completed! 🏆"
+              : `Team-Progress: ${formatDate(currentPeriodDate)} ${currentProgressStage}`}
           </Typography>
         </Paper>
       </Box>
 
-      {/* Interactive Step Rows */}
+      {/* ===== Stage buttons with tooltips ===== */}
       <Stack spacing={2}>
-        {stepsMaster.map((step) => {
+        {stepsMaster.map(step => {
           const status = getStageStatus(step);
           const isActive = status === "ACTIVE";
           const isDone = status === "COMPLETED" || status === "FINISHED";
-          const hasReport = step.viewLabel !== "None";
 
           return (
-            <Stack key={step.stageNo} direction="row" alignItems="center" spacing={1.5}>
-              {/* Main Step Action Button */}
-              <Tooltip title={isActive ? "Click to process this step" : "Step Status"} arrow placement="top">
-                <Button
-                  fullWidth
-                  disabled={!isActive || actionLoading}
-                  onClick={() => handleStepClick(step)}
-                  sx={{
-                    flex: 1,
-                    justifyContent: "space-between", py: 2, px: 3, borderRadius: "12px", textTransform: "none",
-                    backgroundColor: isActive ? step.color : isDone ? "#f0fdf4" : "#f8fafc",
-                    color: isActive ? "#fff" : isDone ? "#16a34a" : "#475569",
-                    opacity: !isActive && !isDone ? 0.6 : 1,
-                    boxShadow: isActive ? `0 6px 15px ${step.color}66` : "none",
-                    transition: "all 0.2s ease-in-out",
-                    "&.Mui-disabled": { 
-                      backgroundColor: isActive ? step.color : isDone ? "#f0fdf4" : "#f8fafc", 
-                      color: isActive ? "#fff" : isDone ? "#16a34a" : "#475569" 
-                    }
-                  }}
-                >
-                  <Stack direction="row" spacing={2} alignItems="center">
-                    {actionLoading && isActive ? <CircularProgress size={18} color="inherit" /> : step.icon}
-                    <Typography variant="body1" fontWeight={isActive ? "bold" : "500"}>
-                      {`Step ${step.stageNo}: ${step.label}`}
-                    </Typography>
-                  </Stack>
-                  <Box>{isDone ? <CheckCircle fontSize="small" /> : !isActive ? <Lock fontSize="small" /> : null}</Box>
-                </Button>
+            <Stack key={step.stageNo} direction="row" spacing={1.5} alignItems="center">
+              
+              {/* Step Button Tooltip */}
+              <Tooltip title="Click to proceed" arrow>
+                <span style={{ flex: 1 }}>
+                  <Button
+                    fullWidth
+                    disabled={!isActive || actionLoading}
+                    onClick={() => handleStepClick(step)}
+                    sx={{
+                      justifyContent: "space-between",
+                      py: 2,
+                      backgroundColor: isActive ? step.color : isDone ? "#f0fdf4" : "#f8fafc",
+                      color: isActive ? "#fff" : "#475569",
+                    }}
+                  >
+                    <Stack direction="row" spacing={2} alignItems="center">
+                      {actionLoading && isActive
+                        ? <CircularProgress size={18} color="inherit" />
+                        : step.icon}
+                      <Typography>{`Step ${step.stageNo}: ${step.label}`}</Typography>
+                    </Stack>
+                    <Box>
+                      {isDone
+                        ? <CheckCircle fontSize="small" />
+                        : !isActive
+                          ? <Lock fontSize="small" />
+                          : null}
+                    </Box>
+                  </Button>
+                </span>
               </Tooltip>
 
-              {/* View Icon - Outside Button Area */}
-              <Box sx={{ width: 45, display: 'flex', justifyContent: 'center' }}>
-                {isDone && hasReport ? (
-                  <Tooltip title={`View Report: ${step.viewLabel}`} arrow>
-                    <IconButton 
-                      onClick={() => handleOpenReport(step)}
-                      sx={{ 
-                        bgcolor: "primary.main", 
-                        color: "white",
-                        "&:hover": { bgcolor: "primary.dark", transform: "scale(1.1)" },
-                        transition: "0.2s"
-                      }}
-                      size="medium"
-                    >
-                      <Visibility fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                ) : (
-                    // Hidden placeholder for consistent alignment
-                    <IconButton disabled sx={{ opacity: 0 }}><Visibility /></IconButton>
-                )}
-              </Box>
+              {/* View Reports Tooltip */}
+              <Tooltip title={getReportTooltip(step.stageNo)} arrow>
+                <span>
+                  <IconButton
+                    onClick={() => handleOpenReport(step.stageNo)}
+                    disabled={!isDone}
+                    color="primary"
+                  >
+                    <Visibility />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Stack>
           );
         })}
       </Stack>
 
-      {/* WORKSPACE DRAWER */}
-      <Drawer
-        anchor="right"
+      {/* ===== Report Drawer ===== */}
+      <ReportDrawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        PaperProps={{ sx: { width: { xs: '100%', sm: '650px' }, p: 3 } }}
-      >
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-          <Box>
-            <Typography variant="h5" fontWeight="900">Report: {activeStep?.label}</Typography>
-            <Typography variant="caption" color="text.secondary">
-              Period {currentPeriodNo} | Stage ID: {activeStep?.stageNo}
-            </Typography>
-          </Box>
-          <IconButton onClick={() => setDrawerOpen(false)}><Close /></IconButton>
-        </Stack>
-        <Divider sx={{ mb: 3 }} />
+        stageNo={activeStageNo}
+        periodNo={currentPeriodNo}
+      />
 
-        <Paper variant="outlined" sx={{ p: 4, bgcolor: "#f8fafc", borderStyle: 'dashed', textAlign: 'center', minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Box>
-            <Typography variant="h6" color="primary" fontWeight="bold" gutterBottom>
-              {activeStep?.viewLabel}
-            </Typography>
-            <Typography variant="body1" sx={{ mt: 2, fontStyle: 'italic', color: 'text.secondary' }}>
-              [Developer Placeholder]: Map the API data for Period {currentPeriodNo} here.
-            </Typography>
-          </Box>
-        </Paper>
-      </Drawer>
-
-      <ToastMessage open={alertData.isVisible} severity={alertData.severity} message={alertData.message} onClose={() => setAlertData({ ...alertData, isVisible: false })} />
+      {/* ===== Toast messages ===== */}
+      <ToastMessage
+        open={alertData.isVisible}
+        severity={alertData.severity}
+        message={alertData.message}
+        onClose={() => setAlertData({ ...alertData, isVisible: false })}
+      />
     </Box>
   );
 }
