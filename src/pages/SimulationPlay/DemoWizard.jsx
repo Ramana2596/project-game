@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
-  Button, Typography, CircularProgress, Box, Stack,LinearProgress,
+  Button, Typography, CircularProgress, Box, Stack, LinearProgress,
   Paper, Tooltip, IconButton
 } from "@mui/material";
 import {
@@ -19,9 +19,8 @@ import { API_STATUS } from "../../utils/statusCodes";
 import ReportDrawer from "../../wizardReports/ReportDrawer";
 import { REPORT_REGISTRY } from "../../wizardReports/reportRegistry";
 
-
 // ===== Master definition of stages (UI only)
-const stepsMaster = [
+const StagesMaster = [
   { stageNo: 1, label: "Company Profile", icon: <EmojiPeople />, color: "#6A1B9A", isLoop: false },
   { stageNo: 2, label: "Strategy Draft", icon: <RocketLaunch />, color: "#C62828", isLoop: false },
   { stageNo: 3, label: "Strategic Plan - Input Your Decision", icon: <Assignment />, color: "#AD1457", isLoop: false },
@@ -34,10 +33,8 @@ const stepsMaster = [
 ];
 
 export default function DemoWizard() {
-
   // ===== User context
-  const { userInfo, userAccessiblePageIds } = useUser(); // corrected camelCase
-  console.log("RBAC", userAccessiblePageIds);
+  const { userInfo, userAccessiblePageIds } = useUser();
 
   // Map uiId → shortName for tooltips
   const screenMap = useMemo(() => {
@@ -48,7 +45,7 @@ export default function DemoWizard() {
     return map;
   }, [userAccessiblePageIds]);
 
-  // Tooltip for Reports (view icon)
+  // Tooltip for Reports
   const getReportTooltip = (stageNo) => {
     const reports = REPORT_REGISTRY[stageNo] || [];
     const names = reports.map(uiId => screenMap[uiId]).filter(Boolean);
@@ -74,10 +71,11 @@ export default function DemoWizard() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeStageNo, setActiveStageNo] = useState(null);
 
-  const FINAL_STAGE_NO = useMemo(
-    () => Math.max(...stepsMaster.map(s => s.stageNo)),
-    []
-  );
+  // ===== Derived constants
+  const FINAL_STAGE_NO = useMemo(() => Math.max(...StagesMaster.map(s => s.stageNo)), []);
+  
+  // Flag for entire simulation completion
+  const isFinished = completedPeriodNo === totalPeriod && completedStage >= FINAL_STAGE_NO;
 
   // ===== Fetch progress from API
   const fetchProgress = useCallback(async () => {
@@ -107,29 +105,24 @@ export default function DemoWizard() {
 
   useEffect(() => { fetchProgress(); }, [fetchProgress]);
 
-  // ===== Confetti celebration when simulation completes
+  // ===== Confetti celebration triggers once per game completion
+  const [celebrated, setCelebrated] = useState(false);
   useEffect(() => {
-    if (currentStage >= FINAL_STAGE_NO) {
+    if (isFinished && !celebrated) {
       confetti({ particleCount: 200, spread: 180 });
+      setCelebrated(true);
     }
-  }, [currentStage, FINAL_STAGE_NO]);
+  }, [isFinished, celebrated]);
 
-  // ===== Determine stage status
-  const getStageStatus = (step) => {
-    if (currentStage >= FINAL_STAGE_NO) return "FINISHED";
-    if (currentStage === step.stageNo) return "ACTIVE";
-    return completedStage >= step.stageNo ? "COMPLETED" : "LOCKED";
-  };
-
-  // ===== Handle step button click
-  const handleStepClick = async (step) => {
+  // ===== Handle Stage button click
+  const handleStageClick = async (Stage) => {
     setActionLoading(true);
     try {
       const response = await updateSimulationPlay({
         gameId: userInfo.gameId,
         gameBatch: userInfo.gameBatch,
         gameTeam: userInfo.gameTeam,
-        currentStage: step.stageNo,
+        currentStage: Stage.stageNo,
         currentPeriod: currentPeriodNo,
       });
       if (response?.data?.returnValue === API_STATUS.SUCCESS) {
@@ -166,83 +159,95 @@ export default function DemoWizard() {
           </Typography>
         </Stack>
 
-        {/* Stage number above progress bar */}
         <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 0.5 }}>
           <Typography variant="caption" color="text.secondary">
             Stage {currentStage} of {FINAL_STAGE_NO}
           </Typography>
         </Box>
 
-        {/* Horizontal progress */}
         <LinearProgress
           variant="determinate"
-          value={(completedStage / FINAL_STAGE_NO) * 100}
+          value={(completedPeriodNo / totalPeriod) * 100}
           sx={{ height: 12, borderRadius: 6, mb: 3, bgcolor: "#e2e8f0" }}
         />
 
-        {/* Status panel */}
         <Paper elevation={0} sx={{ p: 2, bgcolor: "#f8fafc", borderRadius: 2, border: "1px solid #cbd5e1" }}>
           <Typography variant="h6" fontWeight="700" color="primary.dark" textAlign="center">
-            {currentStage >= FINAL_STAGE_NO
+            {isFinished
               ? "🏆 Simulation Completed! 🏆"
-              : `Team-Progress: ${formatDate(currentPeriodDate)} ${currentProgressStage}`}
+              : `Team Progress:  ${formatDate(currentPeriodDate)} ${currentProgressStage}`}
           </Typography>
         </Paper>
       </Box>
 
       {/* ===== Stage buttons with tooltips ===== */}
       <Stack spacing={2}>
-        {stepsMaster.map(step => {
-          const status = getStageStatus(step);
+        {StagesMaster.map(Stage => {
+          // Determine status per stage: ACTIVE, COMPLETED, LOCKED, FINISHED
+          const status = Stage.stageNo === FINAL_STAGE_NO && isFinished
+            ? "FINISHED"
+            : Stage.stageNo === currentStage
+              ? "ACTIVE"
+              : Stage.stageNo < currentStage
+                ? "COMPLETED"
+                : "LOCKED";
+
           const isActive = status === "ACTIVE";
-          const isDone = status === "COMPLETED" || status === "FINISHED";
+          const canViewReports = status === "COMPLETED" || status === "FINISHED";
 
           return (
-            <Stack key={step.stageNo} direction="row" spacing={1.5} alignItems="center">
-              
-              {/* Step Button Tooltip */}
+            <Stack key={Stage.stageNo} direction="row" spacing={1.5} alignItems="center">
+
+              {/* Stage Button */}
               <Tooltip title="Click to proceed" arrow>
                 <span style={{ flex: 1 }}>
                   <Button
                     fullWidth
                     disabled={!isActive || actionLoading}
-                    onClick={() => handleStepClick(step)}
+                    onClick={() => handleStageClick(Stage)}
                     sx={{
                       justifyContent: "space-between",
-                      py: 2,
-                      backgroundColor: isActive ? step.color : isDone ? "#f0fdf4" : "#f8fafc",
-                      color: isActive ? "#fff" : "#475569",
+                      py: 2, px: 2.5,
+                      backgroundColor: isActive ? Stage.color : status === "LOCKED" ? "#e8edf3" : "#edf7ed",
+                      color: isActive ? "#fff" : "#334155",
+                      borderRadius: "14px",
+                      boxShadow: isActive ? "0 6px 18px rgba(0,0,0,0.18)" : "0 2px 6px rgba(0,0,0,0.06)",
+                      border: "1px solid rgba(0,0,0,0.08)",
+                      transition: "all 0.25s ease",
+                      "&:hover": { boxShadow: "0 8px 22px rgba(0,0,0,0.22)", transform: "translateY(-2px)" },
+                      "&:active": { transform: "translateY(0px)", boxShadow: "0 4px 10px rgba(0,0,0,0.18)" },
+                      opacity: status === "LOCKED" ? 0.75 : 1
                     }}
                   >
                     <Stack direction="row" spacing={2} alignItems="center">
                       {actionLoading && isActive
                         ? <CircularProgress size={18} color="inherit" />
-                        : step.icon}
-                      <Typography>{`Step ${step.stageNo}: ${step.label}`}</Typography>
+                        : Stage.icon}
+                      <Typography>{`Stage ${Stage.stageNo}: ${Stage.label}`}</Typography>
                     </Stack>
                     <Box>
-                      {isDone
-                        ? <CheckCircle fontSize="small" />
-                        : !isActive
-                          ? <Lock fontSize="small" />
-                          : null}
+                      {status === "ACTIVE" && <PlayCircle fontSize="small" />}
+                      {status === "COMPLETED" && <CheckCircle fontSize="small" />}
+                      {status === "LOCKED" && <Lock fontSize="small" />}
+                      {status === "FINISHED" && <CheckCircle fontSize="small" color="success" />}
                     </Box>
                   </Button>
                 </span>
               </Tooltip>
 
-              {/* View Reports Tooltip */}
-              <Tooltip title={getReportTooltip(step.stageNo)} arrow>
+              {/* Reports Button */}
+              <Tooltip title={getReportTooltip(Stage.stageNo)} arrow>
                 <span>
                   <IconButton
-                    onClick={() => handleOpenReport(step.stageNo)}
-                    disabled={!isDone}
+                    onClick={() => handleOpenReport(Stage.stageNo)}
+                    disabled={!canViewReports}
                     color="primary"
                   >
                     <Visibility />
                   </IconButton>
                 </span>
               </Tooltip>
+
             </Stack>
           );
         })}
