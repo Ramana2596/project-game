@@ -1,22 +1,12 @@
 // src/wizardReports/ReportDrawer.jsx
-// Tab-based report viewer for better UX with large reports
 
 import React, { useMemo, useState, useEffect } from "react";
-import {
-  Drawer,
-  Box,
-  Typography,
-  Tabs,
-  Tab,
-  IconButton,
-  Divider
-} from "@mui/material";
+import { Drawer, Box, Typography, Tabs, Tab, IconButton, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useUser } from "../core/access/userContext";
 import { componentList } from "../constants/globalConstants";
 import { REPORT_REGISTRY } from "./reportRegistry";
 
-// ===== Find JSX element by uiId from nested componentList
 const findComponentById = (list, id) => {
   for (const item of list) {
     if (item.id === id) return item.routeElement;
@@ -28,34 +18,39 @@ const findComponentById = (list, id) => {
   return null;
 };
 
-export default function ReportDrawer({ open, onClose, stageNo, periodNo }) {
-
-  // ===== Get RBAC accessible pages
+export default function ReportDrawer({
+  open,
+  onClose,
+  stageNo,
+  completedPeriod,   
+  completedPeriodNo, 
+  stageTitle 
+}) {
   const { userAccessiblePageIds } = useUser();
-
-  // ===== Reports allowed for this stage after RBAC filter
-  const reportsForStage = useMemo(() => {
-    if (!stageNo) return [];
-
-    const stageReports = (REPORT_REGISTRY[stageNo] || []).filter(
-      (uiId) => userAccessiblePageIds?.some((p) => p.uiId === uiId)
-    );
-
-    return stageReports.map((uiId) => {
-      const shortName = userAccessiblePageIds.find((p) => p.uiId === uiId)?.shortName;
-      return { uiId, shortName };
-    });
-  }, [stageNo, userAccessiblePageIds]);
-
-  // ===== Currently selected tab index
   const [tabIndex, setTabIndex] = useState(0);
 
-  // ===== Reset to first report whenever drawer opens or stage changes
   useEffect(() => {
     if (open) setTabIndex(0);
   }, [open, stageNo]);
 
-  // ===== Get selected JSX element from globalConstants
+  // Clean formatting: Only "Feb 2026"
+  const formattedMonth = useMemo(() => {
+    if (!completedPeriod) return "Setup Phase";
+    const date = new Date(completedPeriod);
+    return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  }, [completedPeriod]);
+
+  const reportsForStage = useMemo(() => {
+    if (!stageNo) return [];
+    const stageReports = (REPORT_REGISTRY[stageNo] || []).filter(
+      (uiId) => userAccessiblePageIds?.some((p) => p.uiId === uiId)
+    );
+    return stageReports.map((uiId) => ({
+      uiId,
+      shortName: userAccessiblePageIds.find((p) => p.uiId === uiId)?.shortName
+    }));
+  }, [stageNo, userAccessiblePageIds]);
+
   const selectedElement = reportsForStage[tabIndex]
     ? findComponentById(componentList, reportsForStage[tabIndex].uiId)
     : null;
@@ -65,79 +60,88 @@ export default function ReportDrawer({ open, onClose, stageNo, periodNo }) {
       anchor="right"
       open={open}
       onClose={onClose}
-      PaperProps={{
-        sx: {
-          width: { xs: "100%", sm: "85%", md: "75%" }, // wider view
-          height: "100vh",
-          p: 2,
-          overflow: "hidden"
-        }
-      }}
+      PaperProps={{ sx: { width: "80%", height: "100vh", display: "flex", flexDirection: "column", bgcolor: "#ffffff", overflow: "hidden" }}}
     >
-      {/* ===== Header with title and close */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h6" fontWeight="700">
-          Reports – Stage {stageNo} / Period {periodNo}
-        </Typography>
-        <IconButton onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
+      {/* 1. HEADER: Minimalist Title & Date Only */}
+      <Box sx={{ px: 3, pt: 10, pb: 1.5 }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Typography 
+            variant="h5" 
+            sx={{ 
+              fontWeight: 800, 
+              color: "#1e293b", 
+              fontSize: "1.5rem",
+              letterSpacing: "-0.01em"
+            }}
+          >
+            {stageTitle}
+          </Typography>
+
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Typography 
+              variant="subtitle1" 
+              sx={{ 
+                  color: "primary.main", 
+                  fontWeight: 800, 
+                  fontSize: "1.1rem" 
+              }}
+            >
+              {formattedMonth}
+            </Typography>
+            <IconButton onClick={onClose} size="small" sx={{ bgcolor: '#f1f5f9' }}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Stack>
+        </Stack>
       </Box>
 
-      <Divider sx={{ mb: 2 }} />
+      {/* 2. TABS: High-contrast active state */}
+      <Box sx={{ px: 2, bgcolor: "#fff", borderBottom: "1px solid #e2e8f0" }}>
+        {reportsForStage.length > 0 && (
+          <Tabs
+            value={tabIndex}
+            onChange={(e, newVal) => setTabIndex(newVal)}
+            variant="scrollable"
+            TabIndicatorProps={{ sx: { display: 'none' } }}
+            sx={{
+              minHeight: 40,
+              mb: 0.5,
+              "& .MuiTab-root": { 
+                fontWeight: 900, 
+                fontSize: "0.9rem", 
+                minHeight: 40, 
+                textTransform: "none",
+                px: 3,
+                mx: 0.5,
+                borderRadius: "6px", 
+                color: "#64748b",
+              },
+              "& .MuiTab-root.Mui-selected": { 
+                bgcolor: "primary.main", 
+                color: "#ffffff !important",
+                "&:hover": { bgcolor: "primary.dark" }
+              }
+            }}
+          >
+            {reportsForStage.map((r) => <Tab key={r.uiId} label={r.shortName} />)}
+          </Tabs>
+        )}
+      </Box>
 
-      {/* ===== Tabs for switching between reports */}
-      {reportsForStage.length > 0 && (
-        <Tabs
-          value={tabIndex}
-          onChange={(e, newVal) => setTabIndex(newVal)}
-          variant="scrollable"
-          scrollButtons="auto"
-          sx={{ mb: 2 }}
-        >
-          {reportsForStage.map((r, idx) => (
-            <Tab key={r.uiId} label={r.shortName} />
-          ))}
-        </Tabs>
-      )}
-
-      {/* ===== Report content area with proper dual scrollbars */}
-      <Box
-        sx={{
-          flex: 1,
-          height: "calc(100vh - 140px)",
-          border: "1px solid #e2e8f0",
-          borderRadius: 2,
-          bgcolor: "#ffffff",
-          overflow: "auto"          // vertical scroll belongs here
-        }}
-      >
-        <Box
-          sx={{
-            minWidth: "1200px",     // force width larger than drawer when needed
-            width: "max-content",   // allow content to grow horizontally
-            overflowX: "auto"
-          }}
-        >
+      {/* 3. CONTENT AREA: Flush to Tabs */}
+      <Box sx={{ flex: 1, overflow: "auto", px: 1.5, pt: 0.5, bgcolor: "#f8fafc" }}>
+        <Box sx={{ minWidth: "1200px", bgcolor: "#fff", p: 0.5 }}>
           {selectedElement ? (
-            React.cloneElement(selectedElement, {
-              periodNo,
-              stageNo
+            React.cloneElement(selectedElement, { 
+              completedPeriod, 
+              periodNo: completedPeriodNo, 
+              stageNo 
             })
           ) : (
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              textAlign="center"
-              sx={{ mt: 6 }}
-            >
-              No reports available for this stage.
-            </Typography>
+            <Typography variant="body2" align="center" sx={{ mt: 5 }}>No Data</Typography>
           )}
         </Box>
       </Box>
-
-
     </Drawer>
   );
 }
