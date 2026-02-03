@@ -274,7 +274,8 @@ export default function DemoWizard() {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         stageNo={activeStageNo}
-        periodNo={currentPeriodNo}
+        completedPeriod={progressData?.Completed_Period}    // Pass the Date object
+        completedPeriodNo={progressData?.Completed_Period_No} // Pass the Int
         stageTitle={STAGE_TITLE_MAP[activeStageNo] || ""}
       />
 
