@@ -12,6 +12,10 @@ import imgLearningOutcome from '../../assets/welcome-page/learning-outcome.jpg';
 import imgforWhom from '../../assets/forWhom.png';
 import imgaboutUs from '../../assets/aboutUs.png';
 
+// UI Components
+import ToastMessage from '../../components/ToastMessage';
+// Constants and Logic
+import { API_STATUS, API_STATUS_MAP } from '../../utils/statusCodes';
 
 // Component imports
 import WelcomeHeader from './components/WelcomeHeader';
@@ -27,6 +31,17 @@ const WelcomePage = () => {
     const { setIsLoading } = useLoading();
     const { login, setUserInfo } = useUser();
     const navigate = useNavigate();
+    //  Alert state for toast messages
+    const [alertData, setAlertData] = useState({
+        open: false,
+        message: '',
+        severity: 'info' // 'success' | 'error' | 'warning' | 'info'
+    });
+
+    // Function to close the toast
+    const handleCloseAlert = () => {
+        setAlertData(prev => ({ ...prev, open: false }));
+    };
 
     const shortTitles = {
         aboutSimulation: 'Welcome',
@@ -53,50 +68,39 @@ const WelcomePage = () => {
             .then((response) => {
                 const { returnStatus, data } = response.data;
 
-                if (returnStatus === 0 && data && data.length > 0) {
+                if (returnStatus === API_STATUS.SUCCESS && data?.length > 0) {
                     const userData = data[0];
 
-                    // Pass user state: userId, loginId, rlId, role
                     login({
                         User_Id: userData.User_Id,
                         User_Login: userData.User_Login,
                         RL_Id: userData.RL_Id,
                         Role: userData.Role
                     });
-                    // Set Game Context (userInfo)
-                    setUserInfo(userData);
 
-                    navigate("/operationGame/homePage");
+                    setUserInfo(userData);
+                    navigate("/operationGame/demoWizard");
                 } else {
-                    console.warn("Login failed:", response.data.message);
-                    navigate("/operationGame/homePage");
-                }
-            })
+                    const statusConfig = API_STATUS_MAP[returnStatus] || {};
+                    const apiMessage = response.data.message;
+
+                    setAlertData({
+                        open: true,
+                        message: apiMessage || statusConfig.defaultMsg || "Error",
+                        severity: statusConfig.severity || "error"
+                    });
+                } // This closes the 'else'
+            }) // This closes the '.then'
             .catch((error) => {
-                console.error("Error during demo login:", error);
-                navigate("/operationGame/homePage");
+                setAlertData({
+                    open: true,
+                    message: "Network Error",
+                    severity: "error"
+                });
             })
             .finally(() => setIsLoading(false));
     };
 
-    /*      // Only Role
-        const handleDemoLogin = () => {
-            setIsLoading(true);
-            getUserDetails({ userEmail: 'guest@guest.com' })
-                .then((response) => {
-                    const userData = response?.data?.data?.[0];
-                    if (userData) {
-                        login(userData.Role);
-                        setUserInfo(userData);
-                        navigate("/operationGame/homePage");
-                    }
-                })
-                .catch(() => {
-                    navigate("/operationGame/homePage");
-                })
-                .finally(() => setIsLoading(false));
-        };
-    */
     const findImageForSection = (section) => {
         if (!section) return null;
         const key = (section.key || '').toLowerCase();
@@ -119,7 +123,8 @@ const WelcomePage = () => {
         };
         updateScrollMargin();
         window.addEventListener('resize', updateScrollMargin);
-        return () => window.removeEventListener('resize', updateScrollMargin);
+        return () =>
+            window.removeEventListener('resize', updateScrollMargin);
     }, []);
 
     // Build image order map for alternating layout
@@ -135,6 +140,7 @@ const WelcomePage = () => {
     }, []);
 
     return (
+
         <Box className="welcome-root" sx={{ minHeight: '100vh' }}>
             <WelcomeHeader
                 activeSection={activeSection}
@@ -158,7 +164,14 @@ const WelcomePage = () => {
             <GamePhasesSection />
 
             <WelcomeFooter />
+            <ToastMessage
+                open={alertData.open}
+                message={alertData.message}
+                severity={alertData.severity}
+                onClose={handleCloseAlert}
+            />
         </Box>
+
     );
 }
 
