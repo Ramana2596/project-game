@@ -1,15 +1,17 @@
 // src/pages/SimulationPlay/DemoWizard.jsx
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button, Typography, CircularProgress, Box, Stack, LinearProgress,
-  Paper, Tooltip, IconButton
+  Paper, Tooltip, Avatar, IconButton
 } from "@mui/material";
 import {
   EmojiPeople, RocketLaunch, Assignment, Insights, Settings,
   PlayCircle, AccountBalance, EventAvailable, SportsScore,
-  CheckCircle, Lock, Visibility
+  CheckCircle, Lock, Visibility, Logout, Close, ExitToApp
 } from "@mui/icons-material";
+
 import confetti from "canvas-confetti";
 import { useUser } from "../../core/access/userContext";
 import { formatDate } from "../../utils/formatDate";
@@ -42,7 +44,14 @@ const STAGE_TITLE_MAP = StagesMaster.reduce((acc, s) => {
 const FINAL_STAGE_NO = Math.max(...StagesMaster.map(s => s.stageNo));
 
 export default function DemoWizard() {
-  const { userInfo, userAccessiblePageIds } = useUser();
+  const { userInfo, userAccessiblePageIds, login, setUserInfo } = useUser();
+
+  const handleExit = () => {
+    sessionStorage.removeItem("wizardUserInfo"); // Clear storage on logout
+    login(null);
+    setUserInfo(null);
+    navigate('/');
+  };
 
   // ===== simulation progress data (single source of truth)
   const [progressData, setProgressData] = useState(null);
@@ -72,6 +81,8 @@ export default function DemoWizard() {
     completedPeriodNo === totalPeriod &&
     completedStage >= FINAL_STAGE_NO;
 
+  const navigate = useNavigate();
+
   // ===== Fetch progress (single API call, store whole payload)
   const fetchProgress = useCallback(async () => {
     if (!userInfo?.gameId) return;
@@ -93,6 +104,28 @@ export default function DemoWizard() {
     }
   }, [userInfo]);
 
+  // 1. Save userInfo to session storage whenever it changes (and is valid)
+  useEffect(() => {
+    if (userInfo && userInfo.gameId) {
+      sessionStorage.setItem("wizardUserInfo", JSON.stringify(userInfo));
+    }
+  }, [userInfo]);
+
+  // 2. On load/refresh: Try to restore data from storage. Only kick out if storage is empty.
+  useEffect(() => {
+    if (!userInfo || !userInfo.gameId) {
+      const stored = sessionStorage.getItem("wizardUserInfo");
+      if (stored) {
+        // Restore data
+        setUserInfo(JSON.parse(stored));
+      } else {
+        // No memory, no storage -> Kick to home
+        navigate('/');
+      }
+    }
+  }, [userInfo, navigate, setUserInfo]);
+
+  // Get progress info
   useEffect(() => { fetchProgress(); }, [fetchProgress]);
 
   // ===== Confetti effect when finished
@@ -203,11 +236,36 @@ export default function DemoWizard() {
 
       {/* ===== Header & Progress ===== */}
       <Box sx={{ mb: 3 }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={1}
+        >
           <Typography variant="h5" fontWeight="900">Simulation Progress</Typography>
-          <Typography variant="subtitle1" color="primary" fontWeight="900">
-            Period {currentPeriodNo} / {totalPeriod}
-          </Typography>
+
+          <Stack direction="row" spacing={2} alignItems="center">
+            {/* Period Display */}
+            <Typography variant="subtitle1" color="primary" fontWeight="900">
+              Period {currentPeriodNo} / {totalPeriod}
+            </Typography>
+
+            {/* Red Exit Icon - ExitToApp represents leaving the simulation */}
+            <Tooltip title="Leave Simulation" arrow>
+              <IconButton onClick={handleExit} sx={{ p: 0 }}>
+                <Avatar sx={{
+                  bgcolor: '#ef5350', // A slightly softer, modern red
+                  width: 32,
+                  height: 32,
+                  cursor: 'pointer',
+                  '&:hover': { bgcolor: '#d32f2f', transform: 'scale(1.1)' },
+                  transition: 'all 0.2s'
+                }}>
+                  <ExitToApp sx={{ fontSize: 18, color: '#fff' }} />
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+          </Stack>
         </Stack>
 
         <LinearProgress

@@ -117,6 +117,7 @@ import SimulationPlay from '../SimulationPlay/SimulationPlay.jsx';
 import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
 import OpsPlanInput from '../OpsPlanInput/OpsPlanInput.jsx';
 import DemoWizard from '../SimulationPlay/DemoWizard.jsx';
+
 //import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
@@ -292,6 +293,7 @@ export default function MiniDrawer() {
         <DrawerHeader />
         <Routes>
           <Route path="/homePage" element={<GameDashboard />} />
+          <Route path="/demoWizard" element={<DemoWizard />} />
           <Route path="/userRoleManagement" element={<UserRoleManagement />} />
           <Route path="/infoDesk" element={<InfoDesk />} />
           <Route path="/simulation" element={<Simulation />} />
