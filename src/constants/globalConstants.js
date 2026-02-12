@@ -138,8 +138,8 @@ import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 import OpsPlanInput from "../pages/OpsPlanInput/OpsPlanInput.jsx";
 import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";
+import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 
-// import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
 
@@ -497,13 +497,12 @@ export const componentList = [
       },
       {
         iconPath: operationalDecisionInputIcon,
-        id: "UI 11 050",
+        id: "UI 11 051",
         label: "Ops Plan Input",
         path: "/opsPlanInput",
         href: "/operationGame/opsPlanInput",
         routeElement: <OpsPlanInput />
       },
-      /*
       {
         iconPath: operationalDecisionInputIcon,
         id: "UI 11 050",
@@ -512,7 +511,6 @@ export const componentList = [
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
       },
-      */
       {
         iconPath: asterikIcon,
         id: "UI 22 280",
