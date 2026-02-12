@@ -366,7 +366,7 @@ export default function MiniDrawer() {
           <Route path='/BatchMaster' element={<BatchMstDetails />} />
           <Route path='/opsPlanInput' element={<OpsPlanInput />} />
           <Route path='/demoWizard' element={<DemoWizard />} />
-          <Route path='/TeamPlanScreen' element={<TeamPlanScreen />} />
+          <Route path='/teamPlanScreen' element={<TeamPlanScreen />} />
 
           {/*<Route path='/AssetCatalog' element={<AssetCatalog />} /> */}
 
