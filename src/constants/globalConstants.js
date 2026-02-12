@@ -126,7 +126,6 @@ import ClassRoomSession from "../pages/ClassRoomSession/ClassRoomSession.jsx";
 import ProfessionInfo from '../pages/ProfessionInfo/ProfessionInfo.jsx';
 import ProfessionRoleInfo from '../pages/ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from "../pages/UserProfileInfo/UserProfileInfo.jsx";
-import OperationInputError from '../pages/OperationInputError/OperationInputError.jsx';
 import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
 import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
@@ -493,14 +492,7 @@ export const componentList = [
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
       },
-      {
-        iconPath: asterikIcon,
-        id: "UI 22 280",
-        label: "Check Minimum Operation Input",
-        path: "/OperationInputError",
-        href: "/operationGame/OperationInputError",
-        routeElement: <OperationInputError />
-      }
+
     ],
   },
   {
