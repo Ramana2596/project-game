@@ -43,7 +43,6 @@ import {
   MarketFactorInfo,
   MarketFactorInfoInput,
   OperationalPlanInfo,
-  OperationalPlanInfoInput,
   IncomeStatementInfo,
   BalanceSheetInfo,
   RmStockInfo,
@@ -303,7 +302,6 @@ export default function MiniDrawer() {
           <Route path="/marketFactorInfo" element={<MarketFactorInfo />} />
           <Route path="/marketFactorInfoInput" element={<MarketFactorInfoInput />} />
           <Route path="/operationalPlanInfo" element={<OperationalPlanInfo />} />
-          <Route path="/operationalPlanInfoInput" element={<OperationalPlanInfoInput />} />
           <Route path="/incomeStatementInfo" element={<IncomeStatementInfo />} />
           <Route path="/balanceSheet" element={<BalanceSheetInfo />} />
           <Route path="/fgStockInfo" element={<FgStockInfo />} />

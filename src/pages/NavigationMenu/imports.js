@@ -38,7 +38,6 @@ import StrategyPlanApproval from "../StrategyPlanApproval/StrategyPlanApproval";
 import MarketFactorInfo from "../MarketFactorInfo/MarketFactorInfo";
 import MarketFactorInfoInput from "../MarketFactorInfoInput/MarketFactorInfoInput";
 import OperationalPlanInfo from "../OperationalPlanInfo/OperationalPlanInfo";
-import OperationalPlanInfoInput from "../OperationalPlanInfoInput/OperationalPlanInfoInput";
 import IncomeStatementInfo from "../IncomeStatementInfo/IncomeStatementInfo.jsx";
 import BalanceSheetInfo from "../BalanceSheetInfo/BalanceSheetInfo.jsx";
 import { getUserAccessPageIds } from "../NavigationMenu/services/indexService.js";
@@ -90,7 +89,6 @@ export {
     MarketFactorInfo,
     MarketFactorInfoInput,
     OperationalPlanInfo,
-    OperationalPlanInfoInput,
     IncomeStatementInfo,
     BalanceSheetInfo,
     FgStockInfo,
