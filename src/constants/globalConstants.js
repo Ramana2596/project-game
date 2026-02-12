@@ -136,7 +136,6 @@ import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
 import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
-import OpsPlanInput from "../pages/OpsPlanInput/OpsPlanInput.jsx";
 import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";
 import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 
@@ -494,14 +493,6 @@ export const componentList = [
         path: "/operationalPlanInfoInput",
         href: "/operationGame/operationalPlanInfoInput",
         routeElement: <OperationalPlanInfoInput />
-      },
-      {
-        iconPath: operationalDecisionInputIcon,
-        id: "UI 11 051",
-        label: "Ops Plan Input",
-        path: "/opsPlanInput",
-        href: "/operationGame/opsPlanInput",
-        routeElement: <OpsPlanInput />
       },
       {
         iconPath: operationalDecisionInputIcon,
