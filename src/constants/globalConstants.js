@@ -4,7 +4,6 @@ import StrategyPlan from "../pages/StrategyPlanApproval/StrategyPlanApproval";
 import MarketFactorInfo from "../pages/MarketFactorInfo/MarketFactorInfo";
 import MarketFactorInfoInput from "../pages/MarketFactorInfoInput/MarketFactorInfoInput";
 import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInfo";
-import OperationalPlanInfoInput from "../pages/OperationalPlanInfoInput/OperationalPlanInfoInput";
 import IncomeStatementInfo from "../pages/IncomeStatementInfo/IncomeStatementInfo";
 import BalanceSheetInfo from "../pages/BalanceSheetInfo/BalanceSheetInfo";
 import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
@@ -485,14 +484,6 @@ export const componentList = [
         path: "/strategyPlanApproval",
         href: "/operationGame/strategyPlanApproval",
         routeElement: <StrategyPlan />
-      },
-      {
-        iconPath: operationalDecisionInputIcon,
-        id: "UI 11 050",
-        label: "Operations Decision Input",
-        path: "/operationalPlanInfoInput",
-        href: "/operationGame/operationalPlanInfoInput",
-        routeElement: <OperationalPlanInfoInput />
       },
       {
         iconPath: operationalDecisionInputIcon,
