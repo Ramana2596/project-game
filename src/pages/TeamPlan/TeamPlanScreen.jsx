@@ -9,11 +9,11 @@ import { Save as SaveIcon, Close as CancelIcon } from "@mui/icons-material";
 import { format } from "date-fns";
 import { Alert } from "@mui/material";
 
-import TeamPlanItem from "./components/TeamPlanItem"; // Table component
-import ToastMessage from "../../components/ToastMessage"; // Toast notifications
-import { useTeamPlan } from "./hooks/useTeamPlan"; // Custom hook with tab + table logic
-import { useUser } from "../../core/access/userContext"; // User context
-import { CATEGORY_ICON } from "./constants/categoryIcon"; // Tab metadata (labels, icons, tooltips)
+import TeamPlanItem from "./components/TeamPlanItem.jsx"; // Table component
+import ToastMessage from "../../components/ToastMessage.jsx"; // Toast notifications
+import { useTeamPlan } from "./hooks/useTeamPlan.js"; // Custom hook with tab + table logic
+import { useUser } from "../../core/access/userContext.jsx"; // User context
+import { CATEGORY_ICON } from "./constants/categoryIcon.js"; // Tab metadata (labels, icons, tooltips)
 
 // MUI icons for each category
 import InventoryIcon from "@mui/icons-material/Inventory";              // Products (finished goods)
@@ -145,7 +145,7 @@ const TeamPlanScreen = () => {
           </Stack>
         </Box>
 
-        {/* 🔔 Inline Unsaved Warning Strip */}
+        {/* Inline Unsaved Warning */}
         {tabStatusMap[currentTab] === "unsaved" && (
           <Box
             sx={{

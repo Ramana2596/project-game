@@ -2,10 +2,10 @@
 // Purpose: Manage TeamPlan state, tab data, LOVs, edit and API integration
 
 import { useState, useEffect } from "react";
-import { getOpsPlanQuery, updateOpsPlanBulk } from "../services/service";
-import { getResolvedColumns } from "../utils/getResolvedColumns";
-import { COLUMN_RULES } from "../constants/columnRules";
-import { useUser } from "../../../core/access/userContext";
+import { getOpsPlanQuery, updateOpsPlanBulk } from "../services/service.js";
+import { getResolvedColumns } from "../utils/getResolvedColumns.js";
+import { COLUMN_RULES } from "../constants/columnRules.js";
+import { useUser } from "../../../core/access/userContext.jsx";
 
 export const useTeamPlan = (userInfo) => {
 

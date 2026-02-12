@@ -1,7 +1,7 @@
 // src/pages/TeamPlan/utils/getResolvedColumns.js
 
-import { PRODUCT_COLUMNS, OTHER_COLUMNS } from "../constants/tableColumns";
-import { COLUMN_RULES } from "../constants/columnRules";
+import { PRODUCT_COLUMNS, OTHER_COLUMNS } from "../constants/tableColumns.js";
+import { COLUMN_RULES } from "../constants/columnRules.js";
 
 /* ---------------- Helper: Identify Product tab ---------------- */
 // True if parameter - 'OI 001'
