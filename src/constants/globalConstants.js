@@ -136,6 +136,7 @@ import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";
 import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
+import SimulationSuite from "../pages/SimulationSuite/SimulationSuite.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -479,7 +480,7 @@ export const componentList = [
       {
         iconPath: approvalIcon,
         id: "UI 11 030",
-        label: "Strategy Plan Decision",
+        label: "Strategic Plan",
         path: "/strategyPlanApproval",
         href: "/operationGame/strategyPlanApproval",
         routeElement: <StrategyPlan />
@@ -487,7 +488,7 @@ export const componentList = [
       {
         iconPath: operationalDecisionInputIcon,
         id: "UI 11 050",
-        label: "Team Plan",
+        label: "Operations Plan",
         path: "/teamPlanScreen",
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
@@ -520,6 +521,14 @@ export const componentList = [
         path: "/simulationPlay",
         href: "/operationGame/SimulationPlay",
         routeElement: <SimulationPlay />
+      },
+      {
+        iconPath: appSettings,
+        id: "UI 21 271",
+        label: "Simulation Suite",
+        path: "/simulationSuite",
+        href: "/operationGame/simulationSuite",
+        routeElement: <SimulationSuite />
       },
       {
         iconPath: appSettings,
