@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { componentList } from "../../constants/globalConstants.js";
-import { saveToStorage, loadFromStorage, clearStorage } from "../utils/storage.js";
+import { saveToStorage, loadFromStorage, clearStorage } from "../../utils/storage.js";
 
 // Context: share user, RBAC, and game session across app
 const UserContext = createContext();
