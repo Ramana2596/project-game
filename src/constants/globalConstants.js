@@ -478,7 +478,7 @@ export const componentList = [
       {
         iconPath: approvalIcon,
         id: "UI 11 030",
-        label: "Strategy Plan Decision",
+        label: "Strategic Plan",
         path: "/strategyPlanApproval",
         href: "/operationGame/strategyPlanApproval",
         routeElement: <StrategyPlan />
@@ -527,6 +527,14 @@ export const componentList = [
         path: "/simulationSuite",
         href: "/operationGame/simulationSuite",
         routeElement: <SimulationSuite />
+      },
+      {
+        iconPath: appSettings,
+        id: "UI 21 270",
+        label: "Demo Wizard",
+        path: "/demoWizard",
+        href: "/operationGame/DemoWizard",
+        routeElement: <DemoWizard />
       }
 
     ],
