@@ -140,8 +140,6 @@ import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
-
-//
 export const componentList = [
   {
     iconPath: homeIcon,
@@ -488,7 +486,7 @@ export const componentList = [
       {
         iconPath: operationalDecisionInputIcon,
         id: "UI 11 050",
-        label: "Team Plan",
+        label: "Operations Plan",
         path: "/teamPlanScreen",
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
