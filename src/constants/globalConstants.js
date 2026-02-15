@@ -524,7 +524,7 @@ export const componentList = [
       },
       {
         iconPath: appSettings,
-        id: "UI 21 271",
+        id: "UI 21 272",
         label: "Simulation Suite",
         path: "/simulationSuite",
         href: "/operationGame/simulationSuite",
