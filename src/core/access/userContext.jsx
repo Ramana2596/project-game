@@ -1,39 +1,48 @@
-// src/core/access/userContext.jsx
+// src/core/access/UserContext.jsx
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { componentList } from "../../constants/globalConstants.js";
+import { saveToStorage, loadFromStorage, clearStorage } from "../../utils/storage.js";
 
-// Create context to share user, RBAC, and game session across app
+// Context: share user, RBAC, and game session across app
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
 
-    // Store basic login identity and role information
-    const [user, setUser] = useState({
-        userId: null,
-        loginId: null,
-        rlId: null,
-        role: null
-    });
+    //State: basic login identity and role information (persisted)
+    const [user, setUser] = useState(() =>
+        loadFromStorage("user", {
+            userId: null,
+            loginId: null,
+            rlId: null,
+            role: null
+        }));
 
-    // Store current game/session participation info for the user
-    const [userInfo, setGameInfo] = useState({
-        gameId: 'OpsMgt',
-        gameBatch: null,
-        gameTeam: null,
-        isGameLeader: null,
-        userId: null,
-        loginId: null,
-        learnMode: 'Class_Room'
-    });
+    //State: current game/session participation info (persisted)
+    const [userInfo, setGameInfo] = useState(() =>
+        loadFromStorage("userInfo", {
+            gameId: 'OpsMgt',
+            gameBatch: null,
+            gameTeam: null,
+            isGameLeader: null,
+            userId: null,
+            loginId: null,
+            learnMode: 'Class_Room'
+        }));
 
-    // Store list of UI IDs user has access to (RBAC)
-    const [userAccessiblePageIds, setUserAccessiblePageIds] = useState(null);
+    // State: RBAC accessible page IDs (persisted)
+    const [userAccessiblePageIds, setUserAccessiblePageIds] = useState(() =>
+        loadFromStorage("userAccessiblePageIds", null));
 
-    // Store filtered component list based on RBAC for menu/navigation
+    // State: filtered component list for navigation
     const [userAccessiblePages, setUserAccessiblePages] = useState(null);
 
-    // Update login identity after successful authentication
+    // Effect: For persist
+    useEffect(() => { saveToStorage("user", user); }, [user]);
+    useEffect(() => { saveToStorage("userInfo", userInfo); }, [userInfo]);
+    useEffect(() => { saveToStorage("userAccessiblePageIds", userAccessiblePageIds); }, [userAccessiblePageIds]);
+
+    // Function: update login identity after authentication
     const login = (loginResponse) => {
         setUser(prev => ({
             ...prev,
@@ -44,7 +53,7 @@ export const UserProvider = ({ children }) => {
         }));
     };
 
-    // Update game/team participation info after team selection
+    // Function: update game/team participation info
     const setUserInfo = (userInfo) => {
         setGameInfo({
             gameId: userInfo?.Game_Id,
@@ -57,20 +66,18 @@ export const UserProvider = ({ children }) => {
         });
     };
 
-    // Convert backend Snake_Case RBAC response into frontend camelCase structure
+    // Function: normalize backend RBAC response
     const setAccessiblePageIds = (accessiblePageIdList) => {
         if (accessiblePageIdList && accessiblePageIdList.length > 0) {
-
             const normalizedList = accessiblePageIdList.map(obj => ({
                 uiId: obj.UI_Id,
                 shortName: obj.Short_Name
             }));
-
             setUserAccessiblePageIds(normalizedList); 
         }
     };
 
-    // Recursively filter componentList to keep only RBAC allowed pages
+    // Function: recursively filter components based on RBAC
     const filterComponents = (list, accessList) => {
         return list
             .filter(item => accessList.some(accessObj => accessObj.uiId === item.id))
@@ -80,7 +87,7 @@ export const UserProvider = ({ children }) => {
             }));
     };
 
-    // Whenever RBAC list changes, recompute accessible menu/pages
+    // Effect: recompute accessible menu/pages when RBAC list changes
     useEffect(() => {
         if (userAccessiblePageIds && userAccessiblePageIds.length > 0) {
             const filteredArray = filterComponents(componentList, userAccessiblePageIds);
@@ -88,37 +95,38 @@ export const UserProvider = ({ children }) => {
         }
     }, [userAccessiblePageIds]);
 
-    // Clear all user, RBAC, and session info on logout
+    // Function: clear all user, RBAC, and session info on logout
     const logout = () => {
-        setUser({
-            userId: null,
-            loginId: null,
-            rlId: null,
-            role: null
-        });
+        setUser({ userId: null, loginId: null, rlId: null, role: null });
+        setGameInfo({ gameId: 'OpsMgt', gameBatch: null, gameTeam: null, isGameLeader: null, userId: null, loginId: null, learnMode: 'Class_Room' });
         setUserAccessiblePages(null);
         setUserAccessiblePageIds(null);
+
+        //  Clear persisted storage
+        clearStorage("user");
+        clearStorage("userInfo");
+        clearStorage("userAccessiblePageIds");
     };
 
-    // Check if user has permission to access a given UI screen
+    // Function: check if user has permission for a given UI screen
     const hasPermission = (permission) => {
         return userAccessiblePageIds?.some(accessObj => accessObj.uiId === permission);
     };
 
-    // Provide user, RBAC, and helper functions to entire app (with alias for old spelling)
+    // Provider: expose user, RBAC, and helper functions to app
     return (
         <UserContext.Provider
             value={{
                 user,
                 userInfo,
-                userAccessiblePageIds, // Correct name
-                userAccessablePageIds: userAccessiblePageIds, //Alias: OLD (misspelt)/ correct name 
+                userAccessiblePageIds,
+                userAccessablePageIds: userAccessiblePageIds, // ❌ Deprecated alias (kept for backward compatibility)
                 userAccessiblePages,
                 login,
                 logout,
                 hasPermission,
-                setAccessiblePageIds, // Correct function name
-                setAccessablePageIds: setAccessiblePageIds, // Alias function: OLD (misspelt)/ correct name
+                setAccessiblePageIds,
+                setAccessablePageIds: setAccessiblePageIds, // ❌ Deprecated alias (kept for backward compatibility)
                 setUserInfo
             }}
         >
@@ -127,5 +135,5 @@ export const UserProvider = ({ children }) => {
     );
 };
 
-// Custom hook for easy access to UserContext anywhere in the app
+// Hook: easy access to UserContext anywhere in the app
 export const useUser = () => useContext(UserContext);

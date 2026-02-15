@@ -480,7 +480,7 @@ export const componentList = [
       {
         iconPath: approvalIcon,
         id: "UI 11 030",
-        label: "Strategy Plan Decision",
+        label: "Strategic Plan",
         path: "/strategyPlanApproval",
         href: "/operationGame/strategyPlanApproval",
         routeElement: <StrategyPlan />
@@ -488,7 +488,7 @@ export const componentList = [
       {
         iconPath: operationalDecisionInputIcon,
         id: "UI 11 050",
-        label: "Team Plan",
+        label: "Operations Plan",
         path: "/teamPlanScreen",
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
@@ -524,11 +524,19 @@ export const componentList = [
       },
       {
         iconPath: appSettings,
-        id: "UI 21 272",
+        id: "UI 21 271",
         label: "Simulation Suite",
         path: "/simulationSuite",
         href: "/operationGame/simulationSuite",
         routeElement: <SimulationSuite />
+      },
+      {
+        iconPath: appSettings,
+        id: "UI 21 270",
+        label: "Demo Wizard",
+        path: "/demoWizard",
+        href: "/operationGame/DemoWizard",
+        routeElement: <DemoWizard />
       }
 
     ],
