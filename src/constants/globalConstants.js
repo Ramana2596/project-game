@@ -136,7 +136,7 @@ import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";
 import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
-import SimulationSuite from "../pages/SimulationSuite/SimulationSuite.jsx";
+import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
