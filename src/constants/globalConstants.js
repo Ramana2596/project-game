@@ -136,6 +136,7 @@ import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";
 import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
+import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -523,11 +524,11 @@ export const componentList = [
       },
       {
         iconPath: appSettings,
-        id: "UI 21 270",
-        label: "Demo Wizard",
-        path: "/demoWizard",
-        href: "/operationGame/DemoWizard",
-        routeElement: <DemoWizard />
+        id: "UI 21 272",
+        label: "Simulation Suite",
+        path: "/simulationSuite",
+        href: "/operationGame/simulationSuite",
+        routeElement: <SimulationSuite />
       }
 
     ],
