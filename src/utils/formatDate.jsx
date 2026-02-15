@@ -1,6 +1,6 @@
 /*
 
-// utils/formatDate.js
+// utils/formatDate.jsx
 export const formatDate = (date, locale = 'en-US') => {
   return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
@@ -11,9 +11,9 @@ export const formatDate = (date, locale = 'en-US') => {
 
 */
 
-// utils/formatDate.js
+// utils/formatDate.jsx
 export const formatDate = (date, locale = 'en-US') => {
-  if (!date) return ""; // ✅ handle null or undefined safely
+  if (!date) return ""; //handle null or undefined safely
 
   // Case 1: already formatted as MMM-yyyy (like "Apr-2025")
   if (/^[A-Za-z]{3}-\d{4}$/.test(date)) {
