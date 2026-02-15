@@ -140,8 +140,6 @@ import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
-
-//
 export const componentList = [
   {
     iconPath: homeIcon,
