@@ -7,7 +7,7 @@ import { Refresh } from "@mui/icons-material";
 import { UI_STRINGS } from "../constants/labels.js";
 
 export default function StageToolbar({ onRefresh }) {
-  // Handler guard for runtime errors when onRefresh is not provided
+  // Handle runtime errors when onRefresh is not provided
   const handleRefresh = () => {
     if (typeof onRefresh === "function") onRefresh();
   };
