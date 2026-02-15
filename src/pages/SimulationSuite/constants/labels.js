@@ -1,5 +1,5 @@
 // src/pages/SimulationSuite/constants/labels.js
-// Shared UI labels and templates of SimulationSuite
+// Centralised UI labels and templates of SimulationSuite
 
 
 export const MODE_LABELS = {
@@ -9,7 +9,7 @@ export const MODE_LABELS = {
   HYBRID: "Hybrid"
 };
 
-// Presentation strings used by components
+// Strings used by components
 export const UI_STRINGS = {
   SIMULATION_PROGRESS: "Simulation Progress",
   LEAVE_SIMULATION: "Leave Simulation",
@@ -20,7 +20,7 @@ export const UI_STRINGS = {
   OPEN_REPORTS_ARIA: (stageNo) => `Open reports for stage ${stageNo}`
 };
 
-// Template: Stage-related headings
+// Stage-related headings
 export const STAGE_TEMPLATES = {
   TITLE: (stageNo, label) => `${stageNo}: ${label}`,
   REPORTS_HEADER: (stageNo) => `${stageNo} Reports`,

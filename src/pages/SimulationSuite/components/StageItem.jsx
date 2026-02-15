@@ -6,7 +6,7 @@ import { PlayCircle, CheckCircle, Lock, Visibility } from "@mui/icons-material";
 import { STAGE_TEMPLATES, UI_STRINGS } from "../constants/labels.js";
 
 export default function StageItem({ stage, onClick, onOpenReport, actionLoading }) {
-  // Props destructure: stage model and handlers
+  // Props: Stage model and handlers
   const { stageNo, label, icon, status, tooltipReports, buttonSx, isActive, canViewReports } = stage;
 
   // Status icon mapping for right-side indicator
@@ -18,7 +18,7 @@ export default function StageItem({ stage, onClick, onOpenReport, actionLoading 
     return null;
   })();
 
-  // Render: main button (left) and report icon (right)
+  // Render: Stage Button, Report icon, Status & tooltips
   return (
     <Stack direction="row" spacing={1.5} alignItems="center">
       <Tooltip title={UI_STRINGS.CLICK_TO_PROCEED} arrow>

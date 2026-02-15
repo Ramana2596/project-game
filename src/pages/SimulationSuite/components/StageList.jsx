@@ -1,11 +1,11 @@
 // file: src/pages/SimulationSuite/components/StageList.jsx
-// Presentation: Stage UI array to Stage Item rows
+// Convert Stage UI array to Stage Item rows
 import React from "react";
 import { Stack } from "@mui/material";
 import StageItem from "./StageItem.jsx";
 
 export default function StageList({ stages, onStageClick, onOpenReport, actionLoading }) {
-  // Render vertical stack of StageItem components
+  // Render Rows of Stage Item components
   return (
     <Stack spacing={2}>
       {stages.map(s => (
