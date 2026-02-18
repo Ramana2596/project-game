@@ -21,7 +21,7 @@ import { API_STATUS } from "../../utils/statusCodes";
 import ReportDrawer from "../../wizardReports/ReportDrawer";
 import { REPORT_REGISTRY } from "../../wizardReports/reportRegistry";
 
-// Configuration : Simulation stages, icons, and theme colors.
+// Configuration: Simulation stages and UI themes.
 const StagesMaster = [
   { stageNo: 1, label: "Company Profile", icon: <EmojiPeople />, color: "#6A1B9A", isLoop: false },
   { stageNo: 2, label: "Strategy Draft", icon: <RocketLaunch />, color: "#C62828", isLoop: false },
@@ -34,20 +34,20 @@ const StagesMaster = [
   { stageNo: 9, label: "KPI & Team Results", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
 ];
 
-// Mapping Stage for UI / Report headers.
+// Map stage numbers to display titles.
 const STAGE_TITLE_MAP = StagesMaster.reduce((acc, s) => {
   acc[s.stageNo] = `${s.stageNo} – ${s.label}`;
   return acc;
 }, {});
 
-// Final step in the simulation sequence identifier.
+// Final simulation step.
 const FINAL_STAGE_NO = Math.max(...StagesMaster.map(s => s.stageNo));
 
 export default function DemoWizard() {
   const { userInfo, userAccessiblePageIds, login, setUserInfo } = useUser();
   const navigate = useNavigate();
 
-  // State management for simulation progress, loading indicators, and UI feedback.
+  // State for progress data and UI status.
   const [progressData, setProgressData] = useState(null);
   const [loading, setLoading] = useState(true); 
   const [actionLoading, setActionLoading] = useState(false);
@@ -57,7 +57,7 @@ export default function DemoWizard() {
   const [celebrated, setCelebrated] = useState(false);
   const [nextMonthAck, setNextMonthAck] = useState(false);
 
-  // Derived variables for simulation state and period logic.
+  // Derived simulation logic variables.
   const currentStage = progressData?.Current_Stage_No ?? 1;
   const completedStage = progressData?.Completed_Stage_No ?? 0;
   const currentPeriodNo = progressData?.Current_Period_No ?? 1;
@@ -70,7 +70,7 @@ export default function DemoWizard() {
   const effectiveHalt = isPeriodClosed && !nextMonthAck;  
   const isFinished = completedPeriodNo === totalPeriod && completedStage >= FINAL_STAGE_NO;
 
-  // Data fetching logic with silent refresh capability.
+  // Fetch current team progress from API.
   const fetchProgress = useCallback(async (isUpdate = false) => {
     if (!userInfo?.gameId) return;
     if (!isUpdate) setLoading(true); 
@@ -85,20 +85,20 @@ export default function DemoWizard() {
     } finally { setLoading(false); }
   }, [userInfo]);
 
-  // Session exit handler to clear context and navigate home.
+  // Handle user session exit.
   const handleExit = () => {
     sessionStorage.removeItem("wizardUserInfo"); 
     login(null); setUserInfo(null); navigate('/');
   };
 
-  // User info persistence sync with session storage.
+  // Persist user info to session storage.
   useEffect(() => {
     if (userInfo && userInfo.gameId) {
       sessionStorage.setItem("wizardUserInfo", JSON.stringify(userInfo));
     }
   }, [userInfo]);
 
-  // Session rehydration from storage on hard refresh.
+  // Rehydrate session info on refresh.
   useEffect(() => {
     if (!userInfo || !userInfo.gameId) {
       const stored = sessionStorage.getItem("wizardUserInfo");
@@ -107,18 +107,18 @@ export default function DemoWizard() {
     }
   }, [userInfo, navigate, setUserInfo]);
 
-  // Component mount trigger for data initialization.
+  // Initial data load on mount.
   useEffect(() => { fetchProgress(); }, [fetchProgress]);
 
-  // Completion celebration logic using canvas-confetti.
+  // Trigger celebration on simulation completion.
   useEffect(() => {
     if (isFinished && !celebrated) {
-      confetti({ particleCount: 300, spread: 180 });
+      confetti({ particleCount: 200, spread: 180 });
       setCelebrated(true);
     }
   }, [isFinished, celebrated]);
 
-  // Stage click handler to update simulation state via service.
+  // Update simulation progress.
   const handleStageClick = async (Stage) => {
     if (effectiveHalt || isSimulationEnd) return;
     setActionLoading(true);
@@ -134,16 +134,16 @@ export default function DemoWizard() {
     } finally { setActionLoading(false); }
   };
 
-  // Helper to trigger report side drawer.
+  // Open report drawer for a specific stage.
   const handleOpenReport = (stageNo) => {
     setActiveStageNo(Number(stageNo));
     setDrawerOpen(true);
   };
 
-  // Acknowledgement to proceed to the next month's simulation cycle.
+  // Acknowledge transition to the next period.
   const handleNextMonth = () => setNextMonthAck(true);
 
-  // Memoized configuration for rendering stage list items.
+  // Compute UI properties for each stage button.
   const stageUI = useMemo(() => {
     return StagesMaster.map((s) => {
       const status = s.stageNo === FINAL_STAGE_NO && isFinished ? "FINISHED" 
@@ -176,7 +176,7 @@ export default function DemoWizard() {
     });
   }, [currentStage, isFinished, userAccessiblePageIds, effectiveHalt, isPeriodClosed, isSimulationEnd]);
 
-  // Global splash loader for initial data fetch.
+  // Loading state placeholder.
   if (loading && !progressData) return (
     <Box sx={{ display: "flex", justifyContent: "center", p: 10 }}><CircularProgress /></Box>
   );
@@ -184,32 +184,45 @@ export default function DemoWizard() {
   return (
     <Box sx={{ maxWidth: 650, margin: "0 auto", p: 3 }}>
 
-      {/* Progress header with period info and main progress bar. */}
-      <Box sx={{ mb: 3 }}>
+      {/* STICKY CONTAINER:  */}
+      <Box sx={{ 
+        position: "sticky", 
+        top: 64, 
+        zIndex: 1100, 
+        bgcolor: "white", 
+        pt: 1,
+        pb: 1.5, 
+        mb: 2, 
+        borderBottom: "1px solid #e2e8f0",
+        boxShadow: "0 10px 15px -10px rgba(0,0,0,0.1)"
+      }}>
+        {/* Progress header with period details and exit action. */}
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
           <Typography variant="h5" fontWeight="900">Simulation Progress</Typography>
           <Stack direction="row" spacing={2} alignItems="center">
             <Typography variant="subtitle1" color="primary" fontWeight="900">Period {currentPeriodNo} / {totalPeriod}</Typography>
             <Tooltip title="Leave Simulation" arrow>
               <IconButton onClick={handleExit} sx={{ p: 0 }}>
-                <Avatar sx={{ bgcolor: '#ef5350', width: 32, height: 32, cursor: 'pointer', '&:hover': { bgcolor: '#d32f2f' } }}>
-                  <ExitToApp sx={{ fontSize: 18, color: '#fff' }} />
+                <Avatar sx={{ bgcolor: '#ef5350', width: 28, height: 28, cursor: 'pointer', '&:hover': { bgcolor: '#d32f2f' } }}>
+                  <ExitToApp sx={{ fontSize: 16, color: '#fff' }} />
                 </Avatar>
               </IconButton>
             </Tooltip>
           </Stack>
         </Stack>
-        <LinearProgress variant="determinate" value={progressPercent} sx={{ height: 12, borderRadius: 6, mb: 3, bgcolor: "#e2e8f0" }} />
 
-        {/* Status Paper: Optimized for text flow and alignment */}
-        <Paper elevation={0} sx={{ p: 2, bgcolor: "#f8fafc", borderRadius: 2, border: "1px solid #cbd5e1" }}>
+        {/* Global simulation progress bar. */}
+        <LinearProgress variant="determinate" value={progressPercent} sx={{ height: 8, borderRadius: 4, mb: 1.5, bgcolor: "#e2e8f0" }} />
+        
+        {/* TEAM BANNER: */}
+        <Paper elevation={0} sx={{ p: 1.5, bgcolor: "#f8fafc", borderRadius: 2, border: "1px solid #cbd5e1" }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="h6" fontWeight="700" color="primary.dark" sx={{ whiteSpace: 'nowrap' }}>
-              Team {userInfo?.gameTeam || ""} : 
+              Team {userInfo?.gameTeam || ""} :
             </Typography>
-            <Typography variant="h6" fontWeight="700" color="primary.dark" sx={{ textAlign: 'right', flex: 1, ml: 2 }}>
-              {isFinished
-                ? "🏆 Simulation Completed! 🏆"
+            <Typography variant="h6" fontWeight="700" color="primary.dark" sx={{ textAlign: 'right' }}>
+              {isFinished 
+                ? "🏆 Simulation Completed! 🏆" 
                 : `${formatDate(currentPeriodDate)} ${progressData?.Current_Progress_Stage || ""}`
               }
             </Typography>
@@ -217,14 +230,14 @@ export default function DemoWizard() {
         </Paper>
       </Box>
 
-      {/* Primary interaction stack containing simulation stages and isolated overlays. */}
+      {/* Main list of simulation stages. */}
       <Stack spacing={2}>
         {stageUI.map(Stage => {
           const isButtonLoading = actionLoading && Stage.status === "ACTIVE";
           return (
             <Stack key={Stage.stageNo} direction="row" spacing={1} alignItems="center">
               
-              {/* Isolated stage button loading overlay to prevent flicker. */}
+              {/* Stage interactive button and status indicators. */}
               <Box sx={{ flex: 1, position: 'relative', overflow: 'hidden', borderRadius: '14px' }}>
                 {isButtonLoading && (
                   <Box sx={{
@@ -255,7 +268,7 @@ export default function DemoWizard() {
                 </Button>
               </Box>
 
-              {/* Sidebar actions for report visibility and period transitions. */}
+              {/* Sidebar actions: View Reports all months. */}
               <Stack direction="row" alignItems="center" spacing={0.5} sx={{ width: 90, justifyContent: "flex-end" }}>
                 <Tooltip title={Stage.tooltipReports || "No reports"} arrow>
                   <span>
@@ -298,7 +311,7 @@ export default function DemoWizard() {
         })}
       </Stack>
 
-      {/* Drawer component for report viewing logic. */}
+      {/* Drawer overlay for reports. */}
       <ReportDrawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
@@ -308,7 +321,7 @@ export default function DemoWizard() {
         stageTitle={STAGE_TITLE_MAP[activeStageNo] || ""}
       />
 
-      {/* Toast notification bridge for system alerts. */}
+      {/* Alert toast Message System. */}
       <ToastMessage
         open={alertData.isVisible}
         severity={alertData.severity}
