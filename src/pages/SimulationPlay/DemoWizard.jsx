@@ -21,7 +21,7 @@ import { API_STATUS } from "../../utils/statusCodes";
 import ReportDrawer from "../../wizardReports/ReportDrawer";
 import { REPORT_REGISTRY } from "../../wizardReports/reportRegistry";
 
-// Configuration: Simulation stages and UI themes.
+// Configuration: Simulation stages 
 const StagesMaster = [
   { stageNo: 1, label: "Company Profile", icon: <EmojiPeople />, color: "#6A1B9A", isLoop: false },
   { stageNo: 2, label: "Strategy Draft", icon: <RocketLaunch />, color: "#C62828", isLoop: false },
@@ -30,11 +30,11 @@ const StagesMaster = [
   { stageNo: 5, label: "Operations Plan", icon: <Settings />, color: "#1565C0", isLoop: true },
   { stageNo: 6, label: "Simulation - Business Cycles", icon: <PlayCircle />, color: "#00897B", isLoop: true },
   { stageNo: 7, label: "Financial Outcomes", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
-  { stageNo: 8, label: "Manufacturing Performance Review", icon: <EventAvailable />, color: "#EF6C00", isLoop: true },
-  { stageNo: 9, label: "KPI & Team Results", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
+//  { stageNo: 8, label: "Manufacturing Performance Review", icon: <EventAvailable />, color: "#EF6C00", isLoop: true },
+  { stageNo: 8, label: "KPI & Team Results", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
 ];
 
-// Map stage numbers to display titles.
+// Map Stage Titlesto  display.
 const STAGE_TITLE_MAP = StagesMaster.reduce((acc, s) => {
   acc[s.stageNo] = `${s.stageNo} – ${s.label}`;
   return acc;
@@ -57,7 +57,7 @@ export default function DemoWizard() {
   const [celebrated, setCelebrated] = useState(false);
   const [nextMonthAck, setNextMonthAck] = useState(false);
 
-  // Derived simulation logic variables.
+  // Team Progress Data.
   const currentStage = progressData?.Current_Stage_No ?? 1;
   const completedStage = progressData?.Completed_Stage_No ?? 0;
   const currentPeriodNo = progressData?.Current_Period_No ?? 1;
@@ -67,7 +67,8 @@ export default function DemoWizard() {
   const progressPercent = progressData?.Progress_Percent ?? 0;
   const isSimulationEnd = progressData?.Is_Simulation_End ?? false;
   const isPeriodClosed = progressData?.Is_Period_Closed ?? false;
-  const effectiveHalt = isPeriodClosed && !nextMonthAck;  
+  const haltStageNo = progressData?.Review_Stage_No ?? 8;
+  const effectiveHalt = (isPeriodClosed && !nextMonthAck) || isSimulationEnd;
   const isFinished = completedPeriodNo === totalPeriod && completedStage >= FINAL_STAGE_NO;
 
   // Fetch current team progress from API.
@@ -76,7 +77,9 @@ export default function DemoWizard() {
     if (!isUpdate) setLoading(true); 
     try {
       const response = await getTeamProgressStatus({
-        gameId: userInfo.gameId, gameBatch: userInfo.gameBatch, gameTeam: userInfo.gameTeam
+        gameId: userInfo.gameId, 
+        gameBatch: userInfo.gameBatch, 
+        gameTeam: userInfo.gameTeam
       });
       const d = response?.data?.data;
       if (d) { setProgressData(d); setNextMonthAck(false); }
@@ -110,7 +113,7 @@ export default function DemoWizard() {
   // Initial data load on mount.
   useEffect(() => { fetchProgress(); }, [fetchProgress]);
 
-  // Trigger celebration on simulation completion.
+  // Trigger Celebration on simulation completion.
   useEffect(() => {
     if (isFinished && !celebrated) {
       confetti({ particleCount: 200, spread: 180 });
@@ -124,8 +127,11 @@ export default function DemoWizard() {
     setActionLoading(true);
     try {
       const response = await updateSimulationPlay({
-        gameId: userInfo.gameId, gameBatch: userInfo.gameBatch,
-        gameTeam: userInfo.gameTeam, currentStage: Stage.stageNo, currentPeriod: currentPeriodNo,
+        gameId: userInfo.gameId, 
+        gameBatch: userInfo.gameBatch,
+        gameTeam: userInfo.gameTeam, 
+        currentStage: Stage.stageNo, 
+        currentPeriod: currentPeriodNo,
       });
       if (response?.data?.returnValue === API_STATUS.SUCCESS) { await fetchProgress(true); } 
       else { setAlertData({ severity: "error", message: "Unable to update stage", isVisible: true }); }
@@ -143,7 +149,7 @@ export default function DemoWizard() {
   // Acknowledge transition to the next period.
   const handleNextMonth = () => setNextMonthAck(true);
 
-  // Compute UI properties for each stage button.
+  // Compile UI properties for each stage button.
   const stageUI = useMemo(() => {
     return StagesMaster.map((s) => {
       const status = s.stageNo === FINAL_STAGE_NO && isFinished ? "FINISHED" 
@@ -156,7 +162,8 @@ export default function DemoWizard() {
       return {
         ...s, status,
         isActive: status === "ACTIVE" && !effectiveHalt && !isSimulationEnd,
-        canViewReports: status === "COMPLETED" || status === "FINISHED" || isPeriodClosed,
+        canViewReports:
+          (status === "COMPLETED" || status === "FINISHED" || isPeriodClosed) && status !== "ACTIVE",
         tooltipReports,
         buttonSx: {
           justifyContent: "space-between", py: 2, px: 2.5,
@@ -184,7 +191,7 @@ export default function DemoWizard() {
   return (
     <Box sx={{ maxWidth: 650, margin: "0 auto", p: 3 }}>
 
-      {/* STICKY CONTAINER:  */}
+      {/* STICKY Heading:  */}
       <Box sx={{ 
         position: "sticky", 
         top: 64, 
@@ -196,7 +203,7 @@ export default function DemoWizard() {
         borderBottom: "1px solid #e2e8f0",
         boxShadow: "0 10px 15px -10px rgba(0,0,0,0.1)"
       }}>
-        {/* Progress header with period details and exit action. */}
+        {/* Progress header and exit action. */}
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
           <Typography variant="h5" fontWeight="900">Simulation Progress</Typography>
           <Stack direction="row" spacing={2} alignItems="center">
@@ -268,7 +275,7 @@ export default function DemoWizard() {
                 </Button>
               </Box>
 
-              {/* Sidebar actions: View Reports all months. */}
+              {/* Sidebar actions: View Reports  */}
               <Stack direction="row" alignItems="center" spacing={0.5} sx={{ width: 90, justifyContent: "flex-end" }}>
                 <Tooltip title={Stage.tooltipReports || "No reports"} arrow>
                   <span>
@@ -282,7 +289,7 @@ export default function DemoWizard() {
                   </span>
                 </Tooltip>
                 <Box sx={{ width: 34 }}>
-                  {Stage.stageNo === 8 && effectiveHalt && !isSimulationEnd && (
+                  {Stage.stageNo === haltStageNo && effectiveHalt && !isSimulationEnd && ( 
                     <Tooltip title="Proceed to next month" arrow>
                       <span>
                         <IconButton
