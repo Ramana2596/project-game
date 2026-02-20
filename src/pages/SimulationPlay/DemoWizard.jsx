@@ -31,7 +31,7 @@ const StagesMaster = [
   { stageNo: 6, label: "Simulation - Business Cycles", icon: <PlayCircle />, color: "#00897B", isLoop: true },
   { stageNo: 7, label: "Financial Outcomes", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
 //  { stageNo: 8, label: "Manufacturing Performance Review", icon: <EventAvailable />, color: "#EF6C00", isLoop: true },
-  { stageNo: 8, label: "KPI & Team Results", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
+  { stageNo: 8, label: "KRI & Team Results", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
 ];
 
 // Map Stage Titlesto  display.
@@ -237,7 +237,7 @@ export default function DemoWizard() {
         </Paper>
       </Box>
 
-      {/* Main list of simulation stages. */}
+      {/* Simulation stages. */}
       <Stack spacing={2}>
         {stageUI.map(Stage => {
           const isButtonLoading = actionLoading && Stage.status === "ACTIVE";
