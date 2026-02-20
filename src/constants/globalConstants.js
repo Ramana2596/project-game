@@ -85,7 +85,8 @@ import peopleIcon from '../assets/navigation-menu/people.png'
 import schoolIcon from '../assets/navigation-menu/school.png'
 import manufacturingIcon from '../assets/navigation-menu/manufacturing.png'
 import dashboardIcon from '../assets/navigation-menu/dash-board.png';
-
+import perfOpsIcon from '../assets/navigation-menu/perfOps.png';
+import perfCoIcon from "../assets/navigation-menu/perfCo.png";
 // end of png 
 
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
@@ -299,7 +300,7 @@ export const componentList = [
         routeElement: <LiabilityInfo />
       },
       {
-        iconPath: dashboardIcon,
+        iconPath: perfCoIcon,
         id: "UI 21 281",
         label: "Key Result - Balance Sheet",
         path: "/KeyResultBsInfo",
@@ -307,7 +308,7 @@ export const componentList = [
         routeElement: <KeyResultBsInfo />
       },
       {
-        iconPath: dashboardIcon,
+        iconPath: perfOpsIcon,
         id: "UI 21 282",
         label: "Key Result - Profit & Loss",
         path: "/KeyResultPlInfo",
