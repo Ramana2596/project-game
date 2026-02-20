@@ -84,7 +84,9 @@ import marketInputIcon from '../assets/navigation-menu/marketInput.png'
 import peopleIcon from '../assets/navigation-menu/people.png'
 import schoolIcon from '../assets/navigation-menu/school.png'
 import manufacturingIcon from '../assets/navigation-menu/manufacturing.png'
-
+import dashboardIcon from '../assets/navigation-menu/dash-board.png';
+import perfOpsIcon from '../assets/navigation-menu/perfOps.png';
+import perfCoIcon from "../assets/navigation-menu/perfCo.png";
 // end of png 
 
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
@@ -137,6 +139,8 @@ import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";
 import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
+import KeyResultBsInfo  from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
+import KeyResultPlInfo  from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -295,6 +299,23 @@ export const componentList = [
         href: "/operationGame/LiabilityInfo",
         routeElement: <LiabilityInfo />
       },
+      {
+        iconPath: perfCoIcon,
+        id: "UI 21 281",
+        label: "Key Result - Balance Sheet",
+        path: "/KeyResultBsInfo",
+        href: "/operationGame/KeyResultBsInfo",
+        routeElement: <KeyResultBsInfo />
+      },
+      {
+        iconPath: perfOpsIcon,
+        id: "UI 21 282",
+        label: "Key Result - Profit & Loss",
+        path: "/KeyResultPlInfo",
+        href: "/operationGame/KeyResultPlInfo",
+        routeElement: <KeyResultPlInfo />
+      },
+      
       {
         iconPath: partIcon,
         id: "UI 22 010",
