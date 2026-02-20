@@ -3,16 +3,16 @@
 
 import api from '../../../core/interceptor/api-interceptor';
 
-// ✅ Update simulation play (advance stage/period).
+// ✅ Updates simulation state to advance stages or periods
 export function updateSimulationPlay(queryParams) {
   return api.post('/api/updateSimulationPlay', {
     ...queryParams,
-    cmdLine: "Team Play",   // ✅ required by backend
+    cmdLine: "Team Play",   // ✅ Internal command required by backend
   });
 }
 
-// ✅ Fetch simulation progress status for a team.
+// ✅ Retrieves current progress data for a specific team
 export function getTeamProgressStatus(queryParams) {
-  // ✅ Use POST body to match Express req.body logic
+  // ✅ Uses POST to securely transmit team and game identifiers
   return api.post('/api/getTeamProgressStatus', queryParams);
 }

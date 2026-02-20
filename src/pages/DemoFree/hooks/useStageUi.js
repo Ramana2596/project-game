@@ -2,10 +2,10 @@
 // ✅ Encapsulates stage UI computation (status, styles, report availability).
 
 import { useMemo } from "react";
-import { StagesMaster, FINAL_STAGE_NO } from "../simconstants"; // ✅ relative path
-import { REPORT_REGISTRY } from "../wizardreports/reportRegistry"; // ✅ relative path
+import { StagesMaster, FINAL_STAGE_NO } from "../simconstants";
+import { REPORT_REGISTRY } from "./wizardreports/reportRegistry"; // ✅ Path corrected to local
+import { UI_STRINGS } from "../constants/labels"; // ✅ Added labels
 
-// ✅ Custom hook for stage UI.
 export function useStageUi(progressData, userAccessiblePageIds, effectiveHalt, isPeriodClosed) {
   const currentStage = progressData?.Current_Stage_No ?? 1;
   const completedStage = progressData?.Completed_Stage_No ?? 0;
@@ -14,18 +14,20 @@ export function useStageUi(progressData, userAccessiblePageIds, effectiveHalt, i
 
   return useMemo(() => {
     return StagesMaster.map((s) => {
+      // ✅ Determine stage status
       const status = s.stageNo === FINAL_STAGE_NO && isFinished ? "FINISHED"
                    : s.stageNo === currentStage ? "ACTIVE"
                    : s.stageNo < currentStage ? "COMPLETED" : "LOCKED";
 
+      // ✅ Map reports to stage
       const reports = REPORT_REGISTRY[s.stageNo] || [];
       const names = reports.map(uiId => userAccessiblePageIds?.find(p => p.uiId === uiId)?.shortName).filter(Boolean);
-      const tooltipReports = !names.length ? "No reports" : names.length > 3 ? names.slice(0, 3).join(", ") + " ⋯" : names.join(", ");
+      const tooltipReports = !names.length ? UI_STRINGS.NO_REPORTS : names.length > 3 ? names.slice(0, 3).join(", ") + " ⋯" : names.join(", ");
 
+      // ✅ Return styles and metadata
       return {
         ...s, status,
         isActive: status === "ACTIVE" && !effectiveHalt,
-        // ✅ Refined: exclude ACTIVE stage from report access
         canViewReports: (status === "COMPLETED" || status === "FINISHED" || isPeriodClosed) && status !== "ACTIVE",
         tooltipReports,
         buttonSx: {

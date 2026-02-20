@@ -1,16 +1,14 @@
-// src/pages/SimulationSuiteNew/components/StageItem.jsx
-// ✅ Renders a single stage button with status, reports, and next month action.
-
 import React from "react";
 import { Box, Stack, Button, Tooltip, IconButton, Typography, CircularProgress } from "@mui/material";
 import { PlayCircle, CheckCircle, Lock, Visibility, SkipNext } from "@mui/icons-material";
+import { UI_STRINGS } from "../constants/labels"; // ✅ Added labels
 
 export default function StageItem({ Stage, actionLoading, effectiveHalt, isSimulationEnd, haltStageNo, handleStageClick, handleOpenReport, handleNextMonth }) {
   const isButtonLoading = actionLoading && Stage.status === "ACTIVE";
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      {/* ✅ Stage interactive button and status indicators */}
+      {/* ✅ Main interactive button area */}
       <Box sx={{ flex: 1, position: 'relative', overflow: 'hidden', borderRadius: '14px' }}>
         {isButtonLoading && (
           <Box sx={{
@@ -20,7 +18,7 @@ export default function StageItem({ Stage, actionLoading, effectiveHalt, isSimul
             backdropFilter: 'blur(2px)'
           }}>
             <CircularProgress size={24} sx={{ mr: 1.5 }} />
-            <Typography variant="body2" fontWeight="700" color="primary.main">Wait...</Typography>
+            <Typography variant="body2" fontWeight="700" color="primary.main">{UI_STRINGS.WAITING}</Typography>
           </Box>
         )}
 
@@ -30,7 +28,7 @@ export default function StageItem({ Stage, actionLoading, effectiveHalt, isSimul
         >
           <Stack direction="row" spacing={2} alignItems="center">
             {Stage.icon}
-            <Typography fontWeight="500">{Stage.label}</Typography> {/* ✅ simplified title */}
+            <Typography fontWeight="500">{Stage.label}</Typography>
           </Stack>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {Stage.status === "ACTIVE" && <PlayCircle fontSize="small" />}
@@ -41,9 +39,9 @@ export default function StageItem({ Stage, actionLoading, effectiveHalt, isSimul
         </Button>
       </Box>
 
-      {/* ✅ Sidebar actions: View Reports and Next Month */}
+      {/* ✅ Sidebar action icons */}
       <Stack direction="row" alignItems="center" spacing={0.5} sx={{ width: 90, justifyContent: "flex-end" }}>
-        <Tooltip title={Stage.tooltipReports || "No reports"} arrow>
+        <Tooltip title={Stage.tooltipReports || UI_STRINGS.NO_REPORTS} arrow>
           <span>
             <IconButton
               onClick={() => handleOpenReport(Stage.stageNo)}
@@ -56,7 +54,7 @@ export default function StageItem({ Stage, actionLoading, effectiveHalt, isSimul
         </Tooltip>
         <Box sx={{ width: 34 }}>
           {Stage.stageNo === haltStageNo && effectiveHalt && !isSimulationEnd && (
-            <Tooltip title="Proceed to next month" arrow>
+            <Tooltip title={UI_STRINGS.NEXT_MONTH_TOOLTIP} arrow>
               <span>
                 <IconButton
                   onClick={handleNextMonth} size="small"
