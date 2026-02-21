@@ -36,6 +36,7 @@ export default function SalesRecordInfo() {
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
+        highlightColumnsByField={pageConstants.highlightedColumns}
         hiddenColumns={[]}
       ></GenericTable>
     </Box>
