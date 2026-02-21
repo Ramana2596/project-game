@@ -12,7 +12,7 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { dateColumns } from "../constants/globalConstants.js";
 import { formatDate } from "../utils/formatDate";
 
-// Purpose: Styled header/body cell visuals
+// Styled header/body cell visuals
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -24,7 +24,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-// Purpose: Zebra striping rows
+// Zebra striping rows
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
@@ -44,12 +44,12 @@ function GenericTable({
   highlightRowsByDetail = [],        // row highlight prop
   highlightColumnsByField = [],      // column highlight by DB field name
 }) {
-  // Purpose: Flat value set (unused elsewhere but retained)
+  // Flat value set (unused elsewhere)
   let tableValueSet = inputTableData?.map((tableDataObj) => {
     return Object.values(tableDataObj);
   });
 
-  // Purpose: Derive cell meta (type/date handling)
+  // Derive cell meta (type/date handling)
   let cellValueType = inputTableData?.map((tableObj) => {
     const transFormedItem = {};
     Object.keys(tableObj).forEach((key) => {
@@ -82,7 +82,7 @@ function GenericTable({
             </TableHead>
             <TableBody>
               <StyledTableRow align="right">
-                {"Some error occurred while loading the table..."}
+                {"Error occurred while loading the table..."}
               </StyledTableRow>
             </TableBody>
           </Table>
@@ -90,8 +90,7 @@ function GenericTable({
       </Box>
     );
   } else if (isAnEditableTable) {
-    // Purpose: Editable table rendering with optional column highlight
-    // ❌ No deletions in this block — only enhancement
+    // Editable table rendering with optional column highlight
     return (
       <Box marginLeft={5} marginRight={5} marginTop={2} sx={{ flexGrow: 1 }}>
         <TableContainer component={Paper}>
@@ -138,7 +137,7 @@ function GenericTable({
       </Box>
     );
   } else {
-    // Purpose: Read-only table rendering with row + column highlight
+    // Read-only table rendering with row + column highlight
     return (
       <Box marginLeft={2} marginRight={2} marginTop={2} sx={{ flexGrow: 1 }}>
         <TableContainer component={Paper}>
@@ -166,7 +165,7 @@ function GenericTable({
                             align="right"
                             sx={{
                               fontWeight:
-                                isVital || highlightColumnsByField.includes(key) // ✅ row OR column highlight
+                                isVital || highlightColumnsByField.includes(key) // row OR column highlight
                                   ? "bold"
                                   : "normal",
                             }}
