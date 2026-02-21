@@ -15,4 +15,14 @@ export const pageConstants = {
     "Std Unit Price",
     "Sales Value"
   ],
+  highlightedColumns: 
+  [
+    "Product",
+    "UOM",
+    "Market_Demand",
+    "Sold_Quantity",
+    "Currency",
+    "Std_Unit_Price",
+    "Sales_Value"
+  ],
 };
