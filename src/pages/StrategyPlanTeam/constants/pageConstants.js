@@ -19,5 +19,10 @@ export const pageConstants = {
   ],
   // column from SP
   highlightedColumns: [
-    "Decision"],
+    "Decision",
+    "Strategy",  
+    "Budget",
+    "Duration",
+    "Norm_Percent"
+   ],
 };
