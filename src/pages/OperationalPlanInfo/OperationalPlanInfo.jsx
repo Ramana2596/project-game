@@ -54,6 +54,7 @@ export default function OperationalPlanInfo() {
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={operationalInfoData}
         ifNoData={null}
+        highlightColumnsByField={pageConstants.highlightedColumns}
         hiddenColumns={pageConstants.hiddenColumns}
       ></GenericTable>
     </Box>
