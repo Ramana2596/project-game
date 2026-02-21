@@ -29,6 +29,7 @@ export default function StrategyPlanTeam() {
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
+        highlightColumnsByField={pageConstants.highlightedColumns}
         hiddenColumns={[]}
       ></GenericTable>
 

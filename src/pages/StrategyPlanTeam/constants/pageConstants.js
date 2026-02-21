@@ -17,4 +17,7 @@ export const pageConstants = {
     "Gain%",
     "Loss%"
   ],
+  // column from SP
+  highlightedColumns: [
+    "Decision"],
 };
