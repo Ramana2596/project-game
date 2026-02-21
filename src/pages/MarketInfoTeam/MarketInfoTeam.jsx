@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { useEffect, useState } from "react";
-import { getMarketInfoTeam} from "./services/service.js";
+import { getMarketInfoTeam } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
 export default function MarketInfoTeam() {
@@ -29,9 +29,10 @@ export default function MarketInfoTeam() {
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
+        highlightColumnsByField={pageConstants.highlightedColumns}
         hiddenColumns={pageConstants.hiddenColumns}
       ></GenericTable>
-      
+
     </Box>
   );
 }

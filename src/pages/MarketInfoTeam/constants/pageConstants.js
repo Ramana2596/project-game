@@ -15,7 +15,17 @@ export const pageConstants = {
       "Currency",
       "Price Info"
     ],
-      hiddenColumns: ["Game_Id",
-                      "Part_No"],
+      hiddenColumns:
+       ["Game_Id",
+        "Part_No"],
+      highlightedColumns:
+       [
+        "Part_Description",
+        "UOM",
+        "Quantity",
+        "Market_Info",
+        "Unit_Price",
+        "Currency",
+       ] ,
 };
 
