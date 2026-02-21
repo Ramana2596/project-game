@@ -15,5 +15,12 @@ export const pageConstants = {
     "Duration",
     "Gain %",
     "Loss %"
-  ]
+  ],
+  // Columns to highlight (by DB field name)
+  highlightedColumns: [
+    "Strategy",
+    "Budget",
+    "Duration",
+    "Gain_Percent"
+  ],
 };
