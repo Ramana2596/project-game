@@ -12,8 +12,7 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { dateColumns } from "../constants/globalConstants.js";
 import { formatDate } from "../utils/formatDate";
 
-
-
+// Purpose: Styled header/body cell visuals
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -25,6 +24,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+// Purpose: Zebra striping rows
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
@@ -36,17 +36,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function GenericTable({
-  inputTableHeadings,
-  inputTableData,
-  ifNoData,
-  isAnEditableTable = false,
-  hiddenColumns = [],
-  highlightRowsByDetail = [],        // ✅ new prop. Ensures safe operation even if no rows are passed.
+  inputTableHeadings,                 //UI column captions (display order only)
+  inputTableData,                     //Array of row objects (DB field driven rendering)
+  ifNoData,                           //Flag to show error row instead of data
+  isAnEditableTable = false,          //Switch between read-only and checkbox table modes
+  hiddenColumns = [],                 //DB field names to be hidden from rendering
+  highlightRowsByDetail = [],        // row highlight prop
+  highlightColumnsByField = [],      // column highlight by DB field name
 }) {
+  // Purpose: Flat value set (unused elsewhere but retained)
   let tableValueSet = inputTableData?.map((tableDataObj) => {
     return Object.values(tableDataObj);
   });
 
+  // Purpose: Derive cell meta (type/date handling)
   let cellValueType = inputTableData?.map((tableObj) => {
     const transFormedItem = {};
     Object.keys(tableObj).forEach((key) => {
@@ -87,6 +90,8 @@ function GenericTable({
       </Box>
     );
   } else if (isAnEditableTable) {
+    // Purpose: Editable table rendering with optional column highlight
+    // ❌ No deletions in this block — only enhancement
     return (
       <Box marginLeft={5} marginRight={5} marginTop={2} sx={{ flexGrow: 1 }}>
         <TableContainer component={Paper}>
@@ -109,7 +114,12 @@ function GenericTable({
                     {Object.keys(valueSet).map((key) => {
                       if (!hiddenColumns.includes(key)) {
                         return (
-                          <StyledTableCell align="right">
+                          <StyledTableCell
+                            align="right"
+                            sx={{
+                              fontWeight: highlightColumnsByField.includes(key) ? "bold" : "normal", // ✅ column highlight support
+                            }}
+                          >
                             {valueSet[key]?.inputType === "checkbox" ? (
                               <DoneAllIcon />
                             ) : (
@@ -128,6 +138,7 @@ function GenericTable({
       </Box>
     );
   } else {
+    // Purpose: Read-only table rendering with row + column highlight
     return (
       <Box marginLeft={2} marginRight={2} marginTop={2} sx={{ flexGrow: 1 }}>
         <TableContainer component={Paper}>
@@ -143,31 +154,9 @@ function GenericTable({
                 })}
               </TableRow>
             </TableHead>
- {/*           <TableBody>
+            <TableBody>
               {inputTableData?.map((valueObj) => {
-                return (
-                  <StyledTableRow align="right">
-                    {Object.keys(valueObj).map((key) => {
-                      if (!hiddenColumns.includes(key)) {
-                        return (
-                          <StyledTableCell align="right">
-                            {dateColumns.some((column) =>
-                              column === key.toLowerCase() || column === key
-                            ) || key.toLowerCase().includes("date")
-                              ? formatDate(valueObj[key])
-                              : valueObj[key]}
-                          </StyledTableCell>
-                        );
-                      }
-                    })}
-                  </StyledTableRow>
-                );
-              })}
-            </TableBody>
-  */}
-              <TableBody>
-              {inputTableData?.map((valueObj) => {
-                  const isVital = highlightRowsByDetail.includes(valueObj["Details"]); // ✅ use prop
+                const isVital = highlightRowsByDetail.includes(valueObj["Details"]); // existing row highlight
                 return (
                   <StyledTableRow align="right">
                     {Object.keys(valueObj).map((key) => {
@@ -176,7 +165,10 @@ function GenericTable({
                           <StyledTableCell
                             align="right"
                             sx={{
-                              fontWeight: isVital ? "bold" : "normal",
+                              fontWeight:
+                                isVital || highlightColumnsByField.includes(key) // ✅ row OR column highlight
+                                  ? "bold"
+                                  : "normal",
                             }}
                           >
                             {dateColumns.some(
@@ -193,7 +185,6 @@ function GenericTable({
                 );
               })}
             </TableBody>
-
           </Table>
         </TableContainer>
       </Box>
