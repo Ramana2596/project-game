@@ -169,7 +169,7 @@ export default function DemoWizard() {
         buttonSx: {
           justifyContent: "space-between", py: 2, px: 2.5,
           backgroundColor: status === "ACTIVE" ? s.color : status === "LOCKED" ? "#f1f5f9" : "#edf7ed",
-          color: status === "ACTIVE" ? "#fff" : "#334155",
+          color: status === "ACTIVE" ? "#fff" : "#1a237e",
           borderRadius: "14px",
           boxShadow: status === "ACTIVE" ? "0 6px 18px rgba(0,0,0,0.18)" : "0 2px 6px rgba(0,0,0,0.06)",
           border: status === "LOCKED" ? "1px solid #cbd5e1" : "1px solid rgba(0,0,0,0.08)",
@@ -193,7 +193,7 @@ export default function DemoWizard() {
     // FULL-SCREEN Background wrapper with the picture
     <Box sx={{
       minHeight: "100vh",
-backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.30)), url(${heroBg})`,      backgroundSize: 'cover',
+      backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.80), rgba(255, 255, 255, 0.30)), url(${heroBg})`, backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
       py: 6, px: 2
@@ -201,7 +201,7 @@ backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255,
       {/* High-Contrast Content Card for Bright Visibility */}
       <Box sx={{
         maxWidth: 700, margin: "0 auto", p: 4,
-        bgcolor: "#ffffff", 
+        bgcolor: "#bbe8f0",
         borderRadius: 6,
         boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
         border: "1px solid rgba(255,255,255,0.4)"
@@ -212,12 +212,14 @@ backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255,
           position: "sticky",
           top: 64,
           zIndex: 1100,
-          bgcolor: "white",
-          pt: 1,
+          bgcolor: "#ffffff",
+          pt: 2,
+          px: 3, 
           pb: 1.5,
-          mb: 2,
-          borderBottom: "1px solid #e2e8f0",
-          boxShadow: "0 10px 15px -10px rgba(0,0,0,0.1)"
+          mb: 3,
+          borderRadius: 4, 
+          border: "1px solid #dee2e6",
+          boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)"
         }}>
           {/* Progress header and exit action. */}
           <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
@@ -238,7 +240,7 @@ backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255,
           <LinearProgress variant="determinate" value={progressPercent} sx={{ height: 8, borderRadius: 4, mb: 1.5, bgcolor: "#e2e8f0" }} />
 
           {/* TEAM BANNER: */}
-          <Paper elevation={0} sx={{ p: 1.5, bgcolor: "#f8fafc", borderRadius: 2, border: "1px solid #cbd5e1" }}>
+          <Paper elevation={0} sx={{ p: 1.5, bgcolor: "#f8fafc", borderRadius: 4, border: "1px solid #cbd5e1" }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Typography variant="h6" fontWeight="700" color="primary.dark" sx={{ whiteSpace: 'nowrap' }}>
                 Team {userInfo?.gameTeam || ""} :
