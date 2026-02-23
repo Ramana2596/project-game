@@ -108,7 +108,7 @@ export default function DemoVirtual() {
       backgroundPosition: "center",
       backgroundAttachment: "fixed", py: 3
     }}>
-      /* High-Contrast Content Card for Bright Visibility */}
+      {/* High-Contrast Content Card for Bright Visibility */}
            <Box sx={{
               maxWidth: 700, margin: "0 auto", p: 4,
               bgcolor: "#bbe8f0",
