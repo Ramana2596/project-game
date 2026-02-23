@@ -1,5 +1,5 @@
 // src\wizardReports\reportRegistry.js 
-// Only map STAGE → report IDs (no component imports)
+// Pure mapping: Stage → Report IDs.->IDs correspond to components in componentList.
 
 export const REPORT_REGISTRY = {
   1: ["UI 22 020", "UI 22 030", "UI 22 040", "UI 22 060","UI 21 140", "UI 21 150"],
