@@ -112,7 +112,7 @@ export default function DemoWizard() {
     }
   }, [userInfo, navigate, setUserInfo]);
 
-  // Initial data load on mount.
+  // Team Progressdata load on mount / user login.s
   useEffect(() => { fetchProgress(); }, [fetchProgress]);
 
   // Trigger Celebration on simulation completion.
@@ -185,7 +185,7 @@ export default function DemoWizard() {
     });
   }, [currentStage, isFinished, userAccessiblePageIds, effectiveHalt, isPeriodClosed, isSimulationEnd]);
 
-  // Loading state placeholder.
+  // Loading state.
   if (loading && !progressData) return (
     <Box sx={{ display: "flex", justifyContent: "center", p: 10 }}><CircularProgress /></Box>
   );
@@ -241,7 +241,7 @@ export default function DemoWizard() {
             </Stack>
           </Stack>
 
-          {/* Global simulation progress bar. */}
+          {/* Simulation progress bar. */}
           <LinearProgress variant="determinate" value={progressPercent} sx={{ height: 8, borderRadius: 4, mb: 1.5, bgcolor: "#e2e8f0" }} />
 
           {/* TEAM BANNER: */}
