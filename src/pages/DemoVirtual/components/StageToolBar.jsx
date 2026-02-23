@@ -1,10 +1,9 @@
 // src/pages/DemoVirtual/components/StageToolBar.jsx
-// Action row for refresh
 
 import React from "react";
 import { Stack, Button, Tooltip, Typography, IconButton, Paper } from "@mui/material";
 import { Refresh, HelpOutline } from "@mui/icons-material";
-import { UI_STRINGS } from "../constants/labels"; // ✅ Added labels
+import { UI_STRINGS } from "../constants/labels";
 
 export default function StageToolBar({ onRefresh, loading }) {
   return (
@@ -19,7 +18,7 @@ export default function StageToolBar({ onRefresh, loading }) {
       }}
     >
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        {/* ✅ Left side: Action group */}
+        {/*  Left side: Action group */}
         <Stack direction="row" spacing={1} alignItems="center">
           <Button
             variant="outlined"
@@ -37,7 +36,7 @@ export default function StageToolBar({ onRefresh, loading }) {
           </style>
         </Stack>
 
-        {/* ✅ Right side: Info group */}
+        {/*  Right side: Info group */}
         <Stack direction="row" spacing={1} alignItems="center">
           <Typography variant="caption" color="text.secondary" sx={{ fontWeight: "500" }}>
             {/* Logic for last sync can be added here */}
