@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { Box, Stack, Typography, LinearProgress, Paper, Avatar, IconButton, Tooltip, CircularProgress } from "@mui/material";
 import { ExitToApp } from "@mui/icons-material";
 
+import heroBG from "../../assets/navigation-menu/heroOpsMgtUniversal.png"
+import confetti from "canvas-confetti";
 import { useUser } from "../../core/access/userContext";
 import { formatDate } from "../../utils/formatDate";
 import { useProgress } from "./hooks/useProgress";
@@ -67,14 +69,15 @@ export default function DemoVirtual() {
         null);
     }
   }, [fetchProgress, userInfo, progressData]);
+
   // Click handler marks stage as completed to advance virtual orchestration
   const handleStageClick = async (Stage) => {
     // Advance orchestration by marking clicked stage as the new Completed marker
     await fetchProgress(
-      userInfo.gameId, 
-      userInfo.gameBatch, 
-      userInfo.gameTeam, 
-      progressData?.Current_Period, 
+      userInfo.gameId,
+      userInfo.gameBatch,
+      userInfo.gameTeam,
+      progressData?.Current_Period,
       Stage.stageNo
     );
   };
@@ -94,40 +97,62 @@ export default function DemoVirtual() {
   );
 
   return (
-    // Outer container with fixed Engineering & Manufacturing background
-    <Box sx={{ 
-      minHeight: "100vh", width: "100%", 
-      backgroundImage: `linear-gradient(rgba(241, 245, 249, 0.92), rgba(241, 245, 249, 0.85)), url('http://googleusercontent.com/image_collection/image_retrieval/2536352074560737839_0')`,
-      backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed", py: 3
+    // ✅ Outer container with background image and visible header
+    <Box sx={{
+      minHeight: "100vh", width: "100%",
+      backgroundImage:
+        `linear-gradient(rgba(255, 255, 255, 0.80),
+       rgba(255, 255, 255, 0.30)),
+        url(${heroBG})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundAttachment: "fixed", py: 3
     }}>
-      <Box sx={{ maxWidth: 650, margin: "0 auto", px: 3 }}>
-        
-        {/* Sticky header with global progress and Glassmorphism effect */}
-        <Box sx={{ 
-          position: "sticky", top: 20, zIndex: 1100, bgcolor: "rgba(255, 255, 255, 0.9)",
-          backdropFilter: "blur(8px)", pt: 1.5, pb: 2, mb: 3, px: 2,
-          borderRadius: 2, border: "1px solid #e2e8f0", boxShadow: "0 10px 15px -10px rgba(0,0,0,0.1)"
+      /* High-Contrast Content Card for Bright Visibility */}
+           <Box sx={{
+              maxWidth: 700, margin: "0 auto", p: 4,
+              bgcolor: "#bbe8f0",
+              borderRadius: 6,
+              boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+              border: "1px solid rgba(255,255,255,0.4)"
+            }}>
+      
+        {/* STICKY Heading:  */}
+        <Box sx={{
+          position: "sticky",
+          top: 64,
+          zIndex: 1100,
+          bgcolor: "#ffffff",
+          pt: 2,
+          px: 3, 
+          pb: 1.5,
+          mb: 3,
+          borderRadius: 3, 
+          border: "1px solid #dee2e6",
+          boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)"
         }}>
+          
+        {/* Progress header and exit action. */}
           <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-            <Typography variant="h5" fontWeight="900">{UI_STRINGS.TITLE}</Typography>
+            <Typography variant="h4" fontWeight="900">{UI_STRINGS.TITLE}</Typography> {/* ✅ Larger header */}
             <Stack direction="row" spacing={2} alignItems="center">
-              <Typography variant="subtitle1" color="primary" fontWeight="900">
+              <Typography variant="h6" color="primary" fontWeight="900">
                 {UI_STRINGS.PERIOD_DISPLAY(progressData?.Current_Period_No, progressData?.Total_Period)}
               </Typography>
               <Tooltip title={UI_STRINGS.EXIT_TOOLTIP} arrow>
                 <IconButton onClick={handleExit} sx={{ p: 0 }}>
-                  <Avatar sx={{ bgcolor: '#ef5350', width: 28, height: 28, cursor: 'pointer', '&:hover': { bgcolor: '#d32f2f' } }}>
-                    <ExitToApp sx={{ fontSize: 16, color: '#fff' }} />
+                  <Avatar sx={{ bgcolor: '#ef5350', width: 32, height: 32, cursor: 'pointer', '&:hover': { bgcolor: '#d32f2f' } }}>
+                    <ExitToApp sx={{ fontSize: 18, color: '#fff' }} />
                   </Avatar>
                 </IconButton>
               </Tooltip>
             </Stack>
           </Stack>
 
-          <LinearProgress variant="determinate" value={progressData?.Progress_Percent ?? 0} sx={{ height: 8, borderRadius: 4, mb: 1.5, bgcolor: "#e2e8f0" }} />
+          <LinearProgress variant="determinate" value={progressData?.Progress_Percent ?? 0} sx={{ height: 10, borderRadius: 5, mb: 1.5, bgcolor: "#e2e8f0" }} />
 
-          {/* Team identity banner with semi-transparent paper styling */}
-          <Paper elevation={0} sx={{ p: 1.5, bgcolor: "rgba(248, 250, 252, 0.7)", borderRadius: 2, border: "1px solid #cbd5e1" }}>
+          {/* Team identity banner */}
+          <Paper elevation={0} sx={{ p: 2, bgcolor: "rgba(248, 250, 252, 0.7)", borderRadius: 2, border: "1px solid #cbd5e1" }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Typography variant="h6" fontWeight="700" color="primary.dark" sx={{ whiteSpace: 'nowrap' }}>
                 {UI_STRINGS.TEAM_PREFIX(userInfo?.gameTeam || "")}
@@ -160,8 +185,9 @@ export default function DemoVirtual() {
           onClose={() => setDrawerOpen(false)}
           stageNo={activeStageNo}
           completedPeriod={progressData?.Completed_Period}
-          completedStageNo={progressData?.Completed_Stage_No} // Historical marker passed
+          completedStageNo={progressData?.Completed_Stage_No}
           stageTitle={STAGE_TITLE_MAP[activeStageNo] || ""}
+          userAccessiblePageIds={userAccessiblePageIds} // ✅ Pass accessible reports
         />
 
         {/* Toast notifications for error and status feedback */}

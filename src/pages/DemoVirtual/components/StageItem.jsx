@@ -1,21 +1,29 @@
 // src/pages/DemoVirtual/components/StageItem.jsx
-// ✅ Individual stage row component handling clicks, visual states, and report access.
+//  Stage row component clicks, visual states, and report.
 
 import React from "react";
 import { Box, Stack, Button, Tooltip, IconButton, Typography, CircularProgress } from "@mui/material";
 import { PlayCircle, CheckCircle, Lock, Visibility, SkipNext } from "@mui/icons-material";
 import { UI_STRINGS } from "../constants/labels";
 
-export default function StageItem({ Stage, actionLoading, effectiveHalt, isSimulationEnd, haltStageNo, handleStageClick, handleOpenReport, handleNextMonth }) {
-  // ✅ Determine if this specific stage is currently triggering an orchestration update
+export default function StageItem(
+  { Stage,
+    actionLoading,
+    effectiveHalt,
+    isSimulationEnd,
+    haltStageNo,
+    handleStageClick,
+    handleOpenReport,
+    handleNextMonth }) {
+
   const isButtonLoading = actionLoading && Stage.status === "ACTIVE";
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      {/* ✅ Main interactive button area with orchestration feedback overlay */}
+      {/*  Main interactive button area with orchestration feedback overlay */}
       <Box sx={{ flex: 1, position: 'relative', overflow: 'hidden', borderRadius: '14px' }}>
-        
-        {/* ✅ Loading overlay for virtual state transitions */}
+
+        {/*  Loading overlay for virtual state transitions */}
         {isButtonLoading && (
           <Box sx={{
             position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
@@ -28,11 +36,11 @@ export default function StageItem({ Stage, actionLoading, effectiveHalt, isSimul
           </Box>
         )}
 
-        {/* ✅ Stage Action Button: Triggers fetchProgress with orchestration markers */}
+        {/*  Stage Action Button: Triggers fetchProgress with orchestration markers */}
         <Button
-          fullWidth 
+          fullWidth
           disabled={!Stage.isActive || actionLoading || effectiveHalt}
-          onClick={() => handleStageClick(Stage)} 
+          onClick={() => handleStageClick(Stage)}
           sx={Stage.buttonSx}
         >
           <Stack direction="row" spacing={2} alignItems="center">
@@ -40,7 +48,7 @@ export default function StageItem({ Stage, actionLoading, effectiveHalt, isSimul
             <Typography fontWeight="500">{Stage.label}</Typography>
           </Stack>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {/* ✅ Visual indicators for virtual orchestration status */}
+            {/*  Visual indicators for virtual orchestration status */}
             {Stage.status === "ACTIVE" && <PlayCircle fontSize="small" />}
             {Stage.status === "COMPLETED" && <CheckCircle fontSize="small" />}
             {Stage.status === "LOCKED" && <Lock fontSize="small" sx={{ color: "#94a3b8" }} />}
@@ -49,10 +57,10 @@ export default function StageItem({ Stage, actionLoading, effectiveHalt, isSimul
         </Button>
       </Box>
 
-      {/* ✅ Sidebar action icons for reports and period transitions */}
+      {/*  Sidebar action icons for reports and period transitions */}
       <Stack direction="row" alignItems="center" spacing={0.5} sx={{ width: 90, justifyContent: "flex-end" }}>
-        
-        {/* ✅ Report visibility trigger */}
+
+        {/*  Report visibility trigger */}
         <Tooltip title={Stage.tooltipReports || UI_STRINGS.NO_REPORTS} arrow>
           <span>
             <IconButton
@@ -65,13 +73,13 @@ export default function StageItem({ Stage, actionLoading, effectiveHalt, isSimul
           </span>
         </Tooltip>
 
-        {/* ✅ Skip/Next Month trigger for period-end HALT state */}
+        {/*  Skip/Next Month trigger for period-end HALT state */}
         <Box sx={{ width: 34 }}>
           {Stage.stageNo === haltStageNo && effectiveHalt && !isSimulationEnd && (
             <Tooltip title={UI_STRINGS.NEXT_MONTH_TOOLTIP} arrow>
               <span>
                 <IconButton
-                  onClick={handleNextMonth} 
+                  onClick={handleNextMonth}
                   size="small"
                   sx={{
                     bgcolor: "#ff9800", color: "#fff", border: "2px solid #fff",
