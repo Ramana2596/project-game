@@ -13,6 +13,7 @@ import {
 } from "@mui/icons-material";
 
 import heroBg from "../../assets/navigation-menu/heroOpsMgtUniversal.png";
+import omgBg from "../../assets/navigation-menu/omgBgSrp.png";
 import confetti from "canvas-confetti";
 import { useUser } from "../../core/access/userContext";
 import { formatDate } from "../../utils/formatDate";
@@ -193,7 +194,11 @@ export default function DemoWizard() {
     // FULL-SCREEN Background wrapper with the picture
     <Box sx={{
       minHeight: "100vh",
-      backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.80), rgba(255, 255, 255, 0.30)), url(${heroBg})`, backgroundSize: 'cover',
+      backgroundImage:
+        `linear-gradient(rgba(255, 255, 255, 0.80),
+       rgba(255, 255, 255, 0.30)),
+        url(${omgBg})`,
+      backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed',
       py: 6, px: 2
