@@ -1,85 +1,170 @@
 // src/pages/DemoVirtual/wizardreports/ReportDrawer.jsx
-// Drawer overlay for reports, updated for virtual orchestration with dynamic component loading.
+// Purpose: Display stage-specific RBAC reports
 
-import React, { useState } from "react";
-import { Drawer, Box, Typography, IconButton, Tabs, Tab } from "@mui/material";
-import { Close } from "@mui/icons-material";
-import { UI_STRINGS } from "../constants/labels";
-import { REPORT_REGISTRY } from "./reportRegistry";          // ✅ Registry mapping
-import { componentList } from "../../../constants/globalConstants"; // ✅ Global component registry
+import React, { useMemo, useState, useEffect } from "react";
+import { Drawer, Box, Typography, Tabs, Tab, IconButton, Stack } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { useUser } from "../../../core/access/userContext";
+import { componentList } from "../../../constants/globalConstants";
+import { REPORT_REGISTRY } from "./reportRegistry";
 
-// Props for rendering Reports
-export default function ReportDrawer({ 
-  open, 
-  onClose, 
-  stageNo, 
-  completedPeriod, 
-  completedStageNo, 
-  stageTitle, 
-  userAccessiblePageIds = [] // ✅ Ensure access filtering
+//  Recursive search component Vs route
+function findComponentById(list, id) {
+  for (const item of list) {
+    if (item.id === id) return item.routeElement;
+    if (item.children) {
+      const found = findComponentById(item.children, id);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+export default function ReportDrawer({
+  open,
+  onClose,
+  stageNo,
+  completedPeriod,
+  stageTitle,
+  userAccessiblePageIds = []
 }) {
-  // ✅ Local state for tab selection
-  const [activeTab, setActiveTab] = useState(0);
+  const { userInfo } = useUser();
+  const { gameTeam } = userInfo || {};
+  const [tabIndex, setTabIndex] = useState(0);
 
-  // ✅ Resolve reports for this stage
-  const reports = REPORT_REGISTRY[stageNo] || [];
-  const accessibleReports = reports.filter(uiId => 
-    userAccessiblePageIds.some(p => p.uiId === uiId)
-  );
+  //  Reset tab index when drawer opens
+  useEffect(() => {
+    if (open) setTabIndex(0);
+  }, [open, stageNo]);
 
-  // ✅ Handle tab change
-  const handleTabChange = (_, newValue) => setActiveTab(newValue);
+  //  Date format
+  const formattedMonth = useMemo(() => {
+    if (!completedPeriod) return "Setup Phase";
+    const date = new Date(completedPeriod);
+    return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  }, [completedPeriod]);
 
-  // ✅ Resolve component for active tab
-  const activeReportId = accessibleReports[activeTab];
-  const activeRouteElement = componentList.find(c => c.id === activeReportId)?.routeElement; // ✅ Use routeElement directly
+  //  Get RBAC UiId of reports for the stage
+  const reportsForStage = useMemo(() => {
+    if (!stageNo) return [];
+    const stageReports = (REPORT_REGISTRY[stageNo] || []).filter(
+      (uiId) => userAccessiblePageIds?.some((p) => p.uiId === uiId)
+    );
+    return stageReports.map((uiId) => ({
+      uiId,
+      shortName: userAccessiblePageIds.find((p) => p.uiId === uiId)?.shortName
+    }));
+  }, [stageNo, userAccessiblePageIds]);
+
+  //  Get component for UiId for active tab
+  const selectedElement = reportsForStage[tabIndex]
+    ? findComponentById(componentList, reportsForStage[tabIndex].uiId)
+    : null;
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose}>
-      <Box sx={{ width: 650, p: 3 }}>
-        
-        {/* Drawer header with dynamic title based on selected stage */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-          <Typography variant="h6" fontWeight="700">
-            {UI_STRINGS.REPORT_HEADER(stageTitle)}
+    <Drawer
+      anchor="right"
+      open={open}
+      onClose={onClose}
+      PaperProps={{
+        sx: {
+          width: "80%", //  Wider drawer
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          bgcolor: "#ffffff",
+          overflow: "hidden"
+        }
+      }}
+    >
+      {/*  HEADER: Team left, Stage center, Month right */}
+      <Box sx={{ px: 3, pt: 10, pb: 1.5 }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          {/* Left: Team */}
+          <Typography
+            variant="subtitle1"
+            sx={{ fontWeight: 700, color: "#1e293b", fontSize: "1.1rem" }}
+          >
+            Team  {gameTeam} :
           </Typography>
-          <IconButton onClick={onClose}><Close /></IconButton>
+
+          {/* Center: Stage Title */}
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 800,
+              color: "#1e293b",
+              fontSize: "1.5rem",
+              textAlign: "center",
+              flexGrow: 1
+            }}
+          >
+            {stageTitle}
+          </Typography>
+
+          {/* Right: Month + Close */}
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Typography
+              variant="subtitle1"
+              sx={{ color: "primary.main", fontWeight: 800, fontSize: "1.1rem" }}
+            >
+              {formattedMonth}
+            </Typography>
+            <IconButton onClick={onClose} size="small" sx={{ bgcolor: '#f1f5f9' }}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Stack>
+        </Stack>
+      </Box>
+
+      {/*  Active TABS: High-contrast BG color */}
+      <Box sx={{ px: 2, bgcolor: "#fff", borderBottom: "1px solid #e2e8f0" }}>
+        {reportsForStage.length > 0 && (
+          <Tabs
+            value={tabIndex}
+            onChange={(e, newVal) => setTabIndex(newVal)}
+            variant="scrollable"
+            TabIndicatorProps={{ sx: { display: 'none' } }}
+            sx={{
+              minHeight: 40,
+              mb: 0.5,
+              "& .MuiTab-root": {
+                fontWeight: 900,
+                fontSize: "0.9rem",
+                minHeight: 40,
+                textTransform: "none",
+                px: 3,
+                mx: 0.5,
+                borderRadius: "6px",
+                color: "#64748b",
+                backgroundColor: "#E5E7EB"
+              },
+              "& .MuiTab-root.Mui-selected": {
+                bgcolor: "primary.main",
+                color: "#ffffff !important",
+                "&:hover": { bgcolor: "primary.dark" }
+              }
+            }}
+          >
+            {reportsForStage.map((r) => <Tab key={r.uiId} label={r.shortName} />)}
+          </Tabs>
+        )}
+      </Box>
+
+      {/*  CONTENT AREA: Flush to Tabs */}
+      <Box sx={{ flex: 1, overflow: "auto", px: 1.5, pt: 0.5, bgcolor: "#f8fafc" }}>
+        <Box sx={{ minWidth: "1200px", bgcolor: "#fff", p: 0.5 }}>
+          {selectedElement ? (
+            React.cloneElement(selectedElement, {
+              completedPeriod,
+              stageNo
+            })
+          ) : (
+            <Typography variant="body2" align="center" sx={{ mt: 5 }}>
+              No Data
+            </Typography>
+          )}
         </Box>
-
-        {/* Team Progress description */}
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          {UI_STRINGS.REPORT_DESC(completedStageNo || stageNo, "", completedPeriod)}
-        </Typography>
-
-        {/* ❌ Removed static placeholder box */}
-        {/* ✅ Added: Tab navigation for accessible reports */}
-        <Tabs 
-          value={activeTab} 
-          onChange={handleTabChange} 
-          variant="scrollable" 
-          scrollButtons="auto" 
-          sx={{ mb: 2 }}
-        >
-          {accessibleReports.map((uiId, idx) => {
-            const shortName = userAccessiblePageIds.find(p => p.uiId === uiId)?.shortName || uiId;
-            return <Tab key={uiId} label={shortName} value={idx} />;
-          })}
-        </Tabs>
-
-        {/* ✅ Render active report component dynamically */}
-        <Box sx={{ 
-          bgcolor: "#f8fafc", 
-          borderRadius: 2, 
-          p: 2, 
-          border: "1px solid #cbd5e1",
-          minHeight: "300px" 
-        }}>
-          {activeRouteElement 
-            ? activeRouteElement 
-            : <Typography variant="body1" fontWeight="500">{UI_STRINGS.NO_REPORTS}</Typography>
-          }
-        </Box>
-        
       </Box>
     </Drawer>
   );
