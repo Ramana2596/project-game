@@ -12,7 +12,9 @@ export default function StageList(
     haltStageNo,
     handleStageClick,
     handleOpenReport,
-    handleNextMonth }) {
+    handleNextMonth,
+    loadingStageNo  
+  }) {
   return (
     <Stack spacing={2}>
       {/* Iterates through processed stage data to render interactive items */}
@@ -27,6 +29,7 @@ export default function StageList(
           handleStageClick={handleStageClick}
           handleOpenReport={handleOpenReport}
           handleNextMonth={handleNextMonth}
+          isLoading={loadingStageNo === Stage.stageNo}
         />
       ))}
     </Stack>

@@ -1,6 +1,6 @@
 // src/pages/DemoVirtual/DemoVirtual.jsx
-// Main page component orchestrating hooks, stage list, report drawer, and toast messages.
-
+// VIrtual Simulation for DEMO purpose
+// orchestrating hooks, stage list, report drawer, RBAC Reports
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Stack, Typography, LinearProgress, Paper, Avatar, IconButton, Tooltip, CircularProgress } from "@mui/material";
@@ -35,6 +35,7 @@ export default function DemoVirtual() {
   // Local state for drawer and active reporting
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeStageNo, setActiveStageNo] = useState(null);
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   // Cleanup session and navigate to entry on exit
   const handleExit = () => {
@@ -71,16 +72,23 @@ export default function DemoVirtual() {
   }, [fetchProgress, userInfo, progressData]);
 
   // Click handler marks stage as completed to advance virtual orchestration
+
+  const [loadingStageNo, setLoadingStageNo] = useState(null);
+
   const handleStageClick = async (Stage) => {
-    // Advance orchestration by marking clicked stage as the new Completed marker
-    await fetchProgress(
-      userInfo.gameId,
-      userInfo.gameBatch,
-      userInfo.gameTeam,
-      progressData?.Current_Period,
-      Stage.stageNo
-    );
+    setLoadingStageNo(Stage.stageNo); // mark clicked stage
+    setTimeout(async () => {
+      await fetchProgress(
+        userInfo.gameId,
+        userInfo.gameBatch,
+        userInfo.gameTeam,
+        progressData?.Current_Period,
+        Stage.stageNo
+      );
+      setLoadingStageNo(null); // clear after fetch
+    }, 500);
   };
+
 
   // Report handler to open side drawer for specific stages
   const handleOpenReport = (stageNo) => {
@@ -97,7 +105,7 @@ export default function DemoVirtual() {
   );
 
   return (
-    // ✅ Outer container with background image and visible header
+    // Outer container with BG image and Header
     <Box sx={{
       minHeight: "100vh", width: "100%",
       backgroundImage:
@@ -177,6 +185,7 @@ export default function DemoVirtual() {
           handleStageClick={handleStageClick}
           handleOpenReport={handleOpenReport}
           handleNextMonth={handleNextMonth}
+          loadingStageNo={loadingStageNo}
         />
 
         {/* Side-panel reports drawer with period and stage markers for historical data */}
