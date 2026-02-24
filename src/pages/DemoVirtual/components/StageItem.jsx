@@ -17,7 +17,7 @@ export default function StageItem(
     handleNextMonth }) {
 
   const isButtonLoading = actionLoading && Stage.status === "ACTIVE";
-
+console.log("Stage object:", Stage);
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       {/*  Main interactive button area with orchestration feedback overlay */}
