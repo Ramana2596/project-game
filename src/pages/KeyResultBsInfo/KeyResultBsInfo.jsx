@@ -17,6 +17,7 @@ useEffect(() => {
       gameId: userInfo.gameId,
       gameBatch: userInfo.gameBatch,
       gameTeam: userInfo.gameTeam,
+      productionMonth: productionMonth || null, // only from prop
     };
 
     getKeyResultBsInfo(payLoad).then((response) => {
