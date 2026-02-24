@@ -16,7 +16,7 @@ export const StagesMaster = [
   { stageNo: 5, label: "Operations Plan", icon: <Settings />, color: "#1565C0", isLoop: true },
   { stageNo: 6, label: "Simulation - Business Cycles", icon: <PlayCircle />, color: "#00897B", isLoop: true },
   { stageNo: 7, label: "Financial Outcomes", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
-  { stageNo: 8, label: "KPI & Team Results", icon: <SportsScore />, color: "#2E7D32", isLoop: false }, // Updated from 9 to 8
+  { stageNo: 8, label: "Key Results", icon: <SportsScore />, color: "#2E7D32", isLoop: false }, // Updated from 9 to 8
 ];
 
 // Map stage numbers to display titles
