@@ -187,7 +187,8 @@ export default function DemoVirtual() {
           completedPeriod={progressData?.Completed_Period}
           completedStageNo={progressData?.Completed_Stage_No}
           stageTitle={STAGE_TITLE_MAP[activeStageNo] || ""}
-          userAccessiblePageIds={userAccessiblePageIds} // ✅ Pass accessible reports
+          userAccessiblePageIds={userAccessiblePageIds} // Pass accessible reports
+          gameTeam={userInfo?.gameTeam}
         />
 
         {/* Toast notifications for error and status feedback */}

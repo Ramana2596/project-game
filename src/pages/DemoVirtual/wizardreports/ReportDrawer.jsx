@@ -4,11 +4,10 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { Drawer, Box, Typography, Tabs, Tab, IconButton, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useUser } from "../../../core/access/userContext";
 import { componentList } from "../../../constants/globalConstants";
 import { REPORT_REGISTRY } from "./reportRegistry";
 
-//  Recursive search component Vs route
+// Recursive search component Vs route
 function findComponentById(list, id) {
   for (const item of list) {
     if (item.id === id) return item.routeElement;
@@ -26,25 +25,24 @@ export default function ReportDrawer({
   stageNo,
   completedPeriod,
   stageTitle,
+  gameTeam,                  // ✅ receive directly from DemoVirtual
   userAccessiblePageIds = []
 }) {
-  const { userInfo } = useUser();
-  const { gameTeam } = userInfo || {};
   const [tabIndex, setTabIndex] = useState(0);
 
-  //  Reset tab index when drawer opens
+  // Reset tab index when drawer opens
   useEffect(() => {
     if (open) setTabIndex(0);
   }, [open, stageNo]);
 
-  //  Date format
+  // Date format
   const formattedMonth = useMemo(() => {
     if (!completedPeriod) return "Setup Phase";
     const date = new Date(completedPeriod);
     return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
   }, [completedPeriod]);
 
-  //  Get RBAC UiId of reports for the stage
+  // Get RBAC UiId of reports for the stage
   const reportsForStage = useMemo(() => {
     if (!stageNo) return [];
     const stageReports = (REPORT_REGISTRY[stageNo] || []).filter(
@@ -56,7 +54,7 @@ export default function ReportDrawer({
     }));
   }, [stageNo, userAccessiblePageIds]);
 
-  //  Get component for UiId for active tab
+  // Get component for UiId for active tab
   const selectedElement = reportsForStage[tabIndex]
     ? findComponentById(componentList, reportsForStage[tabIndex].uiId)
     : null;
@@ -68,7 +66,7 @@ export default function ReportDrawer({
       onClose={onClose}
       PaperProps={{
         sx: {
-          width: "80%", //  Wider drawer
+          width: "80%", // Wider drawer
           height: "100vh",
           display: "flex",
           flexDirection: "column",
@@ -77,7 +75,7 @@ export default function ReportDrawer({
         }
       }}
     >
-      {/*  HEADER: Team left, Stage center, Month right */}
+      {/* HEADER: Team left, Stage center, Month right */}
       <Box sx={{ px: 3, pt: 10, pb: 1.5 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           {/* Left: Team */}
@@ -85,7 +83,7 @@ export default function ReportDrawer({
             variant="subtitle1"
             sx={{ fontWeight: 700, color: "#1e293b", fontSize: "1.1rem" }}
           >
-            Team  {gameTeam} :
+            Team {gameTeam} :
           </Typography>
 
           {/* Center: Stage Title */}
@@ -110,21 +108,21 @@ export default function ReportDrawer({
             >
               {formattedMonth}
             </Typography>
-            <IconButton onClick={onClose} size="small" sx={{ bgcolor: '#f1f5f9' }}>
+            <IconButton onClick={onClose} size="small" sx={{ bgcolor: "#f1f5f9" }}>
               <CloseIcon fontSize="small" />
             </IconButton>
           </Stack>
         </Stack>
       </Box>
 
-      {/*  Active TABS: High-contrast BG color */}
+      {/* Active TABS: High-contrast BG color */}
       <Box sx={{ px: 2, bgcolor: "#fff", borderBottom: "1px solid #e2e8f0" }}>
         {reportsForStage.length > 0 && (
           <Tabs
             value={tabIndex}
             onChange={(e, newVal) => setTabIndex(newVal)}
             variant="scrollable"
-            TabIndicatorProps={{ sx: { display: 'none' } }}
+            TabIndicatorProps={{ sx: { display: "none" } }}
             sx={{
               minHeight: 40,
               mb: 0.5,
@@ -146,18 +144,19 @@ export default function ReportDrawer({
               }
             }}
           >
-            {reportsForStage.map((r) => <Tab key={r.uiId} label={r.shortName} />)}
+            {reportsForStage.map((r) => (
+              <Tab key={r.uiId} label={r.shortName} />
+            ))}
           </Tabs>
         )}
       </Box>
 
-      {/*  CONTENT AREA: Flush to Tabs */}
+      {/* Render active tab-report with Production_Month injected */}
       <Box sx={{ flex: 1, overflow: "auto", px: 1.5, pt: 0.5, bgcolor: "#f8fafc" }}>
         <Box sx={{ minWidth: "1200px", bgcolor: "#fff", p: 0.5 }}>
           {selectedElement ? (
             React.cloneElement(selectedElement, {
-              completedPeriod,
-              stageNo
+              productionMonth: completedPeriod // Optional Prop injection for reports that need it
             })
           ) : (
             <Typography variant="body2" align="center" sx={{ mt: 5 }}>
