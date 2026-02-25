@@ -6,20 +6,22 @@ import { pageConstants } from "./constants/pageConstants.js";
 import { useEffect, useState } from "react";
 import {
   getDashboardData,
-  getOperationalDecisionData,
-} from "./services/operationalDecisionService.js";
+  getOpsPlanData,
+} from "./services/service.js";
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 
-export default function OperationalPlanInfo() {
+
+export default function OperationalPlanInfo({ productionMonth }) {  // productionMonth as prop
   const { setIsLoading } = useLoading();
   const { userInfo } = useUser();
   const [gameData, setGameData] = useState(null);
-  const [operationalInfoData, setOperationalInfoData] = useState(null);
+  const [OpsPlanData, setOpsPlanData] = useState(null);
 
-  let getOperationalPlanInfoParam = {
+  let payload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
+    productionMonth: productionMonth,
   };
 
   useEffect(() => {
@@ -33,9 +35,9 @@ export default function OperationalPlanInfo() {
       .catch((err) => { })
       .finally(() => setIsLoading(false));
 
-    getOperationalDecisionData(getOperationalPlanInfoParam).then((response) => {
+    getOpsPlanData(payload).then((response) => {
       if (response) {
-        setOperationalInfoData(response.data);
+        setOpsPlanData(response.data.data);
       }
     })
       .catch((err) => { })
@@ -46,13 +48,15 @@ export default function OperationalPlanInfo() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      {/*}
       <Grid container margin={3} spacing={2}>
         <h3 className="standard-title-color">{pageConstants.gameBatch}: {userInfo?.gameBatch}</h3>
         <h3 className="standard-title-color">{pageConstants.gameTeam}: {userInfo?.gameTeam}</h3>
       </Grid>
+      */}
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}
-        inputTableData={operationalInfoData}
+        inputTableData={OpsPlanData}
         ifNoData={null}
         highlightColumnsByField={pageConstants.highlightedColumns}
         hiddenColumns={pageConstants.hiddenColumns}
