@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
 export function getSalesRecordInfo(queryParams) {
-    return api.get('/api/getSalesInfo',
+    return api.post('/api/getSalesInfo',
         {
             params: { ...queryParams }
         });

@@ -1,3 +1,6 @@
+// src/pages/SalesRecordInfo/SalesRecordInfo.jsx
+// Purpose: Display Sales Record Info
+
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
@@ -6,24 +9,29 @@ import { useEffect, useState } from "react";
 import { getSalesRecordInfo } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function SalesRecordInfo() {
+export default function SalesRecordInfo({ productionMonth }) {  // productionMonth as prop
   const { userInfo } = useUser();
-  let getTableDataPayload = {
+  let payload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
+    productionMonth: productionMonth || null,   // use injected prop only
   };
   const [tableData, setTableData] = useState([]);
+
+  // Fetch sales record info
   useEffect(() => {
-    getSalesRecordInfo(getTableDataPayload).then((response) => {
+    getSalesRecordInfo(payload).then((response) => {
       if (response) {
-        setTableData(response.data);
+        setTableData(response.data.data);
       }
     });
   }, []);
 
+// Render the table with sales record info
   return (
     <Box sx={{ flexGrow: 1 }}>
+      {/*
       <Grid container spacing={2} margin={3}>
         <h3 className="standard-title-color">
           {pageConstants.gameBatch}: {userInfo?.gameBatch}
@@ -32,6 +40,7 @@ export default function SalesRecordInfo() {
           {pageConstants.gameTeam}: {userInfo?.gameTeam}
         </h3>
       </Grid>
+      */}
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
