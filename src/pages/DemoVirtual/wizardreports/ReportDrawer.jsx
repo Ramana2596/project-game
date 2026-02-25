@@ -25,7 +25,7 @@ export default function ReportDrawer({
   stageNo,
   completedPeriod,
   stageTitle,
-  gameTeam,                  // ✅ receive directly from DemoVirtual
+  gameTeam,
   userAccessiblePageIds = []
 }) {
   const [tabIndex, setTabIndex] = useState(0);
