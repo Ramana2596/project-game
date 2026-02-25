@@ -32,7 +32,7 @@ export default function KeyResultBsInfo({ productionMonth }) {  // productionMon
         }
       });
     }
-  }, [userInfo, productionMonth]); // dependency includes productionMonth
+  }, [userInfo]); 
 
   // Render table with headings, hidden columns, and data
   return (
