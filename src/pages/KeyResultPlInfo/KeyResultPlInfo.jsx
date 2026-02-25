@@ -1,4 +1,5 @@
 // src/pages/KeyResultPlInfo/KeyResultPlInfo.jsx
+// Purpose: Display Key Result Income Statement Info
 
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -7,7 +8,7 @@ import { useUser } from "../../core/access/userContext.jsx";
 import { getKeyResultPlInfo } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function KeyResultPlInfo() {
+export default function KeyResultPlInfo({ productionMonth }) {  // productionMonth as prop
   const { userInfo } = useUser();
   const [tableData, setTableData] = useState([]);
 
@@ -17,6 +18,7 @@ useEffect(() => {
       gameId: userInfo.gameId,
       gameBatch: userInfo.gameBatch,
       gameTeam: userInfo.gameTeam,
+      productionMonth: productionMonth || null,   // use injected prop only
     };
 
     getKeyResultPlInfo(payLoad).then((response) => {
@@ -29,7 +31,7 @@ useEffect(() => {
       }
     });
   }
-}, [userInfo]); // Dependency ensures it runs when userInfo is ready
+}, [userInfo]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
