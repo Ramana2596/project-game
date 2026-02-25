@@ -206,10 +206,11 @@ export default function DemoWizard() {
       {/* High-Contrast Content Card for Bright Visibility */}
       <Box sx={{
         maxWidth: 700, margin: "0 auto", p: 4,
-        bgcolor: "#bbe8f0",
+        bgcolor: "#ffffff", // Pure white
         borderRadius: 6,
-        boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
-        border: "1px solid rgba(255,255,255,0.4)"
+        // Using a more neutral, professional shadow
+        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.1)",
+        border: "1px solid #e2e8f0"
       }}>
 
         {/* STICKY Heading:  */}
