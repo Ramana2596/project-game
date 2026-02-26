@@ -2,12 +2,12 @@ export const pageConstants = {
 //  gameBatch: "Batch",
 //  gameTeam: "Team",
   tableHeading: [
-      // "Game_Id",
+      "Game_Id",
       "Team",
       "Period",
       "Category",
-      // "Part_No",
-      "Part_Description",
+      "Part_No",
+      "Part Description",
       "UOM",
       "Quantity",
       "Market Info",
@@ -15,8 +15,10 @@ export const pageConstants = {
       "Currency",
       "Price Info"
     ],
+    // match with SP field names 
       hiddenColumns:
        ["Game_Id",
+        "Team",
         "Part_No"],
       highlightedColumns:
        [

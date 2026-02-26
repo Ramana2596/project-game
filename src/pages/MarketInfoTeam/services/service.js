@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
 export function getMarketInfoTeam(queryParams) {
-    return api.get('/api/getMarketInfoTeam',
+    return api.post('/api/getMarketInfoTeam',
         {
             params: { ...queryParams }
         });
