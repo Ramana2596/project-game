@@ -87,7 +87,7 @@ import manufacturingIcon from '../assets/navigation-menu/manufacturing.png'
 import dashboardIcon from '../assets/navigation-menu/dash-board.png';
 import perfOpsIcon from '../assets/navigation-menu/perfOps.png';
 import perfCoIcon from "../assets/navigation-menu/perfCo.png";
-import omgBgIcon from "../assets/navigation-menu/omgBg.png";
+import omgBg from "../assets/navigation-menu/omgBgSrp.png";
 
 // end of png 
 
