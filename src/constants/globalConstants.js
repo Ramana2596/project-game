@@ -87,6 +87,8 @@ import manufacturingIcon from '../assets/navigation-menu/manufacturing.png'
 import dashboardIcon from '../assets/navigation-menu/dash-board.png';
 import perfOpsIcon from '../assets/navigation-menu/perfOps.png';
 import perfCoIcon from "../assets/navigation-menu/perfCo.png";
+import omgBg from "../assets/navigation-menu/omgBgSrp.png";
+
 // end of png 
 
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
@@ -141,6 +143,7 @@ import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
 import KeyResultBsInfo  from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo  from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
+import DemoOmg from '../pages/DemoOmg/DemoOmg.jsx';
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -556,6 +559,14 @@ export const componentList = [
         path: "/demoWizard",
         href: "/operationGame/DemoWizard",
         routeElement: <DemoWizard />
+      },
+      {
+        iconPath: appSettings,
+        id: "UI 21 273",
+        label: "Demo OMG",
+        path: "/demoOmg",
+        href: "/operationGame/DemoOmg",
+        routeElement: <DemoOmg />
       }
 
     ],

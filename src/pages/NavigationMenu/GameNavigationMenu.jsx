@@ -116,8 +116,9 @@ import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
 import DemoWizard from '../SimulationPlay/DemoWizard.jsx';
 import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
 import SimulationSuite from '../SimulationSuite/SimulationSuite.jsx';
-import KeyResultBsInfo  from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
-import KeyResultPlInfo  from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
+import KeyResultBsInfo from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
+import KeyResultPlInfo from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
+import DemoOmg from '../DemoOmg/DemoOmg.jsx';
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
@@ -135,7 +136,7 @@ export default function MiniDrawer() {
     isVisible: false,
   });
 
-// Parameters Game_Id and RL_Id are used to fetch user access page IDs
+  // Parameters Game_Id and RL_Id are used to fetch user access page IDs
   useEffect(() => {
     if (userInfo?.gameId && user?.rlId) {
       setIsLoading(true);
@@ -360,13 +361,15 @@ export default function MiniDrawer() {
           <Route path='/AssetCatalogTeam' element={<AssetCatalogTeam />} />
           <Route path='/AssetCatalogBatch' element={<AssetCatalogBatch />} />
           <Route path='/BatchMgt' element={<BatchMgt />} />
-          <Route path='/SimulationPlay' element={<SimulationPlay />} /> 
+          <Route path='/SimulationPlay' element={<SimulationPlay />} />
           <Route path='/BatchMaster' element={<BatchMstDetails />} />
           <Route path='/demoWizard' element={<DemoWizard />} />
           <Route path='/teamPlanScreen' element={<TeamPlanScreen />} />
           <Route path='/simulationSuite' element={<SimulationSuite />} />
           <Route path='/keyResultBsInfo' element={<KeyResultBsInfo />} />
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
+          <Route path='/demoOmg' element={<DemoOmg />} />
+
           { }
 
         </Routes>
