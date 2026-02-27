@@ -12,4 +12,11 @@ export const pageConstants = {
     "Currency",
     "Closing Value"
   ],
+  hiddenColumns: [
+    "Game_Id",
+    "Game_Batch",
+    "Game_Team",
+    "Stock",
+
+  ]
 };
