@@ -1,12 +1,12 @@
-// src/pages/DemoVirtual/hooks/useProgress.js
-// Virtual API calls, HALT logic, and progress state orchestration.
+// src/pages/DemoOmg/hooks/useDemoProgress.js
+// State engine: API, progress and manages Simualtion - HALT / Play
 
 import { useState, useEffect, useCallback } from "react";
 import confetti from "canvas-confetti";
 import { getTeamProgressVirtual } from "../services/service"; 
 import { UI_STRINGS } from "../constants/labels";
 
-export function useProgress(userInfo) {
+export function useDemoProgress(userInfo) {
   // State initialization for progress tracking and UI feedback
   const [progressData, setProgressData] = useState(null);
   const [loading, setLoading] = useState(true);

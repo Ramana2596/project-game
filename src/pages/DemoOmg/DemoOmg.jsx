@@ -1,24 +1,23 @@
-// src/pages/DemoVirtual/DemoVirtual.jsx
+// src/pages/DemoOmg/DemoOmg.jsx
 // VIrtual Simulation for DEMO purpose
-// orchestrating hooks, stage list, report drawer, RBAC Reports
+// Stage Manager: Page, hooks, stage list, report drawer, RBAC Reports
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Stack, Typography, LinearProgress, Paper, Avatar, IconButton, Tooltip, CircularProgress } from "@mui/material";
 import { ExitToApp } from "@mui/icons-material";
 
 import heroBG from "../../assets/navigation-menu/heroOpsMgtUniversal.png"
-import confetti from "canvas-confetti";
 import { useUser } from "../../core/access/userContext";
 import { formatDate } from "../../utils/formatDate";
-import { useProgress } from "./hooks/useProgress";
-import { useStageUi } from "./hooks/useStageUi";
-import StageList from "./components/StageList";
+import { useDemoProgress } from "./hooks/useDemoProgress";
+import { useDemoUi } from "./hooks/useDemoUi";
+import StageProp from "./components/StageProp";
 import ReportDrawer from "./wizardreports/ReportDrawer";
 import ToastMessage from "../../components/ToastMessage";
-import { STAGE_TITLE_MAP } from "./simconstants";
+import { STAGE_TITLE_MAP } from "./stagesMaster";
 import { UI_STRINGS } from "./constants/labels";
 
-export default function DemoVirtual() {
+export default function DemoOmg() {
   const { userInfo, login, setUserInfo, userAccessiblePageIds } = useUser();
   const navigate = useNavigate();
 
@@ -27,10 +26,16 @@ export default function DemoVirtual() {
     progressData, loading, actionLoading, alertData, setAlertData,
     fetchProgress, updatePlay, effectiveHalt, haltStageNo,
     nextMonthAck, setNextMonthAck
-  } = useProgress(userInfo);
+  } = useDemoProgress(userInfo);
 
   // Compute UI mapping based on virtual progress data
-  const stageUI = useStageUi(progressData, userAccessiblePageIds, effectiveHalt, progressData?.Is_Period_Closed ?? false);
+
+  const stageUI = useDemoUi(
+    progressData,
+    userAccessiblePageIds,
+    effectiveHalt,
+    progressData?.Is_Period_Closed ?? false,
+    progressData?.Is_Simulation_End ?? false);
 
   // Local state for drawer and active reporting
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -72,7 +77,6 @@ export default function DemoVirtual() {
   }, [fetchProgress, userInfo, progressData]);
 
   // Click handler marks stage as completed to advance virtual orchestration
-
   const [loadingStageNo, setLoadingStageNo] = useState(null);
 
   const handleStageClick = async (Stage) => {
@@ -88,7 +92,6 @@ export default function DemoVirtual() {
       setLoadingStageNo(null); // clear after fetch
     }, 500);
   };
-
 
   // Report handler to open side drawer for specific stages
   const handleOpenReport = (stageNo) => {
@@ -109,66 +112,66 @@ export default function DemoVirtual() {
     <Box sx={{
       minHeight: "100vh", width: "100%",
       backgroundImage:
-        `linear-gradient(rgba(255, 255, 255, 0.80),
-       rgba(255, 255, 255, 0.30)),
-        url(${heroBG})`,
+        `linear-gradient(rgba(255, 255, 255, 0.85),
+       rgba(255, 255, 255, 0.40)),
+       url(${heroBG})`,
       backgroundSize: "cover",
       backgroundPosition: "center",
-      backgroundAttachment: "fixed", py: 3
+      backgroundAttachment: "fixed", py: 4
     }}>
       {/* High-Contrast Content Card for Bright Visibility */}
-           <Box sx={{
-              maxWidth: 700, margin: "0 auto", p: 4,
-              bgcolor: "#bbe8f0",
-              borderRadius: 6,
-              boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
-              border: "1px solid rgba(255,255,255,0.4)"
-            }}>
-      
-        {/* STICKY Heading:  */}
+      <Box sx={{
+        maxWidth: 720, margin: "0 auto", p: { xs: 2, md: 4 },
+        bgcolor: "#f1f5f9",
+        borderRadius: 8,
+        boxShadow: "0 30px 60px -12px rgba(0,0,0,0.25)",
+        border: "1px solid rgba(255,255,255,0.6)"
+      }}>
+
+        {/* STICKY Heading: Progress and Navigation controls */}
         <Box sx={{
           position: "sticky",
-          top: 64,
+          top: 20,
           zIndex: 1100,
           bgcolor: "#ffffff",
-          pt: 2,
-          px: 3, 
-          pb: 1.5,
-          mb: 3,
-          borderRadius: 3, 
-          border: "1px solid #dee2e6",
-          boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)"
+          pt: 2.5,
+          px: 3,
+          pb: 2,
+          mb: 4,
+          borderRadius: 4,
+          border: "1px solid #e2e8f0",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.08)"
         }}>
-          
-        {/* Progress header and exit action. */}
-          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-            <Typography variant="h4" fontWeight="900">{UI_STRINGS.TITLE}</Typography> {/* ✅ Larger header */}
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Typography variant="h6" color="primary" fontWeight="900">
+
+          {/* Progress header and exit action. */}
+          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
+            <Typography variant="h5" fontWeight="900" color="primary.dark">{UI_STRINGS.TITLE}</Typography>
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <Typography variant="subtitle1" color="primary.main" fontWeight="800">
                 {UI_STRINGS.PERIOD_DISPLAY(progressData?.Current_Period_No, progressData?.Total_Period)}
               </Typography>
               <Tooltip title={UI_STRINGS.EXIT_TOOLTIP} arrow>
-                <IconButton onClick={handleExit} sx={{ p: 0 }}>
-                  <Avatar sx={{ bgcolor: '#ef5350', width: 32, height: 32, cursor: 'pointer', '&:hover': { bgcolor: '#d32f2f' } }}>
-                    <ExitToApp sx={{ fontSize: 18, color: '#fff' }} />
+                <IconButton onClick={handleExit} size="small">
+                  <Avatar sx={{ bgcolor: '#f43f5e', width: 30, height: 30, cursor: 'pointer', '&:hover': { bgcolor: '#e11d48' } }}>
+                    <ExitToApp sx={{ fontSize: 16, color: '#fff' }} />
                   </Avatar>
                 </IconButton>
               </Tooltip>
             </Stack>
           </Stack>
 
-          <LinearProgress variant="determinate" value={progressData?.Progress_Percent ?? 0} sx={{ height: 10, borderRadius: 5, mb: 1.5, bgcolor: "#e2e8f0" }} />
+          <LinearProgress variant="determinate" value={progressData?.Progress_Percent ?? 0} sx={{ height: 8, borderRadius: 4, mb: 2, bgcolor: "#f1f5f9" }} />
 
-          {/* Team identity banner */}
-          <Paper elevation={0} sx={{ p: 2, bgcolor: "rgba(248, 250, 252, 0.7)", borderRadius: 2, border: "1px solid #cbd5e1" }}>
+          {/* Team identity banner for high-contrast visibility */}
+          <Paper elevation={0} sx={{ p: 2, bgcolor: "#f8fafc", borderRadius: 3, border: "1px solid #e2e8f0" }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography variant="h6" fontWeight="700" color="primary.dark" sx={{ whiteSpace: 'nowrap' }}>
+              <Typography variant="body1" fontWeight="800" color="primary.dark" sx={{ whiteSpace: 'nowrap' }}>
                 {UI_STRINGS.TEAM_PREFIX(userInfo?.gameTeam || "")}
               </Typography>
-              <Typography variant="h6" fontWeight="700" color="primary.dark" sx={{ textAlign: 'right' }}>
+              <Typography variant="body1" fontWeight="800" color="primary.dark" sx={{ textAlign: 'right' }}>
                 {progressData?.Is_Simulation_End
                   ? UI_STRINGS.SIM_COMPLETED
-                  : `${formatDate(progressData?.Current_Period)} ${progressData?.Current_Progress_Stage || ""}`
+                  : `${formatDate(progressData?.Current_Period)}`
                 }
               </Typography>
             </Stack>
@@ -176,7 +179,7 @@ export default function DemoVirtual() {
         </Box>
 
         {/* List of interactive stages orchestrated by progress state */}
-        <StageList
+        <StageProp
           stageUI={stageUI}
           actionLoading={actionLoading}
           effectiveHalt={effectiveHalt}

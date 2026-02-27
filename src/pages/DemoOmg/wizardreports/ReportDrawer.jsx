@@ -1,5 +1,5 @@
-// src/pages/DemoVirtual/wizardreports/ReportDrawer.jsx
-// Purpose: Display stage-specific RBAC reports
+// src/pages/DemoOmg/wizardreports/ReportDrawer.jsx
+// Purpose: Display(ReportWriter) stage-specific RBAC reports.
 
 import React, { useMemo, useState, useEffect } from "react";
 import { Drawer, Box, Typography, Tabs, Tab, IconButton, Stack } from "@mui/material";
@@ -7,7 +7,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { componentList } from "../../../constants/globalConstants";
 import { REPORT_REGISTRY } from "./reportRegistry";
 
-// Recursive search component Vs route
+// Recursive search component Vs route: Navigates global component list to find the matching element by UI ID.
 function findComponentById(list, id) {
   for (const item of list) {
     if (item.id === id) return item.routeElement;
@@ -30,19 +30,19 @@ export default function ReportDrawer({
 }) {
   const [tabIndex, setTabIndex] = useState(0);
 
-  // Reset tab index when drawer opens
+  // Reset tab index  at the first report when drawer opens:
   useEffect(() => {
     if (open) setTabIndex(0);
   }, [open, stageNo]);
 
-  // Date format
+  // Date format: Month-Year format fo.
   const formattedMonth = useMemo(() => {
     if (!completedPeriod) return "Setup Phase";
     const date = new Date(completedPeriod);
     return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
   }, [completedPeriod]);
 
-  // Get RBAC UiId of reports for the stage
+  // Get RBAC UiId of reports for the stage: Filters available reports by RBAC.
   const reportsForStage = useMemo(() => {
     if (!stageNo) return [];
     const stageReports = (REPORT_REGISTRY[stageNo] || []).filter(
@@ -66,7 +66,7 @@ export default function ReportDrawer({
       onClose={onClose}
       PaperProps={{
         sx: {
-          width: "80%", // Wider drawer
+          width: "85%", 
           height: "100vh",
           display: "flex",
           flexDirection: "column",
@@ -76,23 +76,28 @@ export default function ReportDrawer({
       }}
     >
       {/* HEADER: Team left, Stage center, Month right */}
-      <Box sx={{ px: 3, pt: 10, pb: 1.5 }}>
+      <Box sx={{ 
+        px: 3, 
+        pt: 4, 
+        pb: 2, 
+        borderBottom: "1px solid #e2e8f0" 
+      }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-          {/* Left: Team */}
+          {/* Left: Team Identity Group */}
           <Typography
             variant="subtitle1"
-            sx={{ fontWeight: 700, color: "#1e293b", fontSize: "1.1rem" }}
+            sx={{ fontWeight: 800, color: "primary.dark", fontSize: "1.1rem" }} 
           >
             Team {gameTeam} :
           </Typography>
 
-          {/* Center: Stage Title */}
+          {/* Center: Main Stage Title */}
           <Typography
             variant="h5"
             sx={{
-              fontWeight: 800,
+              fontWeight: 900, 
               color: "#1e293b",
-              fontSize: "1.5rem",
+              fontSize: "1.6rem",
               textAlign: "center",
               flexGrow: 1
             }}
@@ -100,7 +105,7 @@ export default function ReportDrawer({
             {stageTitle}
           </Typography>
 
-          {/* Right: Month + Close */}
+          {/* Right: Period Info + Close Action */}
           <Stack direction="row" spacing={2} alignItems="center">
             <Typography
               variant="subtitle1"
@@ -108,15 +113,15 @@ export default function ReportDrawer({
             >
               {formattedMonth}
             </Typography>
-            <IconButton onClick={onClose} size="small" sx={{ bgcolor: "#f1f5f9" }}>
+            <IconButton onClick={onClose} size="small" sx={{ bgcolor: "#f1f5f9", "&:hover": { bgcolor: "#e2e8f0" } }}>
               <CloseIcon fontSize="small" />
             </IconButton>
           </Stack>
         </Stack>
       </Box>
 
-      {/* Active TABS: High-contrast BG color */}
-      <Box sx={{ px: 2, bgcolor: "#fff", borderBottom: "1px solid #e2e8f0" }}>
+      {/* Active TABS: Professional high-contrast navigation bar */}
+      <Box sx={{ px: 2, bgcolor: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}> 
         {reportsForStage.length > 0 && (
           <Tabs
             value={tabIndex}
@@ -124,23 +129,26 @@ export default function ReportDrawer({
             variant="scrollable"
             TabIndicatorProps={{ sx: { display: "none" } }}
             sx={{
-              minHeight: 40,
-              mb: 0.5,
+              minHeight: 48,
               "& .MuiTab-root": {
-                fontWeight: 900,
-                fontSize: "0.9rem",
+                fontWeight: 800, 
+                fontSize: "0.875rem",
                 minHeight: 40,
-                textTransform: "none",
+                textTransform: "uppercase", // Professional caps
+                letterSpacing: "0.025em",
                 px: 3,
+                my: 1,
                 mx: 0.5,
-                borderRadius: "6px",
+                borderRadius: "8px",
                 color: "#64748b",
-                backgroundColor: "#E5E7EB"
+                backgroundColor: "transparent",
+                transition: "all 0.2s",
+                "&:hover": { color: "primary.main", bgcolor: "rgba(15, 23, 42, 0.04)" }
               },
               "& .MuiTab-root.Mui-selected": {
                 bgcolor: "primary.main",
                 color: "#ffffff !important",
-                "&:hover": { bgcolor: "primary.dark" }
+                boxShadow: "0 4px 12px rgba(37, 99, 235, 0.2)" 
               }
             }}
           >
@@ -151,17 +159,25 @@ export default function ReportDrawer({
         )}
       </Box>
 
-      {/* Render active tab-report with Production_Month injected */}
-      <Box sx={{ flex: 1, overflow: "auto", px: 1.5, pt: 0.5, bgcolor: "#f8fafc" }}>
-        <Box sx={{ minWidth: "1200px", bgcolor: "#fff", p: 0.5 }}>
+      {/* Report Content Area: Injects production month data into the selected component */}
+      <Box sx={{ flex: 1, overflow: "auto", px: 2, py: 2, bgcolor: "#f1f5f9" }}> 
+        <Box sx={{ 
+          minWidth: "1200px", 
+          bgcolor: "#fff", 
+          p: 3,
+          borderRadius: 2,
+          boxShadow: "0 1px 3px rgba(0,0,0,0.1)" 
+        }}>
           {selectedElement ? (
             React.cloneElement(selectedElement, {
-              productionMonth: completedPeriod // Optional Prop injection for reports that need it
+              productionMonth: completedPeriod 
             })
           ) : (
-            <Typography variant="body2" align="center" sx={{ mt: 5 }}>
-              No Data
-            </Typography>
+            <Box sx={{ textAlign: "center", py: 10 }}>
+              <Typography variant="h6" color="text.secondary" fontWeight="700">
+                No Data Available
+              </Typography>
+            </Box>
           )}
         </Box>
       </Box>
