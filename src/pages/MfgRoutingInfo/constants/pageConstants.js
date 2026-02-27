@@ -2,9 +2,9 @@ export const pageConstants = {
  // gameBatch: "Batch",
  // gameTeam: "Team",
   tableHeading: [
-    "Team",
+    //"Team",
     "Part",
-    "Process Chart",
+    "Process Chart No",
     "Sequence",
     "Process / Work Centre",
     "Shop / Facility Name",
@@ -13,4 +13,12 @@ export const pageConstants = {
     "Std Time Per Piece",
     "Unit of Time"
     ],
+     hiddenColumns: [
+    "Game_Id",
+    "Game_Batch",
+    "Game_Team",
+    "Team",
+    "Part_No",
+
+  ]
 };
