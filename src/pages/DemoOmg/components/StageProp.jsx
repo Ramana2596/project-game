@@ -1,8 +1,8 @@
 // src/pages/DemoOmg/components/StageProp.jsx
-// Purpose: Propagates orchestrated stage data and interaction handlers to StageShow rows.
+// Purpose: Propagates orchestrated stage data for UI of stage rows
 
 import React from "react";
-import { Box } from "@mui/material";
+import { Stack } from "@mui/material";
 import StageShow from "./StageShow";
 
 export default function StageProp({
@@ -17,7 +17,8 @@ export default function StageProp({
   loadingStageNo
 }) {
   return (
-    <Box sx={{ mt: 2 }}>
+    // Disburse Props of Stage by stageNo
+    <Stack spacing={2} sx={{ mt: 2 }}> 
       {stageUI.map((s) => (
         <StageShow
           key={s.stageNo}
@@ -29,9 +30,9 @@ export default function StageProp({
           handleStageClick={handleStageClick} 
           handleOpenReport={handleOpenReport} 
           handleNextMonth={handleNextMonth} 
-          isLoading={loadingStageNo === s.stageNo} 
+          isLoading={loadingStageNo === s.stageNo}
         />
       ))}
-    </Box>
+    </Stack>
   );
 }
