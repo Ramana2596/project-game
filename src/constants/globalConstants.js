@@ -142,7 +142,7 @@ import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
 import KeyResultBsInfo  from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo  from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
-import DemoOmg from "../pages/DemoOmg/DemoOmg.jsx";
+import DemoOmg from '../pages/DemoOmg/DemoOmg.jsx';
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -559,14 +559,14 @@ export const componentList = [
         href: "/operationGame/DemoWizard",
         routeElement: <DemoWizard />
       },
-            {
+      {
         iconPath: appSettings,
         id: "UI 21 273",
         label: "Demo OMG",
         path: "/demoOmg",
         href: "/operationGame/DemoOmg",
         routeElement: <DemoOmg />
-      }
+      },
 
     ],
   },

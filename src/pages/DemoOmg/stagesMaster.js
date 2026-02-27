@@ -1,4 +1,4 @@
-// src/pages/DemoVirtual/simconstants.js
+// src/pages/DemoOmg/simconstants.js
 // Holds simulation stage definitions and constants.
 
 import React from "react";
