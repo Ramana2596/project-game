@@ -2,9 +2,9 @@ export const pageConstants = {
   //  gameBatch: "Batch",
   //  gameTeam: "Team",
   tableHeading: [
-    "Team",
+   // "Team",
     "S.No",
-    "Name",
+    "Product",
     "UOM",
     "Date of Launch",
     "Product Life Cycle",
@@ -15,15 +15,19 @@ export const pageConstants = {
   ],
   // Define columns to be bold here
   highlightedColumns: [
-    "Name", 
-    "Profit_Percent", 
+    "Name",
+    "Profit_Percent",
     "Unit_Price",
   ],
   hiddenColumns: [
     "Game_Id",
     "Game_Batch",
     "Game_Team",
-     "Category_Description",
+    "Team",
+    "Part_No",
+    "Product_Category",
+    "Category_Description",
+    "PLM_Stage",
   ]
 };
 
