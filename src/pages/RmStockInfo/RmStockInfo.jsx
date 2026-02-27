@@ -6,16 +6,17 @@ import { useEffect, useState } from "react";
 import { getRmStockInfo } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function RmStockInfo() {
+export default function RmStockInfo({productionMonth}) { //prop from parent call
   const { userInfo } = useUser();
-  let getTableDataPayload = {
+  let payload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
+    production: productionMonth // as prop
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getRmStockInfo(getTableDataPayload).then((response) => {
+    getRmStockInfo(payload).then((response) => {
       if (response) {
         setTableData(response.data);
       }
@@ -24,6 +25,7 @@ export default function RmStockInfo() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      {/*}
       <Grid container spacing={2} margin={3}>
         <h3 className="standard-title-color">
           {pageConstants.gameBatch}: {userInfo?.gameBatch}
@@ -32,6 +34,7 @@ export default function RmStockInfo() {
           {pageConstants.gameTeam}: {userInfo?.gameTeam}
         </h3>
       </Grid>
+      */}
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
