@@ -88,7 +88,6 @@ import dashboardIcon from '../assets/navigation-menu/dash-board.png';
 import perfOpsIcon from '../assets/navigation-menu/perfOps.png';
 import perfCoIcon from "../assets/navigation-menu/perfCo.png";
 import omgBg from "../assets/navigation-menu/omgBgSrp.png";
-
 // end of png 
 
 import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
@@ -547,7 +546,7 @@ export const componentList = [
       {
         iconPath: appSettings,
         id: "UI 21 272",
-        label: "Simulation Suite",
+        label: "O M G",
         path: "/simulationSuite",
         href: "/operationGame/simulationSuite",
         routeElement: <SimulationSuite />
@@ -567,7 +566,7 @@ export const componentList = [
         path: "/demoOmg",
         href: "/operationGame/DemoOmg",
         routeElement: <DemoOmg />
-      }
+      },
 
     ],
   },

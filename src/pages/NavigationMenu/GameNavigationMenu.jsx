@@ -116,8 +116,8 @@ import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
 import DemoWizard from '../SimulationPlay/DemoWizard.jsx';
 import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
 import SimulationSuite from '../SimulationSuite/SimulationSuite.jsx';
-import KeyResultBsInfo from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
-import KeyResultPlInfo from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
+import KeyResultBsInfo  from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
+import KeyResultPlInfo  from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
 import DemoOmg from '../DemoOmg/DemoOmg.jsx';
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
@@ -369,8 +369,6 @@ export default function MiniDrawer() {
           <Route path='/keyResultBsInfo' element={<KeyResultBsInfo />} />
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
           <Route path='/demoOmg' element={<DemoOmg />} />
-
-          { }
 
         </Routes>
       </Box>
