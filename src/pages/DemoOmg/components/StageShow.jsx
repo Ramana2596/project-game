@@ -23,7 +23,7 @@ export default function StageShow({
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       
-      {/* Stage button */}
+      {/* Stage Interactive button */}
       <Box sx={{ flex: 1, position: 'relative', overflow: 'hidden', borderRadius: '14px' }}>
         
         {isLoading && (
@@ -61,7 +61,7 @@ export default function StageShow({
         </Button>
       </Box>
 
-      {/* Sidebar actions:view reports & period triggers */}
+      {/* Sidebar actions:view reports & NextMonth triggers */}
       <Stack
         direction="row"
         alignItems="center"
@@ -83,7 +83,7 @@ export default function StageShow({
           </span>
         </Tooltip>
 
-        {/* Next Month trigger with Master Pulse Animation */}
+        {/* NextMonth trigger with Pulse Animation */}
         <Box sx={{ width: 34 }}>
           {Stage.stageNo === haltStageNo && effectiveHalt && !isSimulationEnd && (
             <Tooltip title={UI_STRINGS.NEXT_MONTH_TOOLTIP || "Proceed to next month"} arrow>
