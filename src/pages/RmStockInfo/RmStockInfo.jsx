@@ -12,7 +12,7 @@ export default function RmStockInfo({productionMonth}) { //prop from parent call
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
-    production: productionMonth // as prop
+    productionMonth: productionMonth // as prop
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
