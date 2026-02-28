@@ -6,21 +6,34 @@ import { useEffect, useState } from "react";
 import { getRmStockInfo } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function RmStockInfo({productionMonth}) { //prop from parent call
+export default function RmStockInfo({ productionMonth }) { //prop from parent call
   const { userInfo } = useUser();
+  const [tableData, setTableData] = useState([]);
+
   let payload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
     productionMonth: productionMonth // as prop
   };
-  const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getRmStockInfo(payload).then((response) => {
-      if (response) {
-        setTableData(response.data);
-      }
-    });
+    if (userInfo?.gameId) {
+      const payLoad = {
+        gameId: userInfo.gameId,
+        gameBatch: userInfo.gameBatch,
+        gameTeam: userInfo.gameTeam,
+        productionMonth: productionMonth || null,   // use injected prop only
+      };
+      getRmStockInfo(payLoad).then((response) => {
+        // response.data is the JSON body { success, code, data }
+        // response.data.data is Array of data [...]
+        if (response?.data?.success && Array.isArray(response.data.data)) {
+          setTableData(response.data.data);
+        } else {
+          setTableData([]);
+        }
+      });
+    }
   }, []);
 
   return (
