@@ -17,5 +17,5 @@ export const pageConstants = {
     "Game_Batch",
     "Game_Team",
     "Stock",
-
+    ]
 };
