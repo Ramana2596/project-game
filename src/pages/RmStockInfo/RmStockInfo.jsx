@@ -36,7 +36,8 @@ export default function RmStockInfo() {
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
-        hiddenColumns={[]}
+        highlightColumnsByField={pageConstants.highlightedColumns}
+        hiddenColumns={pageConstants.hiddenColumns}
       ></GenericTable>
     </Box>
   );
