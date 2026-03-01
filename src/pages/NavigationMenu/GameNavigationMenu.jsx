@@ -136,7 +136,7 @@ export default function MiniDrawer() {
     isVisible: false,
   });
 
-// Parameters Game_Id and RL_Id are used to fetch user access page IDs
+  // Parameters Game_Id and RL_Id are used to fetch user access page IDs
   useEffect(() => {
     if (userInfo?.gameId && user?.rlId) {
       setIsLoading(true);
@@ -361,7 +361,7 @@ export default function MiniDrawer() {
           <Route path='/AssetCatalogTeam' element={<AssetCatalogTeam />} />
           <Route path='/AssetCatalogBatch' element={<AssetCatalogBatch />} />
           <Route path='/BatchMgt' element={<BatchMgt />} />
-          <Route path='/SimulationPlay' element={<SimulationPlay />} /> 
+          <Route path='/SimulationPlay' element={<SimulationPlay />} />
           <Route path='/BatchMaster' element={<BatchMstDetails />} />
           <Route path='/demoWizard' element={<DemoWizard />} />
           <Route path='/teamPlanScreen' element={<TeamPlanScreen />} />
@@ -369,7 +369,6 @@ export default function MiniDrawer() {
           <Route path='/keyResultBsInfo' element={<KeyResultBsInfo />} />
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
           <Route path='/demoOmg' element={<DemoOmg />} />
-          { }
 
         </Routes>
       </Box>

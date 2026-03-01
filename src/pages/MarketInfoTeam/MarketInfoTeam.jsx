@@ -6,16 +6,17 @@ import { useEffect, useState } from "react";
 import { getMarketInfoTeam } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function MarketInfoTeam() {
+export default function MarketInfoTeam({productionMonth}) { // as prop from parent component
   const { userInfo } = useUser();
-  let getTableDataPayload = {
+  let payload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
+    productionMonth: productionMonth  // as prop 
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getMarketInfoTeam(getTableDataPayload).then((response) => {
+    getMarketInfoTeam(payload).then((response) => {
       if (response) {
         setTableData(response.data);
       }
