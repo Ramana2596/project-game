@@ -30,7 +30,7 @@ export default function StrategyPlanTeam() {
         inputTableData={tableData}
         ifNoData={null}
         highlightColumnsByField={pageConstants.highlightedColumns}
-        hiddenColumns={[]}
+        hiddenColumns={pageConstants.hiddenColumns}
       ></GenericTable>
 
     </Box>
