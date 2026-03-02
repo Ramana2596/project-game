@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getStrategyBenefit } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function StrategySetCollection() {
+export default function StrategyBenefit() {
   const { userInfo } = useUser();
   let payload = {
     gameId: userInfo?.gameId
@@ -15,7 +15,7 @@ export default function StrategySetCollection() {
   useEffect(() => {
     getStrategyBenefit(payload).then((response) => {
       if (response) {
-        setTableData(response.data);
+        setTableData(response.data.data); // array
       }
     });
   }, []);
