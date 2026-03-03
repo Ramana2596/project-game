@@ -1,22 +1,18 @@
 export const pageConstants = {
-  gameBatch: "Batch",
-  gameTeam: "Team",
-  tableHeading: [
-    "Line_no",
-    "Details",
-    "PrvYear_End",
-    "Period_1",
-    "Period_2",
-    "Period_3",
-    "Period_4",
-    "Period_5",
-    "Period_6",
-    "Period_7",
-    "Period_8",
-    "Period_9",
-    "Period_10",
-    "Period_11",
-    "Period_12",
+  // TableHeadings are dynamic rendered, See BanceSheetInfo.jsx
+  // Fallback used only if data hasn't loaded yet
+  fallbackHeadings: [
+    "Line_No",
+    "Details"
+  ],
+  // ❌ Removed Period_1 through Period_12 as they are now dynamic
+  highlightColumns: [
+
+  ],
+  hiddenColumns: [
+    "Game_Id",
+    "Game_Batch",
+    "Game_Team",
   ],
   vitalRows: [
     "Equity",
