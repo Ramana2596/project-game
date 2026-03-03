@@ -15,7 +15,7 @@ export const pageConstants = {
    // column from SP
   highlightedColumns: [
     "Strategy",  
-    "BPart_Description",
+    "Part_Description",
     "Demand_Percent",
     "Accrual_Date"
    ],
