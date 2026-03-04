@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
 export function getIncomeStatementInfo(queryParams) {
-    return api.get('/api/getIncomeStatementInfo',
+    return api.post('/api/getIncomeStatementInfo',
         {params: { ...queryParams }
     });
 }
