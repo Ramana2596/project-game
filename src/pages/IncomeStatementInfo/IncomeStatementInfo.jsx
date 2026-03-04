@@ -26,9 +26,10 @@ export default function IncomeStatementInfo({ productionMonth }) {  // as prrop 
   // Income Statement
   useEffect(() => {
     getIncomeStatementInfo(payload).then((response) => {
-      if (response) {
-        setTableData(response.data.data);
-
+      if (response && response.data.data.length > 0) {
+        const rawData = response.data.data;
+        setTableData(rawData);
+        
         // Generate Column headings from data (excluding hidden ones)
         const keys = Object.keys(rawData[0]);
         const filteredHeadings = keys.filter(key => !pageConstants.hiddenColumns.includes(key));
