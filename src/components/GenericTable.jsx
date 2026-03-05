@@ -35,6 +35,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+// Indian number formatting
+const formatNumber = (value) => {
+  if (value === null || value === undefined) return "";
+  if (!isNaN(value)) return new Intl.NumberFormat("en-US").format(value);
+  return value;
+};
+
+// detect numeric
+const isNumeric = (value) => {
+  if (value === null || value === undefined) return false;
+  return !isNaN(value);
+};
+
 function GenericTable({
   inputTableHeadings,                 //UI column captions (display order only)
   inputTableData,                     //Array of row objects (DB field driven rendering)
