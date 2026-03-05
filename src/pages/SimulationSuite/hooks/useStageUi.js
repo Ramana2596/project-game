@@ -2,7 +2,7 @@
 // Build Stage UI model (status, styles, tooltips) from progress and access list
 
 import { useMemo } from "react";
-import { STAGES } from "../simconstants.js";
+import { STAGES } from "../stageConstants.js"
 import { REPORT_REGISTRY } from "../wizardreports/reportRegistry.js";
 import { UI_STRINGS } from "../constants/labels.js";
 
