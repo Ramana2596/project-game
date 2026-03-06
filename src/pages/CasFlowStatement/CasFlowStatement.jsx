@@ -12,7 +12,7 @@ import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 export default function CasFlowStatement() {
   const { userInfo } = useUser();
   const { setIsLoading } = useLoading();
-  let getTableDataPayload = {
+  let payload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
@@ -20,9 +20,9 @@ export default function CasFlowStatement() {
   const [tableData, setTableData] = useState([]);
   const [chartData, setChartData] = useState([]);
   useEffect(() => {
-    getCashFlowStatement(getTableDataPayload).then((response) => {
+    getCashFlowStatement(payload).then((response) => {
       if (response) {
-        setTableData(response.data);
+        setTableData(response.data.data);
       }
     });
   }, []);
