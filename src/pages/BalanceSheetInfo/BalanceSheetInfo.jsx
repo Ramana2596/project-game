@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { useEffect, useState } from "react";
-import { getBalanceSheetInfo } from "./services/balanceSheetInfoService.js";
+import { getBalanceSheetInfo } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 import InventoryLineChart from "../GameDashboard/components/InventoryLineChart.jsx";
 import { getChartInfo } from "../GameDashboard/services/gameDashboard.js";
@@ -12,7 +12,7 @@ import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 export default function BalanceSheetInfo() {
   const { userInfo } = useUser();
   const { setIsLoading } = useLoading();
-  let getBalanceSheetInfoParams = {
+  let payload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
@@ -20,7 +20,7 @@ export default function BalanceSheetInfo() {
   const [tableData, setTableData] = useState([]);
   const [chartData, setChartData] = useState([]);
   useEffect(() => {
-    getBalanceSheetInfo(getBalanceSheetInfoParams).then((response) => {
+    getBalanceSheetInfo(payload).then((response) => {
       if (response) {
         setTableData(response.data);
       }
