@@ -4,7 +4,6 @@ import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { useEffect, useState } from "react";
 import { getIncomeStatementInfo } from "./services/service.js";
-import { getIncomeStatementInfo } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 import { chartConstants } from "./constants/chartConstants.js"; // New import
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
@@ -46,7 +45,7 @@ export default function IncomeStatementInfo({ productionMonth }) {
         const rawData = response.data.data;
         setTableData(rawData);
 
-        // Generate dynamic headings from data (excluding hidden ones)
+        // Generate Column headings - excluding hidden ones
         const keys = Object.keys(rawData[0]);
         const filteredHeadings = keys.filter(
           (key) => !pageConstants.hiddenColumns.includes(key)
@@ -54,6 +53,7 @@ export default function IncomeStatementInfo({ productionMonth }) {
         setDynamicHeadings(filteredHeadings);
 
         // Transform table data into chart series (one chart per detail)
+        // X- Axis: Month
         const months = filteredHeadings.filter(
           (h) => h !== "Details" && h !== "Line_No"
         );
