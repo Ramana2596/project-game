@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
 export function getFgStockInfo(queryParams) {
-    return api.get('/api/getFgStockInfo',
+    return api.post('/api/getFgStockInfo',
         {
             params: { ...queryParams }
         });
