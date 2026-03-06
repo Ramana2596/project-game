@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
-export function getStrategyPlanTeam(queryParams) {
-    return api.post('/api/getStrategyPlanTeam',
+export function getStrategyBenefit(queryParams) {
+    return api.post('/api/getStrategyBenefit',
         {
             params: { ...queryParams }
         });
