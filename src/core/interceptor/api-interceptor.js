@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE_URL
+    baseURL: process.env.REACT_APP_API_BASE_URL //Production API Base URL
+    // baseURL: process.env.REACT_APP_DEV_API_BASE_URL //Development API Base URL - enable this line for development
 });
 
 api.defaults.headers.common['ngrok-skip-browser-warning'] = `true`; // Replace 'token' with your actual token or a function to get the token

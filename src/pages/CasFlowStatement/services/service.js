@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
 export function getCashFlowStatement(queryParams) {
-    return api.get('/api/getCashFlowStatement',
+    return api.post('/api/getCashFlowStatement',
         {
             params: { ...queryParams }
         });
