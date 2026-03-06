@@ -4,7 +4,7 @@
 import React from "react";
 import { Box, CircularProgress, Paper, Stack, Typography, LinearProgress, Tooltip, IconButton, Avatar } from "@mui/material";
 import { ExitToApp } from "@mui/icons-material";
-import StageList from "./components/StageList.jsx";
+import StageProp from "./components/StageProp.jsx";
 import ReportDrawer from "./wizardreports/ReportDrawer.jsx";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import { useProgress } from "./hooks/useProgress.js";
@@ -96,7 +96,7 @@ export default function SimulationSuite() {
         </Box>
 
         {/* Stage list */}
-        <StageList stages={stageUi} onStageClick={handleStageClick} onOpenReport={handleOpenReport} actionLoading={actionLoading} />
+        <StageProp stages={stageUi} onStageClick={handleStageClick} onOpenReport={handleOpenReport} actionLoading={actionLoading} />
 
         {/* ✅ Report drawer with accessible reports */}
         <ReportDrawer
