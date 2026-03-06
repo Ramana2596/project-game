@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { useEffect, useState } from "react";
-import { getIncomeStatementInfo } from "./services/incomeStatementInfoService.js";
+import { getIncomeStatementInfo } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 import ProfitPercentLineChart from "../GameDashboard/components/ProfitPercentLineChart.jsx";
 import { getChartInfo } from "../GameDashboard/services/gameDashboard.js";
@@ -12,7 +12,7 @@ import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 export default function IncomeStatementInfo() {
   const { userInfo } = useUser();
   const { setIsLoading } = useLoading();
-  let getOperationalPlanInfoParam = {
+  let payload = {
     gameId: userInfo?.gameId,
     gameBatch: Number(userInfo?.gameBatch),
     gameTeam: userInfo?.gameTeam,
@@ -20,9 +20,9 @@ export default function IncomeStatementInfo() {
   const [tableData, setTableData] = useState([]);
   const [chartData, setChartData] = useState([]);
   useEffect(() => {
-    getIncomeStatementInfo(getOperationalPlanInfoParam).then((response) => {
+    getIncomeStatementInfo(payload).then((response) => {
       if (response) {
-        setTableData(response.data);
+        setTableData(response.data.data);
       }
     });
   }, []);
