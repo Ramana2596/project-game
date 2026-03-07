@@ -18,7 +18,7 @@ export default function MarketInfoTeam({productionMonth}) { // as prop from pare
   useEffect(() => {
     getMarketInfoTeam(payload).then((response) => {
       if (response) {
-        setTableData(response.data.data);
+        setTableData(response.data);
       }
     });
   }, []);

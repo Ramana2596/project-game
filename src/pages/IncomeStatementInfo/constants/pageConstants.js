@@ -1,21 +1,22 @@
 export const pageConstants = {
-  //gameBatch: "Batch",
-  //gameTeam: "Team",
-  
-  // TableHeadings: Dynamic Column Heading, removed Period_1.._12. See IncomeStatementInfo.jsx
-  // Fallback used only if data has not loaded
-  fallbackHeadings: [
-    "Line_No",
-    "Details"
-  ],
-  
-  highlightColumns: [
-
-  ],
-  hiddenColumns: [
-    "Game_Id",
-    "Game_Batch",
-    "Game_Team",
+  gameBatch: "Batch",
+  gameTeam: "Team",
+  tableHeading: [
+    "Line_no",
+    "Details",
+    "PrvYear_End",
+    "Period_1",
+    "Period_2",
+    "Period_3",
+    "Period_4",
+    "Period_5",
+    "Period_6",
+    "Period_7",
+    "Period_8",
+    "Period_9",
+    "Period_10",
+    "Period_11",
+    "Period_12",
   ],
   vitalRows: [
     "Sales Revenue",

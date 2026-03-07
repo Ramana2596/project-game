@@ -52,8 +52,7 @@ export default function RmStockInfo({ productionMonth }) { //prop from parent ca
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
-        highlightColumnsByField={pageConstants.highlightedColumns}
-        hiddenColumns={pageConstants.hiddenColumns}
+        hiddenColumns={[]}
       ></GenericTable>
     </Box>
   );

@@ -143,7 +143,6 @@ import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
 import KeyResultBsInfo  from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo  from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
 import DemoOmg from '../pages/DemoOmg/DemoOmg.jsx';
-import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -191,16 +190,8 @@ export const componentList = [
     routeElement: <InfoDesk />,
     children: [
       {
-        iconPath: approvalIcon,
-        id: "UI 21 010",
-        label: "Strategy Formulation",
-        path: "/strategyBenefit",
-        href: "/operationGame/StrategyBenefit",
-        routeElement: <StrategyBenefit />
-      },
-      {
         iconPath: strategySetsIcon,
-        id: "UI 21 011",
+        id: "UI 21 010",
         label: "Strategy Sets Collection",
         path: "/StrategySetCollection",
         href: "/operationGame/StrategySetCollection",

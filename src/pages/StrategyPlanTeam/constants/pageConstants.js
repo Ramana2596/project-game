@@ -2,15 +2,14 @@ export const pageConstants = {
   //gameBatch: "Batch",
   //gameTeam: "Team",
   tableHeading: [
-    "S No",
-   // "Team",
-   // "Strategy Set",
-   // "Strategy Id",  
+    "Team",
+    "Strategy Set",
+    "Strategy Id",  
     "Implement Decision",
     "Strategy",
     "Benefit",
-    "UOM",
-    "Budget Amount",
+    "Currency",
+    "Budget",
     "Invest-Period",
     "Outcome",
     "From Month No",
@@ -20,20 +19,10 @@ export const pageConstants = {
   ],
   // column from SP
   highlightedColumns: [
-    "Player_Decision",
+    "Decision",
     "Strategy",  
-    "Budget_Amount",
-    "Duration_Month",
+    "Budget",
+    "Duration",
     "Norm_Percent"
-   ],
-   hiddenColumns: [
-    "Game_Id",
-    "Game_Batch",
-    "Game_Team",
-    "Team",
-    "Strategy_Set_No",
-    "Strategy_Id",
-    "Mutual_X_Group",
-
    ],
 };
