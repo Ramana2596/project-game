@@ -1,194 +1,187 @@
+```javascript
+// GenericTable.jsx
+// Final Industry-grade universal table using MUI DataGrid
+// Compact columns + horizontal scroll
+
 import * as React from "react";
-import { Box } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
+import { Box, Tooltip } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { dateColumns } from "../constants/globalConstants.js";
 import { formatDate } from "../utils/formatDate";
 
-// Styled header/body cell visuals
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-    padding: "8px 16px", // Adjust the padding to reduce height
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
 
-// Zebra striping rows
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
+// Indian number formatting
+const formatNumber = (value) => {
+  if (value === null || value === undefined) return "";
+  if (!isNaN(value)) return new Intl.NumberFormat("en-US").format(value);
+  return value;
+};
+
+
+// detect numeric
+const isNumeric = (value) => {
+  if (value === null || value === undefined) return false;
+  return !isNaN(value);
+};
+
 
 function GenericTable({
-  inputTableHeadings,                 //UI column captions (display order only)
-  inputTableData,                     //Array of row objects (DB field driven rendering)
-  ifNoData,                           //Flag to show error row instead of data
-  isAnEditableTable = false,          //Switch between read-only and checkbox table modes
-  hiddenColumns = [],                 //DB field names to be hidden from rendering
-  highlightRowsByDetail = [],        // row highlight prop
-  highlightColumnsByField = [],      // column highlight by DB field name
+  inputTableHeadings,
+  inputTableData,
+  ifNoData,
+  isAnEditableTable = false,
+  hiddenColumns = [],
+  highlightRowsByDetail = [],
+  highlightColumnsByField = [],
 }) {
-  // Flat value set (unused elsewhere)
-  let tableValueSet = inputTableData?.map((tableDataObj) => {
-    return Object.values(tableDataObj);
-  });
 
-  // Derive cell meta (type/date handling)
-  let cellValueType = inputTableData?.map((tableObj) => {
-    const transFormedItem = {};
-    Object.keys(tableObj).forEach((key) => {
-      transFormedItem[key] = {
-        value: tableObj[key],
-        inputType: key === "Game_Id" ? "checkbox" : "readOnly",
-        valueType: dateColumns.includes(key.toLowerCase()) ? "date" : "text",
-      };
-    });
-    return transFormedItem;
-  });
+  const tableData = Array.isArray(inputTableData) ? inputTableData : [];
 
-  if (ifNoData) {
-    return (
-      <Box marginLeft={5} marginRight={5} marginTop={2} sx={{ flexGrow: 1 }}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 500 }} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                {inputTableHeadings?.map((headingString) => {
-                  if (!hiddenColumns.includes(headingString)) {
-                    return (
-                      <StyledTableCell align="right">
-                        {headingString}
-                      </StyledTableCell>
-                    );
-                  }
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <StyledTableRow align="right">
-                {"Error occurred while loading the table..."}
-              </StyledTableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    );
-  } else if (isAnEditableTable) {
-    // Editable table rendering with optional column highlight
-    return (
-      <Box marginLeft={5} marginRight={5} marginTop={2} sx={{ flexGrow: 1 }}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 500 }} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                {inputTableHeadings?.map((headingString) => {
-                  return (
-                    <StyledTableCell align="right">
-                      {headingString}
-                    </StyledTableCell>
-                  );
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {cellValueType?.map((valueSet) => {
+  const rows = tableData.map((row, index) => ({
+    id: index + 1,
+    ...row,
+  }));
+
+
+  const columns =
+    tableData.length > 0
+      ? Object.keys(tableData[0])
+          .filter((key) => !hiddenColumns.includes(key))
+          .map((key) => {
+
+            const firstValue = tableData[0][key];
+            const numeric = isNumeric(firstValue);
+
+            return {
+              field: key,
+              headerName: key.replaceAll("_", " "),
+              width: 180,        // fixed width prevents stretching
+              sortable: true,
+
+              align: numeric ? "right" : "left",
+              headerAlign: numeric ? "right" : "left",
+
+              cellClassName: highlightColumnsByField.includes(key)
+                ? "highlight-column"
+                : "",
+
+              renderCell: (params) => {
+
+                const value = params.value;
+
+                if (key === "Game_Id" && isAnEditableTable) {
+                  return <DoneAllIcon fontSize="small" />;
+                }
+
+                if (
+                  dateColumns.includes(key.toLowerCase()) ||
+                  key.toLowerCase().includes("date")
+                ) {
+                  return formatDate(value);
+                }
+
+                const displayValue = formatNumber(value);
+
                 return (
-                  <StyledTableRow align="right">
-                    {Object.keys(valueSet).map((key) => {
-                      if (!hiddenColumns.includes(key)) {
-                        return (
-                          <StyledTableCell
-                            align="right"
-                            sx={{
-                              fontWeight: highlightColumnsByField.includes(key) ? "bold" : "normal", // ✅ column highlight support
-                            }}
-                          >
-                            {valueSet[key]?.inputType === "checkbox" ? (
-                              <DoneAllIcon />
-                            ) : (
-                              valueSet[key]?.value
-                            )}
-                          </StyledTableCell>
-                        );
-                      }
-                    })}
-                  </StyledTableRow>
+                  <Tooltip title={String(displayValue)}>
+                    <span
+                      style={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        width: "100%",
+                      }}
+                    >
+                      {displayValue}
+                    </span>
+                  </Tooltip>
                 );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    );
-  } else {
-    // Read-only table rendering with row + column highlight
+              },
+            };
+          })
+      : [];
+
+
+  const getRowClassName = (params) => {
+    const highlight = highlightRowsByDetail.includes(params.row?.Details);
+    return highlight ? "highlight-row" : "";
+  };
+
+
+  if (ifNoData || tableData.length === 0) {
     return (
-      <Box marginLeft={2} marginRight={2} marginTop={2} sx={{ flexGrow: 1 }}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 500 }} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                {inputTableHeadings?.map((headingString) => {
-                  return (
-                    <StyledTableCell align="right">
-                      {headingString}
-                    </StyledTableCell>
-                  );
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {inputTableData?.map((valueObj) => {
-                const isVital = highlightRowsByDetail.includes(valueObj["Details"]); // existing row highlight
-                return (
-                  <StyledTableRow align="right">
-                    {Object.keys(valueObj).map((key) => {
-                      if (!hiddenColumns.includes(key)) {
-                        return (
-                          <StyledTableCell
-                            align="right"
-                            sx={{
-                              fontWeight:
-                                isVital || highlightColumnsByField.includes(key) // row OR column highlight
-                                  ? "bold"
-                                  : "normal",
-                            }}
-                          >
-                            {dateColumns.some(
-                              (column) =>
-                                column === key.toLowerCase() || column === key
-                            ) || key.toLowerCase().includes("date")
-                              ? formatDate(valueObj[key])
-                              : valueObj[key]}
-                          </StyledTableCell>
-                        );
-                      }
-                    })}
-                  </StyledTableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <Box marginLeft={2} marginRight={2} marginTop={2}>
+        <Box
+          sx={{
+            padding: 3,
+            textAlign: "center",
+            border: "1px solid #e5e7eb",
+            borderRadius: 1,
+            backgroundColor: "#f9fafb",
+          }}
+        >
+          No data available
+        </Box>
       </Box>
     );
   }
+
+
+  return (
+    <Box
+      marginLeft={2}
+      marginRight={2}
+      marginTop={2}
+      sx={{
+        width: "100%",
+        overflowX: "auto",   // enables horizontal scroll
+      }}
+    >
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        autoHeight
+        pagination
+        pageSizeOptions={[5, 10, 25, 50]}
+        disableRowSelectionOnClick
+        getRowClassName={getRowClassName}
+
+        sx={{
+          minWidth: columns.length * 180,   // prevents stretching
+
+          border: "1px solid #e5e7eb",
+          fontFamily: "Inter, Roboto, Arial",
+          fontSize: 13,
+
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: "#000000",
+            color: "#ffffff",
+            fontWeight: 600,
+          },
+
+          "& .MuiDataGrid-row:nth-of-type(odd)": {
+            backgroundColor: "#f8fafc",
+          },
+
+          "& .MuiDataGrid-row:hover": {
+            backgroundColor: "#f1f5f9",
+          },
+
+          "& .highlight-column": {
+            backgroundColor: "#fef9c3",
+            fontWeight: 600,
+          },
+
+          "& .highlight-row": {
+            fontWeight: 600,
+            backgroundColor: "#fefce8",
+          },
+        }}
+      />
+    </Box>
+  );
 }
 
 export default GenericTable;
+```

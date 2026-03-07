@@ -35,15 +35,6 @@ export default function BalanceSheetInfo({ productionMonth }) {
   // State for table, chart, headings, and chart type
   const [tableData, setTableData] = useState([]);
   const [chartData, setChartData] = useState([]);
-
-  useEffect(() => {
-    getBalanceSheetInfo(payload).then((response) => {
-      if (response) {
-        setTableData(response.data.data);
-      }
-    });
-  }, []);
-
   const [dynamicHeadings, setDynamicHeadings] = useState([]);
   const [chartType, setChartType] = useState(chartConstants.defaultChartType);
 
