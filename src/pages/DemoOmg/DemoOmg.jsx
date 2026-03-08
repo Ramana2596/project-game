@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Stack, Typography, LinearProgress, Paper, Avatar, IconButton, Tooltip, CircularProgress } from "@mui/material";
 import { ExitToApp } from "@mui/icons-material";
-
-import heroBG from "../../assets/navigation-menu/heroOpsMgtUniversal.png"
+import omgBg from "../../assets/navigation-menu/omgBgSrp.png"
+//import heroBG from "../../assets/navigation-menu/heroOpsMgtUniversal.png"
 import { useUser } from "../../core/access/userContext";
 import { formatDate } from "../../utils/formatDate";
 import { useDemoProgress } from "./hooks/useDemoProgress";
@@ -114,7 +114,7 @@ export default function DemoOmg() {
       backgroundImage:
         `linear-gradient(rgba(255, 255, 255, 0.75),
        rgba(255, 255, 255, 0.40)),
-       url(${heroBG})`,
+       url(${omgBg})`,
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundAttachment: "fixed", py: 6, px: 2

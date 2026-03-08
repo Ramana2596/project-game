@@ -571,7 +571,7 @@ export const componentList = [
       {
         iconPath: appSettings,
         id: "UI 21 273",
-        label: "Demo OMG",
+        label: "Demo",
         path: "/demoOmg",
         href: "/operationGame/DemoOmg",
         routeElement: <DemoOmg />
