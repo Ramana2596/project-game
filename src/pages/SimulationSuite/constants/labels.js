@@ -1,33 +1,29 @@
 // src/pages/SimulationSuite/constants/labels.js
-// Centralised UI labels and templates of SimulationSuite
+// Purpose: Centralized labels and UI text for Simulation Suite
 
 
+/*
 export const MODE_LABELS = {
   DEMO: "Demo",
   CLASS: "Classroom",
   ONLINE: "Online",
   HYBRID: "Hybrid"
 };
+*/
 
-// Strings used by components
+// UI labels used across SimulationSuite components
 export const UI_STRINGS = {
-  SIMULATION_PROGRESS: "Simulation Progress",
-  LEAVE_SIMULATION: "Leave Simulation",
-  NO_REPORTS: "No reports available",
-  SIMULATION_COMPLETED: "🏆 Simulation Completed! 🏆",
-  CLICK_TO_PROCEED: "Click to proceed",
-  REFRESH: "Refresh",
-  OPEN_REPORTS_ARIA: (stageNo) => `Open reports for stage ${stageNo}`
+  HEADER: "Simulation",
+  PERIOD: "Period",
+  TEAM: "Team",
+  SIM_COMPLETED: "Simulation Completed",
+  EXIT_TOOLTIP: "Exit Simulation",
+  NEXT_MONTH_TOOLTIP: "Proceed to Next Month",
+  ERROR_STATUS: "Error updating simulation status"
 };
 
-// Stage-related headings
-export const STAGE_TEMPLATES = {
-  TITLE: (stageNo, label) => `${stageNo}: ${label}`,
-  REPORTS_HEADER: (stageNo) => `${stageNo} Reports`,
-};
-
-export default {
-  MODE_LABELS,
-  UI_STRINGS,
-  STAGE_TEMPLATES
-};
+/*
+  DEMO: "Demo",
+  CLASS: "Classroom",
+  ONLINE: "Self-paced",
+*/
