@@ -555,7 +555,7 @@ export const componentList = [
       {
         iconPath: appSettings,
         id: "UI 21 272",
-        label: "O M G",
+        label: "Business Cycle",
         path: "/simulationSuite",
         href: "/operationGame/simulationSuite",
         routeElement: <SimulationSuite />
