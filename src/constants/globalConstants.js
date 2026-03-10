@@ -90,7 +90,6 @@ import perfCoIcon from "../assets/navigation-menu/perfCo.png";
 import omgBg from "../assets/navigation-menu/omgBgSrp.png";
 // end of png 
 
-import FeatureManagement from "../pages/FeatureManagement/FeatureManagement";
 import Operations from "../pages/Operations/Operations";
 import MarketScenario from "../pages/MarketScenario/MarketScenario.jsx";
 import AccountPayable from "../pages/AccountPayable/AccountPayable";
@@ -534,16 +533,6 @@ export const componentList = [
     href: "/operationGame/Simulation",
     routeElement: <Simulation />,
     children: [
-      /*
-        {
-          iconPath: appSettings,
-          id: "UI 21 260",
-          label: "Team Play",
-          path: "/teamPlay",
-          href: "/operationGame/teamPlay",
-          routeElement: <FeatureManagement />
-        },
-      */
       {
         iconPath: appSettings,
         id: "UI 21 271",
@@ -555,7 +544,7 @@ export const componentList = [
       {
         iconPath: appSettings,
         id: "UI 21 272",
-        label: "O M G",
+        label: "Business Cycle",
         path: "/simulationSuite",
         href: "/operationGame/simulationSuite",
         routeElement: <SimulationSuite />
@@ -571,7 +560,7 @@ export const componentList = [
       {
         iconPath: appSettings,
         id: "UI 21 273",
-        label: "Demo OMG",
+        label: "Demo OMTP",
         path: "/demoOmg",
         href: "/operationGame/DemoOmg",
         routeElement: <DemoOmg />

@@ -3,7 +3,7 @@
 
 export const UI_STRINGS = {
   // Main Page & Header
-  TITLE: "OMG Simulation",
+  TITLE: "Demo OMTP",
   EXIT_TOOLTIP: "Leave Simulation",
   PERIOD_DISPLAY: (curr, total) => `Period ${curr} / ${total}`,
   TEAM_PREFIX: (team) => `Team ${team} :`,

@@ -60,7 +60,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import '../NavigationMenu/styles/temporaryDrawer.css';
-import FeatureManagement from '../FeatureManagement/FeatureManagement.jsx';
 import Operations from '../Operations/Operations.jsx';
 import AccountPayable from '../AccountPayable/AccountPayable.jsx';
 import SavingsRealisable from '../SavingsRealisable/SavingsRealisable.jsx';
@@ -314,7 +313,6 @@ export default function MiniDrawer() {
           <Route path="/salesRecord" element={<SalesRecordInfo />} />
           <Route path="/productionRecordInfo" element={<ProductionRecordInfo />} />
           <Route path="/cashFlowStatement" element={<CasFlowStatement />} />
-          <Route path="/teamPlay" element={<FeatureManagement />} />
           <Route path="/operations" element={<Operations />} />
           <Route path="/accountPayable" element={<AccountPayable />} />
           <Route path="/AcReceivable" element={<AcReceivable />} />

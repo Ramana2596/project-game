@@ -1,209 +1,237 @@
 // src/pages/SimulationSuite/SimulationSuite.jsx
-// Composes hooks, components of Simulation UI, using centralized UI_STRINGS and STAGE_TEMPLATES
-
-import React from "react";
+// Operations Mgt Learning Platform: Simulation Centre for all Learning-Modes 
+// Stage Manager: Page, hooks, stage list, report drawer, RBAC Reports
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✔ Added for rehydration navigation
 import {
-  Box, CircularProgress, Paper, Stack, Typography,
-  LinearProgress, Tooltip, IconButton, Avatar
+  Box, Stack, Typography, LinearProgress, Paper,
+  Avatar, IconButton, Tooltip, CircularProgress
 } from "@mui/material";
 import { ExitToApp } from "@mui/icons-material";
-import StageProp from "./components/StageProp.jsx";
-import ReportDrawer from "./wizardreports/ReportDrawer.jsx";
-import ToastMessage from "../../components/ToastMessage.jsx";
-import { useProgress } from "./hooks/useProgress.js";
-import { useStageUi } from "./hooks/useStageUi.js";
-import { formatDate } from "../../utils/formatDate.jsx";
-import { useUser } from "../../core/access/userContext.jsx";
-import { UI_STRINGS, STAGE_TEMPLATES } from "./constants/labels.js";
-import { getApiMessage } from "../../utils/getApiMessage.js"; // ✔ Use centralized API message mapper
+import omgBg from "../../assets/navigation-menu/omgBgSrp.png";
+
+// Internal components and hooks
+import StageProp from "./components/StageProp";
+import ReportDrawer from "./wizardreports/ReportDrawer";
+import ToastMessage from "../../components/ToastMessage";
+import { useProgress } from "./hooks/useProgress";
+import { useStageUi } from "./hooks/useStageUi";
+
+// Utilities and Constants
+import { formatDate } from "../../utils/formatDate";
+import { useUser } from "../../core/access/userContext";
+import { UI_STRINGS } from "./constants/labels";
+import { getApiMessage } from "../../utils/getApiMessage";
 
 export default function SimulationSuite() {
 
-  const { userInfo } = useUser();   // Fetch logged-in user info
+  // USER CONTEXT: RBAC accessible pages from user session
+  const { userInfo, login, setUserInfo, userAccessiblePageIds } = useUser(); 
+  const navigate = useNavigate();
 
-  // Progress-simulation state and stage updates
-  const { progress, loading, actionLoading, setStage } = useProgress();
-  const userAccessible = progress?.AccessiblePages || [];  // Accessible reports
+  // Progress-simulation state and stage updates / orchestration
+  const {
+    progress, loading, actionLoading, setStage,
+    handleNextMonth, effectiveHalt, haltStageNo
+  } = useProgress();
 
-  // Build stage UI model from progress and accessibility
+  const userAccessible = userAccessiblePageIds || []; // RBAC reports
+
+  // ✔ Simulation Stages Model-UI using RBAC accessible pages
   const stages = useStageUi({ progress, userAccessiblePageIds: userAccessible });
 
-  // Drawer and alert UI states
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [activeStageNo, setActiveStageNo] = React.useState(null);
+  // Local state for drawer and active reporting
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [activeStageNo, setActiveStageNo] = useState(null);
+  const [loadingStageNo, setLoadingStageNo] = useState(null);
+  const [apiMessage, setApiMessage] = useState({ isVisible: false, message: "", severity: "info" });
 
-  // ❌ const [alert, setAlert] = React.useState({ isVisible: false, message: "", severity: "info" });
-  // ✔ Centralized API message state
-  const [apiMessage, setApiMessage] = React.useState({ isVisible: false, message: "", severity: "info" });
+  // SESSION PERSISTENCE: Save user data for refresh resilience
+  useEffect(() => {
+    if (userInfo?.gameId) {
+      sessionStorage.setItem("wizardUserInfo", JSON.stringify(userInfo));
+    }
+  }, [userInfo]);
 
-  // Exit handler: clear session and redirect to home
+  // REHYDRATION: Restore session userInfo after refresh
+  useEffect(() => {
+    if (!userInfo?.gameId) {
+      const stored = sessionStorage.getItem("wizardUserInfo");
+      if (stored) {
+        setUserInfo(JSON.parse(stored));
+      } else {
+        navigate('/');
+      }
+    }
+  }, [userInfo, navigate, setUserInfo]);
+
+  // SESSION CLEANUP: Exit simulation and reset session
   const handleExit = () => {
     sessionStorage.removeItem("wizardUserInfo");
-    window.location.href = "/";
+    login(null);
+    setUserInfo(null);
+    navigate('/');
   };
 
-  // Open report drawer for a selected stage
+  // STAGE CLICK: Execute stage completion and refresh progress
+  const handleStageClick = async (stage) => {
+    setLoadingStageNo(stage.stageNo);
+    try {
+      const response = await setStage(stage.stageNo, progress?.Current_Period_No);
+      if (response?.returnValue !== undefined) {
+        setApiMessage(getApiMessage(response.returnValue, response.message));
+      }
+    } catch {
+      setApiMessage(getApiMessage(-99, UI_STRINGS.ERROR_STATUS));
+    } finally {
+      setLoadingStageNo(null);
+    }
+  };
+
+  // REPORT HANDLER: Open side drawer for selected stage reports
   const handleOpenReport = (stageNo) => {
     setActiveStageNo(Number(stageNo));
     setDrawerOpen(true);
   };
 
-  // Handle user clicking a stage button and delegate stage update to hook
-  const handleStageClick = async (stage) => {
-    try {
+  // SIMULATION END CHECK: Determine if all periods and stages completed
+  const isSimulationEnd =
+    (progress?.Completed_Period_No === progress?.Total_Period) &&
+    (progress?.Completed_Stage_No >= Math.max(...stages.map(s => s.stageNo), 0));
 
-      // ✔ Delegate stage update to hook
-      const response = await setStage(stage.stageNo, progress?.Current_Period_No);
+  // FULL PAGE LOADER: Render during initial progress fetch
+  if (loading && !progress) return (
+    <Box sx={{ display: "flex", justifyContent: "center", p: 10 }}>
+      <CircularProgress />
+    </Box>
+  );
 
-      // ✔ Show API message if hook returns response payload
-      if (response?.returnValue !== undefined) {
-        setApiMessage(getApiMessage(response.returnValue, response.message));
-      }
-
-    }
-    catch {
-
-      // ❌ setAlert({ severity: "error", message: "Error updating status", isVisible: true });
-
-      // ✔ Use standardized API message helper
-      setApiMessage(getApiMessage(-99, "Error updating status"));
-
-    }
-  };
-
-  // Loading UI while fetching simulation progress
-  if (loading)
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", p: 10 }}>
-        <CircularProgress />
-      </Box>
-    );
-
-  // Get progress info for header
-  const currentPeriodNo = progress?.Current_Period_No ?? 1;
-  const totalPeriod = progress?.Total_Period ?? 1;
-  const progressPercent = progress?.Progress_Percent ?? 0;
-  const currentPeriodDate = progress?.Current_Period ?? null;
-
-  const isFinished =
-    (progress?.Completed_Period_No === totalPeriod) &&
-    (progress?.Completed_Stage_No >= Math.max(...stages.map(s => s.stageNo)));
-
-  // Compile header and exit labels based on learnMode
-  const computeLabels = () => {
-    const lm = userInfo?.learnMode;
-    const header = `Simulation - ${lm}`;
-    const exit = `${UI_STRINGS.LEAVE_SIMULATION} - ${lm}`;
-    return { header, exit };
-  };
-
-  const labels = computeLabels();
-
-  // Main render with background image and simulation header
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        width: "100%",
-        backgroundImage: `linear-gradient(rgba(241, 245, 249, 0.92), rgba(241, 245, 249, 0.85)), url('/assets/bg-simulation.jpg')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-        py: 3
-      }}
-    >
-      <Box sx={{ maxWidth: 900, margin: "0 auto", px: 3 }}>
+    // PAGE CONTAINER: Background and layout
+    <Box sx={{
+      minHeight: "100vh", width: "100%",
+      backgroundImage:
+        `linear-gradient(rgba(255, 255, 255, 0.75), 
+        rgba(255, 255, 255, 0.40)), 
+        url(${omgBg})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundAttachment: "fixed", py: 6, px: 2
+    }}>
+      {/* High-Contrast Content Card for Bright Visibility */}
+      <Box sx={{
+        maxWidth: 700, margin: "0 auto", p: 4,
+        bgcolor: "#ffffff",
+        borderRadius: 8,
+        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.1)",
+        border: "1px solid #e2e8f0"
+      }}>
 
-        {/* Simulation header and progress display */}
-        <Box
-          sx={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1200,
-            bgcolor: "rgba(255, 255, 255, 0.95)",
-            backdropFilter: "blur(8px)",
-            pt: 2,
-            pb: 2.5,
-            mb: 3,
-            px: 3,
-            borderRadius: 2,
-            border: "1px solid #e2e8f0",
-            boxShadow: "0 10px 15px -10px rgba(0,0,0,0.1)"
-          }}
-        >
-          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-            <Typography variant="h4" fontWeight="900">{labels.header}</Typography>
+        {/* STICKY HEADER: Progress and exit controls */}
+        <Box sx={{
+          position: "sticky",
+          top: 0,
+          zIndex: 1100,
+          bgcolor: "#ffffff",
+          pt: 1,
+          pb: 2,
+          mb: 3,
+          borderBottom: "1px solid #f1f5f9",
+        }}>
+
+          {/* Progress header and exit action */}
+          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
+            <Typography variant="h5" fontWeight="900" color="text.primary">
+              {`${UI_STRINGS.HEADER} - ${userInfo?.learnMode || 'Standard'}`}
+            </Typography>
 
             <Stack direction="row" spacing={2} alignItems="center">
-              <Typography variant="h6" color="primary" fontWeight="900">
-                Period {currentPeriodNo} / {totalPeriod}
+              <Typography variant="subtitle1" color="primary" fontWeight="800">
+                {`${UI_STRINGS.PERIOD} ${progress?.Current_Period_No || 1} / ${progress?.Total_Period || 1}`}
               </Typography>
 
-              <Tooltip title={labels.exit} arrow>
+              <Tooltip title={UI_STRINGS.EXIT_TOOLTIP} arrow>
                 <IconButton onClick={handleExit} sx={{ p: 0 }}>
-                  <Avatar
-                    sx={{
-                      bgcolor: '#ef5350',
-                      width: 32,
-                      height: 32,
-                      cursor: 'pointer',
-                      '&:hover': { bgcolor: '#d32f2f', transform: 'scale(1.1)' },
-                      transition: 'all 0.2s'
-                    }}
-                  >
-                    <ExitToApp sx={{ fontSize: 18, color: '#fff' }} />
+                  <Avatar sx={{
+                    bgcolor: '#fee2e2',
+                    width: 32,
+                    height: 32,
+                    cursor: 'pointer',
+                    '&:hover': { bgcolor: '#fecaca' }
+                  }}>
+                    <ExitToApp sx={{ fontSize: 18, color: '#ef4444' }} />
                   </Avatar>
                 </IconButton>
               </Tooltip>
             </Stack>
           </Stack>
 
-          {/* Simulation progress bar */}
+          {/* Progress bar styling */}
           <LinearProgress
             variant="determinate"
-            value={progressPercent}
-            sx={{ height: 10, borderRadius: 5, mb: 1.5, bgcolor: "#e2e8f0" }}
+            value={progress?.Progress_Percent ?? 0}
+            sx={{ height: 10, borderRadius: 5, mb: 2, bgcolor: "#f1f5f9" }}
           />
 
-          {/* Current simulation stage status */}
-          <Paper elevation={0} sx={{ p: 2, bgcolor: "#f8fafc", borderRadius: 2, border: "1px solid #cbd5e1" }}>
-            <Typography variant="h6" fontWeight="700" color="primary.dark" textAlign="center">
-              {isFinished
-                ? UI_STRINGS.SIMULATION_COMPLETED
-                : `Team Progress: ${formatDate(currentPeriodDate)} ${progress?.Current_Progress_Stage || ""}`}
-            </Typography>
+          {/* Team banner */}
+          <Paper elevation={0} sx={{
+            p: 2,
+            bgcolor: isSimulationEnd ? "#fff9c4" : "#f8fafc",
+            borderRadius: 4,
+            border: isSimulationEnd ? "1px solid #fbc02d" : "1px solid #e2e8f0"
+          }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography variant="h6" fontWeight="800" color={isSimulationEnd ? "#af8500" : "primary.dark"}>
+                {`${UI_STRINGS.TEAM} ${userInfo?.gameTeam || ""}`}
+              </Typography>
+
+              <Typography
+                variant="h6"
+                fontWeight="800"
+                color={isSimulationEnd ? "#af8500" : "primary.dark"}
+                sx={{ textAlign: 'right' }}
+              >
+                {isSimulationEnd
+                  ? UI_STRINGS.SIM_COMPLETED
+                  : formatDate(progress?.Current_Period)}
+              </Typography>
+            </Stack>
           </Paper>
         </Box>
 
-        {/* Render Prop of all Stages*/}
+        {/* Stage list orchestrated by simulation progress */}
         <StageProp
           stages={stages}
           actionLoading={actionLoading}
+          effectiveHalt={effectiveHalt}
+          isSimulationEnd={isSimulationEnd}
+          haltStageNo={haltStageNo}
           onStageClick={handleStageClick}
           onOpenReport={handleOpenReport}
+          onNextMonth={handleNextMonth}
+          loadingStageNo={loadingStageNo}
         />
 
-        {/* Report drawer for accessible reports */}
+        {/* ✔ REPORT DRAWER: RBAC filtered reports */}
         <ReportDrawer
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
           stageNo={activeStageNo}
           completedPeriod={progress?.Completed_Period}
-          completedPeriodNo={progress?.Completed_Period_No}
-          stageTitle={
-            stages.find(s => s.stageNo === activeStageNo)?.label ||
-            STAGE_TEMPLATES.REPORTS_HEADER(activeStageNo)
-          }
+          completedStageNo={progress?.Completed_Stage_No}
+          stageTitle={stages.find(s => s.stageNo === activeStageNo)?.label || ""}
           userAccessiblePageIds={userAccessible}
+          gameTeam={userInfo?.gameTeam}
         />
 
-        {/* Toast alert messages */}
+        {/* Toast notifications for error and status feedback */}
         <ToastMessage
-          open={apiMessage.isVisible}   // ✔ Use centralized apiMessage state
+          open={apiMessage.isVisible}
           severity={apiMessage.severity}
           message={apiMessage.message}
           onClose={() => setApiMessage({ ...apiMessage, isVisible: false })}
         />
+
       </Box>
     </Box>
   );
