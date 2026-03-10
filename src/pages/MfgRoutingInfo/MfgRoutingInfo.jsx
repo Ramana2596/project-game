@@ -29,8 +29,7 @@ export default function MfgRoutingInfo() {
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
-        highlightColumnsByField={pageConstants.highlightedColumns}
-        hiddenColumns={pageConstants.hiddenColumns}
+        hiddenColumns={[]}
       ></GenericTable>
       
     </Box>

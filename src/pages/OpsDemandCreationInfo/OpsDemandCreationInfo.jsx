@@ -8,16 +8,16 @@ import { pageConstants } from "./constants/pageConstants.js";
 
 export default function OpsDemandCreationInfo() {
   const { userInfo } = useUser();
-  let payload = {
+  let getTableDataPayload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getOpsDemandCreationInfo(payload).then((response) => {
+    getOpsDemandCreationInfo(getTableDataPayload).then((response) => {
       if (response) {
-        setTableData(response.data.data);
+        setTableData(response.data);
       }
     });
   }, []);
@@ -29,8 +29,7 @@ export default function OpsDemandCreationInfo() {
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
-        highlightColumnsByField={pageConstants.highlightedColumns}
-        hiddenColumns={pageConstants.hiddenColumns}
+        hiddenColumns={[]}
       ></GenericTable>
       
     </Box>

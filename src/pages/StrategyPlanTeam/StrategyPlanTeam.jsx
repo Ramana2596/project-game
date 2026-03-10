@@ -8,16 +8,16 @@ import { pageConstants } from "./constants/pageConstants.js";
 
 export default function StrategyPlanTeam() {
   const { userInfo } = useUser();
-  let payload = {
+  let getTableDataPayload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getStrategyPlanTeam(payload).then((response) => {
+    getStrategyPlanTeam(getTableDataPayload).then((response) => {
       if (response) {
-        setTableData(response.data.data);
+        setTableData(response.data);
       }
     });
   }, []);
@@ -30,7 +30,7 @@ export default function StrategyPlanTeam() {
         inputTableData={tableData}
         ifNoData={null}
         highlightColumnsByField={pageConstants.highlightedColumns}
-        hiddenColumns={pageConstants.hiddenColumns}
+        hiddenColumns={[]}
       ></GenericTable>
 
     </Box>
