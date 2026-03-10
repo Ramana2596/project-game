@@ -6,31 +6,31 @@ import { Stack } from "@mui/material";
 import StageShow from "./StageShow";
 
 export default function StageProp({
-  stageUI,
+  stages,
   actionLoading,
   effectiveHalt,
   isSimulationEnd,
   haltStageNo,
-  handleStageClick,
-  handleOpenReport,
-  handleNextMonth,
+  onStageClick,
+  onOpenReport,
+  onNextMonth,
   loadingStageNo
 }) {
   return (
-    // Disburse Props of Stage by stageNo
-    <Stack spacing={2} sx={{ mt: 2 }}> 
-      {stageUI.map((s) => (
+    // Disburse Props of each stage by stageNo
+    <Stack spacing={2} sx={{ mt: 2 }}>
+      {(stages || []).map((stage) => (
         <StageShow
-          key={s.stageNo}
-          Stage={s} 
-          actionLoading={actionLoading} 
-          effectiveHalt={effectiveHalt} 
-          isSimulationEnd={isSimulationEnd} 
-          haltStageNo={haltStageNo} 
-          handleStageClick={handleStageClick} 
-          handleOpenReport={handleOpenReport} 
-          handleNextMonth={handleNextMonth} 
-          isLoading={loadingStageNo === s.stageNo}
+          key={stage.stageNo}
+          stage={stage}
+          actionLoading={actionLoading}
+          effectiveHalt={effectiveHalt}
+          isSimulationEnd={isSimulationEnd}
+          haltStageNo={haltStageNo}
+          onStageClick={onStageClick}
+          onOpenReport={onOpenReport}
+          onNextMonth={onNextMonth} 
+          isLoading={loadingStageNo === stage.stageNo}
         />
       ))}
     </Stack>

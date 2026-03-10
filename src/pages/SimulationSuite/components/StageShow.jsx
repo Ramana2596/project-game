@@ -1,5 +1,5 @@
 // src\pages\SimulationSuite\components\StageShow.jsx
-// Purpose: The actual visual bar/button, status, icons, & .Size, colour
+// Purpose: The actual visual bar/button, status, icons, & size, colour
  
 import React from "react";
 import { Box, Stack, Button, Tooltip, IconButton, Typography, CircularProgress } from "@mui/material";
@@ -7,14 +7,14 @@ import { PlayCircle, CheckCircle, Lock, Visibility, SkipNext } from "@mui/icons-
 import { UI_STRINGS } from "../constants/labels";
 
 export default function StageShow({
-  Stage,
+  stage,
   actionLoading,
   effectiveHalt,
   isSimulationEnd,
   haltStageNo,
-  handleStageClick,
-  handleOpenReport,
-  handleNextMonth,
+  onStageClick,
+  onOpenReport,
+  onNextMonth,
   isLoading
 }) {
  
@@ -43,25 +43,28 @@ export default function StageShow({
         {/* Stage Button: Action with Master Styles */}
         <Button
           fullWidth
-          disabled={!Stage.isActive || isLoading || effectiveHalt}
-          onClick={() => handleStageClick(Stage)}
-          sx={Stage.buttonSx}
+          disabled={!stage.isActive || isLoading || effectiveHalt}
+          onClick={() => onStageClick(stage)}
+          sx={stage.buttonSx}
         >
           <Stack direction="row" spacing={2} alignItems="center">
-            {Stage.icon}
+            {stage.icon}
+            
             {/* Stage Label format `{No: Name}` */}
-            <Typography fontWeight="700">{`${Stage.stageNo}: ${Stage.label}`}</Typography>
+            <Typography fontWeight="700">{`${stage.stageNo}: ${stage.label}`}</Typography>
+          
           </Stack>
+
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {Stage.status === "ACTIVE" && <PlayCircle fontSize="small" />}
-            {Stage.status === "COMPLETED" && <CheckCircle fontSize="small" sx={{ color: "#4caf50" }} />}
-            {Stage.status === "LOCKED" && <Lock fontSize="small" sx={{ color: "#94a3b8" }} />}
-            {Stage.status === "FINISHED" && <CheckCircle fontSize="small" sx={{ color: "#2e7d32" }} />}
+            {stage.status === "ACTIVE" && <PlayCircle fontSize="small" />}
+            {stage.status === "COMPLETED" && <CheckCircle fontSize="small" sx={{ color: "#4caf50" }} />}
+            {stage.status === "LOCKED" && <Lock fontSize="small" sx={{ color: "#94a3b8" }} />}
+            {stage.status === "FINISHED" && <CheckCircle fontSize="small" sx={{ color: "#2e7d32" }} />}
           </Box>
         </Button>
       </Box>
 
-      {/* Sidebar actions:view reports & NextMonth triggers */}
+      {/* Sidebar actions: view reports & NextMonth triggers */}
       <Stack
         direction="row"
         alignItems="center"
@@ -69,14 +72,14 @@ export default function StageShow({
         sx={{ width: `${sidebarWidth}px`, justifyContent: "flex-end" }}
       >
         {/* ViewIcon Report Tooltip and Button */}
-        <Tooltip title={Stage.tooltipReports || "No reports"} arrow>
+        <Tooltip title={stage.tooltipReports || "No reports"} arrow>
           <span>
             <IconButton
-              onClick={() => handleOpenReport(Stage.stageNo)}
-              disabled={!Stage.canViewReports}
+              onClick={() => onOpenReport(stage.stageNo)}
+              disabled={!stage.canViewReports}
               color="primary"
               size="small"
-              sx={{ bgcolor: Stage.canViewReports ? '#f1f5f9' : 'transparent' }}
+              sx={{ bgcolor: stage.canViewReports ? '#f1f5f9' : 'transparent' }}
             >
               <Visibility />
             </IconButton>
@@ -85,11 +88,11 @@ export default function StageShow({
 
         {/* NextMonth trigger with Pulse Animation */}
         <Box sx={{ width: 34 }}>
-          {Stage.stageNo === haltStageNo && effectiveHalt && !isSimulationEnd && (
+          {stage.stageNo === haltStageNo && effectiveHalt && !isSimulationEnd && (
             <Tooltip title={UI_STRINGS.NEXT_MONTH_TOOLTIP || "Proceed to next month"} arrow>
               <span>
                 <IconButton
-                  onClick={handleNextMonth}
+                  onClick={onNextMonth}
                   size="small"
                   sx={{
                     bgcolor: "#ff9800",
