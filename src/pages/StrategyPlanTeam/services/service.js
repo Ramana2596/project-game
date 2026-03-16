@@ -6,4 +6,3 @@ export function getStrategyPlanTeam(queryParams) {
             params: { ...queryParams }
         });
 }
-
