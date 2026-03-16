@@ -1,7 +1,7 @@
 import api from '../../../core/interceptor/api-interceptor';
 
 export function getOpsDiscountOfferInfo(queryParams) {
-    return api.get('/api/getOpsDiscountOfferInfo',
+    return api.post('/api/getOpsDiscountOfferInfo',
         {
             params: { ...queryParams }
         });

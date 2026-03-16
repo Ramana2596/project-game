@@ -45,7 +45,7 @@ export default function IncomeStatementInfo({ productionMonth }) {
         const rawData = response.data.data;
         setTableData(rawData);
 
-        // Generate Column headings - excluding hidden ones
+        // Generate dynamic headings from data (excluding hidden ones)
         const keys = Object.keys(rawData[0]);
         const filteredHeadings = keys.filter(
           (key) => !pageConstants.hiddenColumns.includes(key)
@@ -53,7 +53,6 @@ export default function IncomeStatementInfo({ productionMonth }) {
         setDynamicHeadings(filteredHeadings);
 
         // Transform table data into chart series (one chart per detail)
-        // X- Axis: Month
         const months = filteredHeadings.filter(
           (h) => h !== "Details" && h !== "Line_No"
         );
