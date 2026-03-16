@@ -8,16 +8,16 @@ import { pageConstants } from "./constants/pageConstants.js";
 
 export default function OpsDiscountOfferInfo() {
   const { userInfo } = useUser();
-  let getTableDataPayload = {
+  let payload = {
     gameId: userInfo?.gameId,
     gameBatch: userInfo?.gameBatch,
     gameTeam: userInfo?.gameTeam,
   };
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    getOpsDiscountOfferInfo(getTableDataPayload).then((response) => {
+    getOpsDiscountOfferInfo(payload).then((response) => {
       if (response) {
-        setTableData(response.data);
+        setTableData(response.data.data);
       }
     });
   }, []);
@@ -29,7 +29,8 @@ export default function OpsDiscountOfferInfo() {
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
-        hiddenColumns={[]}
+        highlightColumnsByField={pageConstants.highlightedColumns}
+        hiddenColumns={pageConstants.hiddenColumns}
       ></GenericTable>
       
     </Box>
