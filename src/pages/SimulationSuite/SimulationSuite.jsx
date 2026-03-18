@@ -2,7 +2,7 @@
 // Operations Mgt Learning Platform: Simulation Centre for all Learning-Modes 
 // Stage Manager: Page, hooks, stage list, report drawer, RBAC Reports
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✔ Added for rehydration navigation
+import { useNavigate } from "react-router-dom";//  Added for rehydration navigation
 import {
   Box, Stack, Typography, LinearProgress, Paper,
   Avatar, IconButton, Tooltip, CircularProgress
@@ -26,25 +26,31 @@ import { getApiMessage } from "../../utils/getApiMessage";
 export default function SimulationSuite() {
 
   // USER CONTEXT: RBAC accessible pages from user session
-  const { userInfo, login, setUserInfo, userAccessiblePageIds } = useUser(); 
+  const { userInfo, login, setUserInfo, userAccessiblePageIds } = useUser();
   const navigate = useNavigate();
 
   // Progress-simulation state and stage updates / orchestration
   const {
-    progress, loading, actionLoading, setStage,
-    handleNextMonth, effectiveHalt, haltStageNo
+    progress,
+    loading,
+    actionLoading,
+    setStage,
+    handleNextMonth,
+    effectiveHalt,
+    haltStageNo,
+    apiMessage,
+    setApiMessage
   } = useProgress();
 
   const userAccessible = userAccessiblePageIds || []; // RBAC reports
 
-  // ✔ Simulation Stages Model-UI using RBAC accessible pages
+ //  Simulation Stages Model-UI using RBAC accessible pages
   const stages = useStageUi({ progress, userAccessiblePageIds: userAccessible });
 
   // Local state for drawer and active reporting
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeStageNo, setActiveStageNo] = useState(null);
   const [loadingStageNo, setLoadingStageNo] = useState(null);
-  const [apiMessage, setApiMessage] = useState({ isVisible: false, message: "", severity: "info" });
 
   // SESSION PERSISTENCE: Save user data for refresh resilience
   useEffect(() => {
@@ -75,14 +81,15 @@ export default function SimulationSuite() {
 
   // STAGE CLICK: Execute stage completion and refresh progress
   const handleStageClick = async (stage) => {
+
     setLoadingStageNo(stage.stageNo);
+
     try {
-      const response = await setStage(stage.stageNo, progress?.Current_Period_No);
-      if (response?.returnValue !== undefined) {
-        setApiMessage(getApiMessage(response.returnValue, response.message));
-      }
-    } catch {
-      setApiMessage(getApiMessage(-99, UI_STRINGS.ERROR_STATUS));
+      setApiMessage({ ...apiMessage, isVisible: false }); // Reset 
+      await setStage(stage.stageNo, progress?.Current_Period_No);
+
+    } catch { 
+      setApiMessage(getApiMessage(-99, UI_STRINGS.ERROR_STATUS)); // Set,if API fails
     } finally {
       setLoadingStageNo(null);
     }
