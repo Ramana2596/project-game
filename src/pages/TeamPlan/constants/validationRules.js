@@ -1,5 +1,5 @@
 // Path: src/pages/TeamPlan/constants/validationRules.js
-// Purpose: Minimal, category-agnostic validation — every numeric field must be >= 0
+// Purpose: Minimal validation — every numeric field must be >= 0
 
 // Return true if value is a finite number and >= 0
 export function validateNumber(value) {

@@ -1,5 +1,5 @@
 // File: src/pages/TeamPlan/components/TeamPlanItem.jsx
-// Purpose: Render Team Plan table with editable cells and loading state
+// Purpose: Render table with Tab-specific logic (Editable Quantity for Products)
 
 import React from "react";
 import {
@@ -7,7 +7,6 @@ import {
   TextField, Paper, CircularProgress, Select, MenuItem, Box, Typography,
 } from "@mui/material";
 
-// Team plan items with editable fields and loading state
 const TeamPlanItem = ({
   rows,
   loading,
@@ -18,6 +17,8 @@ const TeamPlanItem = ({
   onCellChange,
   fetchBuyInfoLovForPart,
 }) => {
+
+  // Display loading spinner while fetching data
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
@@ -31,6 +32,7 @@ const TeamPlanItem = ({
       <Table size="small" stickyHeader sx={{ minWidth: 900 }}>
         <TableHead>
           <TableRow>
+            {/* Header row with sticky positioning and bold labels */}
             {columns.map((col) => (
               <TableCell
                 key={col.key}
@@ -39,7 +41,6 @@ const TeamPlanItem = ({
                   backgroundColor: "#F1F3F5",
                   textTransform: "uppercase",
                   fontSize: "0.85rem",
-                  color: "#212529",
                   position: "sticky",
                   top: 0,
                   zIndex: 2,
@@ -55,49 +56,40 @@ const TeamPlanItem = ({
           {(!rows || rows.length === 0) ? (
             <TableRow>
               <TableCell colSpan={columns.length} align="center" sx={{ py: 6 }}>
-                <Typography sx={{ color: "#6c757d", fontWeight: 600 }}>
-                  No Records
-                </Typography>
+                <Typography sx={{ color: "#6c757d", fontWeight: 600 }}>No Records</Typography>
               </TableCell>
             </TableRow>
           ) : (
             rows.map((row, rowIndex) => {
-              // Price LOV for this row's Part_No and currentTab
               const priceLov = lovsMap?.[currentTab]?.[row.Part_No]?.Price_Lov || [];
-              const hasPriceId = priceLov.some((p) => p.Price_Id === row.Price_Id);
-              const selectedPriceId = hasPriceId ? (row.Price_Id ?? "") : "";
+              const selectedPriceId = priceLov.some((p) => p.Price_Id === row.Price_Id) ? (row.Price_Id ?? "") : "";
 
               return (
                 <TableRow key={rowIndex} hover>
                   {columns.map((col) => (
-                    <TableCell key={col.key} sx={{ verticalAlign: "top" }}>
-                      {col.key === "Required_Quantity" ? (
-                        col.editable ? (
-                          <TextField
-                            size="small"
-                            value={row.Required_Quantity ?? ""}
-                            onFocus={() => onEditStart && onEditStart()}
-                            onChange={(e) => {
-                              const raw = e.target.value;
-                              const val = raw === "" ? "" : Number(raw);
-                              onCellChange && onCellChange(rowIndex, "Required_Quantity", val);
+                    <TableCell key={col.key} sx={{ verticalAlign: "middle" }}>
+                      
+                      {/* Required Quantity: Only for Material/Machinery tabs */}
+                      {col.key === "Required_Quantity" && currentTab !== "OI 001" ? (
+                        <TextField
+                          size="small"
+                          value={row.Required_Quantity ?? ""}
+                          onFocus={() => onEditStart && onEditStart()}
+                          onChange={(e) => {
+                            const val = e.target.value === "" ? "" : Number(e.target.value);
+                            onCellChange(rowIndex, "Required_Quantity", val);
+                            const apiQty = Number(priceLov.find(p => p.Price_Id === row.Price_Id)?.Quantity || 0);
+                            onCellChange(rowIndex, "Quantity", Math.max(Number(val || 0), apiQty));
+                          }}
+                          fullWidth
+                        />
+                      ) : 
 
-                              const currentQty = row.Quantity;
-                              const isQtyEmptyOrZero =
-                                currentQty === "" || currentQty === null ||
-                                currentQty === undefined || Number(currentQty) === 0;
-                              if (isQtyEmptyOrZero) {
-                                onCellChange && onCellChange(rowIndex, "Quantity", val);
-                              }
-                            }}
-                            fullWidth
-                            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-                          />
+                      /* Info_Price: Read-only for Products & Interactive Select for Material/Machinery,  */
+                      col.key === "Info_Price" ? (
+                        currentTab === "OI 001" ? (
+                          <Typography sx={{ fontSize: "0.85rem" }}>{row.Info_Price || row.Purchase_Preference || ""}</Typography>
                         ) : (
-                          row.Required_Quantity ?? ""
-                        )
-                      ) : col.key === "Info_Price" ? (
-                        col.editable ? (
                           <Select
                             size="small"
                             value={selectedPriceId}
@@ -105,71 +97,44 @@ const TeamPlanItem = ({
                               onEditStart && onEditStart();
                               fetchBuyInfoLovForPart && fetchBuyInfoLovForPart(currentTab, row.Part_No);
                             }}
-                            // Handle all Changes in the row, as per LOV
                             onChange={(e) => {
-                              const selectedPriceIdValue = e.target.value;
-                              const selected = priceLov.find((p) => p.Price_Id === selectedPriceIdValue);
-
-                              const updatedRow = {
+                              const selected = priceLov.find((p) => p.Price_Id === e.target.value);
+                              const finalQty = Math.max(Number(row.Required_Quantity || 0), Number(selected?.Quantity || 0));
+                              onCellChange(rowIndex, null, {
                                 ...row,
-                                Price_Id: selectedPriceIdValue ?? null,
+                                Price_Id: e.target.value,
                                 Info_Price: selected?.Info_Price ?? "",
-                                Quantity: (selected?.Quantity === 0 || selected?.Quantity === null)
-                                  ? row.Required_Quantity
-                                  : selected?.Quantity ?? "",
-                                Unit_Price: selected?.Unit_Price ?? null,
-                              };
-
-                              onCellChange && onCellChange(rowIndex, null, updatedRow);
+                                Quantity: finalQty,
+                                Unit_Price: selected?.Unit_Price ?? 0,
+                              });
                             }}
-
                             fullWidth
                           >
-                            {priceLov.length === 0 ? (
-                              <MenuItem value="">
-                                <em>No options</em>
-                              </MenuItem>
-                            ) : (
-                              priceLov.map((p) => (
-                                <MenuItem key={p.Price_Id ?? p.Info_Price} value={p.Price_Id}>
-                                  {p.Info_Price}
-                                </MenuItem>
-                              ))
-                            )}
+                            {priceLov.map((p) => <MenuItem key={p.Price_Id} value={p.Price_Id}>{p.Info_Price}</MenuItem>)}
                           </Select>
-                        ) : (
-                          row.Info_Price ?? ""
                         )
-                      ) : col.editable ? (
-                        <TextField
-                          size="small"
-                          value={row[col.key] ?? ""}
-                          onFocus={() => onEditStart && onEditStart()}
-                          onChange={(e) => {
-                            let val = e.target.value;
-                            if (col.key === "Quantity" || col.key === "Required_Quantity") {
-                              val = val === "" ? "" : Number(val);
-                            }
-                            onCellChange && onCellChange(rowIndex, col.key, val);
+                      ) : 
 
-                            if (col.key === "Quantity") {
-                              const newQty = val;
-                              if (newQty === 0 || newQty === "" || newQty === null) {
-                                const reqQty = row.Required_Quantity;
-                                if (reqQty !== undefined && reqQty !== null) {
-                                  onCellChange && onCellChange(rowIndex, "Quantity", reqQty);
-                                }
-                              }
-                            }
-                          }}
-                          fullWidth
-                          inputProps={{
-                            inputMode: col.key === "Quantity" || col.key === "Required_Quantity" ? "numeric" : "text",
-                            pattern: col.key === "Quantity" || col.key === "Required_Quantity" ? "[0-9]*" : undefined,
-                          }}
-                        />
+                      /* Quantity: Editable for Products (OI 001), Calculated Display for others */
+                      col.key === "Quantity" ? (
+                        currentTab === "OI 001" ? (
+                          <TextField
+                            size="small"
+                            value={row.Quantity ?? ""}
+                            onFocus={() => onEditStart && onEditStart()}
+                            onChange={(e) => onCellChange(rowIndex, "Quantity", e.target.value === "" ? "" : Number(e.target.value))}
+                            fullWidth
+                          />
+                        ) : (
+                          <Typography sx={{ fontWeight: 700, color: "#1976D2", textAlign: "right" }}>
+                            {row.Quantity ?? 0}
+                          </Typography>
+                        )
                       ) : (
-                        row[col.key] ?? ""
+                        /* Standard fallback: Handles the "not displayed" values by checking for existence */
+                        <Typography sx={{ fontSize: "0.85rem" }}>
+                          {row[col.key] !== undefined && row[col.key] !== null ? row[col.key] : ""}
+                        </Typography>
                       )}
                     </TableCell>
                   ))}

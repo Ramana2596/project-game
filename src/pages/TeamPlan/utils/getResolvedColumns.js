@@ -1,10 +1,11 @@
 // src/pages/TeamPlan/utils/getResolvedColumns.js
+// Tab (Product or Others) Vs Respective Columns
 
 import { PRODUCT_COLUMNS, OTHER_COLUMNS } from "../constants/tableColumns.js";
 import { COLUMN_RULES } from "../constants/columnRules.js";
 
 /* ---------------- Helper: Identify Product tab ---------------- */
-// True if parameter - 'OI 001'
+// Product: Parameter - 'OI 001'
 const isProductTab = (operationsInputId) => operationsInputId === "OI 001";
 
 /* ---------------- Resolve Columns based on tab ---------------- */

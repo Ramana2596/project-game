@@ -16,24 +16,25 @@ import { useUser } from "../../core/access/userContext.jsx"; // User context
 import { CATEGORY_ICON } from "./constants/categoryIcon.js"; // Tab metadata (labels, icons, tooltips)
 
 // MUI icons for each category
-import InventoryIcon from "@mui/icons-material/Inventory";              // Products (finished goods)
-import LayersIcon from "@mui/icons-material/Layers";                    // Materials (raw inputs)
-import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing"; // Machinery (industrial assets)
+import InventoryIcon from "@mui/icons-material/Inventory";
+import LayersIcon from "@mui/icons-material/Layers";
+import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
 
 const TeamPlanScreen = () => {
-  const { userInfo } = useUser(); // Get user info (batch, team, etc.)
+  const { userInfo } = useUser(); // Get user info from context
 
-  // Hook state and handlers
+  // Initialize hook to manage production plan state and operations
   const {
-    tableData, tabDataMap, loading, lovs, lovsMap, currentTab, editMode, columns,
+    tableData, tabDataMap, loading, currentTab, editMode, columns,
     setEditMode, handleTabChange, handleCellChange,
     saveTableData, cancelEdit, productionMonth, tabStatusMap, fetchBuyInfoLovForPart,
+    lovsMap,
   } = useTeamPlan(userInfo);
 
-  // Local toast state
+  // Manage feedback notifications for save/error actions
   const [toast, setToast] = useState({ open: false, message: "", severity: "info" });
 
-  // Save handler with toast feedback
+  // Execute save operation and provide visual feedback via toast
   const onSaveClick = async () => {
     try {
       const res = await saveTableData();
@@ -48,9 +49,12 @@ const TeamPlanScreen = () => {
     }
   };
 
-  // Enhance columns with styling classes
+  // Logic: Pick which columns look "editable" based on the current tab using OR (||) logic
   const enhancedColumns = columns.map((col) => {
-    const isEditable = col.editable || ["quantity", "operationPlan"].includes(col.field);
+    const isEditable = col.editable ||
+      (currentTab === "OI 001" && col.key === "Quantity") ||
+      (currentTab !== "OI 001" && ["Required_Quantity", "Info_Price"].includes(col.key)); 
+    
     return {
       ...col,
       headerClassName: isEditable ? "editable-header-bold" : "standard-header-bold",
@@ -58,17 +62,17 @@ const TeamPlanScreen = () => {
     };
   });
 
-  // Status icons mapping for tabs
+  // Define icon set for tab status indicators (Saved, Unsaved, Unseen)
   const STATUS_ICONS = {
     saved: { icon: "✅", tooltip: "Saved" },
     unsaved: { icon: "🟡", tooltip: "Yet to Save" },
     unseen: { icon: "⚪", tooltip: "Not yet opened" },
   };
 
-  // Determine rows for current tab (fallback to tableData for backward compatibility)
+  // Extract relevant rows for the active tab from the state map
   const currentRows = tabDataMap?.[currentTab] ?? tableData ?? [];
 
-  // Determine whether current tab has unsaved changes
+  // Determine button states based on current tab's modification status
   const currentStatus = tabStatusMap?.[currentTab] || "unseen";
   const canSave = currentStatus === "unsaved" && editMode;
   const canCancel = currentStatus === "unsaved" && editMode;
@@ -76,13 +80,13 @@ const TeamPlanScreen = () => {
   return (
     <Box sx={{ p: 4, backgroundColor: "#F8F9FA" }}>
 
-      {/* Header section with title and metadata */}
+      {/* Header section containing the main title and dynamic metadata */}
       <Box sx={{ mb: 3 }}>
 
-        {/* Top Row: Title + Actions */}
+        {/* Layout for heading info and global action buttons */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
-          {/* Left: Heading & metadata */}
+          {/* Render branded heading and user session details */}
           <Box>
             <Typography
               sx={{
@@ -100,36 +104,31 @@ const TeamPlanScreen = () => {
             <Stack direction="row" spacing={4}>
               <Typography sx={{ fontSize: "1.1rem" }}>
                 <Box component="span" sx={{ fontWeight: 900 }}>BATCH:</Box>
-                <Box component="span" sx={{ color: "#6c757d", ml: 1 }}>
-                  {userInfo.gameBatch}
-                </Box>
+                <Box component="span" sx={{ color: "#6c757d", ml: 1 }}>{userInfo.gameBatch}</Box>
               </Typography>
 
               <Typography sx={{ fontSize: "1.1rem" }}>
                 <Box component="span" sx={{ fontWeight: 900 }}>TEAM:</Box>
-                <Box component="span" sx={{ color: "#6c757d", ml: 1 }}>
-                  {userInfo.gameTeam}
-                </Box>
+                <Box component="span" sx={{ color: "#6c757d", ml: 1 }}>{userInfo.gameTeam}</Box>
               </Typography>
 
               <Typography sx={{ fontSize: "1.1rem" }}>
                 <Box component="span" sx={{ fontWeight: 900 }}>PERIOD:</Box>
                 <Box component="span" sx={{ color: "#6c757d", ml: 1 }}>
-                  {productionMonth
-                    ? format(new Date(productionMonth), "MMM yyyy").toUpperCase()
-                    : ""}
+                  {productionMonth ? format(new Date(productionMonth), "MMM yyyy").toUpperCase() : ""}
                 </Box>
               </Typography>
             </Stack>
           </Box>
 
-          {/* Right: Save / Cancel */}
+          {/* Action buttons for persisting or reverting table changes */}
           <Stack direction="row" spacing={2}>
             <Button
               variant="contained"
               startIcon={<SaveIcon />}
               disabled={!canSave}
               onClick={onSaveClick}
+              sx={{ fontWeight: 700 }}
             >
               Submit
             </Button>
@@ -139,25 +138,21 @@ const TeamPlanScreen = () => {
               disabled={!canCancel}
               onClick={cancelEdit}
               startIcon={<CancelIcon />}
+              color="inherit"
+              sx={{ fontWeight: 700 }}
             >
               Cancel
             </Button>
           </Stack>
         </Box>
 
-        {/* Inline Unsaved Warning */}
+        {/* Display warning banner when active tab has unsaved modifications */}
         {tabStatusMap[currentTab] === "unsaved" && (
           <Box
             sx={{
-              mt: 2,
-              px: 2,
-              py: 1.5,
-              borderRadius: 2,
-              backgroundColor: "#FFF3CD",
-              border: "1px solid #FFEEBA",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center"
+              mt: 2, px: 2, py: 1.5, borderRadius: 2,
+              backgroundColor: "#FFF3CD", border: "1px solid #FFEEBA",
+              display: "flex", justifyContent: "space-between", alignItems: "center"
             }}
           >
             <Typography sx={{ fontWeight: 600, color: "#856404" }}>
@@ -165,10 +160,9 @@ const TeamPlanScreen = () => {
             </Typography>
           </Box>
         )}
-
       </Box>
 
-      {/* Tabs navigation with category + status icons */}
+      {/* Navigation bar with category-specific icons and status indicators */}
       <Tabs
         value={currentTab}
         onChange={(e, v) => handleTabChange(v)}
@@ -179,13 +173,12 @@ const TeamPlanScreen = () => {
           const status = tabStatusMap[key] || "unseen";
           const { icon, tooltip } = STATUS_ICONS[status];
 
-          // Map category key to correct MUI icon
+          {/* Switch category icons based on Operations Input ID */ }
           let CategoryIconComponent = InventoryIcon;
-          if (key === "OI 001") CategoryIconComponent = InventoryIcon;              // Products
-          if (key === "OI 002") CategoryIconComponent = LayersIcon;                 // Materials
-          if (key === "OI 003") CategoryIconComponent = PrecisionManufacturingIcon; // Machinery
+          if (key === "OI 001") CategoryIconComponent = InventoryIcon;
+          if (key === "OI 002") CategoryIconComponent = LayersIcon;
+          if (key === "OI 003") CategoryIconComponent = PrecisionManufacturingIcon;
 
-          // Show count if rows exist
           const rowCount = (tabDataMap?.[key] || []).length;
           const countBadge = rowCount > 0 ? ` (${rowCount})` : "";
 
@@ -196,9 +189,9 @@ const TeamPlanScreen = () => {
               label={
                 <Tooltip title={`${cfg.tooltip}${countBadge} • ${tooltip}`} arrow>
                   <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                    <CategoryIconComponent fontSize="small" /> {/* ✅ Correct icon */}
-                    <span>{cfg.label}</span>                   {/* ✅ Just "Products", "Materials", "Machinery" */}
-                    <span>{icon}</span>                        {/* Status icon (✅/🟡/⚪) */}
+                    <CategoryIconComponent fontSize="small" />
+                    <span>{cfg.label}</span>
+                    <span>{icon}</span>
                   </span>
                 </Tooltip>
               }
@@ -214,7 +207,7 @@ const TeamPlanScreen = () => {
         })}
       </Tabs>
 
-      {/* Table section showing rows for current tab */}
+      {/* Main data display area rendering the production plan table */}
       <Paper elevation={15} sx={{ borderRadius: "0 20px 20px 20px", border: "1px solid #DEE2E6", overflow: "hidden", mt: 2 }}>
         <Box sx={{ p: 1 }}>
           <TeamPlanItem
@@ -227,12 +220,11 @@ const TeamPlanScreen = () => {
             onCellChange={handleCellChange}
             fetchBuyInfoLovForPart={fetchBuyInfoLovForPart}
           />
-
         </Box>
       </Paper>
 
-      {/* Toast notifications */}
-      <ToastMessage {...toast} />
+      {/* Floating notification system for operation results */}
+      <ToastMessage {...toast} onClose={() => setToast({ ...toast, open: false })} />
     </Box>
   );
 };
