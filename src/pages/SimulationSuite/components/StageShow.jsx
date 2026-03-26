@@ -88,7 +88,7 @@ export default function StageShow({
 
         {/* NextMonth trigger with Pulse Animation */}
         <Box sx={{ width: 34 }}>
-          {stage.stageNo === haltStageNo && effectiveHalt && !isSimulationEnd && (
+          {Number(stage.stageNo) === Number(haltStageNo) && effectiveHalt && !isSimulationEnd && (
             <Tooltip title={UI_STRINGS.NEXT_MONTH_TOOLTIP || "Proceed to next month"} arrow>
               <span>
                 <IconButton
