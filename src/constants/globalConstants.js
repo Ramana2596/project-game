@@ -143,6 +143,7 @@ import KeyResultBsInfo  from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo  from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
 import DemoOmg from '../pages/DemoOmg/DemoOmg.jsx';
 import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
+import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -564,6 +565,14 @@ export const componentList = [
         path: "/demoOmg",
         href: "/operationGame/DemoOmg",
         routeElement: <DemoOmg />
+      },
+      {
+        iconPath: appSettings,
+        id: "UI 21 274",
+        label: "Rollback to Start",
+        path: "/resetSimulation",
+        href: "/operationGame/ResetSimulation",
+        routeElement: <ResetSimulation />
       },
 
     ],
