@@ -19,8 +19,8 @@ import { formatDate } from "../../utils/formatDate";
 import { updateSimulationPlay, getTeamProgressStatus } from "./services/service";
 import ToastMessage from "../../components/ToastMessage";
 import { API_STATUS } from "../../utils/statusCodes";
-import ReportDrawer from "../../wizardReports/ReportDrawer";
-import { REPORT_REGISTRY } from "../../wizardReports/reportRegistry";
+import ReportDrawer from "./wizardReports/ReportDrawer";
+import { REPORT_REGISTRY } from "./wizardReports/reportRegistry";
 
 // Configuration: Simulation stages
 const StagesMaster = [
@@ -29,8 +29,8 @@ const StagesMaster = [
   { stageNo: 3, label: "Strategic Plan", icon: <Assignment />, color: "#AD1457", isLoop: false },
   { stageNo: 4, label: "Market Intelligence", icon: <Insights />, color: "#0288D1", isLoop: true },
   { stageNo: 5, label: "Operations Plan", icon: <Settings />, color: "#1565C0", isLoop: true },
-  { stageNo: 6, label: "Simulation - Business Cycles", icon: <PlayCircle />, color: "#00897B", isLoop: true },
-  { stageNo: 7, label: "Financial Outcomes", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
+  { stageNo: 6, label: "Business Plan Execution", icon: <PlayCircle />, color: "#00897B", isLoop: true },
+  { stageNo: 7, label: "Financial Outcome", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
   { stageNo: 8, label: "Key Results & Financial Ratio", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
 ];
 
