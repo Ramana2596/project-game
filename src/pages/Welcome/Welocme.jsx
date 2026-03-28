@@ -80,7 +80,7 @@ const WelcomePage = () => {
 
                     setUserInfo(userData);
                     //navigate("/operationGame/demoWizard");
-                    navigate("/operationGame/demoOmg");
+                    navigate("/operationGame/demoOmtp");
                 } else {
                     const statusConfig = API_STATUS_MAP[returnStatus] || {};
                     const apiMessage = response.data.message;
