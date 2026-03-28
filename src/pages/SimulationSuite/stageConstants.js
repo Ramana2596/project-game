@@ -12,8 +12,8 @@ export const STAGES = [
   { stageNo: 3, label: "Strategic Plan", icon: <Assignment />, color: "#AD1457", isLoop: false },
   { stageNo: 4, label: "Market Intelligence", icon: <Insights />, color: "#0288D1", isLoop: true },
   { stageNo: 5, label: "Operations Plan", icon: <Settings />, color: "#1565C0", isLoop: true },
-  { stageNo: 6, label: "Simulation - Business Cycles", icon: <PlayCircle />, color: "#00897B", isLoop: true },
-  { stageNo: 7, label: "Financial Outcomes", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
+  { stageNo: 6, label: "Business Plan Execution", icon: <PlayCircle />, color: "#00897B", isLoop: true },
+  { stageNo: 7, label: "Financial Outcome", icon: <AccountBalance />, color: "#F9A825", isLoop: true },
   //{ stageNo: 8, label: "Manufacturing Performance Review", icon: <EventAvailable />, color: "#EF6C00", isLoop: true },
   { stageNo: 8, label: "Key Results", icon: <SportsScore />, color: "#2E7D32", isLoop: false },
 ];
