@@ -119,6 +119,7 @@ import KeyResultBsInfo  from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo  from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
 import DemoOmg from '../DemoOmg/DemoOmg.jsx';
 import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
+import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
@@ -369,7 +370,8 @@ export default function MiniDrawer() {
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
           <Route path='/demoOmg' element={<DemoOmg />} />
           <Route path='/strategyBenefit' element = {<StrategyBenefit />} />
-
+          <Route path='/resetSimulation' element= {<ResetSimulation />} />
+          
         </Routes>
       </Box>
       <ToastMessage
