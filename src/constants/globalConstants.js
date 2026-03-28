@@ -523,7 +523,14 @@ export const componentList = [
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
       },
-
+     {
+        iconPath: appSettings,
+        id: "UI 21 272",
+        label: "Business Plan Execution",
+        path: "/simulationSuite",
+        href: "/operationGame/simulationSuite",
+        routeElement: <SimulationSuite />
+      },
     ],
   },
   {
@@ -541,14 +548,6 @@ export const componentList = [
         path: "/simulationPlay",
         href: "/operationGame/SimulationPlay",
         routeElement: <SimulationPlay />
-      },
-      {
-        iconPath: appSettings,
-        id: "UI 21 272",
-        label: "Business Cycle",
-        path: "/simulationSuite",
-        href: "/operationGame/simulationSuite",
-        routeElement: <SimulationSuite />
       },
       {
         iconPath: appSettings,
