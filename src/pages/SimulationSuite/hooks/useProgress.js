@@ -5,12 +5,12 @@ import confetti from "canvas-confetti";
 import { getTeamProgressStatus, updateSimulationPlay } from "../services/service.js";
 import { useUser } from "../../../core/access/userContext.jsx";
 
-// ✔ Added: API status utilities
+// API Message Uility
 import { getApiMessage } from "../../../utils/getApiMessage.js";
 import { API_STATUS } from "../../../utils/statusCodes.js";
 
 export function useProgress() {
-  // User context: Game identifiers
+  // User context
   const { userInfo } = useUser();
 
   // State: progress payload and loading flags
@@ -20,16 +20,16 @@ export function useProgress() {
   const [celebrated, setCelebrated] = useState(false);
   const [nextMonthAck, setNextMonthAck] = useState(false);
 
-  // ✔ Added: API message state for toast notifications
+  // API message state for toast notifications
   const [apiMessage, setApiMessage] = useState({ isVisible: false, message: "", severity: "info" });
 
-  // Computes logic for HALT and simulation status for UI rendering
+  // Compute-logic for HALT and simulation status for UI rendering
   const isSimulationEnd = progress?.Is_Simulation_End ?? false;
   const isPeriodClosed = progress?.Is_Period_Closed ?? false;
   const haltStageNo = progress?.Review_Stage_No ?? 8;
   const effectiveHalt = (isPeriodClosed && !nextMonthAck) || isSimulationEnd;
 
-  // Fetch Progress Status from backend
+  // Fetch Progress Status
   const fetch = useCallback(async () => {
     if (!userInfo?.gameId) return;
     setLoading(true);
@@ -39,19 +39,17 @@ export function useProgress() {
         gameBatch: userInfo.gameBatch,
         gameTeam: userInfo.gameTeam
       });
-
       const d = response?.data?.data;
       if (d) {
         setProgress(d);
         setNextMonthAck(false);
       }
 
-      // ✔ API message template
+      // API message template
       if (response?.data?.returnValue !== undefined) {
         setApiMessage(getApiMessage(response.data.returnValue, response.data.message));
       }
     } catch {
-      // ✔ Plain error string (Option B)
       setApiMessage(getApiMessage(-99, "System error while fetching progress"));
     } finally {
       setLoading(false);
@@ -67,22 +65,18 @@ export function useProgress() {
         gameId: userInfo.gameId,
         gameBatch: userInfo.gameBatch,
         gameTeam: userInfo.gameTeam,
-        //      currentStage: stageNo,
-        //      currentPeriod
       });
-
       // ✔ API message template
       if (response?.data?.returnValue !== undefined) {
         setApiMessage(getApiMessage(response.data.returnValue, response.data.message));
       }
 
-      // ✔ If success, refresh progress
+      // Refresh progress
       if (response?.data?.returnValue === API_STATUS.SUCCESS) {
         await fetch();
       }
       return response;
     } catch {
-      // ✔ Plain error string (Option B)
       setApiMessage(getApiMessage(-99, "System error while updating stage"));
       throw new Error("Stage update failed");
     } finally {
@@ -95,7 +89,7 @@ export function useProgress() {
     setNextMonthAck(true);
   };
 
-  // Celebration effect; Trigger confetti when simulation is truly complete
+  // Celebration effect; Trigger confetti
   useEffect(() => {
     if (isSimulationEnd && !celebrated) {
       confetti({ particleCount: 200, spread: 180 });
