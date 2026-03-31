@@ -153,7 +153,7 @@ export default function SimulationHub() {
         {/* STICKY HEADER: Progress and exit controls */}
         <Box sx={{
           position: "sticky",
-          top: 0,
+          top: 64,
           zIndex: 1100,
           bgcolor: "#ffffff",
           pt: 1,
