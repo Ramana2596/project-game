@@ -114,7 +114,7 @@ import SimulationPlay from '../SimulationPlay/SimulationPlay.jsx';
 import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
 import DemoWizard from '../SimulationPlay/DemoWizard.jsx';
 import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
-import SimulationSuite from '../SimulationSuite/SimulationSuite.jsx';
+//import SimulationSuite from '../SimulationSuite/SimulationSuite.jsx';
 import KeyResultBsInfo  from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo  from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
 import DemoOmtp from '../DemoOmtp/DemoOmtp.jsx';
@@ -366,7 +366,6 @@ export default function MiniDrawer() {
           <Route path='/BatchMaster' element={<BatchMstDetails />} />
           <Route path='/demoWizard' element={<DemoWizard />} />
           <Route path='/teamPlanScreen' element={<TeamPlanScreen />} />
-          <Route path='/simulationSuite' element={<SimulationSuite />} />
           <Route path='/keyResultBsInfo' element={<KeyResultBsInfo />} />
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
           <Route path='/demoOmtp' element={<DemoOmtp />} />
