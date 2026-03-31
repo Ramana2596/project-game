@@ -29,7 +29,7 @@ export default function SimulationHub() {
   const { userInfo, login, setUserInfo, userAccessiblePageIds } = useUser();
   const navigate = useNavigate();
   const isLeader = userInfo?.isGameLeader?.toUpperCase() === "YES";
-  
+
   // Progress-simulation state and stage updates / orchestration
   const {
     progress,
@@ -45,8 +45,14 @@ export default function SimulationHub() {
 
   const userAccessible = userAccessiblePageIds || []; // RBAC reports
 
- //  Simulation Stages Model-UI using RBAC accessible pages
-  const stages = useStageUi({ progress, userAccessiblePageIds: userAccessible });
+  //  Simulation Stages Model-UI using RBAC accessible pages
+  const stages = useStageUi({
+    progress,
+    userAccessiblePageIds: userAccessible,
+    isPeriodClosed: progress?.Is_Period_Closed ?? false,
+    effectiveHalt,
+    isSimulationEnd: progress?.Is_Simulation_End ?? false
+  });
 
   // Local state for drawer and active reporting
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -88,7 +94,7 @@ export default function SimulationHub() {
       setApiMessage({ ...apiMessage, isVisible: false }); // Reset 
       await setStage(stage.stageNo, progress?.Current_Period_No);
 
-    } catch { 
+    } catch {
       setApiMessage(getApiMessage(-99, UI_STRINGS.ERROR_STATUS)); // Set,if API fails
     } finally {
       setLoadingStageNo(null);
@@ -107,10 +113,14 @@ export default function SimulationHub() {
     setDrawerOpen(true);
   };
 
-  // SIMULATION END CHECK: Determine if all periods and stages completed
+  // SIMULATION END: all periods and stages completed
+  /*
   const isSimulationEnd =
     (progress?.Completed_Period_No === progress?.Total_Period) &&
     (progress?.Completed_Stage_No >= Math.max(...stages.map(s => s.stageNo), 0));
+    */
+  const isSimulationEnd = progress?.Is_Simulation_End ?? false;
+
 
   // FULL PAGE LOADER: Render during initial progress fetch
   if (loading && !progress) return (

@@ -6,7 +6,13 @@ import { STAGES } from "../stageConstants.js";
 import { REPORT_REGISTRY } from "../wizardreports/reportRegistry.js";
 import { UI_STRINGS } from "../constants/labels.js";
 
-export function useStageUi({ progress, userAccessiblePageIds } = {}) {
+export function useStageUi({
+  progress,
+  userAccessiblePageIds,
+  isPeriodClosed,
+  effectiveHalt,
+  isSimulationEnd
+} = {}) {
 
   // Derived values from progress payload
   const currentStage = progress?.Current_Stage_No ?? 1;
@@ -14,7 +20,9 @@ export function useStageUi({ progress, userAccessiblePageIds } = {}) {
   const completedPeriodNo = progress?.Completed_Period_No ?? 0;
   const totalPeriod = progress?.Total_Period ?? 1;
 
-  const FINAL = STAGES.length ? Math.max(...STAGES.map(stage => stage.stageNo)) : 0;
+  const FINAL = STAGES.length
+    ? Math.max(...STAGES.map(stage => stage.stageNo))
+    : 0;
 
   const isFinished =
     completedPeriodNo === totalPeriod &&
@@ -32,18 +40,19 @@ export function useStageUi({ progress, userAccessiblePageIds } = {}) {
 
     return STAGES.map((stage) => {
 
+      // Determine stage status
       const status =
         stage.stageNo === FINAL && isFinished
           ? "FINISHED"
           : stage.stageNo === currentStage
-          ? "ACTIVE"
-          : stage.stageNo < currentStage
-          ? "COMPLETED"
-          : "LOCKED";
+            ? "ACTIVE"
+            : stage.stageNo < currentStage
+              ? "COMPLETED"
+              : "LOCKED";
 
       const reports = REPORT_REGISTRY[stage.stageNo] || [];
 
-      // Get reportname for uiId
+      // Get report name for uiId
       const names = reports
         .map(uiId => reportNameMap.get(uiId))
         .filter(Boolean);
@@ -52,8 +61,8 @@ export function useStageUi({ progress, userAccessiblePageIds } = {}) {
         !names.length
           ? UI_STRINGS.NO_REPORTS
           : names.length > 3
-          ? names.slice(0, 3).join(", ") + " ⋯"
-          : names.join(", ");
+            ? names.slice(0, 3).join(", ") + " ⋯"
+            : names.join(", ");
 
       const buttonSx = {
         justifyContent: "space-between",
@@ -63,8 +72,8 @@ export function useStageUi({ progress, userAccessiblePageIds } = {}) {
           status === "ACTIVE"
             ? stage.color
             : status === "LOCKED"
-            ? "#e8edf3"
-            : "#edf7ed",
+              ? "#e8edf3"
+              : "#edf7ed",
         color: status === "ACTIVE" ? "#fff" : "#334155",
         borderRadius: "14px",
         boxShadow:
@@ -87,14 +96,42 @@ export function useStageUi({ progress, userAccessiblePageIds } = {}) {
       return {
         ...stage,
         status,
-        isActive: status === "ACTIVE",
-        canViewReports: status === "COMPLETED" || status === "FINISHED",
+
+        // ActiveStage logic:
+        isActive:
+          status === "ACTIVE" &&
+          !effectiveHalt &&
+          !isSimulationEnd,
+
+        // canViewReports logic:
+        canViewReports:
+          (status === "COMPLETED" ||
+            status === "FINISHED" ||
+            isPeriodClosed) &&
+          status !== "ACTIVE",
+/*
+        canViewReports:
+          (status === "COMPLETED" ||
+            status === "FINISHED" ||
+            isPeriodClosed) &&
+          status !== "ACTIVE" &&
+          status !== "LOCKED",
+*/
         tooltipReports,
         buttonSx
       };
     });
 
-  }, [currentStage, isFinished, reportNameMap]);
+  }, [
+    currentStage,
+    isFinished,
+    reportNameMap,
+
+    // Dependencies
+    isPeriodClosed,
+    effectiveHalt,
+    isSimulationEnd
+  ]);
 }
 
 export default useStageUi;
