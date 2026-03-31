@@ -120,6 +120,7 @@ import KeyResultPlInfo  from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
 import DemoOmtp from '../DemoOmtp/DemoOmtp.jsx';
 import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
 import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
+import SimulationHub from '../SimulationHub/SimulationHub.jsx';
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
@@ -371,6 +372,7 @@ export default function MiniDrawer() {
           <Route path='/demoOmtp' element={<DemoOmtp />} />
           <Route path='/strategyBenefit' element = {<StrategyBenefit />} />
           <Route path='/resetSimulation' element= {<ResetSimulation />} />
+          <Route path='/simulationHub' element= {<SimulationHub />} />
           
         </Routes>
       </Box>

@@ -144,6 +144,7 @@ import KeyResultPlInfo  from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
 import DemoOmtp from '../pages/DemoOmtp/DemoOmtp.jsx';
 import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
 import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
+import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -530,6 +531,14 @@ export const componentList = [
         path: "/simulationSuite",
         href: "/operationGame/simulationSuite",
         routeElement: <SimulationSuite />
+      },
+        {
+        iconPath: appSettings,
+        id: "UI 21 272",
+        label: "HUB",
+        path: "/simulationHub",
+        href: "/operationGame/simulationHub",
+        routeElement: <SimulationHub />
       },
     ],
   },
