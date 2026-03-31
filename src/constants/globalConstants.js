@@ -138,9 +138,9 @@ import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";
 import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
-import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
-import KeyResultBsInfo  from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
-import KeyResultPlInfo  from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
+//import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
+import KeyResultBsInfo from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
+import KeyResultPlInfo from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
 import DemoOmtp from '../pages/DemoOmtp/DemoOmtp.jsx';
 import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
 import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
@@ -327,7 +327,7 @@ export const componentList = [
         href: "/operationGame/KeyResultPlInfo",
         routeElement: <KeyResultPlInfo />
       },
-      
+
       {
         iconPath: partIcon,
         id: "UI 22 010",
@@ -524,18 +524,10 @@ export const componentList = [
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
       },
-     {
+      {
         iconPath: appSettings,
         id: "UI 21 272",
         label: "Business Plan Execution",
-        path: "/simulationSuite",
-        href: "/operationGame/simulationSuite",
-        routeElement: <SimulationSuite />
-      },
-        {
-        iconPath: appSettings,
-        id: "UI 21 272",
-        label: "HUB",
         path: "/simulationHub",
         href: "/operationGame/simulationHub",
         routeElement: <SimulationHub />
