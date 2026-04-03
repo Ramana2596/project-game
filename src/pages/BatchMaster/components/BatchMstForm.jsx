@@ -3,19 +3,8 @@ import { Button, Grid, TextField, MenuItem } from "@mui/material";
 import { pageConstants } from "../constants/pageConstants.js";
 import { useUser } from "../../../core/access/userContext.jsx";
 
-/**
- * Component: BatchMstForm
- * Purpose:
- *   Display and edit all batch details for a selected Game_Batch.
- * Props:
- *   - details: object with batch details (from API)
- *   - selectOptions: { Centre_Id, Faculty, Facilitator, UOM, Batch_Status }
- *   - onSave: function(updatedDetails)
- *   - onCancel: function()
- * Notes:
- *   - Defaults are provided for onSave/onCancel to avoid runtime errors. 
- *   - Read-only fields display only.
- */
+// Batch Master Form /details, with selectOptions: { Centre_Id, Faculty, Facilitator, UOM, Batch_Status }
+
 export default function BatchMstForm({
   details = {},                          //  default empty object
   selectOptions = {},                     //  default empty dropdowns
@@ -30,7 +19,6 @@ export default function BatchMstForm({
   useEffect(() => {
     const initialForm = {};
     pageConstants.contentSection.inputTypes.forEach(input => {
-      //  Use null for fields with no value
       initialForm[input.columnName] = details?.[input.columnName] ?? null;
     });
     setForm(initialForm);
