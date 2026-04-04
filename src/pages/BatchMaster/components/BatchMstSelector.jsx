@@ -1,14 +1,14 @@
 // src/pages/BatchMaster/components/BatchMstSelector.jsx
 // Component to select Batch to get Master details page.
+
 import React, { useState } from "react";
 import { Button, FormControl, InputLabel, Select, MenuItem, Grid } from "@mui/material";
 
-// BatchMstSelector
-
+// Batch Selector:
 export default function BatchMstSelector({ gameId = "", gameBatchList = [], onSubmit }) {
   const [gameBatch, setGameBatch] = useState(""); // selected batch
 
-  /** Handle submit button click */
+  // Handle submit button click
   const handleSubmit = (e) => {
     e.preventDefault();
     if (gameId && gameBatch && onSubmit) {
@@ -23,8 +23,8 @@ export default function BatchMstSelector({ gameId = "", gameBatchList = [], onSu
         {/* Read-only Game Id */}
         <Grid item>
           <FormControl size="small" variant="outlined" disabled>
-            <InputLabel shrink>Game Id</InputLabel>
-            <Select value={gameId} style={{ minWidth: 120 }}>
+            <InputLabel shrink>Game</InputLabel> {/* label improved */}
+            <Select value={gameId} sx={{ minWidth: 140 }}>
               <MenuItem value={gameId}>{gameId}</MenuItem>
             </Select>
           </FormControl>
@@ -33,33 +33,32 @@ export default function BatchMstSelector({ gameId = "", gameBatchList = [], onSu
         {/* Selectable Game Batch */}
         <Grid item>
           <FormControl size="small" variant="outlined">
-            <InputLabel id="game-batch-label">Game Batch</InputLabel>
+            <InputLabel id="game-batch-label">Batch</InputLabel> {/* label improved */}
             <Select
               labelId="game-batch-label"
               value={gameBatch}
-              label="Game Batch"
+              label="Batch"
               onChange={e => setGameBatch(e.target.value)}
-              style={{ minWidth: 120 }}
+              sx={{ minWidth: 160 }} // consistent width
             >
-              {/* Requires Game_Batch in { value, label } format */}
+              {/* Batch options */}
               {gameBatchList.map(opt => (
-                <MenuItem key={opt.value} value={opt.value}>  
-                  {opt.label}                                
+                <MenuItem key={opt.value} value={opt.value}>
+                  {opt.label}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
         </Grid>
 
-        {/* Submit button */}
+        {/* Submit button (enabled only when batch selected) */}
         <Grid item>
           <Button
             type="submit"
             variant="contained"
-            color="primary"
-            disabled={!gameBatch} // enable only when a batch is selected
+            disabled={!gameBatch}
           >
-            Submit
+            Load {/* label improved */}
           </Button>
         </Grid>
 

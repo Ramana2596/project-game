@@ -1,7 +1,7 @@
 import api from "../../../core/interceptor/api-interceptor";
 
-// Update batch data using UI_Batch_Mgt_Trans
+// Update Batch Master
 export function updateBatchMst(payload) {
-  // payload should include all fields and CMD_Line: 'Update'
+  // payload should include all fields with CMD_Line: 'Update'
   return api.post("/api/updateBatchMst", payload);
 }
