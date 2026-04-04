@@ -1,3 +1,5 @@
+// src/pages/BatchMgt/BatchMgt.jsx
+//  BatchMgt cards and navigates to page on User context
 import * as React from 'react';
 import { Card, CardActionArea, CardContent, Typography, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
