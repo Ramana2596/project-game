@@ -97,7 +97,7 @@ import ProductMstInfo from '../ProductMstInfo/ProductMstInfo.jsx';
 import ValueStream from '../ValueStream/ValueStream.jsx';
 import ValueStreamMap from '../ValueStreamMap/ValueStreamMap.jsx';
 import ClassRoomSession from '../ClassRoomSession/ClassRoomSession.jsx';
-import UserRoleManagement from '../UserRoleManagement/UserRoleManagement.jsx';
+import UserRoleMgt from '../UserRoleMgt/UserRoleMgt.jsx';
 import ProfessionInfo from '../ProfessionInfo/ProfessionInfo.jsx';
 import ProfessionRoleInfo from '../ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from '../UserProfileInfo/UserProfileInfo.jsx';
@@ -121,6 +121,7 @@ import DemoOmtp from '../DemoOmtp/DemoOmtp.jsx';
 import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
 import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
 import SimulationHub from '../SimulationHub/SimulationHub.jsx';
+import UserRole from '../UserRole/UserRole.jsx';
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
@@ -296,7 +297,7 @@ export default function MiniDrawer() {
         <Routes>
           <Route path="/homePage" element={<GameDashboard />} />
           <Route path="/demoWizard" element={<DemoWizard />} />
-          <Route path="/userRoleManagement" element={<UserRoleManagement />} />
+          <Route path="/userRoleMgt" element={<UserRoleMgt />} />
           <Route path="/infoDesk" element={<InfoDesk />} />
           <Route path="/simulation" element={<Simulation />} />
           <Route path="/gameMaster" element={<GameMaster />} />
@@ -372,6 +373,7 @@ export default function MiniDrawer() {
           <Route path='/strategyBenefit' element = {<StrategyBenefit />} />
           <Route path='/resetSimulation' element= {<ResetSimulation />} />
           <Route path='/simulationHub' element= {<SimulationHub />} />
+          <Route path='/userRole' element= {<UserRole />} />
           
         </Routes>
       </Box>

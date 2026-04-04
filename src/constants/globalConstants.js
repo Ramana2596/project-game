@@ -18,7 +18,7 @@ import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwo
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
 import SystemInfoDesk from "../pages/SystemInfoDesk/SystemInfoDesk.jsx";
 import UserMgtDesk from "../pages/UserMgtDesk/UserMgtDesk.jsx";
-import UserRoleManagement from "../pages/UserRoleManagement/UserRoleManagement";
+import UserRoleMgt from "../pages/UserRoleMgt/UserRoleMgt.jsx";
 import Simulation from "../pages/Simulation/Simulation";
 import BatchMgt from "../pages/BatchMgt/BatchMgt.jsx";
 
@@ -145,6 +145,7 @@ import DemoOmtp from '../pages/DemoOmtp/DemoOmtp.jsx';
 import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
 import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";
+import UserRole from "../pages/UserRole/UserRole.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -592,7 +593,25 @@ export const componentList = [
         path: "/BatchMaster",
         href: "/operationGame/BatchMaster",
         routeElement: <BatchMstDetails />
-      }
+      },
+      {
+        iconPath: verifiedIcon,
+        id: "UI 15 030",
+        label: "User-Role Assignment",
+        path: "/userRoleMgt",
+        href: "/operationGame/UserRoleMgt",
+        routeElement: <UserRoleMgt />
+      },
+/*
+      {
+        iconPath: verifiedIcon,
+        id: "UI 15 031",
+        label: "User Role",
+        path: "/userRole",
+        href: "/operationGame/userRole",
+        routeElement: <UserRole />
+      },
+*/
     ],
   },
 
@@ -651,14 +670,6 @@ export const componentList = [
         path: "/UserProfileInfo",
         href: "/operationGame/UserProfileInfo",
         routeElement: <UserProfileInfo />
-      },
-      {
-        iconPath: verifiedIcon,
-        id: "UI 15 030",
-        label: "User Role Management",
-        path: "/userRoleManagement",
-        href: "/operationGame/userRoleManagement",
-        routeElement: <UserRoleManagement />
       },
     ],
   },

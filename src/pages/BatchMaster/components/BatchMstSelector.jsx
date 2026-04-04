@@ -1,14 +1,10 @@
+// src/pages/BatchMaster/components/BatchMstSelector.jsx
+// Component to select Batch to get Master details page.
 import React, { useState } from "react";
 import { Button, FormControl, InputLabel, Select, MenuItem, Grid } from "@mui/material";
 
-/**
- * Component: BatchMstSelector
- * ----------------------------
- * Props:
- *   gameId: string (fixed, display-only)
- *   gameBatchList: array of { value, label } objects for Game_Batch
- *   onSubmit: function({ gameId, gameBatch }) - called on Submit
- */
+// BatchMstSelector
+
 export default function BatchMstSelector({ gameId = "", gameBatchList = [], onSubmit }) {
   const [gameBatch, setGameBatch] = useState(""); // selected batch
 
