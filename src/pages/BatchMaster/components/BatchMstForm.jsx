@@ -1,135 +1,256 @@
-import React, { useEffect, useState } from "react";
-import { Button, Grid, TextField, MenuItem } from "@mui/material";
-import { pageConstants } from "../constants/pageConstants.js";
-import { useUser } from "../../../core/access/userContext.jsx";
+// src/pages/BatchMaster/components/BatchMstForm.jsx
+// Purpose: Seamless grid-based Batch form with full UX enhancements (Game Batch style), validation, and safe rendering
 
-// Batch Master Form /details, with selectOptions: { Centre_Id, Faculty, Facilitator, UOM, Batch_Status }
+import React, { useState, useEffect } from "react";
+import { pageConstants } from "../constants/pageConstants"; 
 
 export default function BatchMstForm({
-  details = {},                          //  default empty object
-  selectOptions = {},                     //  default empty dropdowns
-  onSave = () => {},                      //  default noop function
-  onCancel = () => {}                     //  default noop function
+  details,
+  selectOptions,
+  onSave,
+  onCancel
 }) {
-  const { gameId } = useUser();
-  const [form, setForm] = useState({});
-  const [editMode, setEditMode] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [errors, setErrors] = useState({}); // ✅ validation state
 
-  /** Initialize form whenever details change */
+  // Initialize full form data (including hidden/system fields)
   useEffect(() => {
-    const initialForm = {};
-    pageConstants.contentSection.inputTypes.forEach(input => {
-      initialForm[input.columnName] = details?.[input.columnName] ?? null;
-    });
-    setForm(initialForm);
-    setEditMode(false);
+    setFormData(details || {});
+    setErrors({}); // ✅ reset errors
   }, [details]);
 
-  /** Handle field change */
-  const handleChange = (field, value) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+  // Handle field value changes
+  const handleChange = (name, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    // ✅ clear error on change
+    setErrors(prev => ({
+      ...prev,
+      [name]: ""
+    }));
   };
 
-  /** Enable edit mode */
-  const handleEdit = () => setEditMode(true);
+  // Ensure fields is always array (safety)
+  const rawFields = pageConstants?.contentSection?.fields; // ✅
+  const fields = Array.isArray(rawFields) ? rawFields : []; // ✅
 
-  /** Cancel edit -> reset form */
-  const handleCancel = () => {
-    const resetForm = {};
-    pageConstants.contentSection.inputTypes.forEach(input => {
-      //  Use null for reset values
-      resetForm[input.columnName] = details?.[input.columnName] ?? null;
+  // Define section order for consistent layout
+  const sectionOrder = ["basic", "assignment", "schedule", "config"];
+
+  // Order fields based on section
+  const orderedFields = sectionOrder.flatMap(section =>
+    fields.filter(f => f && f.section === section)
+  );
+
+  // Common input style
+  const inputStyle = {
+    width: "100%",
+    border: "none",
+    outline: "none",
+    fontSize: "14px",
+    background: "transparent"
+  };
+
+  // Validate required fields
+  const validate = () => {
+    const newErrors = {};
+
+    orderedFields.forEach(field => {
+      if (field.required && !formData[field.columnName]) {
+        newErrors[field.columnName] = `${field.label} is required`;
+      }
     });
-    setForm(resetForm);
-    setEditMode(false);
-    onCancel();  //  safe call
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-    /* Save form -> call parent onSave with current form fileds*/
+  // Generic field renderer
+  const renderField = (field) => {
+    if (!field) return null;
+
+    const value = formData[field.columnName] ?? "";
+    const error = errors[field.columnName];
+
+    const commonProps = {
+      style: {
+        ...inputStyle,
+        cursor: field.editable ? "text" : "not-allowed"
+      },
+      onFocus: (e) => e.target.parentElement.style.border = "1px solid #1976d2", // ✅ focus
+      onBlur: (e) => e.target.parentElement.style.border = error ? "1px solid red" : "1px solid #ccc" // ✅ blur
+    };
+
+    switch (field.type) {
+
+      case "select":
+        return (
+          <select
+            value={value}
+            {...commonProps}
+            onChange={e => handleChange(field.columnName, e.target.value)}
+          >
+            <option value="">-- Select --</option>
+            {(selectOptions[field.columnName] || []).map(opt => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        );
+
+      case "date":
+        return (
+          <input
+            type="date"
+            value={value ? String(value).split("T")[0] : ""}
+            {...commonProps}
+            onChange={e => handleChange(field.columnName, e.target.value)}
+          />
+        );
+
+      case "number":
+        return (
+          <input
+            type="number"
+            value={value}
+            {...commonProps}
+            onChange={e => handleChange(field.columnName, e.target.value)}
+          />
+        );
+
+      default:
+        return (
+          <input
+            type="text"
+            value={value}
+            readOnly={!field.editable}
+            {...commonProps}
+            onChange={e => handleChange(field.columnName, e.target.value)}
+          />
+        );
+    }
+  };
+
+  // Handle Save with validation
   const handleSave = () => {
-    onSave(form); //  safe call
-    setEditMode(false);
-  };
+    if (!validate()) return; // ✅ stop if invalid
 
-  if (!form) return null; // safety
+    const {
+      Created_By,
+      Created_On,
+      Modified_By,
+      Modified_On,
+      ...payload
+    } = formData;
+
+    onSave(payload);
+  };
 
   return (
-    <form>
-      <Grid container spacing={2}>
-        {pageConstants.contentSection.inputTypes.map(input => {
-          const { columnName, inputType, readOnly } = input;
-          //  use null fallback
-          const value = form[columnName] ?? null;
-          const disabled = readOnly || (!editMode && columnName !== "Game_Id");
+    <div style={{ padding: "16px" }}>
 
-          // Dropdown for editable select fields only
-          const isDropdown =
-            inputType === "select" &&
-            ["Centre_Id", "Faculty", "Facilitator", "UOM", "Batch_Status"].includes(columnName);
+      {/* Responsive grid layout */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: "18px"
+        }}
+      >
+        {orderedFields.map(field => {
+          const error = errors[field.columnName];
 
-          if (isDropdown) {
-            return (
-              <Grid item xs={12} sm={6} md={4} key={columnName}>
-                <TextField
-                  select
-                  label={columnName.replace(/_/g, " ")}
-                  // Simple default: first option if value not set
-                  value={value ?? selectOptions[columnName]?.[0]?.value ?? ""}
-                  onChange={e => handleChange(columnName, e.target.value)}
-                  fullWidth
-                  disabled={disabled}
-                >
-                  {(selectOptions[columnName] || []).map(opt => (
-                    <MenuItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-            );
-          }
-
-          // Text / number / date fields (including read-only display-only)
           return (
-            <Grid item xs={12} sm={6} md={4} key={columnName}>
-              <TextField
-                label={columnName.replace(/_/g, " ")}
-                type={inputType}
-                //  fallback for rendering
-                value={value ?? ""}  
-                onChange={e => handleChange(columnName, e.target.value)}
-                fullWidth
-                disabled={disabled}
-              />
-            </Grid>
+            <div
+              key={field.columnName}
+              style={{ display: "flex", flexDirection: "column" }}
+            >
+
+              {/* Field label */}
+              <label
+                style={{
+                  fontSize: "13px",
+                  fontWeight: "500",
+                  marginBottom: "6px",
+                  color: "#444"
+                }}
+              >
+                {field.label}
+              </label>
+
+              {/* Input container */}
+              <div
+                style={{
+                  border: error ? "1px solid red" : "1px solid #ccc", // ✅ error highlight
+                  borderRadius: "8px",
+                  padding: "10px",
+                  minHeight: "42px",
+                  display: "flex",
+                  alignItems: "center",
+                  background: field.editable ? "#fff" : "#f5f5f5",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                {renderField(field)}
+              </div>
+
+              {/* Error message */}
+              {error && (
+                <span style={{ color: "red", fontSize: "11px", marginTop: "4px" }}>
+                  {error}
+                </span>
+              )}
+
+            </div>
           );
         })}
-      </Grid>
+      </div>
 
-      {/* Action buttons */}
-      <Grid container spacing={2} style={{ marginTop: 16 }}>
-        {!editMode && (
-          <Grid item>
-            <Button variant="contained" color="primary" onClick={handleEdit}>
-              {pageConstants.contentSection.modifyBtnLabel}
-            </Button>
-          </Grid>
-        )}
-        {editMode && (
-          <>
-            <Grid item>
-              <Button variant="contained" color="primary" onClick={handleSave}>
-                {pageConstants.contentSection.saveBtnLabel}
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button variant="outlined" color="secondary" onClick={handleCancel}>
-                {pageConstants.contentSection.cancelBtnLabel}
-              </Button>
-            </Grid>
-          </>
-        )}
-      </Grid>
-    </form>
+      {/* Inline action buttons aligned near LOAD */}
+      <div
+        style={{
+          marginTop: "20px",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          gap: "10px"
+        }}
+      >
+        {/* Cancel Button */}
+        <button
+          onClick={onCancel}
+          style={{
+            padding: "8px 16px",
+            fontSize: "14px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            background: "#f5f5f5",
+            cursor: "pointer"
+          }}
+        >
+          Cancel
+        </button>
+
+        {/* Submit Button (same style as LOAD) */}
+        <button
+          onClick={handleSave}
+          style={{
+            padding: "8px 16px",
+            fontSize: "14px",
+            borderRadius: "6px",
+            border: "1px solid #ccc",
+            background: "#f5f5f5",
+            cursor: "pointer"
+          }}
+        >
+          Submit
+        </button>
+      </div>
+
+    </div>
   );
 }
