@@ -11,9 +11,10 @@ export const pageConstants = {
     // Section definitions for grouped UI rendering
     sections: {
       basic: "Basic Information",
-      assignment: "Assignment",
+      centre: "Centre",
+      admin: "Admin",
       schedule: "Schedule",
-      config: "Configuration"
+
     },
 
     // Field configuration (DB is source of truth, UI derived later)
@@ -25,7 +26,7 @@ export const pageConstants = {
 
       {
         columnName: "Game_Id",
-        label: "Game",
+        label: "Learn Platform",
         db: { type: "nvarchar", length: 20 },        // ✅ Added DB definition
         section: "basic",
         editable: false,
@@ -52,7 +53,7 @@ export const pageConstants = {
 
       {
         columnName: "Batch_Size",
-        label: "Batch Size",
+        label: "Strength",
         db: { type: "tinyint" },                     // ✅ Added DB definition
         section: "basic",
         editable: false,
@@ -69,24 +70,35 @@ export const pageConstants = {
       },
 
       // ========================
-      // Assignment
+      // Centre
       // ========================
 
       {
         columnName: "Centre_Id",
         label: "Centre",
         db: { type: "int" },                         // ✅ Added DB definition
-        section: "assignment",
+        section: "centre",
         editable: true,
         visible: true,
         ui: { control: "select" }                    // ✅ Only where override needed ✔
       },
-
+      {
+        columnName: "Venue",
+        label: "Venue",
+        db: { type: "nvarchar", length: 100 },       // ✅ Drives span later
+        section: "centre",
+        editable: true,
+        visible: true
+      },
+      // ========================
+      // Admin
+      // ========================
+      
       {
         columnName: "Faculty",
         label: "Faculty",
         db: { type: "int" },
-        section: "assignment",
+        section: "admin",
         editable: true,
         visible: true,
         ui: { control: "select" }                    // ✅ Override ✔
@@ -96,7 +108,7 @@ export const pageConstants = {
         columnName: "Facilitator",
         label: "Facilitator",
         db: { type: "int" },
-        section: "assignment",
+        section: "admin",
         editable: true,
         visible: true,
         ui: { control: "select" }                    // ✅ Override ✔
@@ -105,7 +117,24 @@ export const pageConstants = {
       // ========================
       // Schedule
       // ========================
+     {
+        columnName: "Duration",
+        label: "Duration",
+        db: { type: "tinyint" },                     // ✅ Added DB definition
+        section: "schedule",
+        editable: true,
+        visible: true
+      },
 
+      {
+        columnName: "UOM",
+        label: "Unit",
+        db: { type: "nvarchar", length: 10 },
+        section: "schedule",
+        editable: true,
+        visible: true,
+        ui: { control: "select" }                    // ✅ Override ✔
+      },
       {
         columnName: "Start_Date",
         label: "Start Date",
@@ -123,6 +152,15 @@ export const pageConstants = {
         editable: true,
         visible: true
       },
+      {
+        columnName: "Batch_Status",
+        label: "Batch Status",
+        db: { type: "nvarchar", length: 20 },
+        section: "schedule",
+        editable: true,
+        visible: true,
+        ui: { control: "select" }                    // ✅ Override ✔
+      },
 
       {
         columnName: "Batch_Open_Date",
@@ -133,48 +171,7 @@ export const pageConstants = {
         visible: true
       },
 
-      {
-        columnName: "Duration",
-        label: "Duration",
-        db: { type: "tinyint" },                     // ✅ Added DB definition
-        section: "schedule",
-        editable: true,
-        visible: true
-      },
-
-      // ========================
-      // Configuration
-      // ========================
-
-      {
-        columnName: "UOM",
-        label: "Unit of Measure",
-        db: { type: "nvarchar", length: 10 },
-        section: "config",
-        editable: true,
-        visible: true,
-        ui: { control: "select" }                    // ✅ Override ✔
-      },
-
-      {
-        columnName: "Batch_Status",
-        label: "Batch Status",
-        db: { type: "nvarchar", length: 20 },
-        section: "config",
-        editable: true,
-        visible: true,
-        ui: { control: "select" }                    // ✅ Override ✔
-      },
-
-      {
-        columnName: "Venue",
-        label: "Venue",
-        db: { type: "nvarchar", length: 100 },       // ✅ Drives span later
-        section: "config",
-        editable: true,
-        visible: true
-      },
-
+ 
       // ========================
       // System Fields (hidden in UI, used in backend)
       // ========================

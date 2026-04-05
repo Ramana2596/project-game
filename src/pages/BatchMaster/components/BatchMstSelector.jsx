@@ -23,7 +23,7 @@ export default function BatchMstSelector({ gameId = "", gameBatchList = [], onSu
         {/* Read-only Game Id */}
         <Grid item>
           <FormControl size="small" variant="outlined" disabled>
-            <InputLabel shrink>Game</InputLabel> {/* label improved */}
+            <InputLabel shrink>Learn Platform</InputLabel> {/* label improved */}
             <Select value={gameId} sx={{ minWidth: 140 }}>
               <MenuItem value={gameId}>{gameId}</MenuItem>
             </Select>
