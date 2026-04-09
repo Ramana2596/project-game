@@ -1,19 +1,45 @@
+// ==========================================
+// Constants: Welcome Page Content & Navigation
+// ==========================================
+
 import { Typography, Box } from '@mui/material';
 
 export const pageConstants = {
+    // ✅ Navigation sections used by WelcomeHeader and ContentSections
     toolBarSections: [
         {
             key: 'aboutSimulation',
-            title: 'Welcome to Operations Management Training Platform  ( O M T P )',
-            content: (<><Typography variant="h6" sx={{ textAlign: 'center' }}>Experience the real world feeling of running a business operation</Typography>
-                <Typography variant="body1" paragraph>The O M T P is an immersive learning platform designed to put you in the driver’s seat of managing a manufacturing or service-based business. Whether you’re overseeing a production line or managing service delivery, OMTP provides a real-world experience where every operational and strategic decision directly impacts your company’s financial health. It provides a learning platform to young business students, entrepreneurs, young professionals, consultants and Academia who are teaching operations management</Typography>
-                <Typography variant="body1" paragraph>Through this interactive session, you will:</Typography><ul>
-                <li>Make critical strategic and operational decisions that affect business performance.</li>
-                <li>Analyse financial statements to see the real impact of your choices.</li>
-                <li>Face simulated real-world challenges like supply chain disruptions, demand fluctuations, and workforce constraints.</li>
-                <li>Experience the effects of long-term strategies, trading off short-term costs against long-term benefits.</li>
-                <li>Gain hands-on experience in business operations, from process efficiency to financial planning.</li>
-            </ul></>)
+            title: 'Welcome to Operations Management Training Platform ( O M T P )',
+            content: (
+                <>
+                    <Typography variant="h6" sx={{ textAlign: 'center', mb: 2 }}>
+                        Experience the real world feeling of running a business operation
+                    </Typography>
+                    <Typography variant="body1" paragraph>
+                        The O M T P is an immersive learning platform designed to put you in the driver’s seat of managing a manufacturing or service-based business. Whether you’re overseeing a production line or managing service delivery, OMTP provides a real-world experience where every operational and strategic decision directly impacts your company’s financial health. It provides a learning platform to young business students, entrepreneurs, young professionals, consultants and Academia who are teaching operations management
+                    </Typography>
+                    <Typography variant="body1" paragraph>Through this interactive session, you will:</Typography>
+                    <ul>
+                        <li>Make critical strategic and operational decisions that affect business performance.</li>
+                        <li>Analyse financial statements to see the real impact of your choices.</li>
+                        <li>Face simulated real-world challenges like supply chain disruptions, demand fluctuations, and workforce constraints.</li>
+                        <li>Experience the effects of long-term strategies, trading off short-term costs against long-term benefits.</li>
+                        <li>Gain hands-on experience in business operations, from process efficiency to financial planning.</li>
+                    </ul>
+                </>
+            )
+        },
+        // ✅ Green Tick: New OMTP Intro Section for independent navigation
+        {
+            key: 'omtpIntro',
+            title: 'OMTP Guided Walkthrough',
+            content: (
+                <Typography variant="body1" paragraph>
+                    New to the platform? Explore our 7-step guided walkthrough to understand 
+                    how to navigate the simulation, from initial market analysis to 
+                    mastering financial statements.
+                </Typography>
+            )
         },
         {
             key: 'aboutUs',
