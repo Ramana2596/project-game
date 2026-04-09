@@ -1,3 +1,7 @@
+// ==========================================
+// Component: WelcomePage (Integrated with Intro)
+// ==========================================
+
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import '../Welcome/styles/pageStyle.css';
@@ -12,12 +16,11 @@ import imgLearningOutcome from '../../assets/welcome-page/learning-outcome.jpg';
 import imgforWhom from '../../assets/forWhom.png';
 import imgaboutUs from '../../assets/aboutUs.png';
 
-// UI Components
+// ✅ UI Components
 import ToastMessage from '../../components/ToastMessage';
-// Constants and Logic
 import { API_STATUS, API_STATUS_MAP } from '../../utils/statusCodes';
 
-// Component imports
+// ✅ Section Components
 import WelcomeHeader from './components/WelcomeHeader';
 import HeroSection from './components/HeroSection';
 import ContentSections from './components/ContentSections';
@@ -31,20 +34,22 @@ const WelcomePage = () => {
     const { setIsLoading } = useLoading();
     const { login, setUserInfo } = useUser();
     const navigate = useNavigate();
-    //  Alert state for toast messages
+
+    // Alert state for toast messages
     const [alertData, setAlertData] = useState({
         open: false,
         message: '',
-        severity: 'info' // 'success' | 'error' | 'warning' | 'info'
+        severity: 'info' 
     });
 
-    // Function to close the toast
     const handleCloseAlert = () => {
         setAlertData(prev => ({ ...prev, open: false }));
     };
 
+    // ✅ Navigation titles mapping
     const shortTitles = {
         aboutSimulation: 'Welcome',
+        omtpIntro: 'OMTP Intro', // ✅ Green Tick: Added Intro to Menu labels
         aboutUs: 'About',
         forWhom: 'For Whom',
         howItWorks: 'How it Works',
@@ -60,8 +65,18 @@ const WelcomePage = () => {
         learningoutcome: imgLearningOutcome,
     };
 
-    // Handle demo user login 
-    // Complete info (User_Id,User_Login, RL_Id, Role)
+    // ✅ Monitor menu selection to trigger page navigation
+    React.useEffect(() => {
+        if (activeSection === 'omtpIntro') {
+            // ✅ Green Tick: Navigates to standalone Intro page
+            navigate("/operationGame/welcomeOmtp");
+            
+            // ❌ Red X: Resets active state so menu isn't stuck
+            setActiveSection('aboutSimulation');
+        }
+    }, [activeSection, navigate]);
+
+    // ✅ Handle direct demo login
     const handleDemoLogin = () => {
         setIsLoading(true);
         getUserDetails({ userEmail: 'guest@guest.com', gameId: 'OpsMgt' })
@@ -70,34 +85,25 @@ const WelcomePage = () => {
 
                 if (returnStatus === API_STATUS.SUCCESS && data?.length > 0) {
                     const userData = data[0];
-
                     login({
                         User_Id: userData.User_Id,
                         User_Login: userData.User_Login,
                         RL_Id: userData.RL_Id,
                         Role: userData.Role
                     });
-
                     setUserInfo(userData);
-                    //navigate("/operationGame/demoWizard");
                     navigate("/operationGame/demoOmtp");
                 } else {
                     const statusConfig = API_STATUS_MAP[returnStatus] || {};
-                    const apiMessage = response.data.message;
-
                     setAlertData({
                         open: true,
-                        message: apiMessage || statusConfig.defaultMsg || "Error",
+                        message: response.data.message || statusConfig.defaultMsg || "Error",
                         severity: statusConfig.severity || "error"
                     });
-                } // This closes the 'else'
-            }) // This closes the '.then'
-            .catch((error) => {
-                setAlertData({
-                    open: true,
-                    message: "Network Error",
-                    severity: "error"
-                });
+                } 
+            })
+            .catch(() => {
+                setAlertData({ open: true, message: "Network Error", severity: "error" });
             })
             .finally(() => setIsLoading(false));
     };
@@ -116,7 +122,7 @@ const WelcomePage = () => {
 
     const appBarRef = React.useRef(null);
 
-    // Initialize scroll margin on mount and window resize
+    // Initialize scroll margin
     React.useEffect(() => {
         const updateScrollMargin = () => {
             const headerHeight = appBarRef.current?.offsetHeight || 80;
@@ -124,11 +130,10 @@ const WelcomePage = () => {
         };
         updateScrollMargin();
         window.addEventListener('resize', updateScrollMargin);
-        return () =>
-            window.removeEventListener('resize', updateScrollMargin);
+        return () => window.removeEventListener('resize', updateScrollMargin);
     }, []);
 
-    // Build image order map for alternating layout
+    // Build image order map
     const imageSectionsOrder = React.useMemo(() => {
         const map = {};
         let counter = 0;
@@ -141,7 +146,6 @@ const WelcomePage = () => {
     }, []);
 
     return (
-
         <Box className="welcome-root" sx={{ minHeight: '100vh' }}>
             <WelcomeHeader
                 activeSection={activeSection}
@@ -165,6 +169,7 @@ const WelcomePage = () => {
             <GamePhasesSection />
 
             <WelcomeFooter />
+            
             <ToastMessage
                 open={alertData.open}
                 message={alertData.message}
@@ -172,7 +177,6 @@ const WelcomePage = () => {
                 onClose={handleCloseAlert}
             />
         </Box>
-
     );
 }
 

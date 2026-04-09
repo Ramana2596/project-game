@@ -6,6 +6,7 @@ import { LoadingProvider } from './hooks/loadingIndicatorContext';
 import GameNavigationMenu from './pages/NavigationMenu/GameNavigationMenu';
 import WelcomePage from './pages/Welcome/Welocme';
 import Register from './pages/RegisterUser/RegisterPage';
+import WelcomeOmtp from './pages/WelcomeOmtp/WelcomeOmtp'; 
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
           <Route path="/" element={<WelcomePage />}></Route>
           <Route path="/signIn" element={<SignIn />}></Route>
           <Route path="/register" element={<Register />}></Route>
+          {/* Add the specific route for the Intro */}
+          <Route path="/operationGame/welcomeOmtp" element={<WelcomeOmtp />} />
+
           <Route path="/operationGame/*" element={<GameNavigationMenu />} />
         </Routes>
       </div>
@@ -24,3 +28,5 @@ function App() {
 }
 
 export default App;
+
+
