@@ -16,7 +16,6 @@ const UserRoleMgt = () => {
 
     const [users, setUsers] = useState([]);
     const [roles, setRoles] = useState([]);
-    const [allRoles, setAllRoles] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [selectedRoles, setSelectedRoles] = useState([]);
     const [initialRoles, setInitialRoles] = useState([]);
@@ -27,7 +26,7 @@ const UserRoleMgt = () => {
         isVisible: false,
     });
 
-    // Initial load: fetch users and all roles
+    // Fetch users and roles on initial load
     useEffect(() => {
         let isMounted = true;
 
@@ -41,7 +40,6 @@ const UserRoleMgt = () => {
 
                 if (isMounted) {
                     setUsers(userData?.data?.Data || []);
-                    setAllRoles(allRoleData?.data?.Data || []);
                 }
             } catch (error) {
                 if (isMounted) {
@@ -60,7 +58,7 @@ const UserRoleMgt = () => {
         return () => { isMounted = false; };
     }, [gameId, setIsLoading]);
 
-    // ✔ Handle user selection and fetch roles + approved roles
+    // Handle user selection and fetch roles + approved roles
     const handleUserChange = async (event) => {
         const user = users.find(u => u.User_Email === event.target.value);
         setSelectedUser(user || null);
@@ -68,7 +66,7 @@ const UserRoleMgt = () => {
         if (user) {
             setIsLoading(true);
             try {
-                //Fetch roles for selected user's profession
+                // Fetch roles for selected user's profession
                 const roleData = await fetchRoles({ gameId: userInfo.gameId, pfId: user.PF_Id });
                 const rolesList = roleData?.data?.Data || [];
                 setRoles(rolesList);
@@ -77,7 +75,7 @@ const UserRoleMgt = () => {
                 const approvedRolesRes = await fetchApprovedRoles({ gameId: userInfo.gameId, userId: user.User_Id });
                 const approvedRoles = approvedRolesRes?.data?.Data || [];
 
-                // Compute checked roles
+                // Compute checked roles from approved roles
                 let checkedRoles = [];
                 if (approvedRoles.length > 0) {
                     const approvedRoleIds = approvedRoles.map(r => String(r.RL_Id));
@@ -87,7 +85,7 @@ const UserRoleMgt = () => {
                 }
 
                 setSelectedRoles(checkedRoles);
-                setInitialRoles(checkedRoles); 
+                setInitialRoles(checkedRoles);
 
             } catch (error) {
                 setAlertData({
@@ -108,7 +106,7 @@ const UserRoleMgt = () => {
         }
     };
 
-    // Handle role checkbox selection
+    // Handle checkbox selection toggle for roles
     const handleRoleChange = (event) => {
         const value = event.target.value;
 
@@ -119,22 +117,37 @@ const UserRoleMgt = () => {
         );
     };
 
-    // Detect if roles have changed
+    // Detect changes by No of rows and roles
     const isChanged =
-        JSON.stringify([...selectedRoles].sort()) !==
-        JSON.stringify([...initialRoles].sort());
+        selectedRoles.length !== initialRoles.length ||
+        selectedRoles.some(r => !initialRoles.includes(r));
 
-    // Handle approve action
+    // Handle approve action with delta role updates (Add/Delete)
     const handleApprove = async () => {
-        if (selectedUser && selectedRoles.length >= 0) {
+        if (selectedUser && isChanged) {
             setIsLoading(true);
             try {
-                const userRoleList = selectedRoles.map(roleId => ({
-                    gameId,
-                    userId: selectedUser.User_Id,
-                    roleId: roleId,
-                    cmdLine: 'Add_Role'
-                }));
+                // Identify added and removed roles
+                const addedRoles = selectedRoles.filter(r => !initialRoles.includes(r));
+                const removedRoles = initialRoles.filter(r => !selectedRoles.includes(r));
+
+                // Build payload with roles list
+                const userRoleList = [
+                    ...addedRoles.map(roleId => ({
+                        gameId,
+                        userId: selectedUser.User_Id,
+                        roleId,
+                        cmdLine: 'Add_Role'
+                    })),
+                    ...removedRoles.map(roleId => ({
+                        gameId,
+                        userId: selectedUser.User_Id,
+                        roleId,
+                        cmdLine: 'Delete_Role'
+                    }))
+                ];
+
+                if (userRoleList.length === 0) return;
 
                 const response = await updateUserRole(userRoleList);
 
@@ -152,7 +165,8 @@ const UserRoleMgt = () => {
                     });
                 }
 
-                setInitialRoles(selectedRoles); //reset baseline after success
+                // Reset baseline after update
+                setInitialRoles([...selectedRoles]);
 
             } catch (error) {
                 setAlertData({
@@ -166,7 +180,7 @@ const UserRoleMgt = () => {
         }
     };
 
-    // Auto-hide toast message
+    // Auto-hide toast message after display
     useEffect(() => {
         if (alertData.isVisible) {
             const timer = setTimeout(() => {
@@ -266,11 +280,11 @@ const UserRoleMgt = () => {
                             ))}
                         </FormControl>
 
-                        {/* ✔ Approve Button with Smart UX */}
+                        {/* Approve button enabled only when valid changes exist */}
                         <Button
                             fullWidth
                             className="standard-button-primary-button"
-                            disabled={!selectedUser || roles.length === 0 || !isChanged} // ✔ UPDATED
+                            disabled={!selectedUser || roles.length === 0 || !isChanged}
                             onClick={handleApprove}
                         >
                             Approve
