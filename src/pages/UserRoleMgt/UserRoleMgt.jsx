@@ -28,7 +28,7 @@ const UserRoleMgt = () => {
         isVisible: false,
     });
 
-    // Fetches initial user list on component mount
+    // Fetch initial user list
     useEffect(() => {
         let isMounted = true;
 
@@ -88,7 +88,7 @@ const UserRoleMgt = () => {
 
             const rolesList = roleData?.data?.Data || [];
 
-            // Mapping Conflicting_Id from SP ✅ 
+            // Map Conflicting_Id
             const conflictMap = {};
 
             rolesList.forEach(row => {
@@ -108,7 +108,7 @@ const UserRoleMgt = () => {
             setRoles(rolesList);
             setRoleConflictMap(conflictMap);
 
-            // Fetch Approved Roles from DB
+            // Fetch Approved Roles
             const approvedRolesRes = await fetchApprovedRoles({
                 gameId: userInfo.gameId,
                 userId: user.User_Id
@@ -147,7 +147,7 @@ const UserRoleMgt = () => {
         }
     };
 
-    // Handles checkbox toggling with real-time mutual exclusivity enforcement ✅
+    // Handles checkbox toggling / mutual exclusivity
     const handleRoleChange = (event) => {
 
         const roleId = String(event.target.value);
@@ -155,7 +155,7 @@ const UserRoleMgt = () => {
 
         setSelectedRoles(prev => {
             if (isChecking) {
-                // Remove any currently selected roles that conflict with the new selection
+                // Remove conflicts the selected Role
                 const conflicts = roleConflictMap[roleId] || [];
                 const filteredRoles = prev.filter(id => !conflicts.includes(id));
                 return [...filteredRoles, roleId];
@@ -165,12 +165,12 @@ const UserRoleMgt = () => {
         });
     };
 
-    // Detects differences between initial and current role selection
+    // Detects changes between initial and current role
     const isChanged =
         selectedRoles.length !== initialRoles.length ||
         selectedRoles.some(r => !initialRoles.includes(r));
 
-    // Processes role changes and sends Add/Delete commands to service ✅
+    // Processes role changes: Add/Delete commands
     const handleApprove = async () => {
 
         if (!selectedUser || !isChanged) return;
@@ -182,11 +182,11 @@ const UserRoleMgt = () => {
             const currentRoles = [...selectedRoles];
             const previousRoles = [...initialRoles];
 
-            // Correct Delta calculation to ensure both Add and Delete are captured in the payload ✅
+            // Delta changes as Add and Delete payloads
             const addedRoles = currentRoles.filter(r => !previousRoles.includes(r));
             const removedRoles = previousRoles.filter(r => !currentRoles.includes(r));
 
-            // Create command list prioritizing Deletions to ensure database integrity ✅
+            // Prioritize Deletions to ensure database integrity
             const userRoleList = [
                 ...removedRoles.map(roleId => ({
                     gameId,
@@ -214,7 +214,7 @@ const UserRoleMgt = () => {
                 isVisible: true,
             });
 
-            // Update initial state to match current successful save ✅
+            // Update initial state after successful update 
             setInitialRoles([...currentRoles]);
 
         } catch (error) {
@@ -230,7 +230,7 @@ const UserRoleMgt = () => {
         }
     };
 
-    // Manages the visibility duration of the feedback toast
+    // Toast Message auto-hide effect
     useEffect(() => {
         if (!alertData.isVisible) return;
 
@@ -242,7 +242,7 @@ const UserRoleMgt = () => {
 
     }, [alertData.isVisible]);
 
-    // Renders the user selection and role checkbox interface
+    // Render user selection and role checkbox interface
     return (
         <Container maxWidth="lg" sx={{ mt: 4 }}>
 
