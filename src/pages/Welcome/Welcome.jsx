@@ -1,11 +1,11 @@
 // ==========================================
-// Component: WelcomePage (Integrated with Intro)
+// Component: Welcome (Integrated with Intro)
 // ==========================================
 
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import '../Welcome/styles/pageStyle.css';
-import { pageConstants } from './constants/pageConstants';
+import { pageConstants } from './constants/pageConstants.js';
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from './services/service.js';
@@ -16,19 +16,19 @@ import imgLearningOutcome from '../../assets/welcome-page/learning-outcome.jpg';
 import imgforWhom from '../../assets/forWhom.png';
 import imgaboutUs from '../../assets/aboutUs.png';
 
-// ✅ UI Components
-import ToastMessage from '../../components/ToastMessage';
-import { API_STATUS, API_STATUS_MAP } from '../../utils/statusCodes';
+// UI Components
+import ToastMessage from '../../components/ToastMessage.jsx';
+import { API_STATUS, API_STATUS_MAP } from '../../utils/statusCodes.js';
 
-// ✅ Section Components
-import WelcomeHeader from './components/WelcomeHeader';
-import HeroSection from './components/HeroSection';
-import ContentSections from './components/ContentSections';
-import CTASection from './components/CTASection';
-import GamePhasesSection from './components/GamePhasesSection';
-import WelcomeFooter from './components/WelcomeFooter';
+// Section Components
+import WelcomeHeader from './components/WelcomeHeader.jsx';
+import HeroSection from './components/HeroSection.jsx';
+import ContentSections from './components/ContentSections.jsx';
+import CTASection from './components/CTASection.jsx';
+import GamePhasesSection from './components/GamePhasesSection.jsx';
+import WelcomeFooter from './components/WelcomeFooter.jsx';
 
-const WelcomePage = () => {
+const Welcome = () => {
     const [activeSection, setActiveSection] = useState('aboutSimulation');
     const [displaySection, setDisplaySection] = useState(activeSection);
     const { setIsLoading } = useLoading();
@@ -46,10 +46,10 @@ const WelcomePage = () => {
         setAlertData(prev => ({ ...prev, open: false }));
     };
 
-    // ✅ Navigation titles mapping
+    // Navigation titles
     const shortTitles = {
         aboutSimulation: 'Welcome',
-        omtpIntro: 'OMTP Intro', // ✅ Green Tick: Added Intro to Menu labels
+        omtpIntro: 'OMTP Intro',
         aboutUs: 'About',
         forWhom: 'For Whom',
         howItWorks: 'How it Works',
@@ -65,18 +65,17 @@ const WelcomePage = () => {
         learningoutcome: imgLearningOutcome,
     };
 
-    // ✅ Monitor menu selection to trigger page navigation
+    // Navigation
     React.useEffect(() => {
         if (activeSection === 'omtpIntro') {
-            // ✅ Green Tick: Navigates to standalone Intro page
+            // Navigate to Intro page
             navigate("/operationGame/welcomeOmtp");
             
-            // ❌ Red X: Resets active state so menu isn't stuck
             setActiveSection('aboutSimulation');
         }
     }, [activeSection, navigate]);
 
-    // ✅ Handle direct demo login
+    // Direct Demo login
     const handleDemoLogin = () => {
         setIsLoading(true);
         getUserDetails({ userEmail: 'guest@guest.com', gameId: 'OpsMgt' })
@@ -180,4 +179,4 @@ const WelcomePage = () => {
     );
 }
 
-export default WelcomePage;
+export default Welcome;
