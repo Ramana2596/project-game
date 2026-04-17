@@ -104,7 +104,7 @@ import UserProfileInfo from '../UserProfileInfo/UserProfileInfo.jsx';
 import MarketInputError from '../MarketInputError/MarketInputError.jsx';
 import StdMarketInput from '../StdMarketInput/StdMarketInput.jsx';
 import StdOperationInput from '../StdOperationInput/StdOperationInput.jsx';
-import omgLogo from '../../assets/omg-logo.png';
+import omgLogo from '../../assets/OMGTree6.png';
 import MarketInfoTeam from '../MarketInfoTeam/MarketInfoTeam.jsx';
 import ToastMessage from '../../components/ToastMessage.jsx';
 import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
@@ -115,13 +115,14 @@ import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
 import DemoWizard from '../SimulationPlay/DemoWizard.jsx';
 import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
 //import SimulationSuite from '../SimulationSuite/SimulationSuite.jsx';
-import KeyResultBsInfo  from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
-import KeyResultPlInfo  from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
+import KeyResultBsInfo from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
+import KeyResultPlInfo from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
 import DemoOmtp from '../DemoOmtp/DemoOmtp.jsx';
 import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
 import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
 import SimulationHub from '../SimulationHub/SimulationHub.jsx';
 import UserRole from '../UserRole/UserRole.jsx';
+//import FormTemplate from '../FormTemplate/FormTemplate.jsx';
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
@@ -205,8 +206,8 @@ export default function MiniDrawer() {
             <div>
               {userInfo ? (
                 <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", width: "100%" }}>
-                  {/* Show Enroll button only if NOT enrolled */}
-                  {!userInfo?.gameBatch && (
+                  {/* Show Enroll button: role=Student (6) or Team Leader (8) */}
+                  {(user?.rlId === 6 || user?.rlId === 8) && (
                     <Button
                       className="standard-button-secondary-button"
                       sx={{ marginRight: 1 }}
@@ -370,11 +371,12 @@ export default function MiniDrawer() {
           <Route path='/keyResultBsInfo' element={<KeyResultBsInfo />} />
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
           <Route path='/demoOmtp' element={<DemoOmtp />} />
-          <Route path='/strategyBenefit' element = {<StrategyBenefit />} />
-          <Route path='/resetSimulation' element= {<ResetSimulation />} />
-          <Route path='/simulationHub' element= {<SimulationHub />} />
-          <Route path='/userRole' element= {<UserRole />} />
-          
+          <Route path='/strategyBenefit' element={<StrategyBenefit />} />
+          <Route path='/resetSimulation' element={<ResetSimulation />} />
+          <Route path='/simulationHub' element={<SimulationHub />} />
+          <Route path='/userRole' element={<UserRole />} />
+{/*          <Route path='/formTemplate' element={<FormTemplate />} /> */}
+
         </Routes>
       </Box>
       <ToastMessage
