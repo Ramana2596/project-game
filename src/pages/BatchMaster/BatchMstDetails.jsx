@@ -11,7 +11,7 @@ import {
   getFacilitator,
   getFaculty,
   getUOM
-} from "./services/getBatchQuery.js";
+} from "./services/getBatchMstQuery.js";
 import { updateBatchMst } from "./services/service.js";
 import { useUser } from "../../core/access/userContext.jsx";
 import { API_STATUS, API_STATUS_MAP } from "../../utils/statusCodes";
