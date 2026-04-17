@@ -4,7 +4,7 @@ import SignIn from './pages/SignIn/SignIn';
 import LoadingIndicator from './components/LoadingIndicator';
 import { LoadingProvider } from './hooks/loadingIndicatorContext';
 import GameNavigationMenu from './pages/NavigationMenu/GameNavigationMenu';
-import WelcomePage from './pages/Welcome/Welocme';
+import Welcome from './pages/Welcome/Welcome';
 import Register from './pages/RegisterUser/RegisterPage';
 import WelcomeOmtp from './pages/WelcomeOmtp/WelcomeOmtp'; 
 
@@ -14,7 +14,7 @@ function App() {
       <div>
         <LoadingIndicator />
         <Routes>
-          <Route path="/" element={<WelcomePage />}></Route>
+          <Route path="/" element={<Welcome />}></Route>
           <Route path="/signIn" element={<SignIn />}></Route>
           <Route path="/register" element={<Register />}></Route>
           {/* Add the specific route for the Intro */}
