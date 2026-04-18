@@ -21,7 +21,7 @@ export function fetchRoles(queryParams) {
 export function fetchApprovedRoles(queryParams) {
     return api.post('/api/getUserRoleQuery', { 
         ...queryParams, 
-        cmdLine: 'Get_Approved_Roles' 
+        cmdLine: 'Get_Active_Roles' 
     });
 };
 
