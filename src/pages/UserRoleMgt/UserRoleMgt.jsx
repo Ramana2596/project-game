@@ -7,12 +7,16 @@ import { Container, Grid, Typography, FormControl, InputLabel, Select, MenuItem,
 import ToastMessage from '../../components/ToastMessage.jsx';
 import { useUser } from "../../core/access/userContext.jsx";
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
+import { create } from 'canvas-confetti';
 
 // Manage User Role Assignment
 const UserRoleMgt = () => {
 
-    const { userInfo } = useUser();
+    // Approver
+    const { user, userInfo } = useUser();
+    const approvedByUserId = user?.userId;   // approver
     const gameId = userInfo?.gameId;
+
     const { setIsLoading } = useLoading();
 
     const [users, setUsers] = useState([]);
@@ -34,16 +38,12 @@ const UserRoleMgt = () => {
 
         const fetchAll = async () => {
             setIsLoading(true);
-
             try {
                 const userData = await fetchUsers({ gameId });
-
                 if (isMounted) {
                     setUsers(userData?.data?.Data || []);
                 }
-
             } catch (error) {
-
                 if (isMounted) {
                     setAlertData({
                         severity: "error",
@@ -51,7 +51,6 @@ const UserRoleMgt = () => {
                         isVisible: true,
                     });
                 }
-
             } finally {
                 if (isMounted) setIsLoading(false);
             }
@@ -63,38 +62,33 @@ const UserRoleMgt = () => {
 
     }, [gameId, setIsLoading]);
 
-    // Loads roles, conflicts, and existing approvals when user selection changes
+    // Loads roles, conflicts, and existing approvals of selected user
     const handleUserChange = async (event) => {
 
-        const user = users.find(u => u.User_Email === event.target.value);
-        setSelectedUser(user || null);
-
-        if (!user) {
+        // User by email selection
+        const selectedUserObj = users.find(u => u.User_Email === event.target.value);
+        setSelectedUser(selectedUserObj || null);
+        if (!selectedUserObj) {
             setRoles([]);
             setSelectedRoles([]);
             setInitialRoles([]);
             setRoleConflictMap({});
             return;
         }
-
         setIsLoading(true);
 
         try {
-
             const roleData = await fetchRoles({
-                gameId: userInfo.gameId,
-                pfId: user.PF_Id
+                gameId: gameId,
+                pfId: selectedUserObj.PF_Id
             });
-
             const rolesList = roleData?.data?.Data || [];
 
             // Map Conflicting_Id
             const conflictMap = {};
 
             rolesList.forEach(row => {
-
                 const id = String(row.RL_Id);
-
                 if (row.Conflicting_Id) {
                     conflictMap[id] = String(row.Conflicting_Id)
                         .split(',')
@@ -108,10 +102,10 @@ const UserRoleMgt = () => {
             setRoles(rolesList);
             setRoleConflictMap(conflictMap);
 
-            // Fetch Approved Roles
+            // Fetch Approved Roles (ACTIVE Only from VIEW)
             const approvedRolesRes = await fetchApprovedRoles({
-                gameId: userInfo.gameId,
-                userId: user.User_Id
+                gameId: gameId,
+                userId: selectedUserObj.User_Id
             });
 
             const approvedRoles = approvedRolesRes?.data?.Data || [];
@@ -119,19 +113,15 @@ const UserRoleMgt = () => {
             let checkedRoles = [];
 
             if (approvedRoles.length > 0) {
-
                 const approvedRoleIds = approvedRoles.map(r => String(r.RL_Id));
-
                 checkedRoles = rolesList
                     .filter(role => approvedRoleIds.includes(String(role.RL_Id)))
                     .map(role => String(role.RL_Id));
             }
-
             setSelectedRoles(checkedRoles);
             setInitialRoles(checkedRoles);
 
         } catch (error) {
-
             setAlertData({
                 severity: "error",
                 message: "Failed to load user roles.",
@@ -147,7 +137,7 @@ const UserRoleMgt = () => {
         }
     };
 
-    // Handles checkbox toggling / mutual exclusivity
+    // Handles mutual exclusivity /checkbox toggling
     const handleRoleChange = (event) => {
 
         const roleId = String(event.target.value);
@@ -155,7 +145,7 @@ const UserRoleMgt = () => {
 
         setSelectedRoles(prev => {
             if (isChecking) {
-                // Remove conflicts the selected Role
+                // Remove conflicts from selected Roles
                 const conflicts = roleConflictMap[roleId] || [];
                 const filteredRoles = prev.filter(id => !conflicts.includes(id));
                 return [...filteredRoles, roleId];
@@ -170,7 +160,7 @@ const UserRoleMgt = () => {
         selectedRoles.length !== initialRoles.length ||
         selectedRoles.some(r => !initialRoles.includes(r));
 
-    // Processes role changes: Add/Delete commands
+    // Processes role changes: Add/Revoke commands
     const handleApprove = async () => {
 
         if (!selectedUser || !isChanged) return;
@@ -182,22 +172,24 @@ const UserRoleMgt = () => {
             const currentRoles = [...selectedRoles];
             const previousRoles = [...initialRoles];
 
-            // Delta changes as Add and Delete payloads
+            // Delta changes as Add and Revoke payloads
             const addedRoles = currentRoles.filter(r => !previousRoles.includes(r));
-            const removedRoles = previousRoles.filter(r => !currentRoles.includes(r));
+            const revokedRoles = previousRoles.filter(r => !currentRoles.includes(r));
 
-            // Prioritize Deletions to ensure database integrity
+            // Prioritize Revokes before Add to avoid uniqueness conflicts
             const userRoleList = [
-                ...removedRoles.map(roleId => ({
+                ...revokedRoles.map(roleId => ({
                     gameId,
                     userId: selectedUser.User_Id,
                     roleId: roleId,
-                    cmdLine: 'Delete_Role'
+                    approvedBy: approvedByUserId,
+                    cmdLine: 'Revoke_Role'
                 })),
                 ...addedRoles.map(roleId => ({
                     gameId,
                     userId: selectedUser.User_Id,
                     roleId: roleId,
+                    approvedBy: approvedByUserId,
                     cmdLine: 'Add_Role'
                 }))
             ];
@@ -260,7 +252,7 @@ const UserRoleMgt = () => {
                 }}
             >
 
-                {/* Left Section: User Selection */}
+                {/* Left Section: User Selection & No Self-Selection */}
                 <Grid item xs={12} sm={6} sx={{ p: 2 }}>
                     <Box sx={{ p: 2, backgroundColor: '#fff', borderRadius: 2 }}>
 
@@ -274,9 +266,13 @@ const UserRoleMgt = () => {
                             >
                                 <MenuItem value=""><em>Select an email</em></MenuItem>
 
-                                {users.map(user => (
-                                    <MenuItem key={user.User_Id} value={user.User_Email}>
-                                        {user.User_Email}
+                                {users.map(u => (
+                                    <MenuItem
+                                        key={u.User_Id}
+                                        value={u.User_Email}
+                                        disabled={u.User_Id === approvedByUserId}   // No self-selection
+                                    >
+                                        {u.User_Email}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -330,7 +326,12 @@ const UserRoleMgt = () => {
                         <Button
                             fullWidth
                             className="standard-button-primary-button"
-                            disabled={!selectedUser || roles.length === 0 || !isChanged}
+                            disabled={
+                                !selectedUser ||
+                                roles.length === 0 ||
+                                !isChanged ||
+                                selectedUser?.User_Id === approvedByUserId   // No self-approve
+}
                             onClick={handleApprove}
                         >
                             Approve
