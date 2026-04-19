@@ -5,7 +5,7 @@ import api from "../../../core/interceptor/api-interceptor";
 
 // Generic POST handler for all API Calls (SP + cmdLine driven)
 function fetchBatchQuery(queryParams, cmdLine) {
-  return api.post("/api/getBatchQuery", {
+  return api.post("/api/getBatchMstQuery", {
     ...queryParams,
     cmdLine
   });
