@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
             isGameLeader: null,
             userId: null,
             loginId: null,
-            learnMode: 'Class_Room'
+            learnMode: 'In-Person'
         }));
 
     // State: RBAC page IDs (from memory)
