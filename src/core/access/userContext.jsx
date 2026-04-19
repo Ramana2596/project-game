@@ -4,12 +4,12 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import { componentList } from "../../constants/globalConstants.js";
 import { saveToStorage, loadFromStorage, clearStorage } from "../../utils/storage.js";
 
-// Context: share user, RBAC, and game session across app
+// Context: share user, RBAC, and Learning session across app
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
 
-    //State: basic login identity and role information (persisted)
+    //State: login and role info from memory
     const [user, setUser] = useState(() =>
         loadFromStorage("user", {
             userId: null,
@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
             role: null
         }));
 
-    //State: current game/session participation info (persisted)
+    //State: Learning session info (from memory)
     const [userInfo, setGameInfo] = useState(() =>
         loadFromStorage("userInfo", {
             gameId: 'OpsMgt',
@@ -30,14 +30,14 @@ export const UserProvider = ({ children }) => {
             learnMode: 'Class_Room'
         }));
 
-    // State: RBAC accessible page IDs (persisted)
+    // State: RBAC page IDs (from memory)
     const [userAccessiblePageIds, setUserAccessiblePageIds] = useState(() =>
         loadFromStorage("userAccessiblePageIds", null));
 
     // State: filtered component list for navigation
     const [userAccessiblePages, setUserAccessiblePages] = useState(null);
 
-    // Effect: For persist
+    // Store info in memory
     useEffect(() => { saveToStorage("user", user); }, [user]);
     useEffect(() => { saveToStorage("userInfo", userInfo); }, [userInfo]);
     useEffect(() => { saveToStorage("userAccessiblePageIds", userAccessiblePageIds); }, [userAccessiblePageIds]);
@@ -53,7 +53,7 @@ export const UserProvider = ({ children }) => {
         }));
     };
 
-    // Function: update game/team participation info
+    // Function: update Learning session info
     const setUserInfo = (userInfo) => {
         setGameInfo({
             gameId: userInfo?.Game_Id,
@@ -66,7 +66,7 @@ export const UserProvider = ({ children }) => {
         });
     };
 
-    // Function: normalize backend RBAC response
+    // Function: normalize UI_Id & name: backend Vs RBAC
     const setAccessiblePageIds = (accessiblePageIdList) => {
         if (accessiblePageIdList && accessiblePageIdList.length > 0) {
             const normalizedList = accessiblePageIdList.map(obj => ({
@@ -87,7 +87,7 @@ export const UserProvider = ({ children }) => {
             }));
     };
 
-    // Effect: recompute accessible menu/pages when RBAC list changes
+    // Recompute accessible pages when RBAC list changes
     useEffect(() => {
         if (userAccessiblePageIds && userAccessiblePageIds.length > 0) {
             const filteredArray = filterComponents(componentList, userAccessiblePageIds);
@@ -102,31 +102,31 @@ export const UserProvider = ({ children }) => {
         setUserAccessiblePages(null);
         setUserAccessiblePageIds(null);
 
-        //  Clear persisted storage
+        //  Clear memory from storage
         clearStorage("user");
         clearStorage("userInfo");
         clearStorage("userAccessiblePageIds");
     };
 
-    // Function: check if user has permission for a given UI screen
+    // Function: check user-permission for a given UI screen
     const hasPermission = (permission) => {
         return userAccessiblePageIds?.some(accessObj => accessObj.uiId === permission);
     };
 
-    // Provider: expose user, RBAC, and helper functions to app
+    // Provider: user, RBAC, and helper functions to app
     return (
         <UserContext.Provider
             value={{
                 user,
                 userInfo,
                 userAccessiblePageIds,
-                userAccessablePageIds: userAccessiblePageIds, // ❌ Deprecated alias (kept for backward compatibility)
+                userAccessablePageIds: userAccessiblePageIds, // Alias (kept for backward compatibility)
                 userAccessiblePages,
                 login,
                 logout,
                 hasPermission,
                 setAccessiblePageIds,
-                setAccessablePageIds: setAccessiblePageIds, // ❌ Deprecated alias (kept for backward compatibility)
+                setAccessablePageIds: setAccessiblePageIds, // Alias (kept for backward compatibility)
                 setUserInfo
             }}
         >
