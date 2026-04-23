@@ -1,15 +1,14 @@
 // File: src/pages/UiAccess/hooks/useUiAccess.js
-// Purpose: Manage UI Access state, filtering, ✔ Assigned logic and API integration (backend-driven matrix)
+// Purpose: Manage UI Access state, hierarchical filtering and ✔ Assigned delta (ONLY changed rows) TVP model
 
 import { useState, useEffect } from "react";
 import {
   getRole,
   getProductArea,
-  getUiScreen,
+  getModule,
   getAccessByRole,
   updateUiAccessBulk
 } from "../services/service.js";
-
 import { UI_ACCESS_COLUMNS } from "../constants/uiAccessColumns.js";
 import { UI_ACCESS_COLUMN_RULES } from "../constants/columnRules.js";
 import { useUser } from "../../../core/access/userContext.jsx";
@@ -21,16 +20,13 @@ export const useUiAccess = () => {
   const [savedRows, setSavedRows] = useState([]);
   const [changedRows, setChangedRows] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const [lovRoles, setLovRoles] = useState([]);
-  const [lovCategories, setLovCategories] = useState([]);
-  const [lovScreens, setLovScreens] = useState({});
-
+  const [roles, setRoles] = useState([]);
+  const [productAreas, setProductAreas] = useState([]);
+  const [modules, setModules] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
-  const [selectedDomain, setSelectedDomain] = useState("");
-
+  const [selectedProductArea, setSelectedProductArea] = useState("");
+  const [selectedModule, setSelectedModule] = useState("");
   const [showUnassignedOnly, setShowUnassignedOnly] = useState(false);
-
   const { user } = useUser();
   const columns = UI_ACCESS_COLUMNS;
 
@@ -39,147 +35,104 @@ export const useUiAccess = () => {
 
   /* ---------------- Load LOVs ---------------- */
   useEffect(() => {
-
     const fetchLovs = async () => {
       try {
-
         const roleResp = await getRole({ gameId: user.gameId });
-        setLovRoles(roleResp.data || []);
-
-        const catResp = await getProductArea({ gameId: user.gameId });
-        setLovCategories(catResp.data || []);
-
-        const screenResp = await getUiScreen({ gameId: user.gameId });
-
-        const grouped = {};
-        (screenResp.data || []).forEach(s => {
-          if (!grouped[s.Domain_Code]) grouped[s.Domain_Code] = [];
-          grouped[s.Domain_Code].push(s);
-        });
-
-        setLovScreens(grouped);
-
+        setRoles(roleResp.data || []);
+        const areaResp = await getProductArea({ gameId: user.gameId });
+        setProductAreas(areaResp.data || []);
+        const moduleResp = await getModule({ gameId: user.gameId });
+        setModules(moduleResp.data || []);
       } catch {
-        setLovRoles([]);
-        setLovCategories([]);
-        setLovScreens({});
+        setRoles([]);
+        setProductAreas([]);
+        setModules([]);
       }
     };
-
     fetchLovs();
-
   }, [user]);
 
   /* ---------------- Load Access By Role ---------------- */
   const loadAccessByRole = async (roleId) => {
-
     if (!roleId) return;
-
     setLoading(true);
-
     try {
-
       const resp = await getAccessByRole({
         gameId: user.gameId,
         RL_Id: roleId,
       });
-
-      /* Backend already returns full UI matrix */
-      const uiAccessRows = Array.isArray(resp.data) ? resp.data : [];
-
-      setRows(uiAccessRows);
-      setSavedRows(uiAccessRows);
+      const gridRows = Array.isArray(resp.data) ? resp.data : [];
+      const enriched = gridRows.map(r => ({ ...r, __dirty: false }));
+      setRows(enriched);
+      setSavedRows(enriched);
       setChangedRows([]);
-
     } finally {
       setLoading(false);
     }
   };
 
-  /* ---------------- Checkbox Toggle Handler ---------------- */
+  /* ---------------- Toggle Assigned (DELTA SAFE) ---------------- */
   const handleAssignedChange = (rowIndex, value) => {
-
     setRows(prev => {
-
       const updated = [...prev];
       const row = { ...updated[rowIndex] };
-
-      row.Assigned = value;
-
-      /* ---------------- Action Derivation ---------------- */
-      if (!row.Assigned && value) {
-        row.Action = "ADD";
-      } else if (row.Assigned && !value) {
-        row.Action = "DELETE";
-      } else {
-        row.Action = "NONE";
-      }
-
+      const original = savedRows[rowIndex];
+      const newAssigned = value ? 1 : 0;
+      row.Assigned = newAssigned;
+      row.__dirty = original && original.Assigned !== newAssigned;
       updated[rowIndex] = row;
-
       setChangedRows(prevChanged => {
-
         const filtered = prevChanged.filter(r =>
           !(r.RL_Id === row.RL_Id && r.UI_Id === row.UI_Id)
         );
-
-        return row.Action !== "NONE"
-          ? [...filtered, row]
-          : filtered;
+        if (original && original.Assigned === newAssigned) {
+          return filtered;
+        }
+        return [
+          ...filtered,
+          {
+            Game_Id: row.Game_Id,
+            RL_Id: row.RL_Id,
+            UI_Id: row.UI_Id,
+            Assigned: newAssigned,
+            Permission_Enabled: 0,
+            Can_View: 0,
+            Can_Create: 0,
+            Can_Edit: 0,
+            Can_Delete: 0,
+            Can_Approve: 0,
+            Can_Execute: 0
+          }
+        ];
       });
-
       return updated;
     });
   };
 
-  /* ---------------- Filtered Rows ---------------- */
+  /* ---------------- Hierarchical Filter ---------------- */
   const filteredRows = rows.filter(r => {
-
-    if (selectedDomain && r.Domain_Code !== selectedDomain) return false;
-
-    if (showUnassignedOnly && r.Assigned === true) return false;
-
+    if (selectedProductArea && r.Product_Area_Code !== selectedProductArea) return false;
+    if (selectedModule && r.Module_Code !== selectedModule) return false;
+    if (showUnassignedOnly && r.Assigned === 1) return false;
     return true;
   });
 
-  /* ---------------- Save Changes ---------------- */
+  /* ---------------- Save ONLY CHANGED ROWS ---------------- */
   const saveAccessData = async () => {
-
-    setLoading(true);
-
-    try {
-
-      const addRows = changedRows.filter(r => r.Action === "ADD");
-      const deleteRows = changedRows.filter(r => r.Action === "DELETE");
-
-      if (addRows.length > 0) {
-        await updateUiAccessBulk({
-          type: "ADD",
-          rows: addRows.map(r => ({
-            Game_Id: r.Game_Id,
-            RL_Id: r.RL_Id,
-            UI_Id: r.UI_Id,
-            Created_By: user.userId,
-          }))
-        });
-      }
-
-      if (deleteRows.length > 0) {
-        await updateUiAccessBulk({
-          type: "DELETE",
-          rows: deleteRows.map(r => ({
-            Game_Id: r.Game_Id,
-            RL_Id: r.RL_Id,
-            UI_Id: r.UI_Id,
-          }))
-        });
-      }
-
-      setSavedRows(rows);
-      setChangedRows([]);
-
+    if (changedRows.length === 0) {
       return { success: true };
-
+    }
+    setLoading(true);
+    try {
+      await updateUiAccessBulk({
+        rows: changedRows,
+        Approved_By: user.userId
+      });
+      const reset = rows.map(r => ({ ...r, __dirty: false }));
+      setRows(reset);
+      setSavedRows(reset);
+      setChangedRows([]);
+      return { success: true };
     } catch {
       return { success: false };
     } finally {
@@ -187,9 +140,10 @@ export const useUiAccess = () => {
     }
   };
 
-  /* ---------------- Cancel Changes ---------------- */
+  /* ---------------- Cancel ---------------- */
   const cancelEdit = () => {
-    setRows(savedRows);
+    const reset = savedRows.map(r => ({ ...r, __dirty: false }));
+    setRows(reset);
     setChangedRows([]);
   };
 
@@ -198,25 +152,22 @@ export const useUiAccess = () => {
     rows: filteredRows,
     loading,
     columns,
-
     handleAssignedChange,
-
     saveAccessData,
     cancelEdit,
-
     isEditable,
-
-    lovRoles,
-    lovCategories,
-    lovScreens,
-
+    roles,
+    productAreas,
+    modules,
     selectedRole,
     setSelectedRole,
-    selectedDomain,
-    setSelectedDomain,
+    selectedProductArea,
+    setSelectedProductArea,
+    selectedModule,
+    setSelectedModule,
     loadAccessByRole,
-
     showUnassignedOnly,
     setShowUnassignedOnly,
+    hasChanges: changedRows.length > 0
   };
 };
