@@ -7,10 +7,9 @@ import {
   FormControl, InputLabel, Select, MenuItem,
   Checkbox, FormControlLabel
 } from "@mui/material";
-
 import { Save as SaveIcon, Close as CancelIcon } from "@mui/icons-material";
-
 import ToastMessage from "../../components/ToastMessage.jsx";
+
 import UiAccessTable from "./components/UiAccessTable.jsx";
 import { useUiAccess } from "./hooks/useUiAccess.js";
 
@@ -23,7 +22,7 @@ const UiAccess = () => {
     columns,
 
     lovRoles,
-    lovCategories,
+    lovProductArea,
 
     handleAssignedChange,
 
@@ -32,8 +31,8 @@ const UiAccess = () => {
 
     selectedRole,
     setSelectedRole,
-    selectedDomain,
-    setSelectedDomain,
+    selectedProductArea,
+    setSelectedProductArea,
     loadAccessByRole,
 
     showUnassignedOnly,
@@ -88,17 +87,17 @@ const UiAccess = () => {
           </Select>
         </FormControl>
 
-        {/* Domain Filter */}
+        {/* ProductArea Filter */}
         <FormControl sx={{ minWidth: 220 }}>
-          <InputLabel>Domain</InputLabel>
+          <InputLabel>ProductArea</InputLabel>
           <Select
-            value={selectedDomain}
-            label="Domain"
-            onChange={(e) => setSelectedDomain(e.target.value)}
+            value={selectedProductArea}
+            label="Product Area"
+            onChange={(e) => setSelectedProductArea(e.target.value)}
           >
             <MenuItem value="">All</MenuItem>
 
-            {lovCategories.map(d => (
+            {lovProductArea.map(d => (
               <MenuItem
                 key={d.Product_Area_Code}
                 value={d.Product_Area_Code}
