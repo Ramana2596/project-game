@@ -1,12 +1,12 @@
-// File: src/pages/UIAccess/constants/uiAccessColumns.js
-// Purpose: Define table columns for UI Access (✔ Assigned model)
+// File: src/pages/UiAccess/constants/uiAccessColumns.js
+// Purpose: Define table columns for UI Access
 
 export const UI_ACCESS_COLUMNS = [
 
-
+  /* ---------------- Editable Column ---------------- */
   { key: "Assigned", label: "Access", type: "checkbox" }, // Tick (Add) or X (Delete)
 
-  /* ---------------- DISPLAY ONLY ---------------- */
+  /* ---------------- Display Only Columns ---------------- */
   { key: "Role", label: "Role" },
   { key: "Domain", label: "Domain" },
   { key: "Module_Name", label: "Module" },
@@ -14,7 +14,7 @@ export const UI_ACCESS_COLUMNS = [
   { key: "Short_Name", label: "Short Name" },
   { key: "UI_Type_Name", label: "UI Type" },
 
-  /* ---------------- FUTURE PERMISSION (DISPLAY ONLY) ---------------- */
+  /* ---------------- Future Permission Columns (Display Only) ---------------- */
   { key: "Permission_Enabled", label: "Perm" },
   { key: "Can_View", label: "View" },
   { key: "Can_Create", label: "Create" },
