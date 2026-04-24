@@ -1,15 +1,12 @@
 // File: src/pages/UiAccess/components/UiAccessTable.jsx
-// Purpose: Render table for Role ↔ UI Page Access (✔ Assigned model with visual cues)
+// Purpose: Render table for Role ↔ UI Page Access (✔ Assigned model with enterprise UX)
 
 import React from "react";
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, CircularProgress, Box, Typography
+  Paper, CircularProgress, Box, Typography,
+  Checkbox, Tooltip   // ✅ Added for better UX
 } from "@mui/material";
-
-// Icons
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
 
 const UiAccessTable = ({ rows, loading, columns, onCellChange }) => {
 
@@ -23,8 +20,15 @@ const UiAccessTable = ({ rows, loading, columns, onCellChange }) => {
   }
 
   return (
-    <TableContainer component={Paper} sx={{ maxHeight: "65vh", overflow: "auto" }}>
-      <Table size="small" stickyHeader sx={{ minWidth: 800 }}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        maxHeight: "65vh",
+        overflow: "auto",
+        borderRadius: "12px"
+      }}
+    >
+      <Table size="small" stickyHeader sx={{ minWidth: 900 }}>
 
         {/* ---------------- Header ---------------- */}
         <TableHead>
@@ -32,7 +36,12 @@ const UiAccessTable = ({ rows, loading, columns, onCellChange }) => {
             {columns.map((col) => (
               <TableCell
                 key={col.key}
-                sx={{ fontWeight: 800, backgroundColor: "#F1F3F5" }}
+                sx={{
+                  fontWeight: 700,
+                  backgroundColor: "#F1F3F5",
+                  color: "#343A40",
+                  fontSize: "0.85rem"
+                }}
               >
                 {col.label}
               </TableCell>
@@ -53,55 +62,95 @@ const UiAccessTable = ({ rows, loading, columns, onCellChange }) => {
               </TableCell>
             </TableRow>
           ) : (
-            rows.map((row, rowIndex) => (
-              <TableRow
-                key={rowIndex}
-                hover
-                sx={{
-                  /* highlight for unassigned */
-                  backgroundColor: row.Assigned ? "inherit" : "#FFF8E1"
-                }}
-              >
+            rows.map((row, rowIndex) => {
 
-                {columns.map((col) => (
-                  <TableCell key={col.key}>
+              /* ---------------- Row State Styling ---------------- */
+              const isUnassigned = row.Assigned === 0;
+              const isDirty = row.__dirty;
 
-                    {/* ---------------- Assigned Toggle (ADD/DELETE) ---------------- */}
-                    {col.key === "Assigned" ? (
-                      <Box
-                        onClick={() =>
-                          onCellChange(rowIndex, "Assigned", !row.Assigned)
-                        }
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          cursor: "pointer",
-                          justifyContent: "center"
-                        }}
-                      >
+              return (
+                <TableRow
+                  key={rowIndex}
+                  hover
+                  sx={{
+                    // highlight: unassigned rows (soft amber)
+                    backgroundColor: isUnassigned ? "#FFF8E1" : "inherit",
 
-                        {/* CheckBox / Assigned */}
-                        {row.Assigned ? (
-                          <CheckCircleIcon sx={{ color: "green", fontSize: 20 }} />
-                        ) : (
-                          <CancelIcon sx={{ color: "red", fontSize: 20 }} />
-                        )}
+                    // highlight: dirty rows (light blue tint)
+                    ...(isDirty && {
+                      backgroundColor: "#E3F2FD"
+                    }),
 
-                      </Box>
+                    // indicator: left border for edited rows
+                    borderLeft: isDirty ? "4px solid #1976D2" : "4px solid transparent",
 
-                    ) : (
-                      /* ---------------- Default Display ---------------- */
-                      <Typography sx={{ fontSize: "0.85rem" }}>
-                        {row[col.key] ?? ""}
-                      </Typography>
-                    )}
+                    transition: "all 0.15s ease-in-out"
+                  }}
+                >
 
-                  </TableCell>
-                ))}
+                  {columns.map((col) => (
+                    <TableCell key={col.key} sx={{ py: 0.8 }}>
 
-              </TableRow>
-            ))
+                      {/* ---------------- Assigned Toggle (Checkbox UX) ---------------- */}
+                      {col.key === "Assigned" ? (
+                        <Box sx={{ display: "flex", justifyContent: "center" }}>
+
+                          {/* ❌ Old index-based toggle (breaks with filter/sort) */}
+                          {/*
+                          <Checkbox
+                            checked={row.Assigned === 1}
+                            onChange={(e) =>
+                              onCellChange(rowIndex, e.target.checked)
+                            }
+                          />
+                          */}
+
+                          {/* ✅ Key-based toggle using full row (stable + correct) */}
+                          <Tooltip
+                            title={row.Assigned ? "Remove Access" : "Grant Access"}
+                            arrow
+                          >
+                            <Checkbox
+                              size="small"
+
+                              // bind numeric (0/1) to boolean
+                              checked={row.Assigned === 1}
+
+                              // ✔ pass full row instead of index
+                              onChange={(e) =>
+                                onCellChange(row, e.target.checked)
+                              }
+
+                              sx={{
+                                color: "#ADB5BD",
+                                padding: "4px",
+                                "&.Mui-checked": {
+                                  color: "#2E7D32"
+                                }
+                              }}
+                            />
+                          </Tooltip>
+
+                        </Box>
+                      ) : (
+                        /* ---------------- Default Display ---------------- */
+                        <Typography
+                          sx={{
+                            fontSize: "0.85rem",
+                            color: "#212529",
+                            fontWeight: 500
+                          }}
+                        >
+                          {row[col.key] ?? ""}
+                        </Typography>
+                      )}
+
+                    </TableCell>
+                  ))}
+
+                </TableRow>
+              );
+            })
           )}
 
         </TableBody>
