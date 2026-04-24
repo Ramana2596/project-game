@@ -1,13 +1,12 @@
 // File: src/pages/UiAccess/constants/columnRules.js
-// Purpose: editability rules for UiAccess table columns
+// Purpose: Editability rules for UiAccess table columns
 
 export const UI_ACCESS_COLUMN_RULES = {
 
+  /* ---------------- Editable Column ---------------- */
+  Assigned: true, 
 
-  // Only editable field 
-  Assigned: true,
-
-  /* ---------------- DISPLAY ONLY ---------------- */
+  /* ---------------- Display Only Columns ---------------- */
   Role: false,
   Domain: false,
   Module_Name: false,
@@ -15,7 +14,7 @@ export const UI_ACCESS_COLUMN_RULES = {
   Short_Name: false,
   UI_Type_Name: false,
 
-  /* ---------------- FUTURE PERMISSION (LOCKED FOR NOW) ---------------- */
+  /* ---------------- Future Permission Columns (Locked for Now) ---------------- */
   Permission_Enabled: false,
   Can_View: false,
   Can_Create: false,

@@ -1,16 +1,16 @@
 // File: src/pages/UiAccess/components/UiAccessTable.jsx
-// Purpose: Render table for Role ↔ UI Page Access (✔ Assigned model with enterprise UX)
+// Purpose: Render table for Role ↔ UI Page Access
 
 import React from "react";
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Paper, CircularProgress, Box, Typography,
-  Checkbox, Tooltip   // ✅ Added for better UX
+  Checkbox, Tooltip 
 } from "@mui/material";
 
 const UiAccessTable = ({ rows, loading, columns, onCellChange }) => {
 
-  /* ---------------- Loading ---------------- */
+  /* ---------------- Loading State ---------------- */
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
@@ -18,6 +18,12 @@ const UiAccessTable = ({ rows, loading, columns, onCellChange }) => {
       </Box>
     );
   }
+
+  /* ---------------- Normalize Assigned Value ---------------- */
+  const isChecked = (val) => {
+    // normalization for API inconsistencies
+    return val === 1 || val === "1" || val === true;
+  };
 
   return (
     <TableContainer
@@ -52,7 +58,7 @@ const UiAccessTable = ({ rows, loading, columns, onCellChange }) => {
         {/* ---------------- Body ---------------- */}
         <TableBody>
 
-          {/* No Data */}
+          {/* No Data Message */}
           {(!rows || rows.length === 0) ? (
             <TableRow>
               <TableCell colSpan={columns.length} align="center" sx={{ py: 6 }}>
@@ -62,28 +68,20 @@ const UiAccessTable = ({ rows, loading, columns, onCellChange }) => {
               </TableCell>
             </TableRow>
           ) : (
-            rows.map((row, rowIndex) => {
+            rows.map((row) => {
 
-              /* ---------------- Row State Styling ---------------- */
-              const isUnassigned = row.Assigned === 0;
+              /* ---------------- Row State ---------------- */
+              const isUnassigned = !isChecked(row.Assigned);
               const isDirty = row.__dirty;
 
               return (
                 <TableRow
-                  key={rowIndex}
+                  key={`${row.Game_Id}-${row.RL_Id}-${row.UI_Id}`}
                   hover
                   sx={{
-                    // highlight: unassigned rows (soft amber)
                     backgroundColor: isUnassigned ? "#FFF8E1" : "inherit",
-
-                    // highlight: dirty rows (light blue tint)
-                    ...(isDirty && {
-                      backgroundColor: "#E3F2FD"
-                    }),
-
-                    // indicator: left border for edited rows
+                    ...(isDirty && { backgroundColor: "#E3F2FD" }),
                     borderLeft: isDirty ? "4px solid #1976D2" : "4px solid transparent",
-
                     transition: "all 0.15s ease-in-out"
                   }}
                 >
@@ -91,36 +89,20 @@ const UiAccessTable = ({ rows, loading, columns, onCellChange }) => {
                   {columns.map((col) => (
                     <TableCell key={col.key} sx={{ py: 0.8 }}>
 
-                      {/* ---------------- Assigned Toggle (Checkbox UX) ---------------- */}
+                      {/* ---------------- Assigned Toggle ---------------- */}
                       {col.key === "Assigned" ? (
                         <Box sx={{ display: "flex", justifyContent: "center" }}>
 
-                          {/* ❌ Old index-based toggle (breaks with filter/sort) */}
-                          {/*
-                          <Checkbox
-                            checked={row.Assigned === 1}
-                            onChange={(e) =>
-                              onCellChange(rowIndex, e.target.checked)
-                            }
-                          />
-                          */}
-
-                          {/* ✅ Key-based toggle using full row (stable + correct) */}
                           <Tooltip
-                            title={row.Assigned ? "Remove Access" : "Grant Access"}
+                            title={isChecked(row.Assigned) ? "Remove Access" : "Grant Access"}
                             arrow
                           >
                             <Checkbox
                               size="small"
-
-                              // bind numeric (0/1) to boolean
-                              checked={row.Assigned === 1}
-
-                              // ✔ pass full row instead of index
+                              checked={isChecked(row.Assigned)}
                               onChange={(e) =>
                                 onCellChange(row, e.target.checked)
                               }
-
                               sx={{
                                 color: "#ADB5BD",
                                 padding: "4px",
@@ -134,13 +116,7 @@ const UiAccessTable = ({ rows, loading, columns, onCellChange }) => {
                         </Box>
                       ) : (
                         /* ---------------- Default Display ---------------- */
-                        <Typography
-                          sx={{
-                            fontSize: "0.85rem",
-                            color: "#212529",
-                            fontWeight: 500
-                          }}
-                        >
+                        <Typography sx={{ fontSize: "0.85rem", color: "#212529", fontWeight: 500 }}>
                           {row[col.key] ?? ""}
                         </Typography>
                       )}

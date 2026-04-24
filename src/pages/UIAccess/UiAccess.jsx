@@ -22,11 +22,10 @@ const UiAccess = () => {
     columns,
 
     roles,
-
-    // ❌ productArea,
-    productAreas, // ✅ FIX: align with hook (plural array)
+    productAreas,
 
     handleAssignedChange,
+    bulkAssign, // ✅ NEW
 
     saveAccessData,
     cancelEdit,
@@ -42,10 +41,11 @@ const UiAccess = () => {
 
   } = useUiAccess();
 
+  /* ---------------- Toast State ---------------- */
   const [toast, setToast] = useState({
     open: false,
     message: "",
-    severity: "info"
+    severity: null // ✔ Changed default from "info" to null
   });
 
   /* ---------------- Save Handler ---------------- */
@@ -58,6 +58,10 @@ const UiAccess = () => {
     });
   };
 
+  /* ---------------- Constants for Bulk Actions ---------------- */
+  const BULK_GRANT = 1; 
+  const BULK_REMOVE = 0;
+
   return (
     <Box sx={{ p: 4, backgroundColor: "#F8F9FA" }}>
 
@@ -66,64 +70,120 @@ const UiAccess = () => {
         UI Access Management
       </Typography>
 
-      {/* ---------------- Filters ---------------- */}
-      <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+      {/* ---------------- Toolbar (Filters + Actions) ---------------- */}
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{
+          mb: 2,
+          alignItems: "center",
+          justifyContent: "space-between"
+        }}
+      >
 
-        {/* Role Filter */}
-        <FormControl sx={{ minWidth: 220 }}>
-          <InputLabel>Role</InputLabel>
-          <Select
-            value={selectedRole}
-            label="Role"
-            onChange={(e) => {
-              const val = e.target.value;
-              setSelectedRole(val);
-              loadAccessByRole(val);
-            }}
+        {/* ---------------- Left: Filters ---------------- */}
+        <Stack direction="row" spacing={2}>
+
+          {/* Role Filter */}
+          <FormControl sx={{ minWidth: 220 }}>
+            <InputLabel id="role-label">Role</InputLabel> {/* Added labelId */}
+            <Select
+              labelId="role-label" // ✔ Added binding
+              value={selectedRole}
+              label="Role"
+              onChange={(e) => {
+                const val = e.target.value;
+                setSelectedRole(val);
+                loadAccessByRole(val);
+              }}
+            >
+              {roles?.map(r => (
+                <MenuItem key={r.RL_Id} value={r.RL_Id}>
+                  {r.Role}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* ProductArea Filter */}
+          <FormControl sx={{ minWidth: 220 }}>
+            <InputLabel id="product-area-label">ProductArea</InputLabel> {/* Added labelId */}
+            <Select
+              labelId="product-area-label" // ✔ Added binding
+              value={selectedProductArea}
+              label="Product Area"
+              onChange={(e) => setSelectedProductArea(e.target.value)}
+            >
+              <MenuItem value="">All</MenuItem>
+
+              {productAreas?.map(d => (
+                <MenuItem
+                  key={d.Product_Area_Code}
+                  value={d.Product_Area_Code}
+                >
+                  {d.Product_Area_Name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* Show Unassigned Only */}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showUnassignedOnly}
+                onChange={(e) =>
+                  setShowUnassignedOnly(e.target.checked)
+                }
+              />
+            }
+            label="Show Unassigned Only"
+          />
+
+        </Stack>
+
+        {/* ---------------- Right: Actions ---------------- */}
+        <Stack direction="row" spacing={1} alignItems="center">
+
+          {/* Bulk Grant */}
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => bulkAssign(BULK_GRANT)}
           >
-            {roles?.map(r => (
-              <MenuItem key={r.RL_Id} value={r.RL_Id}>
-                {r.Role}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            Bulk Grant
+          </Button>
 
-        {/* ProductArea Filter */}
-        <FormControl sx={{ minWidth: 220 }}>
-          <InputLabel>ProductArea</InputLabel>
-          <Select
-            value={selectedProductArea}
-            label="Product Area"
-            onChange={(e) => setSelectedProductArea(e.target.value)}
+          {/* Bulk Remove */}
+          <Button
+            variant="outlined"
+            size="small"
+            color="warning"
+            onClick={() => bulkAssign(BULK_REMOVE)} 
           >
-            <MenuItem value="">All</MenuItem>
+            Bulk Remove
+          </Button>
 
-            {/* map: render Product Area LOV values */}
-            {/* ❌ productArea?.map */}
-            {productAreas?.map(d => ( // ✅ FIX
-              <MenuItem
-                key={d.Product_Area_Code}
-                value={d.Product_Area_Code}
-              >
-                {d.Product_Area_Name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+          {/* Save */}
+          <Button
+            variant="contained"
+            startIcon={<SaveIcon />}
+            onClick={onSaveClick}
+          >
+            Save
+          </Button>
 
-        {/* Show Unassigned Only */}
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={showUnassignedOnly}
-              onChange={(e) =>
-                setShowUnassignedOnly(e.target.checked)
-              }
-            />
-          }
-          label="Show Unassigned Only"
-        />
+          {/* Cancel */}
+          <Button
+            variant="contained"
+            startIcon={<CancelIcon />}
+            color="secondary" 
+            onClick={cancelEdit}
+          >
+            Cancel
+          </Button>
+
+        </Stack>
 
       </Stack>
 
@@ -142,35 +202,11 @@ const UiAccess = () => {
             rows={rows}
             loading={loading}
             columns={columns}
-
-            /* ✔ toggle handler */
             onCellChange={handleAssignedChange}
           />
 
         </Box>
       </Paper>
-
-      {/* ---------------- Actions ---------------- */}
-      <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
-
-        <Button
-          variant="contained"
-          startIcon={<SaveIcon />}
-          onClick={onSaveClick}
-        >
-          Save
-        </Button>
-
-        <Button
-          variant="contained"
-          startIcon={<CancelIcon />}
-          color="inherit"
-          onClick={cancelEdit}
-        >
-          Cancel
-        </Button>
-
-      </Stack>
 
       {/* ---------------- Toast ---------------- */}
       <ToastMessage

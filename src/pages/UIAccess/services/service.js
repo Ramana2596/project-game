@@ -3,41 +3,40 @@
 
 import api from "../../../core/interceptor/api-interceptor";
 
-// Generic POST handler for all UI Access APIs (SP / cmdLine driven)
+/* ---------------- Generic POST handler ---------------- */
 function fetchUiAccess(queryParams, cmdLine) {
-
   return api.post("/api/getUiAccessQuery", {
     ...queryParams,
-    cmdLine: cmdLine  // API Parameter & value
+    cmdLine: cmdLine // API Parameter & value
   });
 }
 
-// -- ROLE LOOKUP
+/* ---------------- Role Lookup ---------------- */
 export function getRole(queryParams) {
   return fetchUiAccess(queryParams, "Role");
 }
 
-// -- PRODUCT AREA LOOKUP
+/* ---------------- Product Area Lookup ---------------- */
 export function getProductArea(queryParams) {
   return fetchUiAccess(queryParams, "Product_Area");
 }
 
-// -- MODULE LOOKUP
+/* ---------------- Module Lookup ---------------- */
 export function getModule(queryParams) {
   return fetchUiAccess(queryParams, "Module");
 }
 
-// -- UI TYPE LOOKUP
+/* ---------------- UI Type Lookup ---------------- */
 export function getUiType(queryParams) {
   return fetchUiAccess(queryParams, "UI_Type");
 }
 
-// -- ACCESS BY ROLE (main data query)
+/* ---------------- Access By Role (Main Data Query) ---------------- */
 export function getAccessByRole(queryParams) {
   return fetchUiAccess(queryParams, "Access_By_Role");
 }
 
-// Bulk update API call, accepts array of rows from in-memory table
+/* ---------------- Bulk Update ---------------- */
 export function updateUiAccessBulk(payload) {
   return api.post("/api/updateUiAccessBulk", payload);
 }

@@ -1,7 +1,7 @@
 // File: src/pages/UiAccess/hooks/useUiAccess.js
-// Purpose: Manage UI Access state, hierarchical filtering and ✔ Assigned delta (ONLY changed rows) TVP model
+// Purpose: Manage UI Access state (rows = list of Role ↔ UI Screen mappings)
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   getRole,
   getProductArea,
@@ -16,14 +16,18 @@ import { useUser } from "../../../core/access/userContext.jsx";
 export const useUiAccess = () => {
 
   /* ---------------- State ---------------- */
-
-  const [rows, setRows] = useState([]);
-  const [savedRows, setSavedRows] = useState([]);
-  const [changedRows, setChangedRows] = useState([]);
+  // rows = current working list of Role ↔ UI Screen mappings
+ 
+  const [rows, setRows] = useState([]); // rows = current working list of Role ↔ UI Screen
+  const [savedRows, setSavedRows] = useState([]);  // savedRows = last saved copy of rows
   const [loading, setLoading] = useState(false);
+
+  // LOVs (lookup lists) for filters
   const [roles, setRoles] = useState([]);
   const [productAreas, setProductAreas] = useState([]);
   const [modules, setModules] = useState([]);
+
+  // Filter selections
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedProductArea, setSelectedProductArea] = useState("");
   const [selectedModule, setSelectedModule] = useState("");
@@ -32,15 +36,11 @@ export const useUiAccess = () => {
   const { user, userInfo } = useUser();
   const columns = UI_ACCESS_COLUMNS;
 
-  /* ---------------- Editable Rules ---------------- */
-  const isEditable = (key) => UI_ACCESS_COLUMN_RULES[key] ?? false;
-
   /* ---------------- Load LOVs ---------------- */
+  // fetch Role, ProductArea, Module lists for filters
   useEffect(() => {
     const fetchLovs = async () => {
       try {
-
-        // ✔ Extract Data[] from standardized API response
         const roleResp = await getRole({ gameId: userInfo.gameId });
         setRoles(roleResp.data?.Data || []);
 
@@ -49,7 +49,6 @@ export const useUiAccess = () => {
 
         const moduleResp = await getModule({ gameId: userInfo.gameId });
         setModules(moduleResp.data?.Data || []);
-
       } catch {
         setRoles([]);
         setProductAreas([]);
@@ -58,151 +57,116 @@ export const useUiAccess = () => {
     };
 
     if (userInfo?.gameId) fetchLovs();
-
   }, [userInfo?.gameId]);
 
   /* ---------------- Load Access By Role ---------------- */
+  // fetch all UI Screen mappings for a given Role
   const loadAccessByRole = async (roleId) => {
-
-    // ✔ Guard: prevent API call when mandatory params missing
     if (!roleId || !userInfo?.gameId) return;
 
     setLoading(true);
 
     try {
-
       const resp = await getAccessByRole({
         gameId: userInfo.gameId,
         rlId: roleId
       });
 
-      const gridRows = Array.isArray(resp.data?.Data) ? resp.data.Data : [];
+      const gridRows = resp.data?.Data || [];
 
-      const enriched = gridRows.map(r => ({ ...r, __dirty: false }));
+      const normalized = gridRows.map(r => ({
+        ...r,
+        Assigned: Number(r.Assigned), // normalize Assigned to number
+      }));
 
-      setRows(enriched);
-      setSavedRows(enriched);
-      setChangedRows([]);
-
+      setRows(normalized);
+      setSavedRows(normalized);
     } finally {
       setLoading(false);
     }
   };
 
-  /* ---------------- Toggle Assigned (KEY SAFE FIX) ---------------- */
-  // ❌ const handleAssignedChange = (rowIndex, value) => {
-  const handleAssignedChange = (rowData, value) => {
+  /* ---------------- Key Helper ---------------- */
+  // Stable unique-keys for each row
+  const getKey = (r) => `${r.Game_Id}_${r.RL_Id}_${r.UI_Id}`;
 
-    setRows(prev => {
+  /* ---------------- Core Updater ---------------- */
+  // update Assigned and minimal permissions for given rows
+  const updateAssigned = (targetRows, targetKey, value, targetKeys = []) => {
+    const newAssigned = value ? 1 : 0;
 
-      // ❌ const updated = [...prev];
-      // ❌ const row = { ...updated[rowIndex] };
-      // ❌ const original = savedRows[rowIndex];
+    return targetRows.map(r => {
+      const key = getKey(r);
 
-      // ✅ Update using business key instead of index (fix for multi-row issue)
-      const updated = prev.map(r => {
+      // For bulk: only update rows in filteredKeys
+      if (targetKey === "__BULK__" && !targetKeys.includes(key)) return r;
+      // For single: only update matching row
+      if (targetKey !== "__BULK__" && key !== targetKey) return r;
 
-        if (
-          r.Game_Id === rowData.Game_Id &&
-          r.RL_Id === rowData.RL_Id &&
-          r.UI_Id === rowData.UI_Id
-        ) {
+      return {
+        ...r,
+        Assigned: newAssigned,
 
-          const newAssigned = value ? 1 : 0;
-
-          const original = savedRows.find(s =>
-            s.Game_Id === r.Game_Id &&
-            s.RL_Id === r.RL_Id &&
-            s.UI_Id === r.UI_Id
-          );
-
-          return {
-            ...r,
-            Assigned: newAssigned,
-            __dirty: original && original.Assigned !== newAssigned
-          };
-        }
-
-        return r;
-      });
-
-      setChangedRows(prevChanged => {
-
-        const filtered = prevChanged.filter(r =>
-          !(r.RL_Id === rowData.RL_Id && r.UI_Id === rowData.UI_Id)
-        );
-
-        const newAssigned = value ? 1 : 0;
-
-        const original = savedRows.find(s =>
-          s.Game_Id === rowData.Game_Id &&
-          s.RL_Id === rowData.RL_Id &&
-          s.UI_Id === rowData.UI_Id
-        );
-
-        if (original && original.Assigned === newAssigned) {
-          return filtered;
-        }
-
-        return [
-          ...filtered,
-          {
-            Game_Id: rowData.Game_Id,
-            RL_Id: rowData.RL_Id,
-            UI_Id: rowData.UI_Id,
-            Assigned: newAssigned,
-            Permission_Enabled: 0,
-            Can_View: 0,
-            Can_Create: 0,
-            Can_Edit: 0,
-            Can_Delete: 0,
-            Can_Approve: 0,
-            Can_Execute: 0
-          }
-        ];
-      });
-
-      return updated;
+        // Minimal safe permissions when Assigned = 1
+        Permission_Enabled: newAssigned,
+        Can_View: newAssigned,
+        Can_Create: 0,
+        Can_Edit: 0,
+        Can_Delete: 0,
+        Can_Approve: 0,
+        Can_Execute: 0
+      };
     });
   };
 
-  /* ---------------- Hierarchical Filter ---------------- */
-  const filteredRows = rows.filter(r => {
+  /* ---------------- Single Row Toggle ---------------- */
+  // toggle Assigned for one row
+  const handleAssignedChange = (rowData, value) => {
+    const key = getKey(rowData);
+    setRows(prev => updateAssigned(prev, key, value));
+  };
 
-    // filter: Product Area, Module, and Unassigned toggle
-    if (selectedProductArea && r.Product_Area_Code !== selectedProductArea) return false;
+  /* ---------------- Bulk Toggle ---------------- */
+  // toggle Assigned for all currently filtered rows
+  const bulkAssign = (value) => {
+    setRows(prev => {
+      const filteredKeys = filteredRows.map(r => getKey(r));
+      return updateAssigned(prev, "__BULK__", value, filteredKeys);
+    });
+  };
 
-    if (selectedModule && r.Module_Code !== selectedModule) return false;
+  /* -------Filter Rows: ProductArea, Module, and Unassigned ------- */
+  // Show rows, matching all selected criteria
+  const filteredRows = useMemo(() => {
+    return rows.filter(r => {
+      if (selectedProductArea && r.Product_Area_Code !== selectedProductArea) return false;
+      if (selectedModule && r.Module_Code !== selectedModule) return false;
+      if (showUnassignedOnly && Number(r.Assigned) === 1) return false;
+      return true;
+    });
+  }, [rows, selectedProductArea, selectedModule, showUnassignedOnly]);
 
-    if (showUnassignedOnly && r.Assigned === 1) return false;
-
-    return true;
-  });
-
-  /* ---------------- Save ONLY CHANGED ROWS ---------------- */
+  /* ---------------- Save Access Data ---------------- */
+  // Save changes to backend
   const saveAccessData = async () => {
-
-    if (changedRows.length === 0) {
-      return { success: true };
-    }
-
     setLoading(true);
 
     try {
+      const changedRows = rows.filter(r => {
+        const original = savedRows.find(s =>
+          getKey(s) === getKey(r)
+        );
+        return original && original.Assigned !== r.Assigned;
+      });
 
       await updateUiAccessBulk({
         rows: changedRows,
         approvedBy: user.userId
       });
 
-      const reset = rows.map(r => ({ ...r, __dirty: false }));
-
-      setRows(reset);
-      setSavedRows(reset);
-      setChangedRows([]);
+      setSavedRows(rows);
 
       return { success: true };
-
     } catch {
       return { success: false };
     } finally {
@@ -210,25 +174,22 @@ export const useUiAccess = () => {
     }
   };
 
-  /* ---------------- Cancel ---------------- */
+  /* ---------------- Cancel Edit ---------------- */
+  // Restore rows to last saved state
   const cancelEdit = () => {
-
-    // ✔ Revert to last saved state and clear delta changes
-    const reset = savedRows.map(r => ({ ...r, __dirty: false }));
-
-    setRows(reset);
-    setChangedRows([]);
+    setRows(savedRows);
   };
 
-  /* ---------------- Return ---------------- */
+  /* ---------------- Return Hook API ---------------- */
+  // Expose state and actions to UiAccess.jsx
   return {
-    rows: filteredRows,
+    rows: filteredRows,          // list of rows after filters applied
     loading,
     columns,
     handleAssignedChange,
+    bulkAssign,
     saveAccessData,
     cancelEdit,
-    isEditable,
     roles,
     productAreas,
     modules,
@@ -241,6 +202,6 @@ export const useUiAccess = () => {
     loadAccessByRole,
     showUnassignedOnly,
     setShowUnassignedOnly,
-    hasChanges: changedRows.length > 0
+    hasChanges: rows.length !== savedRows.length
   };
 };
