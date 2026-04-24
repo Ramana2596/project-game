@@ -21,8 +21,10 @@ const UiAccess = () => {
     loading,
     columns,
 
-    lovRoles,
-    lovProductArea,
+    roles,
+
+    // ❌ productArea,
+    productAreas, // ✅ FIX: align with hook (plural array)
 
     handleAssignedChange,
 
@@ -79,7 +81,7 @@ const UiAccess = () => {
               loadAccessByRole(val);
             }}
           >
-            {lovRoles.map(r => (
+            {roles?.map(r => (
               <MenuItem key={r.RL_Id} value={r.RL_Id}>
                 {r.Role}
               </MenuItem>
@@ -97,7 +99,9 @@ const UiAccess = () => {
           >
             <MenuItem value="">All</MenuItem>
 
-            {lovProductArea.map(d => (
+            {/* map: render Product Area LOV values */}
+            {/* ❌ productArea?.map */}
+            {productAreas?.map(d => ( // ✅ FIX
               <MenuItem
                 key={d.Product_Area_Code}
                 value={d.Product_Area_Code}

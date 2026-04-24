@@ -8,7 +8,7 @@ function fetchUiAccess(queryParams, cmdLine) {
 
   return api.post("/api/getUiAccessQuery", {
     ...queryParams,
-    CMD_Line: cmdLine   // SP vs API parameter name
+    cmdLine: cmdLine  // API Parameter & value
   });
 }
 
