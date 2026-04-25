@@ -146,6 +146,8 @@ import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
 import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";
 import UserRole from "../pages/UserRole/UserRole.jsx";
+import UiAccess from "../pages/UiAccess/UiAccess.jsx";
+//import FormTemplate from "../pages/FormTemplate/FormTemplate.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -594,6 +596,16 @@ export const componentList = [
         href: "/operationGame/BatchMaster",
         routeElement: <BatchMstDetails />
       },
+/*
+      {
+        iconPath: peopleIcon,
+        id: "UI 14 020",
+        label: "Batch Details Template",
+        path: "/formTemplate",
+        href: "/operationGame/FormTemplate",
+        routeElement: <FormTemplate />
+      },
+*/
       {
         iconPath: verifiedIcon,
         id: "UI 15 030",
@@ -606,12 +618,20 @@ export const componentList = [
       {
         iconPath: verifiedIcon,
         id: "UI 15 031",
-        label: "User Role",
+        label: "Single Role",
         path: "/userRole",
         href: "/operationGame/userRole",
         routeElement: <UserRole />
       },
 */
+      {
+        iconPath: tilesIcon,
+        id: "UI 15 040",
+        label: "UI Access Grant",
+        path: "/uiAccess",
+        href: "/operationGame/UiAccess",
+        routeElement: <UiAccess />
+      },
     ],
   },
 

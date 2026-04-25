@@ -122,6 +122,8 @@ import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
 import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
 import SimulationHub from '../SimulationHub/SimulationHub.jsx';
 import UserRole from '../UserRole/UserRole.jsx';
+import UiAccess from '../UiAccess/UiAccess.jsx';
+
 //import FormTemplate from '../FormTemplate/FormTemplate.jsx';
 
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
@@ -375,6 +377,7 @@ export default function MiniDrawer() {
           <Route path='/resetSimulation' element={<ResetSimulation />} />
           <Route path='/simulationHub' element={<SimulationHub />} />
           <Route path='/userRole' element={<UserRole />} />
+          <Route path='/uiAccess' element={<UiAccess />} />
 {/*          <Route path='/formTemplate' element={<FormTemplate />} /> */}
 
         </Routes>
