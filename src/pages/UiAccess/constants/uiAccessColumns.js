@@ -8,7 +8,7 @@ export const UI_ACCESS_COLUMNS = [
 
   /* ---------------- Display Only Columns ---------------- */
   { key: "Role", label: "Role" },
-  { key: "Domain", label: "Domain" },
+  { key: "Product_Area_Name", label: "Domain" },
   { key: "Module_Name", label: "Module" },
   { key: "Screen_Name", label: "Screen Name" },
   { key: "Short_Name", label: "Short Name" },
