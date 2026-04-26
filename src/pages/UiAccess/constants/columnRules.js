@@ -8,11 +8,11 @@ export const UI_ACCESS_COLUMN_RULES = {
 
   /* ---------------- Display Only Columns ---------------- */
   Role: false,
-  Domain: false,
-  Module_Name: false,
-  Screen_Name: false,
-  Short_Name: false,
-  UI_Type_Name: false,
+  Product_Area_Name: true,
+  Module_Name: true,
+  Screen_Name: true,
+  Short_Name: true,
+  UI_Type_Name: true,
 
   /* ---------------- Future Permission Columns (Locked for Now) ---------------- */
   Permission_Enabled: false,
