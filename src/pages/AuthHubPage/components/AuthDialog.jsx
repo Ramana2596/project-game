@@ -1,4 +1,4 @@
-// File: src/authHub/AuthDialog.jsx
+// File: src/pages/AuthHubPage/AuthDialog.jsx
 // Purpose: Success/enrollment dialog shown after registration or OAuth login
 
 import React from "react";
@@ -8,37 +8,39 @@ import {
   DialogContent,
   DialogActions,
   Typography,
-  Button,
+  Button
 } from "@mui/material";
 
-// ✅ AuthDialog Component
+// ✔ AuthDialog component
 const AuthDialog = ({ open, onClose, userId }) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      {/* ✅ Title */}
+
+      {/* Purpose: Display dialog title */}
       <DialogTitle sx={{ fontWeight: "bold", color: "primary.main" }}>
-        🎉 Welcome!
+        Welcome to OM Training Platform
       </DialogTitle>
 
-      {/* ✅ Content */}
       <DialogContent dividers>
         <Typography variant="body1" gutterBottom>
-          Your account has been created successfully.
+          Your account is ready to use.
         </Typography>
+
         {userId && (
           <Typography variant="body2" color="text.secondary">
-            User ID: {userId}
+            Reference ID: {userId}
           </Typography>
         )}
+
         <Typography variant="body1" sx={{ mt: 2 }}>
-          You can now explore the platform, personalize your profile, and start learning.
+          Access the platform and begin your learning journey.
         </Typography>
       </DialogContent>
 
-      {/* ✅ Actions */}
+      {/* Purpose: Display dialog action button */}
       <DialogActions>
         <Button onClick={onClose} color="primary" variant="contained">
-          Continue
+          Get Started
         </Button>
       </DialogActions>
     </Dialog>
