@@ -107,6 +107,11 @@ const Welcome = () => {
             .finally(() => setIsLoading(false));
     };
 
+    // Navigate to unified login/register screen
+    const handleAuthNavigation = () => {
+        navigate("/login");
+    };
+
     const findImageForSection = (section) => {
         if (!section) return null;
         const key = (section.key || '').toLowerCase();
@@ -155,7 +160,10 @@ const Welcome = () => {
                 appBarRef={appBarRef}
             />
 
-            <HeroSection handleDemoLogin={handleDemoLogin} />
+            <HeroSection
+                handleDemoLogin={handleDemoLogin}
+                handleAuthNavigation={handleAuthNavigation}
+            />
 
             <ContentSections
                 pageConstants={pageConstants}

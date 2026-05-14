@@ -90,24 +90,37 @@ const WelcomeHeader = ({
                     <Button
                         variant="text"
                         onClick={handleDemoLogin}
-                        sx={{ color: '#7b1fa2', fontWeight: 600, textTransform: 'none' }}
+                        sx={{
+                            color: '#7b1fa2',
+                            fontWeight: 600,
+                            textTransform: 'none',
+                            '&:hover': {
+                                backgroundColor: 'rgba(123, 31, 162, 0.08)',
+                            }
+                        }}
                     >
                         Demo
                     </Button>
                     <Button
-                        variant="outlined"
+                        variant="contained"
                         component={Link}
-                        to="/register"
+                        to="/login"
                         sx={{
-                            borderColor: '#7b1fa2',
-                            color: '#7b1fa2',
+                            background: 'linear-gradient(135deg, #7b1fa2, #512da8)',
+                            color: 'white',
                             fontWeight: 600,
                             textTransform: 'none',
-                            '&:hover': { bgcolor: 'rgba(123, 31, 162, 0.06)' }
+                            boxShadow: '0 4px 12px rgba(123, 31, 162, 0.3)',
+                            '&:hover': {
+                                background: 'linear-gradient(135deg, #6a1b9a, #4527a0)',
+                                boxShadow: '0 6px 18px rgba(123, 31, 162, 0.45)',
+                                transform: 'translateY(-1px)',
+                            }
                         }}
                     >
-                        Register
+                        Sign In / Sign Up
                     </Button>
+                    {/*
                     <Button
                         variant="contained"
                         component={Link}
@@ -122,6 +135,7 @@ const WelcomeHeader = ({
                     >
                         Sign In
                     </Button>
+*/}
                 </Box>
             </Toolbar>
         </AppBar>
