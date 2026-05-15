@@ -5,17 +5,22 @@ import api from "../../../core/interceptor/api-interceptor";
 
 /* AUTH SERVICES */
 
-// Register a new user (manual signup)
+// Register a new user (manual signup + password creation)
 export function registerUser(payload) {
   return api.post("/api/registerUser", payload);
 }
+
+// ❌ Obsolete: Password is now created during registerUser() final onboarding step
+// export function setUserPassword(payload) {
+//   return api.post("/api/setUserPassword", payload);
+// }
 
 // Login existing user
 export function loginUser(payload) {
   return api.post("/api/loginUser", payload);
 }
 
-// password reset link/token
+// Password reset link/token
 export function forgotPassword(payload) {
   return api.post("/api/forgotPassword", payload);
 }
@@ -25,7 +30,7 @@ export function resetPassword(payload) {
   return api.post("/api/resetPassword", payload);
 }
 
-/* PROFILE SERVICES*/
+/* PROFILE SERVICES */
 
 // LOV: Profession
 export function fetchProfessions(queryParams) {

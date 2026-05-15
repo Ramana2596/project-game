@@ -1,5 +1,5 @@
 // File: RegisterForm.jsx
-// Purpose: New user registration with enterprise-grade UX, compact spacing, validation clarity, and responsive form behavior.
+// Purpose: Step 1 of enterprise registration flow (Identity Capture Only - no credentials in this stage)
 
 import React, { useState, useEffect } from "react";
 import {
@@ -8,101 +8,74 @@ import {
   Box,
   MenuItem,
   Typography,
-  InputAdornment,
-  IconButton,
-  Divider
+  InputAdornment
 } from "@mui/material";
-import {
-  Visibility,
-  VisibilityOff,
-  Email,
-  Person
-} from "@mui/icons-material";
+import { Email, Person } from "@mui/icons-material";
 import {
   fetchCountries,
-  fetchProfessions,
-  registerUser
+  fetchProfessions
 } from "../services/authApiService.js";
 
 const RegisterForm = ({ onSuccess }) => {
-  // Loading states
+
   const [loading, setLoading] = useState(false);
 
   // LOV state
   const [professions, setProfessions] = useState([]);
   const [countries, setCountries] = useState([]);
 
-  // Password visibility state
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // Visible UX error message
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Maintain registration form state
+  // FORM STATE (User Info - NO PASSWORDS)
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
-    password: "",
-    confirmPassword: "",
     professionId: "",
     countryId: ""
   });
 
-  // Fetch LOV metadata for Professions and Countries
+  // Load dropdown values
   useEffect(() => {
-    // Fetch Profession LOV
     fetchProfessions({ gameId: "OpsMgt" })
       .then((res) => setProfessions(res.data || []))
       .catch((err) => console.error("Profession fetch failed", err));
 
-    // Fetch Country LOV
     fetchCountries({ gameId: "OpsMgt" })
-      .then((res) => {
-        const countryData = res.data || [];
-        setCountries(countryData);
-      })
+      .then((res) => setCountries(res.data || []))
       .catch((err) => console.error("Country fetch failed", err));
   }, []);
 
-  // Handle form field changes
+  // Handle input change
   const handleChange = (e) => {
     setErrorMessage("");
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
-  // Validate form before registration
+  // Validate registration form
   const validateForm = () => {
+
+    // Validate user name
     if (!formData.userName.trim()) {
       setErrorMessage("Full Name is required.");
       return false;
     }
 
+    // Validate email format
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
       setErrorMessage("Please enter a valid email address.");
       return false;
     }
 
-    if (!formData.password) {
-      setErrorMessage("Password is required.");
-      return false;
-    }
-
-    if (formData.password.length < 6) {
-      setErrorMessage("Password must be at least 6 characters.");
-      return false;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setErrorMessage("Passwords do not match.");
-      return false;
-    }
-
+    // Validate profession
     if (!formData.professionId) {
       setErrorMessage("Please select a Profession.");
       return false;
     }
 
+    // Validate country
     if (!formData.countryId) {
       setErrorMessage("Please select a Country.");
       return false;
@@ -111,62 +84,47 @@ const RegisterForm = ({ onSuccess }) => {
     return true;
   };
 
-  // Submit handler for new registration
+  // Submit User Info collect only, no DB write)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
 
-    // Validate before API call
     if (!validateForm()) return;
 
     setLoading(true);
 
     try {
-      const res = await registerUser({
-        name: formData.userName,
+
+      // Resolve selected profession
+      const selectedProf = professions.find(
+        (p) => p.PF_Id === formData.professionId
+      );
+
+      // Resolve selected country
+      const selectedCountry = countries.find(
+        (c) => c.Country_Id === formData.countryId
+      );
+
+      // Pass collected user context to password step
+      onSuccess({
+        userName: formData.userName,
         email: formData.email,
-        password: formData.password,
-        pfId: formData.professionId,
+        professionId: formData.professionId,
         countryId: formData.countryId,
-        learnMode: "",
-        cmdLine: "Add_User"
+        profession: selectedProf?.Profession || "",
+        country: selectedCountry?.Country || ""
       });
 
-      if (res.data && res.data.userId) {
-        const selectedProf = professions.find(
-          (p) => p.PF_Id === formData.professionId
-        );
-
-        const selectedCountry = countries.find(
-          (c) => c.Country_Id === formData.countryId
-        );
-
-        onSuccess({
-          userId: res.data.userId,
-          profession: selectedProf?.Profession || "",
-          country: selectedCountry?.Country || "",
-          isEnrolled: false,
-          userEmail: formData.email
-        });
-      } else {
-        setErrorMessage("Registration failed. Please try again.");
-      }
-    } catch (err) {
-      console.error("Registration Error:", err);
-      setErrorMessage(
-        err?.response?.data?.message ||
-          "Unable to create account. Please try again."
-      );
     } finally {
       setLoading(false);
     }
   };
 
-  // Render registration form UI
   return (
     <Box
       component="form"
       onSubmit={handleSubmit}
+      autoComplete="off"
       sx={{
         mt: 1,
         display: "flex",
@@ -174,14 +132,21 @@ const RegisterForm = ({ onSuccess }) => {
         gap: 1
       }}
     >
-      {/* IDENTITY SECTION */}
+
+      {/* Anti-autofill decoy */}
+      <input
+        type="text"
+        name="fake_field"
+        autoComplete="off"
+        style={{ display: "none" }}
+      />
+
+      {/* User name input */}
       <TextField
         fullWidth
         label="Full Name"
         name="userName"
         size="small"
-        required
-        autoComplete="name"
         value={formData.userName}
         onChange={handleChange}
         InputProps={{
@@ -193,14 +158,13 @@ const RegisterForm = ({ onSuccess }) => {
         }}
       />
 
+      {/* Email input */}
       <TextField
         fullWidth
         label="Email Address"
         name="email"
         type="email"
         size="small"
-        required
-        autoComplete="email"
         value={formData.email}
         onChange={handleChange}
         InputProps={{
@@ -212,66 +176,7 @@ const RegisterForm = ({ onSuccess }) => {
         }}
       />
 
-      <Divider sx={{ my: 0.5 }} />
-
-      {/* SECURITY SECTION */}
-      <TextField
-        fullWidth
-        label="Password"
-        name="password"
-        type={showPassword ? "text" : "password"}
-        size="small"
-        required
-        autoComplete="new-password"
-        value={formData.password}
-        onChange={handleChange}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() => setShowPassword(!showPassword)}
-                edge="end"
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          )
-        }}
-      />
-
-      <TextField
-        fullWidth
-        label="Confirm Password"
-        name="confirmPassword"
-        type={showConfirmPassword ? "text" : "password"}
-        size="small"
-        required
-        autoComplete="new-password"
-        value={formData.confirmPassword}
-        onChange={handleChange}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() =>
-                  setShowConfirmPassword(!showConfirmPassword)
-                }
-                edge="end"
-              >
-                {showConfirmPassword ? (
-                  <VisibilityOff />
-                ) : (
-                  <Visibility />
-                )}
-              </IconButton>
-            </InputAdornment>
-          )
-        }}
-      />
-
-      <Divider sx={{ my: 0.5 }} />
-
-      {/* PROFILE SECTION */}
+      {/* Profession dropdown */}
       <TextField
         fullWidth
         select
@@ -279,7 +184,6 @@ const RegisterForm = ({ onSuccess }) => {
         name="professionId"
         value={formData.professionId}
         onChange={handleChange}
-        required
         size="small"
         disabled={!professions.length || loading}
       >
@@ -291,6 +195,7 @@ const RegisterForm = ({ onSuccess }) => {
         ))}
       </TextField>
 
+      {/* Country dropdown */}
       <TextField
         fullWidth
         select
@@ -298,10 +203,8 @@ const RegisterForm = ({ onSuccess }) => {
         name="countryId"
         value={formData.countryId}
         onChange={handleChange}
-        required
         size="small"
         disabled={!countries.length || loading}
-        helperText=" "
       >
         <MenuItem value="">Select Country</MenuItem>
         {countries.map((c) => (
@@ -311,21 +214,20 @@ const RegisterForm = ({ onSuccess }) => {
         ))}
       </TextField>
 
-      {/* ERROR MESSAGE */}
+      {/* Error message */}
       {errorMessage && (
         <Typography color="error" variant="body2">
           {errorMessage}
         </Typography>
       )}
 
-      {/* SUBMIT BUTTON */}
+      {/* Continue button */}
       <Button
         type="submit"
         fullWidth
         variant="contained"
         size="large"
-        disabled={loading}
-        disableElevation
+        disabled={loading} // future-safe
         sx={{
           mt: 1.5,
           py: 1.3,
@@ -334,8 +236,9 @@ const RegisterForm = ({ onSuccess }) => {
           borderRadius: 2
         }}
       >
-        {loading ? "Creating Account..." : "Create Account"}
+        {loading ? "Loading..." : "Continue"} {/* future-safe */}
       </Button>
+
     </Box>
   );
 };
