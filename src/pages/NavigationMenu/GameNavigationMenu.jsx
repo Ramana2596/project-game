@@ -104,7 +104,7 @@ import UserProfileInfo from '../UserProfileInfo/UserProfileInfo.jsx';
 import MarketInputError from '../MarketInputError/MarketInputError.jsx';
 import StdMarketInput from '../StdMarketInput/StdMarketInput.jsx';
 import StdOperationInput from '../StdOperationInput/StdOperationInput.jsx';
-import omgLogo from '../../assets/OMGTree6.png';
+import OmtpLogo from '../../assets/GreenTree.png';
 import MarketInfoTeam from '../MarketInfoTeam/MarketInfoTeam.jsx';
 import ToastMessage from '../../components/ToastMessage.jsx';
 import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
@@ -181,7 +181,7 @@ export default function MiniDrawer() {
       <AppBar position="fixed" open={open} sx={{ backgroundImage: 'radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%))' }}>
         <Toolbar style={{ paddingLeft: 0 }} sx={{ backgroundImage: 'inherit' }}>
           {/* Logo Image */}
-          <img src={omgLogo} alt="OMG Logo" style={{ width: 75, height: 75 }} />
+          <img src={OmtpLogo} alt="OMTP Logo" style={{ width: 65, height: 65 }} />
           <IconButton className="hover-effect" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{ marginLeft: 1, ...(open && { display: 'none' }) }} >
             <ArrowForwardIosIcon />
           </IconButton>
