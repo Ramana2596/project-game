@@ -145,9 +145,7 @@ import DemoOmtp from '../pages/DemoOmtp/DemoOmtp.jsx';
 import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
 import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";
-import UserRole from "../pages/UserRole/UserRole.jsx";
 import UiAccess from "../pages/UiAccess/UiAccess.jsx";
-//import FormTemplate from "../pages/FormTemplate/FormTemplate.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -512,6 +510,15 @@ export const componentList = [
     routeElement: <Operations />,
     children: [
       {
+        iconPath: appSettings,
+        id: "UI 21 272",
+        label: "Business Plan Execution",
+        path: "/simulationHub",
+        href: "/operationGame/simulationHub",
+        routeElement: <SimulationHub />
+      },
+
+      {
         iconPath: approvalIcon,
         id: "UI 11 030",
         label: "Strategic Plan",
@@ -527,14 +534,7 @@ export const componentList = [
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
       },
-      {
-        iconPath: appSettings,
-        id: "UI 21 272",
-        label: "Business Plan Execution",
-        path: "/simulationHub",
-        href: "/operationGame/simulationHub",
-        routeElement: <SimulationHub />
-      },
+
     ],
   },
   {
@@ -596,16 +596,6 @@ export const componentList = [
         href: "/operationGame/BatchMaster",
         routeElement: <BatchMstDetails />
       },
-/*
-      {
-        iconPath: peopleIcon,
-        id: "UI 14 020",
-        label: "Batch Details Template",
-        path: "/formTemplate",
-        href: "/operationGame/FormTemplate",
-        routeElement: <FormTemplate />
-      },
-*/
       {
         iconPath: verifiedIcon,
         id: "UI 15 030",
@@ -614,16 +604,6 @@ export const componentList = [
         href: "/operationGame/UserRoleMgt",
         routeElement: <UserRoleMgt />
       },
-/*
-      {
-        iconPath: verifiedIcon,
-        id: "UI 15 031",
-        label: "Single Role",
-        path: "/userRole",
-        href: "/operationGame/userRole",
-        routeElement: <UserRole />
-      },
-*/
       {
         iconPath: tilesIcon,
         id: "UI 15 040",
