@@ -95,7 +95,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                                     variant="outlined"
                                     size="large"
                                     component={Link}
-                                    to="/register"
+                                    to="/login"
                                     sx={{
                                         borderColor: '#7b1fa2',
                                         color: '#7b1fa2',

@@ -44,7 +44,7 @@ const CTASection = ({ handleDemoLogin }) => {
                         variant="outlined"
                         size="large"
                         component={Link}
-                        to="/register"
+                        to="/login"
                         sx={{
                             borderColor: 'white',
                             color: 'white',
