@@ -27,6 +27,12 @@ import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from "../SignIn/services/signInServices.js";
 import { useNavigate } from "react-router-dom";
 
+// Dynamic Visibility Settings for OAuth Providers
+const SOCIAL_CONFIG = {
+  GOOGLE_ENABLED: false,   // Flag: True / False 
+  LINKEDIN_ENABLED: false, // Flag: True / False
+};
+
 const AuthHubPage = () => {
 
  // VIEW CONTROLLER
@@ -118,6 +124,9 @@ const AuthHubPage = () => {
  // UI LABELS
   const isLogin = view === VIEW.LOGIN;
 
+  // Compute status if any provider is active
+  const hasSocialLogins = SOCIAL_CONFIG.GOOGLE_ENABLED || SOCIAL_CONFIG.LINKEDIN_ENABLED;
+
   return (
     <Box
       sx={{
@@ -164,9 +173,8 @@ const AuthHubPage = () => {
           </Typography>
         </Box>
 
-        {/* LOGIN VIEW */}
-
-        {view === VIEW.LOGIN && (
+        {/* Dynamic Social Login Bar */}
+        {(view === VIEW.LOGIN || view === VIEW.REGISTER) && hasSocialLogins && (
           <>
             <Stack
               direction="row"
@@ -174,19 +182,27 @@ const AuthHubPage = () => {
               justifyContent="center"
               sx={{ mb: 3 }}
             >
-              <IconButton sx={{ border: "1px solid #ececec", p: 1.2 }}>
-                <GoogleIcon />
-              </IconButton>
+              {SOCIAL_CONFIG.GOOGLE_ENABLED && (
+                <IconButton sx={{ border: "1px solid #ececec", p: 1.2 }}>
+                  <GoogleIcon />
+                </IconButton>
+              )}
 
-              <IconButton sx={{ border: "1px solid #ececec", p: 1.2 }}>
-                <LinkedInIcon sx={{ color: "#0077b5" }} />
-              </IconButton>
+              {SOCIAL_CONFIG.LINKEDIN_ENABLED && (
+                <IconButton sx={{ border: "1px solid #ececec", p: 1.2 }}>
+                  <LinkedInIcon sx={{ color: "#0077b5" }} />
+                </IconButton>
+              )}
             </Stack>
 
             <Divider sx={{ mb: 3 }}>OR</Divider>
-
-            <AuthForm isLogin={true} onSuccess={handleAuthSuccess} />
           </>
+        )}
+
+        {/* LOGIN VIEW */}
+        {view === VIEW.LOGIN && (
+          // ❌ Extracted old hardcoded icons stack and divider from this block
+          <AuthForm isLogin={true} onSuccess={handleAuthSuccess} />
         )}
 
         {/* REGISTER VIEW */}
@@ -205,7 +221,7 @@ const AuthHubPage = () => {
           />
         )}
 
-{/* LOGIN ↔ REGISTER TOGGLE */}
+        {/* LOGIN ↔ REGISTER TOGGLE */}
         {/* Footer navigation log in / register */}
         {(view === VIEW.LOGIN || view === VIEW.REGISTER) && (
           <Box sx={{ mt: 4, textAlign: "center" }}>
