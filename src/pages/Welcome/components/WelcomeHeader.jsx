@@ -2,7 +2,7 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { pageConstants } from '../constants/pageConstants';
-import omgLogo from '../../../assets/OMGTree6.png';
+import OmtpLogo from '../../../assets/GreenTree.png';
 
 
 const WelcomeHeader = ({
@@ -48,7 +48,7 @@ const WelcomeHeader = ({
                         alignItems: 'center',
                         justifyContent: 'center',
                     }}>
-                        <img src={omgLogo} alt="OMG Logo" style={{ width: 100, height: 100 }} />
+                        <img src={OmtpLogo} alt="OMTP Logo" style={{ width: 100, height: 80 }} />
                     </Box>
                 </Box>
 

@@ -6,13 +6,13 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-// ✅ Logic & Context Imports
+// Logic & Context Imports
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from '../Welcome/services/service.js'; 
 import { API_STATUS } from '../../utils/statusCodes';
 
-// ✅ Page Section Components
+// Page Section Components
 import OmtpNavbar from './components/OmtpNavbar';
 import HeroSection from './components/HeroSection';
 import VideoIntro from './components/VideoIntro'; 
@@ -31,7 +31,7 @@ const WelcomeOmtp = () => {
   const { setIsLoading } = useLoading();
   const { login, setUserInfo } = useUser();
 
-  // ✅ The "Master Link": Performs API Auth then Navigates
+  // The "Master Link": Performs API Auth then Navigates
   const handleOpenDemo = () => {
     setIsLoading(true);
     
