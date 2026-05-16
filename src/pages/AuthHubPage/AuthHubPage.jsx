@@ -205,14 +205,17 @@ const AuthHubPage = () => {
           />
         )}
 
-        {/* LOGIN ↔ REGISTER TOGGLE */}
-        {view === VIEW.LOGIN && (
+{/* LOGIN ↔ REGISTER TOGGLE */}
+        {/* Footer navigation log in / register */}
+        {(view === VIEW.LOGIN || view === VIEW.REGISTER) && (
           <Box sx={{ mt: 4, textAlign: "center" }}>
             <Typography variant="body2" color="text.secondary">
-              New to OMTP?{" "}
+              {/* Toggle static text based on view */}
+              {view === VIEW.LOGIN ? "New to OMTP? " : "Already have an account? "}
               <Typography
                 component="span"
-                onClick={() => setView(VIEW.REGISTER)}
+                /* Switch view */
+                onClick={() => setView(view === VIEW.LOGIN ? VIEW.REGISTER : VIEW.LOGIN)}
                 sx={{
                   color: "primary.main",
                   fontWeight: 700,
@@ -220,7 +223,8 @@ const AuthHubPage = () => {
                   "&:hover": { textDecoration: "underline" },
                 }}
               >
-                Create an Account
+                {/* Toggle link label text */}
+                {view === VIEW.LOGIN ? "Create an Account" : "Sign in"}
               </Typography>
             </Typography>
           </Box>
