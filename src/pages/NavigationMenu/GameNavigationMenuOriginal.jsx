@@ -123,7 +123,6 @@ import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
 import SimulationHub from '../SimulationHub/SimulationHub.jsx';
 import UserRole from '../UserRole/UserRole.jsx';
 import UiAccess from '../UiAccess/UiAccess.jsx';
-import AuthHubPage from '../AuthHubPage/AuthHubPage.jsx';
 
 //import FormTemplate from '../FormTemplate/FormTemplate.jsx';
 
@@ -135,6 +134,7 @@ export default function MiniDrawer() {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const { user, userInfo, setAccessablePageIds, userAccessiblePages } = useUser();
+  const [showEnrollDialog, setShowEnrollDialog] = useState(false);
   const location = useLocation();
   const [alertData, setAlertData] = useState({
     severity: "",
@@ -191,9 +191,33 @@ export default function MiniDrawer() {
           <BreadCrumb currentRoute={currentRoute} />
           <div style={{ marginLeft: "auto", display: 'flex', alignItems: 'center', gap: 2 }}>
 
+            <EnrollUserDialog
+              open={showEnrollDialog}
+              onClose={() => setShowEnrollDialog(false)}
+              userId={userInfo?.userId}
+              learnMode={userInfo?.learnMode}   // can be null; dialog handles default
+              onResult={(result) => {
+                setAlertData({
+                  severity: result.severity,
+                  message: result.message,
+                  isVisible: true,
+                });
+              }}
+            />
+
             <div>
               {userInfo ? (
                 <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", width: "100%" }}>
+                  {/* Show Enroll button: role=Student (6) or Team Leader (8) */}
+                  {(user?.rlId === 6 || user?.rlId === 8) && (
+                    <Button
+                      className="standard-button-secondary-button"
+                      sx={{ marginRight: 1 }}
+                      onClick={() => setShowEnrollDialog(true)}
+                    >
+                      Enroll
+                    </Button>
+                  )}
 
                   {/* Always show AccountCircle */}
                   <Button
@@ -354,7 +378,6 @@ export default function MiniDrawer() {
           <Route path='/simulationHub' element={<SimulationHub />} />
           <Route path='/userRole' element={<UserRole />} />
           <Route path='/uiAccess' element={<UiAccess />} />
-          <Route path='/authHubPage' element={<AuthHubPage />} />
 {/*          <Route path='/formTemplate' element={<FormTemplate />} /> */}
 
         </Routes>
@@ -367,4 +390,3 @@ export default function MiniDrawer() {
     </Box>
   );
 }
-
