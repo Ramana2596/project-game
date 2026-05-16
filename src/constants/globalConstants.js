@@ -132,7 +132,6 @@ import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
 import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
-import AssetCatalogTeam from "../pages/AssetCatalogTeam/AssetCatalogTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
 import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
@@ -328,19 +327,10 @@ export const componentList = [
         href: "/operationGame/KeyResultPlInfo",
         routeElement: <KeyResultPlInfo />
       },
-
       {
         iconPath: partIcon,
         id: "UI 22 010",
         label: "Capital Asset Catalog",
-        path: "/assetCatalogTeam",
-        href: "/operationGame/assetCatalogTeam",
-        routeElement: <AssetCatalogTeam />
-      },
-      {
-        iconPath: partIcon,
-        id: "UI 22 050",
-        label: "Capital Asset Catalog Master",
         path: "/assetCatalogBatch",
         href: "/operationGame/assetCatalogBatch",
         routeElement: <AssetCatalogBatch />
@@ -371,7 +361,7 @@ export const componentList = [
       },
       {
         iconPath: machineIcon,
-        id: "UI 22 060",
+        id: "UI 22 050",
         label: "Capital Asset Stock",
         path: "/CapitalAssetStockInfo",
         href: "/operationGame/CapitalAssetStockInfo",
