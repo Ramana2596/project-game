@@ -77,14 +77,13 @@ const SetPasswordForm = ({ userContext, onSuccess, onBack }) => {
 
     try {
 
-      // Create full user only after password is provided
+      // Create user account only after input of profile & password
       const res = await registerUser({
         name: userContext.userName,
         email: userContext.email,
         password: formData.password,
         pfId: userContext.professionId,
         countryId: userContext.countryId,
-        learnMode: "",
         cmdLine: "Add_User"
       });
 
