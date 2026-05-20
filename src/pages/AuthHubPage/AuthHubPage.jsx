@@ -17,6 +17,7 @@ import ColorModeSelect from "../SignIn/theme/ColorModeSelect";
 
 import AuthForm from "./components/AuthForm";
 import EnrollUserDialog from "./components/EnrollUserDialog";
+import ToastMessage from "../../components/ToastMessage.jsx";
 
 // Auth components
 import RegisterForm from "./components/RegisterForm";
@@ -45,11 +46,16 @@ const AuthHubPage = () => {
   const [view, setView] = useState(VIEW.LOGIN);
 
  // ENROLLMENT STATE
-   const [enrollOpen, setEnrollOpen] = useState(false);
+  const [enrollOpen, setEnrollOpen] = useState(false);
   const [pendingUser, setPendingUser] = useState(null);
+  const [toast_message, setToastMessage] = useState("");
+  const [alertData, setAlertData] = useState({
+    open: false,
+    severity: "info",
+  });
 
  // USER CONTEXT
-   const { login, setUserInfo } = useUser();
+  const { login, setUserInfo } = useUser();
   const navigate = useNavigate();
 
  // REGISTRATION CONTEXT
@@ -87,6 +93,12 @@ const AuthHubPage = () => {
       })
       .catch((err) => {
         console.error("User context initialization failed:", err);
+        setToastMessage("Unable to initialize user session.");
+
+        setAlertData({
+          open: true,
+          severity: "error",
+        });
       });
   };
 
@@ -125,7 +137,8 @@ const AuthHubPage = () => {
   const isLogin = view === VIEW.LOGIN;
 
   // Compute status if any provider is active
-  const hasSocialLogins = SOCIAL_CONFIG.GOOGLE_ENABLED || SOCIAL_CONFIG.LINKEDIN_ENABLED;
+  const hasSocialLogins =
+    SOCIAL_CONFIG.GOOGLE_ENABLED || SOCIAL_CONFIG.LINKEDIN_ENABLED;
 
   return (
     <Box
@@ -201,7 +214,6 @@ const AuthHubPage = () => {
 
         {/* LOGIN VIEW */}
         {view === VIEW.LOGIN && (
-          // ❌ Extracted old hardcoded icons stack and divider from this block
           <AuthForm isLogin={true} onSuccess={handleAuthSuccess} />
         )}
 
@@ -222,16 +234,25 @@ const AuthHubPage = () => {
         )}
 
         {/* LOGIN ↔ REGISTER TOGGLE */}
-        {/* Footer navigation log in / register */}
         {(view === VIEW.LOGIN || view === VIEW.REGISTER) && (
           <Box sx={{ mt: 4, textAlign: "center" }}>
             <Typography variant="body2" color="text.secondary">
               {/* Toggle static text based on view */}
-              {view === VIEW.LOGIN ? "New to OMTP? " : "Already have an account? "}
+              {view === VIEW.LOGIN
+                ? "New to OMTP? "
+                : "Already have an account? "}
+
               <Typography
                 component="span"
-                /* Switch view */
-                onClick={() => setView(view === VIEW.LOGIN ? VIEW.REGISTER : VIEW.LOGIN)}
+
+                // Switch view
+                onClick={() =>
+                  setView(
+                    view === VIEW.LOGIN
+                      ? VIEW.REGISTER
+                      : VIEW.LOGIN
+                  )
+                }
                 sx={{
                   color: "primary.main",
                   fontWeight: 700,
@@ -240,7 +261,9 @@ const AuthHubPage = () => {
                 }}
               >
                 {/* Toggle link label text */}
-                {view === VIEW.LOGIN ? "Create an Account" : "Sign in"}
+                {view === VIEW.LOGIN
+                  ? "Create an Account"
+                  : "Sign in"}
               </Typography>
             </Typography>
           </Box>
@@ -251,7 +274,16 @@ const AuthHubPage = () => {
           open={enrollOpen}
           userId={pendingUser?.userId}
           onClose={() => setEnrollOpen(false)}
+
+          // Enrollment response messages
           onResult={(res) => {
+            setToastMessage(res.message);
+            setAlertData({
+              open: true,
+              severity: res.severity,
+            });
+
+            // Navigate only for success
             if (res.severity === "success") {
               navigate("/operationGame/homePage");
             }
@@ -259,6 +291,14 @@ const AuthHubPage = () => {
         />
 
       </Card>
+
+      {/* GLOBAL TOAST MESSAGE */}
+      <ToastMessage
+        open={alertData.open}
+        severity={alertData.severity}
+        message={toast_message}
+      />
+
     </Box>
   );
 };
