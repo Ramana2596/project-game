@@ -59,7 +59,7 @@ export const UserProvider = ({ children }) => {
             gameId: userInfo?.Game_Id,
             gameBatch: userInfo?.Game_Batch,
             gameTeam: userInfo?.Game_Team,
-            isGameLeader: userInfo?.Team_Leader,
+            isGameLeader: userInfo?.Is_Team_Leader,
             loginId: userInfo?.User_Login,
             userId: userInfo?.User_Id,
             learnMode: userInfo?.Learn_Mode ? userInfo?.Learn_Mode : 'Class_Room',
