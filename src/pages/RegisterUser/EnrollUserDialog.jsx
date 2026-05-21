@@ -43,7 +43,7 @@ const EnrollUserDialog = ({
   const gameId = userInfo?.gameId || "OpsMgt"; //  Use context/default
  
   const userId = isPropMode ? propUserId : userInfo?.userId;             //  Use prop or context
-  const defaultMode = isPropMode ? propLearnMode : userInfo?.learnMode || "Class_Room"; //  Initial mode
+  const defaultMode = isPropMode ? propLearnMode : userInfo?.learnMode || "in-Person"; //  Initial mode
 
   const [learnModes, setLearnModes] = useState([]);
   const [selectedMode, setSelectedMode] = useState(defaultMode); //  Initialize with defaultMode
