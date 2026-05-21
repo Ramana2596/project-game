@@ -62,7 +62,7 @@ export const UserProvider = ({ children }) => {
             isGameLeader: userInfo?.Is_Team_Leader,
             loginId: userInfo?.User_Login,
             userId: userInfo?.User_Id,
-            learnMode: userInfo?.Learn_Mode ? userInfo?.Learn_Mode : 'Class_Room',
+            learnMode: userInfo?.Learn_Mode ? userInfo?.Learn_Mode : 'in-Person',
         });
     };
 
@@ -98,7 +98,14 @@ export const UserProvider = ({ children }) => {
     // Function: clear all user, RBAC, and session info on logout
     const logout = () => {
         setUser({ userId: null, loginId: null, rlId: null, role: null });
-        setGameInfo({ gameId: 'OpsMgt', gameBatch: null, gameTeam: null, isGameLeader: null, userId: null, loginId: null, learnMode: 'Class_Room' });
+        setGameInfo({ 
+            gameId: 'OpsMgt',
+            gameBatch: null, 
+            gameTeam: null, 
+            isGameLeader: null, 
+            userId: null, 
+            loginId: null, 
+            learnMode: 'in-Person' });
         setUserAccessiblePages(null);
         setUserAccessiblePageIds(null);
 
