@@ -146,7 +146,7 @@ const Register = () => {
         open={showEnrollDialog}
         onClose={() => setShowEnrollDialog(false)}
         userId={registeredUserId}
-        learnMode={learningMode}   // If null, "Class_Room"
+        learnMode={learningMode}   // If null, "in-Person"
         onResult={(alert) => setAlertData({ ...alert, isVisible: true })}
       />
 
