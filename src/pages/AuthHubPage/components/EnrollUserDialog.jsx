@@ -1,3 +1,6 @@
+// File: src/pages/AuthHubPage/components/EnrollUserDialog.jsx
+// Finalize student enrollment parameters and classroom routing setups
+
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
@@ -36,15 +39,14 @@ const EnrollUserDialog = ({
   const [selectedMode, setSelectedMode] = useState(defaultMode);
   const [loading, setLoading] = useState(false);
 
-  // 2: Fetch available learning modes (Online, In-Person, etc.)
+  // Purpose: Fetch available learning modes from the DB profile configuration query
   useEffect(() => {
     if (open && gameId) {
       getUserProfile({ cmdLine: "Learn_Mode", gameId })
         .then((res) => {
-          const modes = res.data || [];
+          const modes = Array.isArray(res.data) ? res.data : (res.data?.records || []);
           setLearnModes(modes);
 
-          // If the list isn't empty, pick the first one automatically
           if (modes.length > 0 && !selectedMode) {
             setSelectedMode(modes[0].Learn_Mode);
           }
@@ -54,9 +56,9 @@ const EnrollUserDialog = ({
           setLearnModes([]);
         });
     }
-  }, [open, gameId]);
+  }, [open, gameId, selectedMode]); 
 
-  // STEP 3: Send the final choice to BD when the button is clicked
+  // Send Learn_Mode final choice to DB 
   const handleEnroll = async () => {
     setLoading(true);
     try {
@@ -66,7 +68,6 @@ const EnrollUserDialog = ({
         learnMode: selectedMode,
       });
 
-      // Check response
       const { returnValue, message } = res.data;
       const { severity, defaultMsg } =
         API_STATUS_MAP[returnValue] || API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
@@ -123,7 +124,7 @@ const EnrollUserDialog = ({
         </FormControl>
         
         <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: 'block' }}>
-          Note: This helps us put you in the right classroom or team.
+          Note: This helps us to onboard you in the right classroom or team.
         </Typography>
       </DialogContent>
 

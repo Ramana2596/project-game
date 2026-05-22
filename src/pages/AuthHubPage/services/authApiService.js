@@ -3,17 +3,15 @@
 
 import api from "../../../core/interceptor/api-interceptor";
 
-/* AUTH SERVICES */
-
 // Register a new user (manual signup + password creation)
 export function registerUser(payload) {
   return api.post("/api/registerUser", payload);
 }
 
-// ❌ Obsolete: Password is now created during registerUser() final onboarding step
-// export function setUserPassword(payload) {
-//   return api.post("/api/setUserPassword", payload);
-// }
+// Enroll user into game/team flow
+export function enrollUser(payload) {
+  return api.post("/api/enrollUser", payload);
+}
 
 // Login existing user
 export function loginUser(payload) {
@@ -52,7 +50,7 @@ export function fetchCountries(queryParams) {
   });
 }
 
-// Fetch user profile using query params (email, id, etc.)
+// Fetch user profile
 export function getUserProfile(queryParams) {
   return api.get("/api/getUserProfile", {
     params: { ...queryParams }
@@ -64,14 +62,8 @@ export function addUserProfileOauth(payload) {
   return api.post("/api/addUserProfileOauth", payload);
 }
 
-// Enroll user into game/team flow
-export function enrollUser(payload) {
-  return api.post("/api/enrollUser", payload);
-}
 
-/*---------------------------------------
- FUTURE SERVICES (SAFE STUBS)
- ---------------------------------------*/
+//  FUTURE SERVICES (SAFE STUBS)
 
 export function updateUserProfile() {
   throw new Error("updateUserProfile API not implemented yet");

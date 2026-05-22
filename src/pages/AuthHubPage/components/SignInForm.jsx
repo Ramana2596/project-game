@@ -1,5 +1,5 @@
 // File: SignInForm.jsx
-// Purpose: Handles manual user login and retrieves profile status for routing.
+// User login and retrieves profile status for routing.
 
 import React, { useState } from "react";
 import {
@@ -11,55 +11,46 @@ import {
   Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff, Email } from "@mui/icons-material";
-// ✅ Service handles the API call to UI_User_Profile_Trans
 import { loginUser } from "../services/authApiService.js";
 
 const SignInForm = ({ onSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
-
-  // ✅ Visible authentication error state
   const [errorMessage, setErrorMessage] = useState("");
 
-  // ✅ Handle input changes
+  // Handle input changes
   const handleChange = (e) => {
-    // ✅ Clear previous errors when user edits input
     setErrorMessage("");
-
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Submit handler for manual login
+  // Manual login processing array data and field casing normalization
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // ✅ Clear previous errors before fresh attempt
     setErrorMessage("");
     setLoading(true);
 
     try {
-      // ✅ Call service (maps to SP: UI_User_Profile_Trans)
+      // API Call
       const res = await loginUser(formData);
 
-      if (res.data?.success && res.data?.user) {
-        // ✅ Return essential routing data to AuthHubPage
+// map the DB Snake_Case keys to camelCase for frontend consistency
+      if (Array.isArray(res.data) && res.data.length > 0) {
+        const dbUser = res.data[0];
         onSuccess({
-          userId: res.data.user.userId,
-          profession: res.data.user.profession,
-          isEnrolled: res.data.user.isEnrolled,
-          userEmail: res.data.user.userEmail,
+          userId: dbUser.User_Id,
+          profession: dbUser.Profession,
+          isEnrolled: dbUser.Is_Enrolled,
+          userEmail: dbUser.User_Email,
         });
       } else {
-        // ✅ Invalid credentials or unexpected API response
         setErrorMessage(
           res.data?.message || "Invalid email or password."
         );
       }
     } catch (err) {
       console.error("Login Error:", err);
-
-      // ✅ Visible network/server error
       setErrorMessage(
         err?.response?.data?.message ||
           "Unable to sign in. Please try again."
@@ -71,14 +62,14 @@ const SignInForm = ({ onSuccess }) => {
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-      {/* ✅ Visible login error alert */}
+      {/* login error alert */}
       {errorMessage && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {errorMessage}
         </Alert>
       )}
 
-      {/* ✅ Enterprise Standard: Clear labels and icons */}
+      {/* Clear labels and icons */}
       <TextField
         fullWidth
         label="Email Address"

@@ -1,7 +1,5 @@
 // File: src/pages/AuthHubPage/AuthHubPage.jsx
-// Main Authentication flow (Login, Register, Password Setup, Social Redirects, Enrollment routing)
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Card,
@@ -28,89 +26,83 @@ import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from "../SignIn/services/signInServices.js";
 import { useNavigate } from "react-router-dom";
 
-// Dynamic Visibility Settings for OAuth Providers
 const SOCIAL_CONFIG = {
-  GOOGLE_ENABLED: false,   // Flag: True / False 
-  LINKEDIN_ENABLED: false, // Flag: True / False
+  GOOGLE_ENABLED: false, 
+  LINKEDIN_ENABLED: false,
+};
+
+const VIEW = {
+  LOGIN: "LOGIN",
+  REGISTER: "REGISTER",
+  SET_PASSWORD: "Set_Password"
 };
 
 const AuthHubPage = () => {
-
- // VIEW CONTROLLER
-  const VIEW = {
-    LOGIN: "LOGIN",
-    REGISTER: "REGISTER",
-    SET_PASSWORD: "Set_Password"
-  };
-
   const [view, setView] = useState(VIEW.LOGIN);
-
- // ENROLLMENT STATE
   const [enrollOpen, setEnrollOpen] = useState(false);
   const [pendingUser, setPendingUser] = useState(null);
-  const [toast_message, setToastMessage] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
   const [alertData, setAlertData] = useState({
     open: false,
     severity: "info",
   });
 
- // USER CONTEXT
   const { login, setUserInfo } = useUser();
   const navigate = useNavigate();
-
- // REGISTRATION CONTEXT
   const [newUserContext, setNewUserContext] = useState(null);
+  
+  // Track mounting state to prevent memory leaks on unmounted promises
+  const isMounted = useRef(true);
 
- // AUTH SUCCESS FLOW
-  const handleAuthSuccess = (userData) => {
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
-    const { profession, isEnrolled, userEmail } = userData;
-
-    // Student enrollment flow
-    if (profession === "Student" && !isEnrolled) {
-      setPendingUser({ userId: userData.userId });
-      setEnrollOpen(true);
-      return;
-    }
-
-    // Load user context after successful auth
-    getUserDetails({ userEmail })
+  // Centralized session initializer
+  const initializeUserSession = (email) => {
+    return getUserDetails({ userEmail: email })
       .then((response) => {
         const apiData = response?.data?.data?.[0];
-
-        if (apiData) {
+        if (apiData && isMounted.current) {
           login({
             User_Id: apiData.User_Id,
             User_Login: apiData.User_Login,
             RL_Id: apiData.RL_Id,
             Role: apiData.Role,
           });
-
           setUserInfo(apiData);
-
           navigate("/operationGame/homePage");
         }
       })
       .catch((err) => {
         console.error("User context initialization failed:", err);
-        setToastMessage("Unable to initialize user session.");
-
-        setAlertData({
-          open: true,
-          severity: "error",
-        });
+        if (isMounted.current) {
+          setToastMessage("Unable to initialize user session.");
+          setAlertData({ open: true, severity: "error" });
+        }
       });
   };
 
- // REGISTER → PASSWORD FLOW
- 
-  // Store registration details locally only
+  const handleAuthSuccess = (userData) => {
+    const { profession, isEnrolled, userEmail } = userData;
+
+    if (profession === "Student" && !isEnrolled) {
+      setPendingUser(userData); // Save complete userData context
+      setEnrollOpen(true);
+      return;
+    }
+
+    initializeUserSession(userEmail);
+  };
+
   const handleRegisterSuccess = (userData) => {
     setNewUserContext(userData);
     setView(VIEW.SET_PASSWORD);
   };
 
-  // Final registration + password creation success
   const handlePasswordSuccess = (finalUser) => {
     handleAuthSuccess({
       userId: finalUser.userId,
@@ -120,25 +112,24 @@ const AuthHubPage = () => {
     });
   };
 
- // OAUTH HANDLER
+  // Handle URL parsing cleanly & strip them instantly
   useEffect(() => {
     const { status, userId } = getAuthStatusFromUrl();
 
     if (status === "success" && userId) {
+      // Clean query parameters from address bar to prevent execution loop
+      navigate(".", { replace: true });
+
       handleAuthSuccess({
         userId,
         profession: "Student",
         isEnrolled: false,
       });
     }
-  }, []);
+  }, [navigate]);
 
- // UI LABELS
   const isLogin = view === VIEW.LOGIN;
-
-  // Compute status if any provider is active
-  const hasSocialLogins =
-    SOCIAL_CONFIG.GOOGLE_ENABLED || SOCIAL_CONFIG.LINKEDIN_ENABLED;
+  const hasSocialLogins = SOCIAL_CONFIG.GOOGLE_ENABLED || SOCIAL_CONFIG.LINKEDIN_ENABLED;
 
   return (
     <Box
@@ -151,10 +142,7 @@ const AuthHubPage = () => {
         p: 2,
       }}
     >
-
-      <ColorModeSelect
-        sx={{ position: "fixed", top: "1rem", right: "1rem" }}
-      />
+      <ColorModeSelect sx={{ position: "fixed", top: "1rem", right: "1rem" }} />
 
       <Card
         sx={{
@@ -165,8 +153,6 @@ const AuthHubPage = () => {
           boxShadow: "0px 10px 30px rgba(0,0,0,0.05)",
         }}
       >
-
-        {/* BRAND HEADER */}
         <Box sx={{ textAlign: "center", mb: 3 }}>
           <Box
             component="img"
@@ -174,85 +160,49 @@ const AuthHubPage = () => {
             alt="OMTP Logo"
             sx={{ height: 65, mb: 2 }}
           />
-
           <Typography variant="h5" fontWeight={800}>
-            {isLogin ? "Welcome Back to OMTP" : "Join OMTP"}
+            {isLogin ? "Welcome Back to OMTP" : "Create Account to OMTP "}
           </Typography>
-
           <Typography variant="body2" color="text.secondary" mt={0.5}>
-            {isLogin
-              ? "Continue your Experiential Learning"
-              : "Start your Experiential Learning"}
+            {isLogin ? "Continue your Experiential Learning" : "Start your Experiential Learning"}
           </Typography>
         </Box>
 
-        {/* Dynamic Social Login Bar */}
         {(view === VIEW.LOGIN || view === VIEW.REGISTER) && hasSocialLogins && (
           <>
-            <Stack
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-              sx={{ mb: 3 }}
-            >
+            <Stack direction="row" spacing={2} justifyContent="center" sx={{ mb: 3 }}>
               {SOCIAL_CONFIG.GOOGLE_ENABLED && (
                 <IconButton sx={{ border: "1px solid #ececec", p: 1.2 }}>
                   <GoogleIcon />
                 </IconButton>
               )}
-
               {SOCIAL_CONFIG.LINKEDIN_ENABLED && (
                 <IconButton sx={{ border: "1px solid #ececec", p: 1.2 }}>
                   <LinkedInIcon sx={{ color: "#0077b5" }} />
                 </IconButton>
               )}
             </Stack>
-
             <Divider sx={{ mb: 3 }}>OR</Divider>
           </>
         )}
 
-        {/* LOGIN VIEW */}
-        {view === VIEW.LOGIN && (
-          <AuthForm isLogin={true} onSuccess={handleAuthSuccess} />
-        )}
-
-        {/* REGISTER VIEW */}
-        {view === VIEW.REGISTER && (
-          <RegisterForm onSuccess={handleRegisterSuccess} />
-        )}
-
-        {/* PASSWORD VIEW */}
+        {view === VIEW.LOGIN && <AuthForm isLogin={true} onSuccess={handleAuthSuccess} />}
+        {view === VIEW.REGISTER && <RegisterForm onSuccess={handleRegisterSuccess} />}
         {view === VIEW.SET_PASSWORD && (
           <SetPasswordForm
             userContext={newUserContext}
             onSuccess={handlePasswordSuccess}
-
-            // Return to Register (retain collected user info)
             onBack={() => setView(VIEW.REGISTER)}
           />
         )}
 
-        {/* LOGIN ↔ REGISTER TOGGLE */}
         {(view === VIEW.LOGIN || view === VIEW.REGISTER) && (
           <Box sx={{ mt: 4, textAlign: "center" }}>
             <Typography variant="body2" color="text.secondary">
-              {/* Toggle static text based on view */}
-              {view === VIEW.LOGIN
-                ? "New to OMTP? "
-                : "Already have an account? "}
-
+              {view === VIEW.LOGIN ? "New to OMTP? " : "Already have an account? "}
               <Typography
                 component="span"
-
-                // Switch view
-                onClick={() =>
-                  setView(
-                    view === VIEW.LOGIN
-                      ? VIEW.REGISTER
-                      : VIEW.LOGIN
-                  )
-                }
+                onClick={() => setView(view === VIEW.LOGIN ? VIEW.REGISTER : VIEW.LOGIN)}
                 sx={{
                   color: "primary.main",
                   fontWeight: 700,
@@ -260,45 +210,34 @@ const AuthHubPage = () => {
                   "&:hover": { textDecoration: "underline" },
                 }}
               >
-                {/* Toggle link label text */}
-                {view === VIEW.LOGIN
-                  ? "Create an Account"
-                  : "Sign in"}
+                {view === VIEW.LOGIN ? "Create an Account" : "Sign in"}
               </Typography>
             </Typography>
           </Box>
         )}
 
-        {/* ENROLLMENT DIALOG */}
         <EnrollUserDialog
           open={enrollOpen}
           userId={pendingUser?.userId}
           onClose={() => setEnrollOpen(false)}
-
-          // Enrollment response messages
           onResult={(res) => {
             setToastMessage(res.message);
-            setAlertData({
-              open: true,
-              severity: res.severity,
-            });
+            setAlertData({ open: true, severity: res.severity });
 
-            // Navigate only for success
             if (res.severity === "success") {
-              navigate("/operationGame/homePage");
+              // Now initialize session using the email preserved in pendingUser context
+              initializeUserSession(pendingUser?.userEmail);
             }
           }}
         />
-
       </Card>
 
-      {/* GLOBAL TOAST MESSAGE */}
       <ToastMessage
         open={alertData.open}
         severity={alertData.severity}
-        message={toast_message}
+        message={toastMessage}
+        onClose={() => setAlertData((prev) => ({ ...prev, open: false }))}
       />
-
     </Box>
   );
 };
