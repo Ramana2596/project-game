@@ -1,7 +1,7 @@
 // File: src/pages/AuthHubPage/components/SetPasswordForm.jsx
 // collect password and create complete user profile
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react"; 
 import {
   TextField,
   Button,
@@ -27,7 +27,17 @@ const SetPasswordForm = ({ userContext, onSuccess, onBack }) => {
     confirmPassword: ""
   });
 
-  // Handle form input change
+  // Monitor component mount / unmount state 
+  const isMounted = useRef(true); 
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []); 
+
+  // FORM CHANGE CONTROL 
   const handleChange = (e) => {
     setErrorMessage("");
     setFormData({
@@ -36,22 +46,21 @@ const SetPasswordForm = ({ userContext, onSuccess, onBack }) => {
     });
   };
 
-  // Validate password form
+  // FORM VALIDATION 
   const validateForm = () => {
 
-    // Validate registration context exists
+    // Validate registration
     if (!userContext) {
       setErrorMessage("Registration session expired. Please register again.");
       return false;
     }
 
-    // Validate password required
+    // Validate password
     if (!formData.password) {
       setErrorMessage("Password is required.");
       return false;
     }
 
-    // Lightweight validation to reduce browser warnings
     if (formData.password.length < 6) {
       setErrorMessage("Password must be at least 6 characters.");
       return false;
@@ -66,7 +75,7 @@ const SetPasswordForm = ({ userContext, onSuccess, onBack }) => {
     return true;
   };
 
-  // Submit full registration with password
+  // REGISTER API CALL
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -77,7 +86,7 @@ const SetPasswordForm = ({ userContext, onSuccess, onBack }) => {
 
     try {
 
-      // Create user account only after input of profile & password
+      // Create user account 
       const res = await registerUser({
         name: userContext.userName,
         email: userContext.email,
@@ -87,31 +96,38 @@ const SetPasswordForm = ({ userContext, onSuccess, onBack }) => {
         cmdLine: "Add_User"
       });
 
-      // Validate API success response
       if (res.data && res.data.returnValue === 0) {
 
-        onSuccess({
-          userId: res.data.userId,
-          email: userContext.email,
-          status: "ACTIVE"
-        });
+        if (isMounted.current) { 
+          onSuccess({
+            userId: res.data.userId,
+            email: userContext.email,
+            status: "ACTIVE"
+          });
+        }
 
       } else {
-        setErrorMessage(
-          res.data?.message ||
-          "Failed to create account. Please try again."
-        );
+        if (isMounted.current) { 
+          setErrorMessage(
+            res.data?.message ||
+            "Failed to create account. Please try again."
+          );
+        }
       }
 
     } catch (err) {
       console.error("Password Setup Error:", err);
 
-      setErrorMessage(
-        err?.response?.data?.message ||
-        "Unable to create account. Please try again."
-      );
+      if (isMounted.current) { 
+        setErrorMessage(
+          err?.response?.data?.message ||
+          "Unable to create account. Please try again."
+        );
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) { 
+        setLoading(false);
+      }
     }
   };
 
