@@ -9,12 +9,15 @@ import RegisterForm from "./RegisterForm.jsx";
 // onSuccess: Feedback to parent-call
 // isLogin: true = show login, false = show register: 
 
-const AuthForm = ({ onSuccess, isLogin }) => {
+const AuthForm = ({ onSuccess, isLogin, onForgotPassword }) => { 
   return (
     <Box sx={{ width: "100%" }}>
 
       {isLogin ? (
-        <SignInForm onSuccess={onSuccess} />
+        <SignInForm 
+          onSuccess={onSuccess} 
+          onForgotPassword={onForgotPassword} 
+        />
       ) : (
         <RegisterForm onSuccess={onSuccess} />
       )}

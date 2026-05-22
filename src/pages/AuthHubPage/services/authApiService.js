@@ -19,8 +19,8 @@ export function loginUser(payload) {
 }
 
 // Password reset link/token
-export function forgotPassword(payload) {
-  return api.post("/api/forgotPassword", payload);
+export function requestPasswordReset(payload) {
+  return api.post("/api/requestPasswordReset", payload);
 }
 
 // Reset password using token/new password
