@@ -33,7 +33,6 @@ const WelcomeOmtp = () => {
 
   // The "Master Link": Performs API Auth then Navigates
   const handleOpenDemo = () => {
-      console.log("handleOpenDemo CALLED");
     setIsLoading(true);
     
     // Authenticate as guest so the Game recognizes the session
@@ -55,7 +54,7 @@ const WelcomeOmtp = () => {
           });
           
           setUserInfo(userData);
-          // Now that we are logged in, move to the Demo
+          // Move to the Demo
           navigate("/operationGame/demoOmtp");
         } else {
           console.error("Auth failed:", response.data.message);
