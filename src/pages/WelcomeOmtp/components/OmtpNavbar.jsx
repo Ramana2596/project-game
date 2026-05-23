@@ -5,7 +5,8 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box, Container } from '@mui/material';
 
-const OmtpNavbar = () => (
+// Component receives navigation handlers from parent
+const OmtpNavbar = ({ onViewDemo }) => (
   // sticky position keeps the navigation visible while scrolling the walkthrough
   <AppBar 
     position="sticky" 
@@ -21,7 +22,6 @@ const OmtpNavbar = () => (
     <Container maxWidth="lg">
       <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
         
-        {/* ✅ LOGO SECTION: Matches the Screenshot branding */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, cursor: 'pointer' }}>
           <Box 
             sx={{ 
@@ -45,7 +45,6 @@ const OmtpNavbar = () => (
           </Box>
         </Box>
 
-        {/* ✅ NAVIGATION LINKS: Centered with hover interaction */}
         <Box sx={{ display: { xs: 'none', lg: 'flex' }, gap: 4 }}>
           {['About', 'How It Works', 'For Whom', 'Pricing'].map((item) => (
             <Typography 
@@ -64,10 +63,12 @@ const OmtpNavbar = () => (
           ))}
         </Box>
 
-        {/* ✅ ACTION BUTTONS: Matches Screenshot button styling */}
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          
+          {/* Demo navigation */}
           <Button 
             variant="outlined" 
+            onClick={onViewDemo}
             sx={{ 
               borderRadius: '20px', 
               textTransform: 'none', 
@@ -80,6 +81,7 @@ const OmtpNavbar = () => (
           >
             View Demo
           </Button>
+
           <Button 
             variant="contained" 
             sx={{ 
