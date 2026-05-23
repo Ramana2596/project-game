@@ -33,14 +33,17 @@ const WelcomeOmtp = () => {
 
   // The "Master Link": Performs API Auth then Navigates
   const handleOpenDemo = () => {
+      console.log("handleOpenDemo CALLED");
     setIsLoading(true);
     
     // Authenticate as guest so the Game recognizes the session
     getUserDetails({ userEmail: 'guest@guest.com', gameId: 'OpsMgt' })
       .then((response) => {
-        const { returnStatus, data } = response.data;
+
+    const { returnStatus, data } = response.data;
 
         if (returnStatus === API_STATUS.SUCCESS && data?.length > 0) {
+
           const userData = data[0];
           
           // Establish the user session
@@ -52,7 +55,6 @@ const WelcomeOmtp = () => {
           });
           
           setUserInfo(userData);
-          
           // Now that we are logged in, move to the Demo
           navigate("/operationGame/demoOmtp");
         } else {
@@ -71,8 +73,11 @@ const WelcomeOmtp = () => {
     <Box sx={{ minHeight: '100vh', bgcolor: '#ffffff' }}>
       
       {/* Navigation */}
-      <OmtpNavbar onBack={handleBackToHome} />
-      
+
+      <OmtpNavbar
+        onBack={handleBackToHome}
+        onViewDemo={handleOpenDemo}
+      />
       <main>
         {/* Pass the authenticated function to the Hero button */}
         <HeroSection handleDemoLogin={handleOpenDemo} />
