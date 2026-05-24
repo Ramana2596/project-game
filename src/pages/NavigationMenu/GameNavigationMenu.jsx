@@ -1,4 +1,3 @@
-
 import BreadCrumb from '../../components/BreadCrumb.jsx';
 import CasFlowStatement from '../CasFlowStatement/CasFlowStatement.jsx';
 import InfoDesk from '../InfoDesk/InfoDesk.jsx';
@@ -125,6 +124,7 @@ import UserRole from '../UserRole/UserRole.jsx';
 import UiAccess from '../UiAccess/UiAccess.jsx';
 //import FormTemplate from '../FormTemplate/FormTemplate.jsx';
 
+
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
 
 
@@ -155,18 +155,22 @@ export default function MiniDrawer() {
     }
   }, [userInfo?.gameId, user?.rlId]);
 
+  // Menu open handler
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
+  // Menu close handler
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  // Drawer open handler
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
+  // Drawer close handler
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -176,19 +180,79 @@ export default function MiniDrawer() {
   return (
     <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ backgroundImage: 'radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%))' }}>
+
+      {/* Main Application AppBar */}
+      <AppBar
+        position="fixed"
+        open={open}
+        sx={{
+          backgroundImage: 'radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%))'
+        }}
+      >
         <Toolbar style={{ paddingLeft: 0 }} sx={{ backgroundImage: 'inherit' }}>
+
           {/* Logo Image */}
           <img src={OmtpLogo} alt="OMTP Logo" style={{ width: 65, height: 65 }} />
-          <IconButton className="hover-effect" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" sx={{ marginLeft: 1, ...(open && { display: 'none' }) }} >
+
+          {/* Drawer Open Button */}
+          <IconButton
+            className="hover-effect"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ marginLeft: 1, ...(open && { display: 'none' }) }}
+          >
             <ArrowForwardIosIcon />
           </IconButton>
-          <IconButton className="hover-effect" aria-label="close drawer" onClick={handleDrawerClose} edge="start" sx={{ ...(!open && { display: 'none' }) }} >
+
+          {/* Drawer Close Button */}
+          <IconButton
+            className="hover-effect"
+            aria-label="close drawer"
+            onClick={handleDrawerClose}
+            edge="start"
+            sx={{ ...(!open && { display: 'none' }) }}
+          >
             <ArrowBackIosIcon />
           </IconButton>
+
+          {/* Breadcrumb Navigation */}
           <BreadCrumb currentRoute={currentRoute} />
+
+          {/* Right-side Header Actions */}
           <div style={{ marginLeft: "auto", display: 'flex', alignItems: 'center', gap: 2 }}>
 
+            {/* Logged-in Batch / Team Identity Badge */}
+            {userInfo?.gameBatch && userInfo?.gameTeam && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  px: 2,
+                  py: 0.8,
+                  borderRadius: '999px',
+                  background: 'linear-gradient(135deg, #eef2ff, #f5f3ff)',
+                  border: '1px solid #c7d2fe',
+                  boxShadow: '0 2px 8px rgba(99, 102, 241, 0.10)',
+                  minHeight: 42
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: '0.82rem',
+                    fontWeight: 800,
+                    color: '#4338ca',
+                    letterSpacing: 0.3,
+                    lineHeight: 1,
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {`${userInfo.gameBatch} / ${userInfo.gameTeam}`}
+                </Typography>
+              </Box>
+            )}
+
+            {/* Account Menu Button */}
             <div>
               {userInfo ? (
                 <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", width: "100%" }}>
@@ -231,21 +295,65 @@ export default function MiniDrawer() {
                   <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
                 </Button>
               )}
-
             </div>
 
-            <Menu id="menu-appbar" anchorEl={anchorEl} anchorOrigin={{ vertical: "bottom", horizontal: "right", }} keepMounted transformOrigin={{ vertical: "top", horizontal: "right", }} open={Boolean(anchorEl)} onClose={handleClose} sx={{ "& .MuiPaper-root": { borderRadius: "10px", padding: "10px", width: "250px", backgroundColor: "#FFFFFF", }, }} >
-              <Typography className="standard-text-color" disabled>{userInfo?.loginId}</Typography>
+            {/* User Menu */}
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+              sx={{
+                "& .MuiPaper-root": {
+                  borderRadius: "10px",
+                  padding: "10px",
+                  width: "250px",
+                  backgroundColor: "#FFFFFF",
+                },
+              }}
+            >
+              <Typography className="standard-text-color" disabled>
+                {userInfo?.loginId}
+              </Typography>
+
               <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
-              <Typography className="standard-text-color" disabled>{user?.role}</Typography>
+
+              <Typography className="standard-text-color" disabled>
+                {user?.role}
+              </Typography>
+
               <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
-              <Typography onClick={handleClose} sx={{ "& .MuiButton-root": { width: "100%", justifyContent: "flex-start", textTransform: "none", padding: "10px", paddingLeft: "20px", } }} >
+
+              <Typography
+                onClick={handleClose}
+                sx={{
+                  "& .MuiButton-root": {
+                    width: "100%",
+                    justifyContent: "flex-start",
+                    textTransform: "none",
+                    padding: "10px",
+                    paddingLeft: "20px",
+                  }
+                }}
+              >
                 <SignOutButton />
               </Typography>
             </Menu>
+
           </div>
         </Toolbar>
       </AppBar>
+
+      {/* Left Navigation Drawer */}
       <Drawer className="drawer-container" variant="permanent" open={open}>
         <DrawerHeader className="drawer-header">
           {open ? (
@@ -253,24 +361,51 @@ export default function MiniDrawer() {
               {pageConstants.companyTitleExpandedFH} < br /> {pageConstants.companyTitleExpandedSH}
             </Typography>
           ) : (
-            <Typography color='black' align="left" variant="h4" noWrap component="div" sx={{ ...(open && { display: 'none' }) }}>
+            <Typography
+              color='black'
+              align="left"
+              variant="h4"
+              noWrap
+              component="div"
+              sx={{ ...(open && { display: 'none' }) }}
+            >
               {pageConstants.companyTitleCollapsed}
             </Typography>
           )}
         </DrawerHeader>
+
         <List sx={{ backgroundImage: 'inherit' }}>
           {userAccessiblePages?.map((componentObj) => (
             <ListItem key={componentObj.href} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton className="hover-effect" component={Link} to={componentObj.href} sx={{ minHeight: 60, justifyContent: open ? 'initial' : 'center', px: 2.5 }} >
+              <ListItemButton
+                className="hover-effect"
+                component={Link}
+                to={componentObj.href}
+                sx={{
+                  minHeight: 60,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5
+                }}
+              >
                 <img src={[componentObj.iconPath]} alt="Description" className="navigation-menu-item-icon" />
-                <ListItemText primary={componentObj.label} sx={{ opacity: open ? 1 : 0, wordWrap: open ? 'break-word' : 'none', whiteSpace: open ? 'normal' : 'none' }} />
+                <ListItemText
+                  primary={componentObj.label}
+                  sx={{
+                    opacity: open ? 1 : 0,
+                    wordWrap: open ? 'break-word' : 'none',
+                    whiteSpace: open ? 'normal' : 'none'
+                  }}
+                />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
       </Drawer>
+
+      {/* Main Content Area */}
       <Box component="main" sx={{ flexGrow: 1 }}>
         <DrawerHeader />
+
         <Routes>
           <Route path="/homePage" element={<GameDashboard />} />
           <Route path="/demoWizard" element={<DemoWizard />} />
@@ -297,7 +432,6 @@ export default function MiniDrawer() {
           <Route path="/accountPayable" element={<AccountPayable />} />
           <Route path="/AcReceivable" element={<AcReceivable />} />
           <Route path="/savingsRealisable" element={<SavingsRealisable />} />
-          /* <Route path="/partInfo" element={<PartInfo />} /> */
           <Route path="/BOMInfo" element={<BOMInfo />} />
           <Route path="/RBACInfo" element={<RBACInfo />} />
           <Route path="/ReferenceInfo" element={<ReferenceInfo />} />
@@ -352,10 +486,12 @@ export default function MiniDrawer() {
           <Route path='/simulationHub' element={<SimulationHub />} />
           <Route path='/userRole' element={<UserRole />} />
           <Route path='/uiAccess' element={<UiAccess />} />
-{/*          <Route path='/formTemplate' element={<FormTemplate />} /> */}
 
+          {/* <Route path='/formTemplate' element={<FormTemplate />} /> */}
         </Routes>
       </Box>
+
+      {/* Global Toast Messages */}
       <ToastMessage
         open={alertData.isVisible}
         severity={alertData.severity}
@@ -364,4 +500,3 @@ export default function MiniDrawer() {
     </Box>
   );
 }
-
