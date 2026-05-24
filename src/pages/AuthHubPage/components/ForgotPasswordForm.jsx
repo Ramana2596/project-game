@@ -59,8 +59,9 @@ const ForgotPasswordForm = ({ initialEmail, onSuccess, onBack }) => {
     try {
       // API call to send the recovery payload
       const res = await requestPasswordReset({ 
+        gameId: "OpsMgt", 
         email: email,
-        cmdLine: "Reset_Password_Request" 
+//        cmdLine: "Reset_Password_Request" 
       });
 
       if (res.data && res.data.returnValue === 0) {
