@@ -1,7 +1,11 @@
 // src/pages/DataForm/components/DataForm.jsx
-// Purpose: Generic DataForm Renderer with simple validation (Mandatory + Type)
+// Purpose: Generic DataForm Renderer with responsive auto-fit grid, validation, and dropdown support
 
 import React, { useState, useEffect } from "react";
+import {
+  groupFieldsBySection,
+  getDropdownOptions
+} from "../form/formUtils";
 
 export default function DataForm({
   fields = [],
@@ -11,13 +15,13 @@ export default function DataForm({
   onCancel
 }) {
   // =========================
-  // STATE
+  // STATE: Form Data + Errors
   // =========================
   const [formData, setFormData] = useState({});
   const [fieldErrors, setFieldErrors] = useState({});
 
   // =========================
-  // INIT DATA
+  // INIT: Populate formData when details change
   // =========================
   useEffect(() => {
     setFormData(details || {});
@@ -25,53 +29,34 @@ export default function DataForm({
   }, [details]);
 
   // =========================
-  // HANDLE CHANGE
+  // HANDLE FIELD CHANGE
   // =========================
   const handleChange = (key, value) => {
     setFormData(prev => ({
       ...prev,
       [key]: value
     }));
-
-    // Clear error on change
-    setFieldErrors(prev => ({
-      ...prev,
-      [key]: ""
-    }));
+    setFieldErrors(prev => ({ ...prev, [key]: "" }));
   };
 
   // =========================
-  // VALIDATION
+  // VALIDATION: Mandatory + Type
   // =========================
   const validateFields = () => {
     const errors = {};
-
     fields.forEach(f => {
       const val = formData[f.columnName];
-
-      // ✅ Mandatory
       if (f.required && (!val || val === "")) {
         errors[f.columnName] = "Required";
         return;
       }
-
-      // Skip further validation if empty
       if (!val) return;
-
-      // ✅ Number
-      if (f.type === "number" && isNaN(val)) {
-        errors[f.columnName] = "Invalid number";
-      }
-
-      // ✅ Date
+      if (f.type === "number" && isNaN(val)) errors[f.columnName] = "Invalid number";
       if (f.type === "date") {
         const d = new Date(val);
-        if (isNaN(d.getTime())) {
-          errors[f.columnName] = "Invalid date";
-        }
+        if (isNaN(d.getTime())) errors[f.columnName] = "Invalid date";
       }
     });
-
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -80,50 +65,40 @@ export default function DataForm({
   // SAVE CLICK
   // =========================
   const handleSaveClick = () => {
-    const isValid = validateFields();
-    if (!isValid) return;
-
-    onSave(formData);
+    if (validateFields()) onSave(formData);
   };
 
   // =========================
-  // GROUP BY SECTION
+  // GROUP FIELDS BY SECTION
   // =========================
-  const sections = {};
-  fields.forEach(f => {
-    const section = f.section || "General";
-    if (!sections[section]) sections[section] = [];
-    sections[section].push(f);
-  });
+  const sections = groupFieldsBySection(fields);
 
   // =========================
   // RENDER FIELD
   // =========================
   const renderField = (field) => {
     const value = formData[field.columnName] || "";
-
     const commonStyle = {
       width: "100%",
-      height: "24px",
-      fontSize: "12px"
+      height: "28px",
+      fontSize: "12px",
+      padding: "2px 4px",
+      boxSizing: "border-box"
     };
 
     // SELECT
     if (field.ui?.control === "select") {
+      const options = getDropdownOptions(field, selectOptions);
       return (
         <select
           value={value}
           disabled={!field.editable}
-          onChange={(e) =>
-            handleChange(field.columnName, e.target.value)
-          }
+          onChange={(e) => handleChange(field.columnName, e.target.value)}
           style={commonStyle}
         >
           <option value="">--Select--</option>
-          {(selectOptions[field.columnName] || []).map(opt => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
+          {options.map(opt => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>
       );
@@ -135,9 +110,7 @@ export default function DataForm({
         type="text"
         value={value}
         disabled={!field.editable}
-        onChange={(e) =>
-          handleChange(field.columnName, e.target.value)
-        }
+        onChange={(e) => handleChange(field.columnName, e.target.value)}
         style={{
           ...commonStyle,
           backgroundColor: field.editable ? "#fff" : "#f5f5f5"
@@ -147,63 +120,51 @@ export default function DataForm({
   };
 
   // =========================
+  // RENDER GRID ROWS
+  // =========================
+  const renderSectionFields = (sectionFields) => {
+    return (
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+          gap: "16px",
+          marginBottom: "12px"
+        }}
+      >
+        {sectionFields.map(field => (
+          <div key={field.columnName}>
+            <label style={{ fontSize: "12px", fontWeight: 500 }}>
+              {field.label} {field.required && <span style={{ color: "red" }}>*</span>}
+            </label>
+            {renderField(field)}
+            {fieldErrors[field.columnName] && (
+              <div style={{ color: "red", fontSize: "10px", marginTop: "2px" }}>
+                {fieldErrors[field.columnName]}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // =========================
   // RENDER
   // =========================
   return (
     <div style={{ marginTop: "16px" }}>
       {Object.keys(sections).map(section => (
-        <div key={section} style={{ marginBottom: "16px" }}>
-          {/* SECTION HEADER */}
-          <h4 style={{ marginBottom: "8px" }}>{section}</h4>
-
-          {/* TABLE GRID */}
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <tbody>
-              {sections[section].map(field => (
-                <tr key={field.columnName}>
-                  {/* LABEL */}
-                  <td style={{ width: "20%", padding: "4px" }}>
-                    {field.label}
-                    {field.required && (
-                      <span style={{ color: "red", marginLeft: 2 }}>
-                        *
-                      </span>
-                    )}
-                  </td>
-
-                  {/* FIELD */}
-                  <td style={{ width: "30%", padding: "4px" }}>
-                    {renderField(field)}
-
-                    {/* INLINE ERROR */}
-                    {fieldErrors[field.columnName] && (
-                      <div
-                        style={{
-                          color: "red",
-                          fontSize: "10px",
-                          marginTop: "2px"
-                        }}
-                      >
-                        {fieldErrors[field.columnName]}
-                      </div>
-                    )}
-                  </td>
-
-                  {/* EMPTY SPACE (RIGHT SIDE FREE) */}
-                  <td style={{ width: "50%" }}></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div key={section} style={{ marginBottom: "24px" }}>
+          <h4 style={{ marginBottom: "12px" }}>{section}</h4>
+          {renderSectionFields(sections[section])}
         </div>
       ))}
 
       {/* ACTION BUTTONS */}
       <div style={{ marginTop: "16px" }}>
         <button onClick={handleSaveClick}>Save</button>
-        <button onClick={onCancel} style={{ marginLeft: "8px" }}>
-          Cancel
-        </button>
+        <button onClick={onCancel} style={{ marginLeft: "8px" }}>Cancel</button>
       </div>
     </div>
   );
