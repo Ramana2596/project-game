@@ -28,7 +28,8 @@ export default function SimulationHub() {
   // USER CONTEXT: RBAC accessible pages from user session
   const { userInfo, login, setUserInfo, userAccessiblePageIds } = useUser();
   const navigate = useNavigate();
-  const isLeader = userInfo?.isGameLeader?.toUpperCase() === "YES";
+  const isLeader = Boolean(userInfo?.isGameLeader);
+  // const isLeader = userInfo?.isGameLeader?.toUpperCase() === "YES";
 
   // Progress-simulation state and stage updates / orchestration
   const {
