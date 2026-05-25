@@ -1,4 +1,5 @@
 // src/pages/BatchMaster/components/BatchMstForm.jsx
+// Dynamic Batch Master form : DB-first display and LOV-based update
 
 import React, { useState, useEffect, useMemo } from "react";
 import { pageConstants } from "../constants/pageConstants";
@@ -12,38 +13,52 @@ export default function BatchMstForm({
   onSelectionChange
 }) {
 
+  // Maintain form state, validation errors, and touched fields
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
-  // Purpose: Build form field structure from configuration
+  // Build form field structure from configuration
   const fields = useMemo(
     () => getFormFields(pageConstants?.contentSection?.fields || []),
     [pageConstants?.contentSection?.fields]
   );
 
-  // Purpose: Sync incoming details into form state
+  // Sync fetched DB details into form state
   useEffect(() => {
     if (details) {
-      setFormData(prev => ({ ...prev, ...details }));
+      setFormData(details);
+      setTouched({});      // Reset touched state for fresh batch load
       setErrors({});
     }
   }, [details]);
 
-  // Purpose: Handle field updates and trigger parent for key LOV drivers
+  // Handle field updates and trigger parent for key LOV drivers
   const handleChange = (name, value) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
 
-    if (errors[name]) setErrors(prev => ({ ...prev, [name]: "" }));
+    // Normalize String to numeric fields
+    const normalizedValue =
+      name === "Faculty" ||
+      name === "Facilitator" ||
+      name === "Centre_Id" ||
+      name === "Game_Batch"
+        ? Number(value)
+        : value;
 
-    // ❌ No extra transformation or logic (LOV integrity handled by backend/UI)
+    setFormData(prev => ({ ...prev, [name]: normalizedValue }));
+    setTouched(prev => ({ ...prev, [name]: true }));   // Mark user-modified fields
 
-    // ✔ Only trigger cascade reload for key fields
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: "" }));
+    }
+
+    // Trigger cascade reload for key fields
     if (name === "Game_Id" || name === "Game_Batch") {
-      onSelectionChange?.(name, value);
+      onSelectionChange?.(name, normalizedValue);
     }
   };
 
-  // Purpose: Validate required fields before save
+  // Validate required fields before save
   const validate = () => {
     const newErrors = {};
 
@@ -57,10 +72,16 @@ export default function BatchMstForm({
     return Object.keys(newErrors).length === 0;
   };
 
-  // Purpose: Render form field dynamically based on configuration
+  // Render form field dynamically based on configuration
   const renderField = (field) => {
 
-    const value = formData[field.columnName] ?? "";
+    const rawValue = formData[field.columnName];
+
+    const value =
+      rawValue !== null && rawValue !== undefined
+        ? String(rawValue)
+        : "";
+
     const options = selectOptions[field.columnName] || [];
 
     const commonProps = {
@@ -71,27 +92,41 @@ export default function BatchMstForm({
         border: "none",
         outline: "none",
         background: "transparent",
-        fontSize: "13px",
+        fontSize: "18px",
         fontWeight: "700",
         color: field.editable ? "#000" : "#444",
       }
     };
 
-    // Purpose: Render LOV (select) fields
+    // Render LOV fields while preserving DB value until changed
     if (field.ui?.control === "select") {
+      // Preserve fetched DB display name
+      const displayOptions = touched[field.columnName]
+        ? options
+        : [
+            ...(value &&
+            !options.some(opt => String(opt.value) === value)
+              ? [{
+                  value,
+                  label: formData[`${field.columnName}_Name`] || value
+                }]
+              : []),
+            ...options
+          ];
+
       return (
         <select
           {...commonProps}
           value={value}
           style={{ ...commonProps.style, cursor: "pointer" }}
         >
-          <option value="" disabled>
+          {/* Allow blank DB value display */}
+          <option value="">
             Select {field.label}
           </option>
 
-          {/* LOV options from backend */}
-          {options.map(opt => (
-            <option key={opt.value} value={opt.value}>
+          {displayOptions.map(opt => (
+            <option key={opt.value} value={String(opt.value)}>
               {opt.label}
             </option>
           ))}
@@ -99,7 +134,7 @@ export default function BatchMstForm({
       );
     }
 
-    // Purpose: Render standard input fields
+    // Render standard input fields
     return (
       <input
         type={field.ui?.control || "text"}
@@ -113,7 +148,7 @@ export default function BatchMstForm({
     <div style={{ padding: "10px 20px", background: "#fff" }}>
       <div style={{ width: "100%", maxWidth: "1450px" }}>
 
-        {/* Purpose: Render form sections dynamically */}
+        {/* Render form sections dynamically */}
         {Object.keys(pageConstants.contentSection.sections).map(sectionKey => {
 
           const sectionFields = fields.filter(
@@ -143,9 +178,12 @@ export default function BatchMstForm({
 
                   let gridSpan = 2;
 
-                  // Layout rules
+                  // Apply layout rules
                   if (field.columnName === "Venue") gridSpan = 4;
-                  if (field.columnName === "Duration" || field.columnName === "UOM") gridSpan = 1;
+                  if (
+                    field.columnName === "Duration" ||
+                    field.columnName === "UOM"
+                  ) gridSpan = 1;
 
                   return (
                     <div
@@ -158,7 +196,7 @@ export default function BatchMstForm({
                     >
                       <label
                         style={{
-                          fontSize: "10px",
+                          fontSize: "14px",
                           fontWeight: "800",
                           color: "#78909c",
                           marginBottom: "2px",
@@ -176,7 +214,7 @@ export default function BatchMstForm({
                           borderRadius: "4px",
                           padding: "0 8px",
                           background: field.editable ? "#fff" : "#f8f9fa",
-                          height: "36px",
+                          height: "48px",
                           display: "flex",
                           alignItems: "center"
                         }}
@@ -192,7 +230,7 @@ export default function BatchMstForm({
           );
         })}
 
-        {/* Purpose: Action buttons */}
+        {/* Render action buttons */}
         <div
           style={{
             display: "flex",
