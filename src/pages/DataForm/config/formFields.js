@@ -1,6 +1,6 @@
 // Purpose: Field definitions (DB-driven UI config)
 
-export const formConfig = [
+export const formFields = [
   {
     columnName: "Game_Batch",
     label: "Batch",

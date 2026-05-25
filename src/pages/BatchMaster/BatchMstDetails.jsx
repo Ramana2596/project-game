@@ -1,11 +1,11 @@
-// Purpose: Orchestrates Batch selection, data fetch, dropdowns, and form save (UI + API integration)
+// Purpose: Orchestrates Batch selection, data fetch, dropdowns, and seamless form rendering (UI + API integration)
 
 import React, { useEffect, useState } from "react";
 import BatchMstSelector from "./components/BatchMstSelector.jsx";
 import BatchMstForm from "./components/BatchMstForm.jsx";
 import {
-  getGameBatch,
-  getGameBatchDetails,
+  getBatch,
+  getBatchDetails,
   getAdminCentre,
   getBatchStatus,
   getFacilitator,
@@ -21,10 +21,10 @@ export default function GameBatchDetails() {
   const { userInfo } = useUser();
   const gameId = userInfo?.gameId || "OpsMgt";
 
-  // Selected batch
+  // Maintain selected batch
   const [selected, setSelected] = useState({ gameId, gameBatch: "" });
 
-  // UI states
+  // Maintain UI states
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [toast, setToast] = useState({
@@ -33,7 +33,7 @@ export default function GameBatchDetails() {
     severity: "info"
   });
 
-  // Dropdown options
+  // Maintain dropdown options
   const [selectOptions, setSelectOptions] = useState({
     Centre_Id: [],
     Faculty: [],
@@ -44,17 +44,17 @@ export default function GameBatchDetails() {
     Team_Theme: []
   });
 
-  // Batch details
+  // Maintain fetched batch details
   const [batchDetails, setBatchDetails] = useState(null);
 
-  // Batch list
+  // Maintain batch selector list
   const [gameBatchList, setGameBatchList] = useState([]);
 
   // Fetch batch list
   useEffect(() => {
     if (!gameId) return;
 
-    getGameBatch({ gameId })
+    getBatch({ gameId })
       .then(res => {
         const mappedBatches = (res.data || []).map(item => ({
           value: item.Game_Batch,
@@ -65,7 +65,7 @@ export default function GameBatchDetails() {
       .catch(() => setError("Failed to load Batch list"));
   }, [gameId]);
 
-  // Fetch dropdown options
+  // Fetch LOV dropdown options
   useEffect(() => {
     const { gameBatch } = selected;
     if (!gameBatch) return;
@@ -83,31 +83,26 @@ export default function GameBatchDetails() {
         setSelectOptions(prev => ({
           ...prev,
 
-          // Faculty mapping
           Faculty: (faculty.data || []).map(i => ({
             value: i.User_Id,
             label: i.User_Name + (i.Role ? " (" + i.Role + ")" : "")
           })),
 
-          // Facilitator mapping
           Facilitator: (facilitator.data || []).map(i => ({
             value: i.User_Id,
             label: i.User_Name + (i.Role ? " (" + i.Role + ")" : "")
           })),
 
-          // UOM mapping
           UOM: (uom.data || []).map(i => ({
             value: i.UOM,
             label: i.UOM
           })),
 
-          // Batch status mapping
           Batch_Status: (batchStatus.data || []).map(i => ({
             value: i.Batch_Status,
             label: i.Batch_Status
           })),
 
-          // Centre mapping
           Centre_Id: (centre.data || []).map(i => ({
             value: i.Centre_Id,
             label: i.Centre_Name
@@ -117,13 +112,13 @@ export default function GameBatchDetails() {
       .catch(() => setError("Failed to load list-box options"));
   }, [gameId, selected.gameBatch]);
 
-  // Handle batch selection
+  // Handle batch selection and load details
   const handleSelectorSubmit = ({ gameId, gameBatch }) => {
     setSelected({ gameId, gameBatch });
     setLoading(true);
     setError("");
 
-    getGameBatchDetails({ gameId, gameBatch })
+    getBatchDetails({ gameId, gameBatch })
       .then(res => {
         const data = res?.data;
         setBatchDetails(data && data.length > 0 ? data[0] : null);
@@ -146,8 +141,8 @@ export default function GameBatchDetails() {
         defaultMsg: "Unknown response"
       };
 
-      // Reset + show toast
       setToast(prev => ({ ...prev, open: false }));
+
       setTimeout(() => {
         setToast({
           open: true,
@@ -161,6 +156,7 @@ export default function GameBatchDetails() {
       }
     } catch (e) {
       const mapped = API_STATUS_MAP[API_STATUS.SYSTEM_ERROR];
+
       setToast({
         open: true,
         message: mapped.defaultMsg,
@@ -175,26 +171,58 @@ export default function GameBatchDetails() {
     <div>
       <h2>Batch Details</h2>
 
-      <BatchMstSelector
-        gameId={gameId}
-        gameBatchList={gameBatchList}
-        onSubmit={handleSelectorSubmit}
-      />
-
-      {loading && <div>Loading batch details...</div>}
-      {error && <div style={{ color: "red" }}>{error}</div>}
-
-      {batchDetails && (
-        <BatchMstForm
-          details={batchDetails}
-          selectOptions={selectOptions}
-          onSave={handleSave}
+      {/* Unified selector + form surface */}
+      <div
+        style={{
+          padding: "10px 20px",
+          background: "#fff",
+          borderRadius: "4px"
+        }}
+      >
+        <BatchMstSelector
+          gameId={gameId}
+          gameBatchList={gameBatchList}
+          selectedBatch={selected.gameBatch}
+          onSubmit={handleSelectorSubmit}
+          onSave={() => handleSave(batchDetails)}
           onCancel={() => {
             setBatchDetails(null);
             setSelected({ gameId, gameBatch: "" });
           }}
         />
-      )}
+
+        {/* Smooth inline loading indicator */}
+        {loading && (
+          <div
+            style={{
+              fontSize: "14px",
+              color: "#607d8b",
+              marginTop: "10px",
+              marginBottom: "10px"
+            }}
+          >
+            Loading...
+          </div>
+        )}
+
+        {error && (
+          <div style={{ color: "red", marginTop: "10px" }}>
+            {error}
+          </div>
+        )}
+
+        {batchDetails && (
+          <BatchMstForm
+            details={batchDetails}
+            selectOptions={selectOptions}
+            onSave={handleSave}
+            onCancel={() => {
+              setBatchDetails(null);
+              setSelected({ gameId, gameBatch: "" });
+            }}
+          />
+        )}
+      </div>
 
       <ToastMessage
         open={toast.open}

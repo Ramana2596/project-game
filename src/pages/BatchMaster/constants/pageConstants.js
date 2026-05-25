@@ -1,5 +1,5 @@
 // src/pages/BatchMaster/constants/pageConstants.js
-// Purpose: Centralized constants for Batch Master page (DB-first + UI derived configuration)
+// Centralized constants for Batch Master page
 
 export const pageConstants = {
   contentSection: {
@@ -8,92 +8,78 @@ export const pageConstants = {
     saveBtnLabel: "Save Changes",
     cancelBtnLabel: "Discard",
 
-    // Section definitions for grouped UI rendering
+    // Section definitions 
     sections: {
       basic: "Basic Information",
       centre: "Centre",
       admin: "Admin",
       schedule: "Schedule",
-
     },
 
-    // Field configuration (DB is source of truth, UI derived later)
+    // Field configuration
     fields: [
-
-      // ========================
-      // Basic Information (read-only)
-      // ========================
 
       {
         columnName: "Game_Id",
         label: "Learn Platform",
-        db: { type: "nvarchar", length: 20 },        // ✅ Added DB definition
+        db: { type: "nvarchar", length: 20 },
         section: "basic",
         editable: false,
-        visible: true
+        visible: false
       },
-
       {
         columnName: "Game_Batch",
         label: "Batch",
-        db: { type: "int" },                         // ✅ Added DB definition
+        db: { type: "int" },
         section: "basic",
         editable: false,
-        visible: true
+        visible: false
       },
-
       {
         columnName: "Learn_Mode",
         label: "Learning Mode",
-        db: { type: "nvarchar", length: 20 },        // ✅ Added DB definition
+        db: { type: "nvarchar", length: 20 },
         section: "basic",
         editable: false,
         visible: true
       },
-
       {
         columnName: "Batch_Size",
         label: "Strength",
-        db: { type: "tinyint" },                     // ✅ Added DB definition
+        db: { type: "tinyint" },
         section: "basic",
         editable: false,
         visible: true
       },
-
       {
         columnName: "Team_Theme",
         label: "Team Theme",
-        db: { type: "nvarchar", length: 20 },        // ✅ Added DB definition
+        db: { type: "nvarchar", length: 20 },
         section: "basic",
         editable: false,
         visible: true
       },
 
-      // ========================
       // Centre
-      // ========================
-
       {
         columnName: "Centre_Id",
         label: "Centre",
-        db: { type: "int" },                         // ✅ Added DB definition
+        db: { type: "int" },
         section: "centre",
         editable: true,
         visible: true,
-        ui: { control: "select" }                    // ✅ Only where override needed ✔
+        ui: { control: "select" }
       },
       {
         columnName: "Venue",
         label: "Venue",
-        db: { type: "nvarchar", length: 100 },       // ✅ Drives span later
+        db: { type: "nvarchar", length: 100 },
         section: "centre",
         editable: true,
         visible: true
       },
-      // ========================
+
       // Admin
-      // ========================
-      
       {
         columnName: "Faculty",
         label: "Faculty",
@@ -101,9 +87,8 @@ export const pageConstants = {
         section: "admin",
         editable: true,
         visible: true,
-        ui: { control: "select" }                    // ✅ Override ✔
+        ui: { control: "select" }
       },
-
       {
         columnName: "Facilitator",
         label: "Facilitator",
@@ -111,21 +96,19 @@ export const pageConstants = {
         section: "admin",
         editable: true,
         visible: true,
-        ui: { control: "select" }                    // ✅ Override ✔
+        ui: { control: "select" }
       },
 
-      // ========================
       // Schedule
-      // ========================
-     {
+
+      {
         columnName: "Duration",
         label: "Duration",
-        db: { type: "tinyint" },                     // ✅ Added DB definition
+        db: { type: "tinyint" },
         section: "schedule",
         editable: true,
         visible: true
       },
-
       {
         columnName: "UOM",
         label: "Unit",
@@ -133,17 +116,16 @@ export const pageConstants = {
         section: "schedule",
         editable: true,
         visible: true,
-        ui: { control: "select" }                    // ✅ Override ✔
+        ui: { control: "select" }
       },
       {
         columnName: "Start_Date",
         label: "Start Date",
-        db: { type: "date" },                        // ✅ Added DB definition
+        db: { type: "date" },
         section: "schedule",
         editable: true,
         visible: true
       },
-
       {
         columnName: "Close_Date",
         label: "Close Date",
@@ -156,35 +138,30 @@ export const pageConstants = {
         columnName: "Batch_Status",
         label: "Batch Status",
         db: { type: "nvarchar", length: 20 },
-        section: "schedule",
+        section: "admin",
         editable: true,
         visible: true,
-        ui: { control: "select" }                    // ✅ Override ✔
+        ui: { control: "select" }
       },
-
       {
         columnName: "Batch_Open_Date",
         label: "Batch Open Date",
         db: { type: "date" },
-        section: "schedule",
+        section: "admin",
         editable: true,
         visible: true
       },
 
- 
-      // ========================
       // System Fields (hidden in UI, used in backend)
-      // ========================
 
       {
         columnName: "Created_By",
         label: "Created By",
-        db: { type: "nvarchar", length: 50 },
+        db: { type: "int" },
         section: "system",
         editable: false,
         visible: false
       },
-
       {
         columnName: "Created_On",
         label: "Created On",
@@ -193,16 +170,14 @@ export const pageConstants = {
         editable: false,
         visible: false
       },
-
       {
         columnName: "Modified_By",
         label: "Modified By",
-        db: { type: "nvarchar", length: 50 },
+        db: { type: "int" },
         section: "system",
         editable: false,
         visible: false
       },
-
       {
         columnName: "Modified_On",
         label: "Modified On",

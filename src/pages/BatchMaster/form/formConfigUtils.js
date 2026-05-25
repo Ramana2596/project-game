@@ -1,8 +1,7 @@
 // src/pages/BatchMaster/form/formConfigUtils.js
 
-/**
- * Maps SQL types to UI controls
- */
+// Map SQL types to UI controls
+
 const resolveControl = (field) => {
   const dbType = field?.db?.type;
   if (field?.ui?.control) return field.ui.control;
@@ -15,9 +14,8 @@ const resolveControl = (field) => {
   }
 };
 
-/**
- * Derives 'ch' width from DB DDL Length
- */
+//Derives 'ch' width from DB DDL Length
+
 const resolveWidthCh = (field) => {
   const { type, length } = field?.db || {};
   
