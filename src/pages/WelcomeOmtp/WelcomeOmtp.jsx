@@ -55,7 +55,7 @@ const WelcomeOmtp = () => {
           
           setUserInfo(userData);
           // Move to the Demo
-          navigate("/operationGame/demoVirtual");
+          navigate("/operationGame/demo");
         } else {
           console.error("Auth failed:", response.data.message);
         } 
