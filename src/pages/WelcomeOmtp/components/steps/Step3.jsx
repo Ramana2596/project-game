@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 3 (Refactored)
+// Component: Walkthrough Step 3 (Compact)
 // ==========================================
 
 import React from 'react';
@@ -14,29 +14,28 @@ const Step3 = () => {
       title="Study Market Intelligence"
       description="Understand market demand and material prices before making operational decisions. This helps connect business planning with changing market conditions."
     >
-      {/* Content Area: Single detailed view */}
       <Box>
-        {/* Sub-label matching the detailed descriptive style of your screenshot */}
+        {/* Slimmer Label */}
         <Typography 
-          variant="h6" 
+          variant="subtitle1" 
           sx={{ 
             fontWeight: 700, 
             color: '#111827', 
-            mb: 2,
-            fontSize: '1.25rem' 
+            mb: 1,
+            fontSize: '1.05rem' 
           }}
         >
           Market demand and Material Prices – Market intelligence
         </Typography>
         
-        {/* Image Frame: Standardized padding and border for the screenshot */}
+        {/* Compact Image Frame */}
         <Box 
           sx={{ 
-            p: 1.5, 
+            p: 1, 
             bgcolor: '#f9fafb', 
             border: '1px solid #e5e7eb', 
-            borderRadius: '20px',
-            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
+            borderRadius: '12px',
+            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.02)'
           }}
         >
           <Box 
@@ -45,7 +44,7 @@ const Step3 = () => {
             alt="Market Intelligence Dashboard" 
             sx={{ 
               width: '100%', 
-              borderRadius: '12px', 
+              borderRadius: '8px', 
               display: 'block' 
             }} 
           />

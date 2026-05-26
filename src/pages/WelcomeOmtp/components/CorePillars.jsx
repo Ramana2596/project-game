@@ -12,14 +12,14 @@ const pillars = [
 ];
 
 const CorePillars = () => (
-  <Box component="section" sx={{ py: 3, bgcolor: '#fcfaff' }}>
+  <Box component="section" sx={{ py: 2, bgcolor: '#fcfaff' }}>
     <Container maxWidth="lg">
       <Grid 
         container 
-        spacing={2} 
+        spacing={1.5} 
         justifyContent="center" 
         alignItems="stretch"
-        sx={{ flexWrap: 'nowrap' }} // Forces single-line behavior
+        sx={{ flexWrap: 'nowrap' }}
       >
         {pillars.map((item, index) => (
           <Grid item xs={4} key={index} sx={{ display: 'flex' }}>
@@ -27,27 +27,26 @@ const CorePillars = () => (
               sx={{ 
                 width: '100%',
                 bgcolor: '#ffffff', 
-                px: 2, 
-                py: 2, 
-                borderRadius: '12px', 
+                px: 1.5, 
+                py: 1.5, 
+                borderRadius: '10px', 
                 border: '1px solid #e5e7eb',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.02)',
                 textAlign: 'center',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
-                // Keeps the height uniform while limiting width
-                minHeight: '100px'
+                minHeight: '80px'   // reduced height
               }}
             >
               <Typography 
                 variant="subtitle2" 
                 sx={{ 
                   fontWeight: 800, 
-                  color: '#7c3aed', // Purple highlight for headers
-                  fontSize: '0.95rem',
+                  color: '#7c3aed',
+                  fontSize: '0.9rem',
                   lineHeight: 1.1,
-                  mb: 0.5
+                  mb: 0.25   // tighter margin
                 }}
               >
                 {item.title}
@@ -57,8 +56,8 @@ const CorePillars = () => (
                 variant="caption" 
                 sx={{ 
                   color: '#4b5563', 
-                  fontSize: '0.8rem', 
-                  lineHeight: 1.3,
+                  fontSize: '0.78rem', 
+                  lineHeight: 1.25,
                   fontWeight: 500
                 }}
               >

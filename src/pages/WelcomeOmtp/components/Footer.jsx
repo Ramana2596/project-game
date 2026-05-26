@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Footer (Aligned & Standardized)
+// Component: Footer (Sleek & Compact)
 // ==========================================
 
 import React from 'react';
@@ -9,33 +9,28 @@ const Footer = () => (
   <Box 
     component="footer" 
     sx={{ 
-      py: 10, 
+      py: 4,   // reduced padding top/bottom
       borderTop: '1px solid #f3f4f6', 
       bgcolor: '#ffffff',
-      mt: 8 // Significant margin to separate from the Final CTA
+      mt: 3    // tighter margin above footer
     }}
   >
-    <Container maxWidth="lg"> {/* Global Width Anchor */}
+    <Container maxWidth="lg">
       <Stack 
         direction={{ xs: 'column', md: 'row' }} 
         justifyContent="space-between" 
         alignItems={{ xs: 'center', md: 'flex-start' }} 
-        spacing={6}
+        spacing={3}   // reduced spacing between brand and links
       >
         {/* Brand Info */}
         <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
           <Typography 
             variant="h6" 
-            sx={{ 
-              fontWeight: 900, 
-              color: '#111827', 
-              mb: 1,
-              letterSpacing: '-0.02em'
-            }}
+            sx={{ fontWeight: 900, color: '#111827', mb: 0.5, letterSpacing: '-0.02em' }}
           >
             OMTP
           </Typography>
-          <Typography variant="body2" sx={{ color: '#6b7280', mb: 0.5, fontWeight: 500 }}>
+          <Typography variant="body2" sx={{ color: '#6b7280', mb: 0.25, fontWeight: 500 }}>
             Operations Management Training Platform
           </Typography>
           <Typography variant="body2" sx={{ color: '#9ca3af' }}>
@@ -46,11 +41,8 @@ const Footer = () => (
         {/* Navigation Links */}
         <Stack 
           direction="row" 
-          spacing={4} 
-          sx={{ 
-            flexWrap: 'wrap', 
-            justifyContent: 'center' 
-          }}
+          spacing={2.5}   // tighter link spacing
+          sx={{ flexWrap: 'wrap', justifyContent: 'center' }}
         >
           {['About', 'How It Works', 'For Whom', 'Pricing'].map((item) => (
             <Link 
@@ -59,10 +51,10 @@ const Footer = () => (
               underline="none" 
               sx={{ 
                 color: '#4b5563', 
-                fontSize: '0.9rem', 
+                fontSize: '0.85rem', 
                 fontWeight: 600,
                 transition: 'color 0.2s',
-                '&:hover': { color: '#7c3aed' } // Branded purple hover
+                '&:hover': { color: '#7c3aed' }
               }}
             >
               {item}
@@ -71,14 +63,14 @@ const Footer = () => (
         </Stack>
       </Stack>
 
-      <Divider sx={{ my: 6, borderColor: '#f3f4f6' }} />
+      <Divider sx={{ my: 3, borderColor: '#f3f4f6' }} />
 
-      {/* Bottom Copyright Area */}
+      {/* Bottom Copyright */}
       <Stack 
         direction={{ xs: 'column', sm: 'row' }} 
         justifyContent="space-between" 
         alignItems="center" 
-        spacing={2}
+        spacing={1.5}
       >
         <Typography variant="caption" sx={{ color: '#9ca3af', fontWeight: 500 }}>
           © {new Date().getFullYear()} OMTP. All rights reserved.

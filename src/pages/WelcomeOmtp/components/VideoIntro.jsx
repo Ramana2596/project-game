@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Video Introduction (Final YouTube Link)
+// Component: Video Introduction (Drop-in Replacement)
 // ==========================================
 
 import React from 'react';
@@ -7,7 +7,6 @@ import { Box, Typography, Button, Container } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 const VideoIntro = () => {
-  // Your specific OMTP YouTube video link
   const youtubeLink = "https://www.youtube.com/watch?v=3eRde31HIzI";
 
   const handleOpenVideo = () => {
@@ -15,9 +14,10 @@ const VideoIntro = () => {
   };
 
   return (
-    <Box component="section" id="how-it-works" sx={{ py: 10, bgcolor: '#ffffff' }}>
+    <Box component="section" id="how-it-works" sx={{ py: { xs: 8, md: 10 }, bgcolor: '#ffffff' }}>
       <Container maxWidth="lg">
-        {/* Left-aligned Header text as per Screenshot 0 */}
+        
+        {/* Header */}
         <Typography 
           variant="h3" 
           sx={{ fontWeight: 800, mb: 2, color: '#111827', letterSpacing: '-0.02em' }}
@@ -26,67 +26,54 @@ const VideoIntro = () => {
         </Typography>
         <Typography 
           variant="body1" 
-          sx={{ color: '#4b5563', mb: 6, maxWidth: '750px', lineHeight: 1.6 }}
+          sx={{ color: '#4b5563', mb: 5, maxWidth: '720px', lineHeight: 1.6, fontSize: '1.1rem' }}
         >
-          Watch the short introduction video for a quick overview, then scroll down to see the full 7-step visual walkthrough of the real platform.
+          Watch the short introduction video for a quick overview, then scroll down to see the full 7‑step visual walkthrough of the real platform.
         </Typography>
 
-        {/* Purple Gradient Container */}
+        {/* Purple Gradient Container with reduced padding */}
         <Box 
           sx={{ 
             width: '100%', 
             background: 'linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%)', 
-            borderRadius: '40px', 
-            p: { xs: 6, md: 10 },
+            borderRadius: '28px', 
+            p: { xs: 4, md: 6 },   // reduced padding
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             color: 'white',
-            boxShadow: '0 20px 40px rgba(124, 58, 237, 0.15)',
-            position: 'relative',
+            boxShadow: '0 16px 36px rgba(124, 58, 237, 0.15)',
           }}
         >
-          {/* Glassmorphism Play Button */}
+          {/* Play Button */}
           <Box 
             onClick={handleOpenVideo}
             sx={{ 
-              width: 85, height: 85, 
+              width: 70, height: 70, 
               bgcolor: 'rgba(255,255,255,0.15)', 
               borderRadius: '50%', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              mb: 4, 
-              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', 
+              mb: 3, cursor: 'pointer',
               backdropFilter: 'blur(4px)',
-              transition: 'all 0.3s ease',
               border: '2px solid rgba(255,255,255,0.3)',
-              '&:hover': { 
-                transform: 'scale(1.1)',
-                bgcolor: 'rgba(255,255,255,0.25)' 
-              }
+              transition: 'all 0.3s ease',
+              '&:hover': { transform: 'scale(1.08)', bgcolor: 'rgba(255,255,255,0.25)' }
             }}
           >
-            <PlayArrowIcon sx={{ fontSize: 45, color: 'white' }} />
+            <PlayArrowIcon sx={{ fontSize: 38, color: 'white' }} />
           </Box>
 
           <Typography 
-            variant="h4" 
-            sx={{ fontWeight: 800, mb: 2, textAlign: 'center' }}
+            variant="h5" 
+            sx={{ fontWeight: 700, mb: 2, textAlign: 'center' }}
           >
             Watch the OMTP intro video
           </Typography>
           
           <Typography 
-            variant="body1" 
-            sx={{ 
-              mb: 4, 
-              opacity: 0.9, 
-              maxWidth: '620px', 
-              textAlign: 'center',
-              lineHeight: 1.6 
-            }}
+            variant="body2" 
+            sx={{ mb: 3.5, opacity: 0.9, maxWidth: '600px', textAlign: 'center', lineHeight: 1.5, fontSize: '1rem' }}
           >
             Get a quick overview of how the platform helps learners make operational decisions, review outcomes, and build practical business understanding.
           </Typography>
@@ -95,27 +82,23 @@ const VideoIntro = () => {
             variant="contained" 
             onClick={handleOpenVideo}
             sx={{ 
-              bgcolor: 'white', 
-              color: '#4c1d95', 
-              px: 5, py: 1.5,
-              fontWeight: 800, 
-              borderRadius: '50px', // Pill shape matching screenshot
-              textTransform: 'none',
-              fontSize: '1.05rem',
-              boxShadow: '0 4px 14px rgba(0,0,0,0.1)',
-              '&:hover': { bgcolor: '#f8f9fa', transform: 'translateY(-2px)' }
+              bgcolor: 'white', color: '#4c1d95', px: 4, py: 1.25,
+              fontWeight: 700, borderRadius: '100px',
+              textTransform: 'none', fontSize: '1rem',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              '&:hover': { bgcolor: '#f9fafb', transform: 'translateY(-2px)' }
             }}
           >
             Watch on YouTube
           </Button>
         </Box>
 
-        {/* Contextual Caption */}
+        {/* Caption */}
         <Typography 
-          variant="body2" 
-          sx={{ color: '#9ca3af', mt: 3, textAlign: 'left', fontStyle: 'italic' }}
+          variant="caption" 
+          sx={{ color: '#9ca3af', mt: 2.5, textAlign: 'left' }}
         >
-          This opens the video directly on YouTube, which is the most reliable option while reviewing the page locally.
+          This opens the video directly on YouTube.
         </Typography>
       </Container>
     </Box>

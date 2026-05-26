@@ -5,18 +5,15 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
-// Logic & Context Imports
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from '../Welcome/services/service.js'; 
 import { API_STATUS } from '../../utils/statusCodes';
 
-// Page Section Components
 import OmtpNavbar from './components/OmtpNavbar';
 import HeroSection from './components/HeroSection';
 import VideoIntro from './components/VideoIntro'; 
-import CorePillars from './components/CorePillars'; 
+//import CorePillars from './components/CorePillars'; 
 import ValueProps from './components/ValueProps';   
 import WalkThroughSection from './components/WalkThroughSection';
 import InfoDeskView from './components/InfoDeskView';
@@ -27,77 +24,83 @@ import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 
 const WelcomeOmtp = () => {
+  // Purpose: Navigation and global context access
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
   const { login, setUserInfo } = useUser();
 
-  // The "Master Link": Performs API Auth then Navigates
+  // Purpose: Authenticate guest and open demo simulation
   const handleOpenDemo = () => {
     setIsLoading(true);
-    
-    // Authenticate as guest so the Game recognizes the session
+
     getUserDetails({ userEmail: 'guest@guest.com', gameId: 'OpsMgt' })
       .then((response) => {
-
-    const { returnStatus, data } = response.data;
+        const { returnStatus, data } = response.data;
 
         if (returnStatus === API_STATUS.SUCCESS && data?.length > 0) {
-
           const userData = data[0];
-          
-          // Establish the user session
+
           login({
             User_Id: userData.User_Id,
             User_Login: userData.User_Login,
             RL_Id: userData.RL_Id,
             Role: userData.Role
           });
-          
+
           setUserInfo(userData);
-          // Move to the Demo
+
           navigate("/operationGame/demo");
         } else {
           console.error("Auth failed:", response.data.message);
-        } 
+        }
       })
       .catch((err) => console.error("Network Error:", err))
       .finally(() => setIsLoading(false));
   };
 
+  // Purpose: Navigate back to landing page
   const handleBackToHome = () => {
     navigate("/");
+  };
+
+  // ✅ Purpose: Navigate to unified authentication hub
+  const handleAuthNavigation = () => {
+    navigate("/login");
   };
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#ffffff' }}>
       
-      {/* Navigation */}
-
+      {/* Purpose: Top navigation */}
       <OmtpNavbar
         onBack={handleBackToHome}
         onViewDemo={handleOpenDemo}
+        onGetStarted={handleAuthNavigation}
       />
+
       <main>
-        {/* Pass the authenticated function to the Hero button */}
+        {/* Purpose: Hero and feature presentation */}
         <HeroSection handleDemoLogin={handleOpenDemo} />
-        
         <VideoIntro />
-        <CorePillars />
+        {/* <CorePillars /> */}
         <ValueProps />
         <WalkThroughSection />
-        
+
+        {/* Purpose: Information dashboard preview */}
         <Box sx={{ py: 4 }}>
           <InfoDeskView />
         </Box>
 
+        {/* Purpose: Value proposition sections */}
         <TargetAudience />
         <WhatLearnersGain />
         <PricingSection />
 
-        {/* Pass the authenticated function to the Final button */}
+        {/* Purpose: Final CTA */}
         <FinalCTA onStart={handleOpenDemo} />
       </main>
 
+      {/* Purpose: Footer */}
       <Footer />
     </Box>
   );
