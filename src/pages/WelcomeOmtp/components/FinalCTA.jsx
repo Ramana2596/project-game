@@ -1,35 +1,34 @@
 // ==========================================
-// Component: Final Call to Action (Standardized)
+// Component: Final Call to Action (Drop-in Replacement)
 // ==========================================
 
 import React from 'react';
 import { Box, Typography, Container, Button, Stack } from '@mui/material';
 
-const FinalCTA = () => {
+const FinalCTA = ({ onStart }) => {
   const scrollToSteps = () => {
     document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <Box component="section" sx={{ py: 10 }}>
-      {/* Outer Container ensures it aligns with the rest of the page width */}
+    <Box component="section" sx={{ py: { xs: 8, md: 12 } }}>
       <Container maxWidth="lg">
         <Box 
           sx={{ 
-            bgcolor: '#7c3aed', 
-            borderRadius: '40px', // Matches VideoIntro and Gain section card radius
+            bgcolor: '#6A0DAD', 
+            borderRadius: '32px',
             p: { xs: 6, md: 8 }, 
             color: 'white',
-            boxShadow: '0 20px 50px rgba(124, 58, 237, 0.2)',
+            boxShadow: '0 20px 50px rgba(106, 13, 173, 0.25)',
             position: 'relative',
             overflow: 'hidden'
           }}
         >
-          {/* Subtle Decorative Background Detail */}
+          {/* Decorative background accent */}
           <Box sx={{ 
             position: 'absolute', top: '-10%', right: '-5%', 
-            width: '300px', height: '300px', borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)'
+            width: '280px', height: '280px', borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 70%)'
           }} />
 
           <Stack 
@@ -38,50 +37,53 @@ const FinalCTA = () => {
             alignItems="center" 
             justifyContent="space-between"
           >
-            <Box sx={{ maxWidth: '650px', textAlign: { xs: 'center', lg: 'left' } }}>
+            {/* Text block */}
+            <Box sx={{ maxWidth: '640px', textAlign: { xs: 'center', lg: 'left' } }}>
               <Typography 
-                variant="h3" 
+                variant="h4" 
                 sx={{ 
-                  fontWeight: 900, 
+                  fontWeight: 800, 
                   mb: 2, 
-                  lineHeight: 1.1,
-                  fontSize: { xs: '2.2rem', md: '3rem' },
+                  lineHeight: 1.2,
+                  fontSize: { xs: '2.2rem', md: '2.8rem' },
                   letterSpacing: '-0.02em'
                 }}
               >
-                Ready to experience real business decision-making?
+                Ready to experience real business decision‑making?
               </Typography>
               <Typography 
                 variant="body1" 
                 sx={{ 
                   opacity: 0.9, 
-                  fontSize: '1.2rem',
+                  fontSize: '1.15rem',
                   fontWeight: 500,
-                  lineHeight: 1.5 
+                  lineHeight: 1.6 
                 }}
               >
                 Give learners a practical way to understand operations, strategy, and finance through one modern simulation platform.
               </Typography>
             </Box>
 
+            {/* CTA buttons */}
             <Stack 
               direction={{ xs: 'column', sm: 'row' }} 
-              spacing={2} 
+              spacing={2.5} 
               sx={{ width: { xs: '100%', sm: 'auto' } }}
             >
               <Button 
                 variant="contained" 
+                onClick={onStart}
                 sx={{ 
                   bgcolor: 'white', 
-                  color: '#7c3aed', 
-                  fontWeight: 800, 
+                  color: '#6A0DAD', 
+                  fontWeight: 700, 
                   px: 4, py: 2,
-                  borderRadius: '100px', // Perfect Pill shape
+                  borderRadius: '100px',
                   textTransform: 'none',
                   fontSize: '1.05rem',
-                  boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
-                  '&:hover': { bgcolor: '#f8f9fa', transform: 'translateY(-2px)' },
-                  transition: 'all 0.2s'
+                  boxShadow: '0 8px 20px rgba(0,0,0,0.12)',
+                  '&:hover': { bgcolor: '#f9fafb', transform: 'translateY(-2px)' },
+                  transition: 'all 0.2s ease'
                 }}
               >
                 Try Live Simulation
@@ -91,8 +93,8 @@ const FinalCTA = () => {
                 onClick={scrollToSteps}
                 sx={{ 
                   color: 'white', 
-                  borderColor: 'rgba(255,255,255,0.4)', 
-                  fontWeight: 800, 
+                  borderColor: 'rgba(255,255,255,0.5)', 
+                  fontWeight: 700, 
                   px: 4, py: 2,
                   borderRadius: '100px', 
                   textTransform: 'none',
@@ -100,10 +102,10 @@ const FinalCTA = () => {
                   borderWidth: '2px',
                   '&:hover': { 
                     borderColor: 'white', 
-                    bgcolor: 'rgba(255,255,255,0.1)',
+                    bgcolor: 'rgba(255,255,255,0.12)',
                     borderWidth: '2px'
                   },
-                  transition: 'all 0.2s'
+                  transition: 'all 0.2s ease'
                 }}
               >
                 See the 7 Steps

@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 2 (Refactored)
+// Component: Walkthrough Step 2 (Compact)
 // ==========================================
 
 import React from 'react';
@@ -15,51 +15,50 @@ const Step2 = () => {
       title="Choose Your Strategy"
       description="Review the strategies available to the team and confirm the strategy chosen. This sets the direction for how the business will compete and grow."
     >
-      {/* Grid container to hold the side-by-side strategy views */}
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         
-        {/* Left Column: Available Strategies */}
+        {/* Left Column */}
         <Grid item xs={12} md={6}>
           <Typography 
-            variant="h6" 
-            sx={{ fontWeight: 700, color: '#111827', mb: 2, fontSize: '1.2rem' }}
+            variant="subtitle1" 
+            sx={{ fontWeight: 700, color: '#111827', mb: 1, fontSize: '1.05rem' }}
           >
-            Strategies available for the team to chose
+            Strategies available for the team to choose
           </Typography>
           <Box 
             sx={{ 
-              p: 1.5, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
-              borderRadius: '20px', overflow: 'hidden' 
+              p: 1, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
+              borderRadius: '12px', overflow: 'hidden' 
             }}
           >
             <Box 
               component="img" 
               src={imgStrategyDraft} 
               alt="Strategy Draft" 
-              sx={{ width: '100%', borderRadius: '12px', display: 'block' }} 
+              sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
             />
           </Box>
         </Grid>
 
-        {/* Right Column: Chosen Strategy */}
+        {/* Right Column */}
         <Grid item xs={12} md={6}>
           <Typography 
-            variant="h6" 
-            sx={{ fontWeight: 700, color: '#111827', mb: 2, fontSize: '1.2rem' }}
+            variant="subtitle1" 
+            sx={{ fontWeight: 700, color: '#111827', mb: 1, fontSize: '1.05rem' }}
           >
-            Strategies Chosen by the team
+            Strategies chosen by the team
           </Typography>
           <Box 
             sx={{ 
-              p: 1.5, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
-              borderRadius: '20px', overflow: 'hidden' 
+              p: 1, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
+              borderRadius: '12px', overflow: 'hidden' 
             }}
           >
             <Box 
               component="img" 
               src={imgStrategicPlan} 
               alt="Strategic Plan" 
-              sx={{ width: '100%', borderRadius: '12px', display: 'block' }} 
+              sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
             />
           </Box>
         </Grid>

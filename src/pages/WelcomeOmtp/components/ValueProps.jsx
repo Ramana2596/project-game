@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Value Propositions (Strict Single Line)
+// Component: Value Propositions (Compact Height)
 // ==========================================
 
 import React from 'react';
@@ -47,38 +47,42 @@ const ValueProps = () => (
         container 
         spacing={2} 
         sx={{ 
-          flexWrap: 'nowrap', // 👈 This forces the single line
-          overflowX: { xs: 'auto', md: 'visible' }, // Scrollable on mobile
+          flexWrap: 'nowrap',
+          overflowX: { xs: 'auto', md: 'visible' },
           pb: { xs: 2, md: 0 } 
         }}
       >
         {valueCards.map((card, index) => (
-          <Grid item xs={4} key={index} sx={{ minWidth: { xs: '280px', md: 'auto' } }}>
+          <Grid item xs={4} key={index} sx={{ minWidth: { xs: '260px', md: 'auto' } }}>
             <Box 
               sx={{ 
-                p: 3, 
-                borderRadius: '20px', 
+                p: 2,   // reduced padding
+                borderRadius: '16px', 
                 bgcolor: '#f9faff', 
-                height: '100%',
                 border: '1px solid #f3f4f6',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 1.5
+                gap: 1,   // tighter spacing
+                height: '100%',
+                maxHeight: 160   // fixed compact height
               }}
             >
               <Box 
                 sx={{ 
-                  width: 40, height: 40, display: 'flex', 
+                  width: 32, height: 32, display: 'flex', 
                   alignItems: 'center', justifyContent: 'center', 
-                  borderRadius: '10px', bgcolor: card.iconBg, fontSize: '20px'
+                  borderRadius: '8px', bgcolor: card.iconBg, fontSize: '18px'
                 }}
               >
                 {card.icon}
               </Box>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#111827' }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#111827', mb: 0.5 }}>
                 {card.title}
               </Typography>
-              <Typography variant="caption" sx={{ color: '#4b5563', lineHeight: 1.4, fontSize: '0.85rem' }}>
+              <Typography 
+                variant="caption" 
+                sx={{ color: '#4b5563', lineHeight: 1.3, fontSize: '0.8rem' }}
+              >
                 {card.desc}
               </Typography>
             </Box>

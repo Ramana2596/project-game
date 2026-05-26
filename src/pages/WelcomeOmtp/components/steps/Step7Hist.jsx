@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 7 (Historical Data)
+// Component: Walkthrough Step 7 (Historical Data - Compact)
 // ==========================================
 
 import React from 'react';
@@ -16,28 +16,28 @@ const Step7Hist = () => {
       description="Use the information panels and historical data to reflect on past performance, identify patterns, and improve future decisions."
     >
       <Box>
-        {/* Correct Label matching your existing content */}
+        {/* Slimmer Label */}
         <Typography 
-          variant="h6" 
-          sx={{ fontWeight: 700, color: '#111827', mb: 2, fontSize: '1.25rem' }}
+          variant="subtitle1" 
+          sx={{ fontWeight: 700, color: '#111827', mb: 1, fontSize: '1.05rem' }}
         >
           Historical Data and Trend Analysis
         </Typography>
 
-        {/* 2-Column Grid for side-by-side data analysis views */}
-        <Grid container spacing={3}>
+        {/* 2-Column Grid */}
+        <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <Box 
               sx={{ 
-                p: 1.5, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
-                borderRadius: '20px'
+                p: 1, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
+                borderRadius: '12px'
               }}
             >
               <Box 
                 component="img" 
                 src={imgInfoDesk1} 
                 alt="Historical Data View 1" 
-                sx={{ width: '100%', borderRadius: '12px', display: 'block' }} 
+                sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
               />
             </Box>
           </Grid>
@@ -45,15 +45,15 @@ const Step7Hist = () => {
           <Grid item xs={12} md={6}>
             <Box 
               sx={{ 
-                p: 1.5, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
-                borderRadius: '20px'
+                p: 1, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
+                borderRadius: '12px'
               }}
             >
               <Box 
                 component="img" 
                 src={imgInfoDesk2} 
                 alt="Historical Data View 2" 
-                sx={{ width: '100%', borderRadius: '12px', display: 'block' }} 
+                sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
               />
             </Box>
           </Grid>

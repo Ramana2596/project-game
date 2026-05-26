@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 6 (Refactored)
+// Component: Walkthrough Step 6 (Compact)
 // ==========================================
 
 import React from 'react';
@@ -14,27 +14,27 @@ import imgKeyResultBs from '../../../../assets/DemoPicture/KeyResultBs.jpg';
 import imgKeyResultPl from '../../../../assets/DemoPicture/KeyResultPl.jpg';
 import imgFinReportBs from '../../../../assets/DemoPicture/FinReportBs.jpg';
 
-// Helper component for the smaller financial "mini-cards"
+// Compact FinancialCard
 const FinancialCard = ({ label, src }) => (
-  <Box sx={{ mb: 2 }}>
+  <Box sx={{ mb: 1.5 }}>
     <Typography 
       variant="caption" 
-      sx={{ fontWeight: 700, color: '#374151', display: 'block', mb: 1, height: '2.5rem', lineHeight: 1.2 }}
+      sx={{ fontWeight: 700, color: '#374151', display: 'block', mb: 0.5, fontSize: '0.75rem', lineHeight: 1.2 }}
     >
       {label}
     </Typography>
     <Box 
       sx={{ 
-        p: 1, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
-        borderRadius: '16px', transition: '0.3s',
-        '&:hover': { borderColor: '#7c3aed', boxShadow: '0 4px 12px rgba(124, 58, 237, 0.1)' }
+        p: 0.75, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
+        borderRadius: '10px', transition: '0.3s',
+        '&:hover': { borderColor: '#7c3aed', boxShadow: '0 2px 6px rgba(124, 58, 237, 0.1)' }
       }}
     >
       <Box 
         component="img" 
         src={src} 
         alt={label} 
-        sx={{ width: '100%', borderRadius: '10px', display: 'block' }} 
+        sx={{ width: '100%', borderRadius: '6px', display: 'block' }} 
       />
     </Box>
   </Box>
@@ -56,8 +56,7 @@ const Step6 = () => {
       title="Review Financial Outcomes"
       description="Analyze financial outcomes, key results, income statement, cash flow statement, and balance sheet to see the real business impact of decisions."
     >
-      {/* 3-Column Grid for Financial Statements */}
-      <Grid container spacing={3}>
+      <Grid container spacing={2}>
         {reports.map((report, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <FinancialCard label={report.label} src={report.src} />

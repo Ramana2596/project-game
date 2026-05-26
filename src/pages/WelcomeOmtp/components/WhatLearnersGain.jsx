@@ -1,5 +1,5 @@
 // ==========================================
-// Component: What Learners Gain Section
+// Component: What Learners Gain Section (Balanced Image)
 // ==========================================
 
 import React from 'react';
@@ -22,17 +22,17 @@ const WhatLearnersGain = () => {
       <Container maxWidth="lg">
         <Grid container spacing={4} alignItems="center">
           
-          {/* Visual Column - Matches the "Rounded Box" style from your screenshot */}
+          {/* Visual Column - Reduced size */}
           <Grid item xs={12} md={6}>
             <Box 
               sx={{ 
-                bgcolor: '#f5f3ff', // Light lavender background from screenshot
-                borderRadius: '40px', 
-                p: 6,
+                bgcolor: '#f5f3ff',
+                borderRadius: '32px',
+                p: 4,   // reduced padding
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                minHeight: '400px'
+                minHeight: '320px'   // reduced height
               }}
             >
               <Box 
@@ -41,9 +41,8 @@ const WhatLearnersGain = () => {
                 sx={{ 
                   width: '100%', 
                   height: 'auto',
-                  maxWidth: '450px',
-                  // Subtle filter to make it pop against the light background
-                  filter: 'drop-shadow(0 10px 20px rgba(124, 58, 237, 0.15))'
+                  maxWidth: '360px',   // reduced max width
+                  filter: 'drop-shadow(0 8px 16px rgba(124, 58, 237, 0.12))'
                 }} 
                 alt="Gain Graphic"
               />

@@ -5,7 +5,7 @@
 import React from 'react';
 import { Box, Typography, Container, Stack } from '@mui/material';
 
-// ✅ Steps Component Imports (Individual journey modules)
+// Demo Steps - Screenshots Component (Individual modules)
 import Step1 from './steps/Step1';
 import Step2 from './steps/Step2';
 import Step3 from './steps/Step3';
@@ -16,7 +16,7 @@ import Step7 from './steps/Step7';
 
 const WalkThroughSection = () => {
   return (
-    // ✅ Main section wrapper with background color and vertical padding
+    // Main section wrapper with BG and vertical padding
     <Box 
       id="how-it-works" 
       component="section" 
@@ -26,7 +26,7 @@ const WalkThroughSection = () => {
       }}
     >
       <Container maxWidth="lg">
-        {/* ✅ Section Header: Left-aligned Title and Description */}
+        {/* Section Header: Left-aligned Title and Description */}
         <Box sx={{ mb: 10 }}>
           <Typography 
             variant="h3" 
@@ -54,8 +54,8 @@ const WalkThroughSection = () => {
           </Typography>
         </Box>
 
-        {/* ✅ Vertical stack for sequential step rendering with standardized spacing */}
-        <Stack spacing={12}>
+        {/* Vertical stack for sequential step rendering with standardized spacing */}
+        <Stack spacing={4}>
           <Step1 />
           <Step2 />
           <Step3 />
