@@ -1,4 +1,4 @@
-// src/pages/DemoOmg/components/StageProp.jsx
+// src/pages/DemoOmtp/components/StageProp.jsx
 // Purpose: Propagates orchestrated stage data for UI of stage rows
 
 import React from "react";

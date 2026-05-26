@@ -1,4 +1,4 @@
-// src/pages/DemoOmg/components/StageShow.jsx
+// src/pages/DemoOmtp/components/StageShow.jsx
 // Purpose: The actual visual bar/button, status, icons, & .Size, colour
  
 import React from "react";

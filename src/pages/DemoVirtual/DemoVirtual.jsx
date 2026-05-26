@@ -1,4 +1,4 @@
-// src/pages/DemoOmg/DemoOmg.jsx
+// src/pages/DemoVirtual/DemoVirtual.jsx
 // VIrtual Simulation for DEMO purpose
 // Stage Manager: Page, hooks, stage list, report drawer, RBAC Reports
 import React, { useEffect, useState } from "react";
@@ -17,7 +17,7 @@ import ToastMessage from "../../components/ToastMessage";
 import { STAGE_TITLE_MAP } from "./stagesMaster";
 import { UI_STRINGS } from "./constants/labels";
 
-export default function DemoOmg() {
+export default function DemoVirtual() {
   const { userInfo, login, setUserInfo, userAccessiblePageIds } = useUser();
   const navigate = useNavigate();
 
@@ -42,7 +42,7 @@ export default function DemoOmg() {
   const [activeStageNo, setActiveStageNo] = useState(null);
   const [buttonLoading, setButtonLoading] = useState(false);
 
-  // Cleanup session and navigate to entry on exit
+  // OnClcik exit,Cleanup session and navigate to landing page
   const handleExit = () => {
     sessionStorage.removeItem("wizardUserInfo");
     login(null); setUserInfo(null); navigate('/');
