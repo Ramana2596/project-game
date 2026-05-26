@@ -116,7 +116,7 @@ import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
 //import SimulationSuite from '../SimulationSuite/SimulationSuite.jsx';
 import KeyResultBsInfo from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
-import DemoOmtp from '../DemoOmtp/DemoOmtp.jsx';
+import DemoVirtual from '../DemoVirtual/DemoVirtual.jsx';
 import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
 import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
 import SimulationHub from '../SimulationHub/SimulationHub.jsx';
@@ -480,7 +480,7 @@ export default function MiniDrawer() {
           <Route path='/teamPlanScreen' element={<TeamPlanScreen />} />
           <Route path='/keyResultBsInfo' element={<KeyResultBsInfo />} />
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
-          <Route path='/demoOmtp' element={<DemoOmtp />} />
+          <Route path='/demoVirtual' element={<DemoVirtual />} />
           <Route path='/strategyBenefit' element={<StrategyBenefit />} />
           <Route path='/resetSimulation' element={<ResetSimulation />} />
           <Route path='/simulationHub' element={<SimulationHub />} />

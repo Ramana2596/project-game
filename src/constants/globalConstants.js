@@ -140,7 +140,7 @@ import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 //import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
 import KeyResultBsInfo from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
-import DemoOmtp from '../pages/DemoOmtp/DemoOmtp.jsx';
+import DemoVirtual from '../pages/DemoVirtual/DemoVirtual.jsx';
 import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
 import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";
@@ -555,9 +555,9 @@ export const componentList = [
         iconPath: appSettings,
         id: "UI 21 273",
         label: "Demo OMTP",
-        path: "/DemoOmtp",
-        href: "/operationGame/DemoOmtp",
-        routeElement: <DemoOmtp />
+        path: "/demoVirtual",
+        href: "/operationGame/DemoVirtual",
+        routeElement: <DemoVirtual />
       },
       {
         iconPath: appSettings,

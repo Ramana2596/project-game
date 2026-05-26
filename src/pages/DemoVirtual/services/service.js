@@ -1,4 +1,4 @@
-// src/pages/DemoOmg/services/service.js
+// src/pages/DemoOmtp/services/service.js
 // API service function
 
 import api from '../../../core/interceptor/api-interceptor';

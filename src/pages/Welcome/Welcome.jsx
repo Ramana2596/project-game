@@ -91,7 +91,7 @@ const Welcome = () => {
                         Role: userData.Role
                     });
                     setUserInfo(userData);
-                    navigate("/operationGame/demoOmtp");
+                    navigate("/operationGame/demoVirtual");
                 } else {
                     const statusConfig = API_STATUS_MAP[returnStatus] || {};
                     setAlertData({
