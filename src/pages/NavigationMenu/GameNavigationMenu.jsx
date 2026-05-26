@@ -480,7 +480,7 @@ export default function MiniDrawer() {
           <Route path='/teamPlanScreen' element={<TeamPlanScreen />} />
           <Route path='/keyResultBsInfo' element={<KeyResultBsInfo />} />
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
-          <Route path='/demoVirtual' element={<DemoVirtual />} />
+          <Route path='/demo' element={<DemoVirtual />} />
           <Route path='/strategyBenefit' element={<StrategyBenefit />} />
           <Route path='/resetSimulation' element={<ResetSimulation />} />
           <Route path='/simulationHub' element={<SimulationHub />} />
