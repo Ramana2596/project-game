@@ -31,8 +31,8 @@ import { useNavigate } from "react-router-dom";
 
 // Dynamic Visibility Settings for OAuth Providers
 const SOCIAL_CONFIG = {
-  GOOGLE_ENABLED: false,   // Flag: True / False 
-  LINKEDIN_ENABLED: false, // Flag: True / False
+  GOOGLE_ENABLED: true,   // Flag: True / False 
+  LINKEDIN_ENABLED: true, // Flag: True / False
 };
 
 const VIEW = {
