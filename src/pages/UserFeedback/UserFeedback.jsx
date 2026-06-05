@@ -14,34 +14,37 @@ import { useUser }            from '../../core/access/userContext.jsx';
 import { useFeedback }        from './hooks/useFeedback.js';
 import FeedbackOptions        from './FeedbackOptions.jsx';
 
-// Map route path to UI_Id
-const resolveUiId = (pathname) => {
-    const map = {
-        '/operationGame/demo'             : '0_Demo',
-        '/operationGame/welcomeOmtp'      : '0_Welcome',
-        '/operationGame/initialisation'   : '1_Initialisation',
-        '/operationGame/launchStrategy'   : '2_Launch_Strategy',
-        '/operationGame/strategyPlan'     : '3_Strategy_Plan',
-        '/operationGame/marketFactor'     : '4_Market_Factor',
-        '/operationGame/operationDecision': '5_Operation_Decision',
-        '/operationGame/operations'       : '6_Operations',
-        '/operationGame/financeResults'   : '7_Finance_Results',
-        '/operationGame/periodClosure'    : '8_Period_Closure',
-        '/operationGame/cycleCompletion'  : '9_Cycle_Completion',
-        '/login'                          : 'Login',
-    };
-    if (map[pathname]) return map[pathname];
-    const key = Object.keys(map).find(k => pathname.startsWith(k));
-    return key ? map[key] : pathname.replace('/operationGame/', '') || 'Unknown';
+// ── Flatten nested page tree into single array ────────────────────────
+const flattenPages = (list) =>
+    list.reduce((acc, item) => {
+        acc.push(item);
+        if (item.children?.length) acc.push(...flattenPages(item.children));
+        return acc;
+    }, []);
+
+// ── Resolve UI_Id from pathname using accessible pages ────────────────
+// Returns matched UI_Id, or 'AppRoute' for app-level screens not in navigation
+const resolveUiId = (pathname, userAccessiblePages) => {
+    if (!userAccessiblePages?.length) return 'AppRoute';
+
+    const flat  = flattenPages(userAccessiblePages);
+    const lower = pathname.toLowerCase();
+
+    // Exact match first, then startsWith for nested routes
+    const match =
+        flat.find(p => p.href && lower === p.href.toLowerCase()) ||
+        flat.find(p => p.href && lower.startsWith(p.href.toLowerCase()));
+
+    return match?.id || 'AppRoute';
 };
 
-// Full-width feedback bar — 3 blocks: Feedback | Widgets+X | Options
+// ── Full-width feedback bar — 3 blocks: Feedback | Widgets+X | Options ─
 const UserFeedback = () => {
-    const { pathname } = useLocation();
-    const { userInfo } = useUser();
+    const { pathname }                      = useLocation();
+    const { userInfo, userAccessiblePages } = useUser();
 
-    const userId = userInfo?.User_Id || null;
-    const uiId   = resolveUiId(pathname);
+    const userId = userInfo?.userId         || null;
+    const uiId   = resolveUiId(pathname, userAccessiblePages);
 
     const {
         widgets, filteredOptions,
@@ -55,8 +58,8 @@ const UserFeedback = () => {
         handleSubmit,
     } = useFeedback(userId, uiId);
 
-    const canSubmit = !!selectedWidget && !!selectedOption && status !== 'submitting';
-    const isOther   = selectedWidget?.Widget === 'Other';
+    const canSubmit   = !!selectedWidget && !!selectedOption && status !== 'submitting';
+    const isOther     = selectedWidget?.Widget === 'Other';
     const showOptions = !!selectedWidget;
 
     // Close options block and reset selections
@@ -65,11 +68,6 @@ const UserFeedback = () => {
         setSelectedOption(null);
         setComment('');
         setRating(0);
-    };
-
-    // Send then reset to original
-    const handleSend = async () => {
-        await handleSubmit();
     };
 
     return (
@@ -156,9 +154,9 @@ const UserFeedback = () => {
                                 onClick={handleCloseOptions}
                                 size="small"
                                 sx={{
-                                    color      : showOptions ? '#5B21B6' : '#B0A8D4',
-                                    ml         : 0.5,
-                                    '&:hover'  : { color: '#3B1FA3' },
+                                    color    : showOptions ? '#5B21B6' : '#B0A8D4',
+                                    ml       : 0.5,
+                                    '&:hover': { color: '#3B1FA3' },
                                 }}
                             >
                                 <CloseIcon sx={{ fontSize: 18 }} />
@@ -243,7 +241,7 @@ const UserFeedback = () => {
                             <Chip
                                 label={status === 'submitting' ? 'Sending…' : 'Send'}
                                 icon={<SendIcon style={{ fontSize: 13 }} />}
-                                onClick={handleSend}
+                                onClick={handleSubmit}
                                 disabled={!canSubmit}
                                 size="medium"
                                 sx={{
