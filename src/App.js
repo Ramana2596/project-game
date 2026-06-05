@@ -3,16 +3,18 @@
 
 import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useUser } from "./core/access/userContext.jsx";
 
 import LoadingIndicator from "./components/LoadingIndicator";
 import { LoadingProvider } from "./hooks/loadingIndicatorContext";
 
-import GameNavigationMenu from "./pages/NavigationMenu/GameNavigationMenu";
+// Pages to be rendered based on route
 import Welcome from "./pages/Welcome/Welcome";
 import WelcomeOmtp from "./pages/WelcomeOmtp/WelcomeOmtp";
 import AuthHubPage from "./pages/AuthHubPage/AuthHubPage.jsx";
+import GameNavigationMenu from "./pages/NavigationMenu/GameNavigationMenu";
+import UserFeedback from './pages/UserFeedback/UserFeedback';
 
-import { useUser } from "./core/access/userContext.jsx";
 
 function App() {
   // Protect application routes for authenticated users only
@@ -34,14 +36,11 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Welcome />} />
-
           <Route path="/login" element={<AuthHubPage />} />
-
           <Route
             path="/operationGame/welcomeOmtp"
             element={<WelcomeOmtp />}
           />
-
           <Route
             path="/operationGame/*"
             element={
@@ -53,6 +52,7 @@ function App() {
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+        <UserFeedback />   {/* User feedback component */}
       </div>
     </LoadingProvider>
   );
