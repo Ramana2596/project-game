@@ -1,5 +1,5 @@
 // src/pages/UserFeedback/UserFeedback.jsx
-import React, { useState }       from 'react';
+import React                     from 'react';
 import {
     Box, Typography, Chip, Fade,
     TextField, Rating, Collapse,
@@ -58,11 +58,12 @@ const UserFeedback = () => {
         handleSubmit,
     } = useFeedback(userId, uiId);
 
-    const canSubmit   = !!selectedWidget && !!selectedOption && status !== 'submitting';
-    const isOther     = selectedWidget?.Widget === 'Other';
+    // Derived state
+    const isOther     = selectedOption?.Feedback_Option === 'Other';
     const showOptions = !!selectedWidget;
+    const canSubmit   = !!selectedWidget && !!selectedOption && status !== 'submitting';
 
-    // Close options block and reset selections
+    // Close options block and reset all selections
     const handleCloseOptions = () => {
         handleWidgetSelect(null);
         setSelectedOption(null);
@@ -85,7 +86,7 @@ const UserFeedback = () => {
                 height       : 52,
             }}
         >
-            {/* Success flash */}
+            {/* ── Success flash ── */}
             {status === 'success' ? (
                 <Fade in>
                     <Box sx={{
@@ -110,6 +111,7 @@ const UserFeedback = () => {
                     height    : '100%',
                     overflow  : 'hidden',
                 }}>
+
                     {/* ── Block 1: Feedback label — fixed, never moves ── */}
                     <Box sx={{
                         display    : 'flex',
@@ -148,7 +150,7 @@ const UserFeedback = () => {
                             onWidgetSelect={handleWidgetSelect}
                         />
 
-                        {/* X — always at end of widget block */}
+                        {/* X — resets all, always at end of widget block */}
                         <Tooltip title="Close" placement="top" arrow>
                             <IconButton
                                 onClick={handleCloseOptions}
@@ -174,57 +176,62 @@ const UserFeedback = () => {
                             height    : 52,
                             whiteSpace: 'nowrap',
                         }}>
-                            {/* Other — text input */}
-                            {isOther ? (
-                                <TextField
-                                    size="small"
-                                    placeholder="Describe your feedback…"
-                                    value={comment}
-                                    onChange={e => setComment(e.target.value)}
-                                    sx={{
-                                        width: 280,
-                                        '& .MuiOutlinedInput-root': {
-                                            fontSize    : 12,
-                                            borderRadius: 2,
-                                            bgcolor     : '#fff',
-                                            '& fieldset'             : { borderColor: 'rgba(103,58,183,0.3)' },
-                                            '&:hover fieldset'       : { borderColor: '#7C3AED' },
-                                            '&.Mui-focused fieldset' : { borderColor: '#7C3AED' },
-                                        },
-                                    }}
-                                />
-                            ) : (
-                                /* Option chips — horizontal, max 5 */
-                                <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center' }}>
-                                    {filteredOptions.slice(0, 5).map(opt => {
-                                        const isSel = selectedOption?.Feedback_Option_Id === opt.Feedback_Option_Id;
-                                        return (
-                                            <Chip
-                                                key={opt.Feedback_Option_Id}
-                                                label={opt.Feedback_Option}
-                                                onClick={() => setSelectedOption(isSel ? null : opt)}
-                                                size="small"
-                                                sx={{
-                                                    fontSize   : 12,
-                                                    fontWeight : isSel ? 600 : 400,
-                                                    bgcolor    : isSel ? '#7C3AED' : 'rgba(255,255,255,0.9)',
-                                                    color      : isSel ? '#fff'    : '#4A3880',
-                                                    border     : '1px solid',
-                                                    borderColor: isSel ? '#7C3AED' : 'rgba(103,58,183,0.3)',
-                                                    cursor     : 'pointer',
-                                                    height     : 30,
-                                                    '&:hover'  : { bgcolor: isSel ? '#6D28D9' : 'rgba(124,58,237,0.1)' },
-                                                }}
-                                            />
-                                        );
-                                    })}
-                                </Box>
+
+                            {/* Option chips — max 5, click to select */}
+                            <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center' }}>
+                                {filteredOptions.slice(0, 5).map(opt => {
+                                    const isSel = selectedOption?.Feedback_Option_Id === opt.Feedback_Option_Id;
+                                    return (
+                                        <Chip
+                                            key={opt.Feedback_Option_Id}
+                                            label={opt.Feedback_Option}
+                                            onClick={() => setSelectedOption(isSel ? null : opt)}
+                                            size="small"
+                                            sx={{
+                                                fontSize   : 12,
+                                                fontWeight : isSel ? 600 : 400,
+                                                bgcolor    : isSel ? '#7C3AED' : 'rgba(255,255,255,0.9)',
+                                                color      : isSel ? '#fff'    : '#4A3880',
+                                                border     : '1px solid',
+                                                borderColor: isSel ? '#7C3AED' : 'rgba(103,58,183,0.3)',
+                                                cursor     : 'pointer',
+                                                height     : 30,
+                                                '&:hover'  : { bgcolor: isSel ? '#6D28D9' : 'rgba(124,58,237,0.1)' },
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </Box>
+
+                            {/* Other selected — text input for comment */}
+                            {isOther && (
+                                <>
+                                    <Box sx={{ width: '1px', height: 28, bgcolor: 'rgba(103,58,183,0.3)', mx: 0.5 }} />
+                                    <TextField
+                                        autoFocus
+                                        size="small"
+                                        placeholder="Your comment…"
+                                        value={comment}
+                                        onChange={e => setComment(e.target.value)}
+                                        sx={{
+                                            width: 400,
+                                            '& .MuiOutlinedInput-root': {
+                                                fontSize    : 12,
+                                                borderRadius: 2,
+                                                bgcolor     : '#fff',
+                                                '& fieldset'             : { borderColor: 'rgba(103,58,183,0.3)' },
+                                                '&:hover fieldset'       : { borderColor: '#7C3AED' },
+                                                '&.Mui-focused fieldset' : { borderColor: '#7C3AED' },
+                                            },
+                                        }}
+                                    />
+                                </>
                             )}
 
-                            {/* Star rating — Appreciation only */}
+                            {/* Star rating — Appreciation widget only */}
                             {selectedWidget?.Widget_Id === 4 && (
                                 <>
-                                    <Box sx={{ width: 1, height: 28, bgcolor: 'rgba(103,58,183,0.2)', mx: 0.5 }} />
+                                    <Box sx={{ width: '1px', height: 28, bgcolor: 'rgba(103,58,183,0.3)', mx: 0.5 }} />
                                     <Rating
                                         value={rating}
                                         onChange={(_, val) => setRating(val)}
@@ -235,9 +242,9 @@ const UserFeedback = () => {
                             )}
 
                             {/* Divider before Send */}
-                            <Box sx={{ width: 1, height: 28, bgcolor: 'rgba(103,58,183,0.2)', mx: 0.5 }} />
+                            <Box sx={{ width: '1px', height: 28, bgcolor: 'rgba(103,58,183,0.3)', mx: 0.5 }} />
 
-                            {/* Send */}
+                            {/* Send — enabled only when option selected */}
                             <Chip
                                 label={status === 'submitting' ? 'Sending…' : 'Send'}
                                 icon={<SendIcon style={{ fontSize: 13 }} />}
@@ -258,12 +265,13 @@ const UserFeedback = () => {
                                 }}
                             />
 
-                            {/* Error */}
+                            {/* Error message */}
                             {status === 'error' && (
                                 <Typography sx={{ fontSize: 12, color: '#E24B4A', whiteSpace: 'nowrap' }}>
                                     {errorMsg}
                                 </Typography>
                             )}
+
                         </Box>
                     </Collapse>
                 </Box>
