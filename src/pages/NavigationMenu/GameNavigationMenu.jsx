@@ -408,7 +408,6 @@ export default function MiniDrawer() {
 
         <Routes>
           <Route path="/homePage" element={<GameDashboard />} />
-          <Route path="/demoWizard" element={<DemoWizard />} />
           <Route path="/userRoleMgt" element={<UserRoleMgt />} />
           <Route path="/infoDesk" element={<InfoDesk />} />
           <Route path="/simulation" element={<Simulation />} />
