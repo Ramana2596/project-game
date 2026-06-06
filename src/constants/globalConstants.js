@@ -554,9 +554,9 @@ export const componentList = [
       {
         iconPath: appSettings,
         id: "UI 21 273",
-        label: "Demo OMTP",
+        label: "Demo",
         path: "/demo",
-        href: "/operationGame/DemoVirtual",
+        href: "/operationGame/demo",
         routeElement: <DemoVirtual />
       },
       {
