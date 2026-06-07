@@ -1,9 +1,9 @@
 // src/pages/UserFeedback/UserFeedback.jsx
-import React                     from 'react';
+import React, { useState }       from 'react';
 import {
     Box, Typography, Chip, Fade,
     TextField, Rating, Collapse,
-    IconButton, Tooltip,
+    IconButton, Tooltip, useMediaQuery, useTheme,
 } from '@mui/material';
 import SendIcon               from '@mui/icons-material/Send';
 import CloseIcon              from '@mui/icons-material/Close';
@@ -38,8 +38,10 @@ const resolveUiId = (pathname, userAccessiblePages) => {
     return match?.id || 'AppRoute';
 };
 
-// ── Full-width feedback bar — 3 blocks: Feedback | Widgets+X | Options ─
+// ── Full-width feedback bar — responsive: horizontal desktop, bottom sheet mobile ─
 const UserFeedback = () => {
+    const theme                             = useTheme();
+    const isMobile                          = useMediaQuery(theme.breakpoints.down('md'));
     const { pathname }                      = useLocation();
     const { userInfo, userAccessiblePages } = useUser();
 
@@ -58,6 +60,9 @@ const UserFeedback = () => {
         handleSubmit,
     } = useFeedback(userId, uiId);
 
+    // Mobile bottom sheet expanded state
+    const [mobileOpen, setMobileOpen] = useState(false);
+
     // Derived state
     const isOther     = selectedOption?.Feedback_Option === 'Other';
     const showOptions = !!selectedWidget;
@@ -69,8 +74,215 @@ const UserFeedback = () => {
         setSelectedOption(null);
         setComment('');
         setRating(0);
+        if (isMobile) setMobileOpen(false);
     };
 
+    // ── Success flash — shared between mobile and desktop ──
+    const SuccessFlash = () => (
+        <Fade in>
+            <Box sx={{
+                display       : 'flex',
+                alignItems    : 'center',
+                justifyContent: 'center',
+                gap           : 1.5,
+                height        : '100%',
+                bgcolor       : '#F0FDF4',
+                borderTop     : '2px solid #BBF7D0',
+                minHeight     : 40,
+            }}>
+                <CheckCircleOutlineIcon sx={{ fontSize: 20, color: '#1D9E75' }} />
+                <Typography sx={{ fontSize: 13, color: '#085041', fontWeight: 600 }}>
+                    Thank you for your feedback!
+                </Typography>
+            </Box>
+        </Fade>
+    );
+
+    // ── MOBILE LAYOUT ─────────────────────────────────────────────────
+    if (isMobile) {
+        return (
+            <Box
+                sx={{
+                    position     : 'fixed',
+                    bottom       : 0,
+                    left         : 0,
+                    right        : 0,
+                    zIndex       : 1300,
+                    bgcolor      : '#EDE9FE',
+                    borderTop    : '2px solid rgba(103,58,183,0.3)',
+                    boxShadow    : '0 -2px 16px rgba(103,58,183,0.15)',
+                    pointerEvents: 'auto',
+                }}
+            >
+                {status === 'success' ? <SuccessFlash /> : (
+                    <>
+                        {/* Mobile trigger bar — always visible */}
+                        <Box
+                            onClick={() => setMobileOpen(prev => !prev)}
+                            sx={{
+                                display        : 'flex',
+                                alignItems     : 'center',
+                                justifyContent : 'space-between',
+                                px             : 2,
+                                height         : 44,
+                                cursor         : 'pointer',
+                                bgcolor        : '#DDD6FE',
+                            }}
+                        >
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <FeedbackOutlinedIcon sx={{ fontSize: 18, color: '#5B21B6' }} />
+                                <Typography sx={{ fontSize: 14, fontWeight: 800, color: '#3B1FA3' }}>
+                                    Feedback
+                                </Typography>
+                                <Typography sx={{ fontSize: 10, color: '#7C6FAE' }}>
+                                    · {uiId}
+                                </Typography>
+                            </Box>
+                            <CloseIcon
+                                sx={{
+                                    fontSize  : 18,
+                                    color     : '#9E93C8',
+                                    transform : mobileOpen ? 'rotate(0deg)' : 'rotate(45deg)',
+                                    transition: 'transform 0.2s',
+                                }}
+                            />
+                        </Box>
+
+                        {/* Mobile expanded bottom sheet */}
+                        <Collapse in={mobileOpen} unmountOnExit>
+                            <Box sx={{ px: 2, pt: 1.5, pb: 2, bgcolor: '#F5F3FF' }}>
+
+                                {/* Widget icons row */}
+                                <Typography sx={{ fontSize: 11, fontWeight: 600, color: '#4A3880', mb: 1 }}>
+                                    What type of feedback?
+                                </Typography>
+                                <FeedbackOptions
+                                    widgets={widgets}
+                                    selectedWidget={selectedWidget}
+                                    onWidgetSelect={handleWidgetSelect}
+                                />
+
+                                {/* Options chips */}
+                                {showOptions && (
+                                    <Box sx={{ mt: 1.5 }}>
+                                        <Typography sx={{ fontSize: 11, fontWeight: 600, color: '#4A3880', mb: 1 }}>
+                                            Select an option
+                                        </Typography>
+                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
+                                            {filteredOptions.slice(0, 5).map(opt => {
+                                                const isSel = selectedOption?.Feedback_Option_Id === opt.Feedback_Option_Id;
+                                                return (
+                                                    <Chip
+                                                        key={opt.Feedback_Option_Id}
+                                                        label={opt.Feedback_Option}
+                                                        onClick={() => setSelectedOption(isSel ? null : opt)}
+                                                        size="medium"
+                                                        sx={{
+                                                            fontSize   : 13,
+                                                            fontWeight : isSel ? 600 : 400,
+                                                            bgcolor    : isSel ? '#7C3AED' : 'rgba(255,255,255,0.9)',
+                                                            color      : isSel ? '#fff'    : '#4A3880',
+                                                            border     : '1px solid',
+                                                            borderColor: isSel ? '#7C3AED' : 'rgba(103,58,183,0.3)',
+                                                            cursor     : 'pointer',
+                                                            height     : 36,
+                                                            '&:hover'  : { bgcolor: isSel ? '#6D28D9' : 'rgba(124,58,237,0.1)' },
+                                                        }}
+                                                    />
+                                                );
+                                            })}
+                                        </Box>
+                                    </Box>
+                                )}
+
+                                {/* Other — text input */}
+                                {isOther && (
+                                    <TextField
+                                        autoFocus
+                                        fullWidth
+                                        size="small"
+                                        placeholder="Your comment…"
+                                        value={comment}
+                                        onChange={e => setComment(e.target.value)}
+                                        sx={{
+                                            mt: 1.5,
+                                            '& .MuiOutlinedInput-root': {
+                                                fontSize    : 13,
+                                                borderRadius: 2,
+                                                bgcolor     : '#fff',
+                                                '& fieldset'             : { borderColor: 'rgba(103,58,183,0.3)' },
+                                                '&:hover fieldset'       : { borderColor: '#7C3AED' },
+                                                '&.Mui-focused fieldset' : { borderColor: '#7C3AED' },
+                                            },
+                                        }}
+                                    />
+                                )}
+
+                                {/* Star rating — Appreciation only */}
+                                {selectedWidget?.Widget_Id === 4 && (
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1.5 }}>
+                                        <Typography sx={{ fontSize: 12, color: '#4A3880', fontWeight: 600 }}>Rate:</Typography>
+                                        <Rating
+                                            value={rating}
+                                            onChange={(_, val) => setRating(val)}
+                                            size="large"
+                                            sx={{ color: '#388E3C' }}
+                                        />
+                                    </Box>
+                                )}
+
+                                {/* Error message */}
+                                {status === 'error' && (
+                                    <Typography sx={{ fontSize: 12, color: '#E24B4A', mt: 1 }}>
+                                        {errorMsg}
+                                    </Typography>
+                                )}
+
+                                {/* Action row — Cancel + Send */}
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 2 }}>
+                                    <Chip
+                                        label="Cancel"
+                                        icon={<CloseIcon style={{ fontSize: 14 }} />}
+                                        onClick={handleCloseOptions}
+                                        size="medium"
+                                        sx={{
+                                            fontSize         : 13,
+                                            bgcolor          : 'rgba(103,58,183,0.1)',
+                                            color            : '#4A3880',
+                                            border           : '1px solid rgba(103,58,183,0.2)',
+                                            cursor           : 'pointer',
+                                            height           : 36,
+                                            '& .MuiChip-icon': { color: '#4A3880' },
+                                        }}
+                                    />
+                                    <Chip
+                                        label={status === 'submitting' ? 'Sending…' : 'Send'}
+                                        icon={<SendIcon style={{ fontSize: 14 }} />}
+                                        onClick={handleSubmit}
+                                        disabled={!canSubmit}
+                                        size="medium"
+                                        sx={{
+                                            fontSize         : 13,
+                                            fontWeight       : 600,
+                                            bgcolor          : '#7C3AED',
+                                            color            : '#fff',
+                                            cursor           : 'pointer',
+                                            height           : 36,
+                                            '&:hover'        : { bgcolor: '#6D28D9' },
+                                            '&.Mui-disabled' : { bgcolor: '#C4B5F4', color: '#fff' },
+                                            '& .MuiChip-icon': { color: '#fff' },
+                                        }}
+                                    />
+                                </Box>
+                            </Box>
+                        </Collapse>
+                    </>
+                )}
+            </Box>
+        );
+    }
+
+    // ── DESKTOP LAYOUT ────────────────────────────────────────────────
     return (
         <Box
             sx={{
@@ -83,28 +295,11 @@ const UserFeedback = () => {
                 borderTop    : '2px solid rgba(103,58,183,0.3)',
                 boxShadow    : '0 -2px 16px rgba(103,58,183,0.15)',
                 pointerEvents: 'auto',
-                height       : 52,
+                height       : 40,          // ← reduced from 52
             }}
         >
-            {/* ── Success flash ── */}
-            {status === 'success' ? (
-                <Fade in>
-                    <Box sx={{
-                        display       : 'flex',
-                        alignItems    : 'center',
-                        justifyContent: 'center',
-                        gap           : 1.5,
-                        height        : '100%',
-                        bgcolor       : '#F0FDF4',
-                        borderTop     : '2px solid #BBF7D0',
-                    }}>
-                        <CheckCircleOutlineIcon sx={{ fontSize: 22, color: '#1D9E75' }} />
-                        <Typography sx={{ fontSize: 14, color: '#085041', fontWeight: 600 }}>
-                            Thank you for your feedback!
-                        </Typography>
-                    </Box>
-                </Fade>
-            ) : (
+            {/* Success flash */}
+            {status === 'success' ? <SuccessFlash /> : (
                 <Box sx={{
                     display   : 'flex',
                     alignItems: 'center',
@@ -112,18 +307,16 @@ const UserFeedback = () => {
                     overflow  : 'hidden',
                 }}>
 
-                    {/* ── Block 1: Feedback label — fixed, never moves ── */}
+                    {/* ── Block 1: Feedback label — icon removed, text only ── */}
                     <Box sx={{
                         display    : 'flex',
                         alignItems : 'center',
-                        gap        : 0.75,
                         px         : 2,
                         height     : '100%',
                         borderRight: '2px solid rgba(103,58,183,0.2)',
                         flexShrink : 0,
                         bgcolor    : '#DDD6FE',
                     }}>
-                        <FeedbackOutlinedIcon sx={{ fontSize: 20, color: '#5B21B6' }} />
                         <Box>
                             <Typography sx={{ fontSize: 15, fontWeight: 800, color: '#3B1FA3', lineHeight: 1.2 }}>
                                 Feedback
@@ -161,7 +354,7 @@ const UserFeedback = () => {
                                     '&:hover': { color: '#3B1FA3' },
                                 }}
                             >
-                                <CloseIcon sx={{ fontSize: 18 }} />
+                                <CloseIcon sx={{ fontSize: 16 }} />
                             </IconButton>
                         </Tooltip>
                     </Box>
@@ -173,11 +366,11 @@ const UserFeedback = () => {
                             alignItems: 'center',
                             gap       : 1,
                             px        : 1.5,
-                            height    : 52,
+                            height    : 40,         // ← reduced from 52
                             whiteSpace: 'nowrap',
                         }}>
 
-                            {/* Option chips — max 5, click to select */}
+                            {/* Option chips — max 5 */}
                             <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center' }}>
                                 {filteredOptions.slice(0, 5).map(opt => {
                                     const isSel = selectedOption?.Feedback_Option_Id === opt.Feedback_Option_Id;
@@ -195,7 +388,7 @@ const UserFeedback = () => {
                                                 border     : '1px solid',
                                                 borderColor: isSel ? '#7C3AED' : 'rgba(103,58,183,0.3)',
                                                 cursor     : 'pointer',
-                                                height     : 30,
+                                                height     : 28,
                                                 '&:hover'  : { bgcolor: isSel ? '#6D28D9' : 'rgba(124,58,237,0.1)' },
                                             }}
                                         />
@@ -206,7 +399,7 @@ const UserFeedback = () => {
                             {/* Other selected — text input for comment */}
                             {isOther && (
                                 <>
-                                    <Box sx={{ width: '1px', height: 28, bgcolor: 'rgba(103,58,183,0.3)', mx: 0.5 }} />
+                                    <Box sx={{ width: '1px', height: 24, bgcolor: 'rgba(103,58,183,0.3)', mx: 0.5 }} />
                                     <TextField
                                         autoFocus
                                         size="small"
@@ -231,7 +424,7 @@ const UserFeedback = () => {
                             {/* Star rating — Appreciation widget only */}
                             {selectedWidget?.Widget_Id === 4 && (
                                 <>
-                                    <Box sx={{ width: '1px', height: 28, bgcolor: 'rgba(103,58,183,0.3)', mx: 0.5 }} />
+                                    <Box sx={{ width: '1px', height: 24, bgcolor: 'rgba(103,58,183,0.3)', mx: 0.5 }} />
                                     <Rating
                                         value={rating}
                                         onChange={(_, val) => setRating(val)}
@@ -242,21 +435,21 @@ const UserFeedback = () => {
                             )}
 
                             {/* Divider before Send */}
-                            <Box sx={{ width: '1px', height: 28, bgcolor: 'rgba(103,58,183,0.3)', mx: 0.5 }} />
+                            <Box sx={{ width: '1px', height: 24, bgcolor: 'rgba(103,58,183,0.3)', mx: 0.5 }} />
 
                             {/* Send — enabled only when option selected */}
                             <Chip
                                 label={status === 'submitting' ? 'Sending…' : 'Send'}
-                                icon={<SendIcon style={{ fontSize: 13 }} />}
+                                icon={<SendIcon style={{ fontSize: 12 }} />}
                                 onClick={handleSubmit}
                                 disabled={!canSubmit}
-                                size="medium"
+                                size="small"
                                 sx={{
                                     bgcolor          : '#7C3AED',
                                     color            : '#fff',
                                     fontWeight       : 600,
-                                    fontSize         : 13,
-                                    height           : 34,
+                                    fontSize         : 12,
+                                    height           : 28,
                                     cursor           : 'pointer',
                                     flexShrink       : 0,
                                     '&:hover'        : { bgcolor: '#6D28D9' },
@@ -267,7 +460,7 @@ const UserFeedback = () => {
 
                             {/* Error message */}
                             {status === 'error' && (
-                                <Typography sx={{ fontSize: 12, color: '#E24B4A', whiteSpace: 'nowrap' }}>
+                                <Typography sx={{ fontSize: 11, color: '#E24B4A', whiteSpace: 'nowrap' }}>
                                     {errorMsg}
                                 </Typography>
                             )}
