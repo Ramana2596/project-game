@@ -366,7 +366,7 @@ const UserFeedback = () => {
                             alignItems: 'center',
                             gap       : 1,
                             px        : 1.5,
-                            height    : 40,         // ← reduced from 52
+                            height    : 28,         // ← reduced from 52
                             whiteSpace: 'nowrap',
                         }}>
 
