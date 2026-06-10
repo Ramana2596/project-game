@@ -38,20 +38,26 @@ const WelcomeHeader = ({
                 transition: 'all 0.3s ease'
             }}
         >
-            <Toolbar sx={{ display: 'flex', gap: 2, py: 1 }}>
+            <Toolbar sx={{ display: 'flex', gap: 2, py: 0.25, minHeight: '56px !important' }}>
                 {/* Logo */}
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <Box sx={{
-                        width: 48,
-                        height: 48,
+                <Box
+                    sx={{
+                        width: 40,
+                        height: 40,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                    }}>
-                        <img src={OmtpLogo} alt="OMTP Logo" style={{ width: 100, height: 80 }} />
-                    </Box>
+                    }}
+                >
+                    <img
+                        src={OmtpLogo}
+                        alt="OMTP Logo"
+                        style={{
+                            width: 80,
+                            height: 60
+                        }}
+                    />
                 </Box>
-
                 <Box sx={{ flexGrow: 1 }} />
 
                 {/* Navigation */}
@@ -68,7 +74,7 @@ const WelcomeHeader = ({
                                 color: activeSection === section.key ? 'white' : 'rgba(30,30,30,0.75)',
                                 fontWeight: activeSection === section.key ? 700 : 500,
                                 px: activeSection === section.key ? 2 : 1,
-                                py: activeSection === section.key ? 0.75 : 0.5,
+                                py: activeSection === section.key ? 0.4 : 0.35,
                                 borderRadius: '50px',
                                 background: activeSection === section.key ? 'linear-gradient(135deg, #7b1fa2, #512da8)' : 'transparent',
                                 boxShadow: activeSection === section.key ? '0 4px 12px rgba(123, 31, 162, 0.25)' : 'none',
