@@ -129,7 +129,7 @@ import ProfessionInfo from '../pages/ProfessionInfo/ProfessionInfo.jsx';
 import ProfessionRoleInfo from '../pages/ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from "../pages/UserProfileInfo/UserProfileInfo.jsx";
 import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
-import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
+//import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
@@ -145,6 +145,7 @@ import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
 import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";
 import UiAccess from "../pages/UiAccess/UiAccess.jsx";
+import PublishMarketData from "../pages/PublishMarketData/PublishMarketData.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -473,13 +474,22 @@ export const componentList = [
         href: "/operationGame/MarketInputError",
         routeElement: <MarketInputError />
       },
-      {
+/*      {
         iconPath: marketInputIcon,
         id: "UI 22 200",
         label: "Release Std Market Input",
         path: "/StdMarketInput",
         href: "/operationGame/StdMarketInput",
         routeElement: <StdMarketInput />
+      },
+*/
+      {
+        iconPath: marketInputIcon,
+        id: "UI 22 200",
+        label: "Publish Market Data",
+        path: "/publishMarketData",
+        href: "/operationGame/PublishMarketData",
+        routeElement: <PublishMarketData />
       },
       {
         iconPath: strategyIcon,
