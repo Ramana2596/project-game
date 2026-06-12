@@ -1,4 +1,4 @@
-// src/pages/DemoOmtp/constants/labels.js
+// src/pages/Demovzirtual/constants/labels.js
 // Centralised UI labels and templates of SimulationSuite
 
 export const UI_STRINGS = {
