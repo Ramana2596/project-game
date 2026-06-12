@@ -1,4 +1,4 @@
-// src/pages/DemoOmtp/hooks/useDemoProgress.js
+// src/pages/DemoVirtual/hooks/useDemoProgress.js
 // State engine: API, progress and manages Simualtion - HALT / Play
 
 import { useState, useEffect, useCallback } from "react";

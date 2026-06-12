@@ -1,4 +1,4 @@
-// src/pages/DemoOmtp/wizardreports/ReportDrawer.jsx
+// src/pages/DemoVirtual/wizardreports/ReportDrawer.jsx
 // Purpose: Display stage-specific RBAC reports
 
 import React, { useMemo, useState, useEffect } from "react";

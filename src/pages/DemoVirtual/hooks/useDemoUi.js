@@ -1,4 +1,4 @@
-// src/pages/DemoOmtp/hooks/useDemoUi.js
+// src/pages/DemoVirtual/hooks/useDemoUi.js
 // Transform Progress data into Stage visuals (icons, colors, styles)
 import { useMemo } from "react";
 import { StagesMaster, FINAL_STAGE_NO } from "../stagesMaster";

@@ -1,4 +1,4 @@
-// src\pages\DemoOmtp\wizardreports\reportRegistry.js
+// src\pages\DemoVirtual\wizardreports\reportRegistry.js
 // Only map STAGE → report IDs (no component imports)
 
 export const REPORT_REGISTRY = {
