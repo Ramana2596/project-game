@@ -4,7 +4,7 @@ import api from "../../../core/interceptor/api-interceptor";
 export function getMarketData(queryParams) {
   return api.post("/api/publishMarketData", {
     ...queryParams,
-    cmdLine: 'Market_Input'
+    cmdLine: 'Market_Data'
   });
 }
 
