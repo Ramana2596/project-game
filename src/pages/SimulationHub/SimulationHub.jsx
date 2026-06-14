@@ -140,11 +140,14 @@ export default function SimulationHub() {
         url(${omgBg})`,
       backgroundSize: "cover",
       backgroundPosition: "center",
-      backgroundAttachment: "fixed", py: 6, px: 2
+      backgroundAttachment: "fixed", py: 2, px: 2
     }}>
       {/* High-Contrast Content Card for Bright Visibility */}
       <Box sx={{
-        maxWidth: 700, margin: "0 auto", p: 4,
+        maxWidth: 700, margin: "0 auto",
+        pt: 2,     // top padding above title
+        pb: 2,     // bottom padding below last stage
+        px: 4,     // keep horizontal padding as original
         bgcolor: "#ffffff",
         borderRadius: 8,
         boxShadow: "0 20px 50px rgba(0, 0, 0, 0.1)",
@@ -157,14 +160,14 @@ export default function SimulationHub() {
           top: 64,
           zIndex: 1100,
           bgcolor: "#ffffff",
-          pt: 1,
-          pb: 2,
-          mb: 3,
+          pt: 0.5,
+          pb: 1,
+          mb: 2,
           borderBottom: "1px solid #f1f5f9",
         }}>
 
           {/* Progress header and exit action */}
-          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
             <Typography variant="h5" fontWeight="900" color="text.primary">
               {`${UI_STRINGS.HEADER} - ${userInfo?.learnMode || 'Standard'}`}
             </Typography>
@@ -194,12 +197,12 @@ export default function SimulationHub() {
           <LinearProgress
             variant="determinate"
             value={progress?.Progress_Percent ?? 0}
-            sx={{ height: 10, borderRadius: 5, mb: 2, bgcolor: "#f1f5f9" }}
+            sx={{ height: 10, borderRadius: 5, mb: 1, bgcolor: "#f1f5f9" }}
           />
 
           {/* Team banner */}
           <Paper elevation={0} sx={{
-            p: 2,
+            p: 1,
             bgcolor: isSimulationEnd ? "#fff9c4" : "#f8fafc",
             borderRadius: 4,
             border: isSimulationEnd ? "1px solid #fbc02d" : "1px solid #e2e8f0"

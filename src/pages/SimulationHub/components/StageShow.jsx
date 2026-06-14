@@ -51,7 +51,7 @@ export default function StageShow({
               fullWidth
               disabled={isDisabled}
               onClick={() => onStageClick(stage)}
-              sx={{ ...stage.buttonSx }}
+              sx={{ ...stage.buttonSx, py: 1.5, minHeight: 44 }}
             >
               {/* Stage label and category icon */}
               <Stack direction="row" spacing={2} alignItems="center">
