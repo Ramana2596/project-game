@@ -19,7 +19,7 @@ export default function StageProp({
 }) {
   return (
     // Disburse Props of each stage by stageNo
-    <Stack spacing={2} sx={{ mt: 2 }}>
+    <Stack spacing={1} sx={{ mt: 2 }}>
       {(stages || []).map((stage) => (
         <StageShow
           key={stage.stageNo}
