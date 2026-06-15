@@ -44,7 +44,7 @@ export const pageConstants = {
         visible: true
       },
       {
-        columnName: "Batch_Size",
+        columnName: "Batch_Strength",
         label: "Strength",
         db: { type: "tinyint" },
         section: "basic",
