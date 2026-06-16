@@ -72,7 +72,6 @@ const UserFeedback = () => {
 
     const handleToggle = () => {
         setOpen(prev => !prev);
-        // Reset selection state when closing
         if (open) handleCloseOptions();
     };
 
@@ -98,31 +97,28 @@ const UserFeedback = () => {
         </Fade>
     );
 
-    // ── Shared floating FAB ───────────────────────────────────────────────────
+    // ── Shared floating Square FAB ────────────────────────────────────────────
     const FeedbackFab = () => (
         <Tooltip title={open ? 'Close feedback' : 'Give feedback'} placement="right" arrow>
             <Box
                 onClick={handleToggle}
                 sx={{
-                    position      : 'fixed',
-                    bottom        : FAB_BOTTOM,
-                    left          : FAB_LEFT,
-                    zIndex        : 1300,
                     width         : FAB_SIZE,
                     height        : FAB_SIZE,
-                    borderRadius  : '0 50% 0 0',  // only top-right curves; other corners flush with viewport edges
-                    bgcolor       : open ? '#5B21B6' : '#7C3AED',
+                    borderRadius  : 0,
+                    bgcolor       : '#3B1FA3', // Exact theme match with the label text color to merge beautifully
                     color         : '#fff',
                     display       : 'flex',
                     alignItems    : 'center',
                     justifyContent: 'center',
                     cursor        : 'pointer',
-                    boxShadow     : '0 4px 14px rgba(103,58,183,0.45)',
-                    transition    : 'background-color 0.2s, transform 0.2s, box-shadow 0.2s',
+                    boxShadow     : '0 4px 14px rgba(59,31,163,0.3)',
+                    transition    : 'background-color 0.2s, transform 0.2s',
+                    zIndex        : 1301,
+                    flexShrink    : 0,
                     '&:hover'     : {
-                        bgcolor  : '#6D28D9',
-                        transform: 'scale(1.08)',
-                        boxShadow: '0 6px 18px rgba(103,58,183,0.55)',
+                        bgcolor  : '#2E1882',
+                        transform: 'scale(1.02)',
                     },
                 }}
             >
@@ -137,14 +133,12 @@ const UserFeedback = () => {
     // ── MOBILE LAYOUT ─────────────────────────────────────────────────────────
     if (isMobile) {
         return (
-            <>
+            <Box sx={{ position: 'fixed', bottom: FAB_BOTTOM, left: FAB_LEFT, zIndex: 1300 }}>
                 <FeedbackFab />
-
-                {/* Bottom sheet — appears above FAB when open */}
                 <Collapse in={open} unmountOnExit>
                     <Box sx={{
                         position  : 'fixed',
-                        bottom    : FAB_SIZE + 8,                  // sit just above the FAB
+                        bottom    : FAB_SIZE + 8,
                         left      : FAB_LEFT,
                         zIndex    : 1299,
                         width     : 'calc(100vw - 32px)',
@@ -161,17 +155,15 @@ const UserFeedback = () => {
                             </Box>
                         ) : (
                             <Box sx={{ px: 2, pt: 1.5, pb: 2 }}>
-                                {/* Header */}
                                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-                                        <FeedbackOutlinedIcon sx={{ fontSize: 16, color: '#5B21B6' }} />
+                                        <FeedbackOutlinedIcon sx={{ fontSize: 16, color: '#3B1FA3' }} />
                                         <Typography sx={{ fontSize: 13, fontWeight: 800, color: '#3B1FA3' }}>
                                             Page Feedback
                                         </Typography>
                                     </Box>
                                 </Box>
 
-                                {/* Widget selection */}
                                 <Typography sx={{ fontSize: 11, fontWeight: 600, color: '#4A3880', mb: 1 }}>
                                     What type of feedback?
                                 </Typography>
@@ -181,7 +173,6 @@ const UserFeedback = () => {
                                     onWidgetSelect={handleWidgetSelect}
                                 />
 
-                                {/* Options */}
                                 {showOptions && (
                                     <Box sx={{ mt: 1.5 }}>
                                         <Typography sx={{ fontSize: 11, fontWeight: 600, color: '#4A3880', mb: 1 }}>
@@ -243,7 +234,6 @@ const UserFeedback = () => {
                                     <Typography sx={{ fontSize: 12, color: '#E24B4A', mt: 1 }}>{errorMsg}</Typography>
                                 )}
 
-                                {/* Actions */}
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 2 }}>
                                     <Chip
                                         label="Cancel"
@@ -275,31 +265,34 @@ const UserFeedback = () => {
                         )}
                     </Box>
                 </Collapse>
-            </>
+            </Box>
         );
     }
 
     // ── DESKTOP LAYOUT ────────────────────────────────────────────────────────
-    // The feedback bar slides out to the RIGHT of the FAB, keeping both
-    // anchored at the same vertical position (FAB_BOTTOM from the bottom).
     return (
-        <>
+        <Box 
+            sx={{ 
+                position: 'fixed', 
+                bottom: FAB_BOTTOM, 
+                left: FAB_LEFT, 
+                zIndex: 1300, 
+                display: 'flex', 
+                alignItems: 'center',
+                height: FAB_SIZE 
+            }}
+        >
             <FeedbackFab />
 
-            {/* Feedback bar — positioned to start right where the FAB ends */}
             <Collapse in={open} orientation="horizontal" unmountOnExit>
                 <Box
                     sx={{
-                        position    : 'fixed',
-                        bottom      : FAB_BOTTOM,
-                        left        : FAB_LEFT + FAB_SIZE,        // start right at FAB's right edge, no gap
-                        zIndex      : 1299,
                         height      : FAB_SIZE,
                         bgcolor     : '#EDE9FE',
                         border      : '1.5px solid rgba(103,58,183,0.3)',
-                        borderTop   : '1.5px solid rgba(103,58,183,0.3)',
-                        borderBottom: 'none',                     // flush with viewport bottom
-                        borderRadius: `0 ${FAB_SIZE / 2}px ${FAB_SIZE / 2}px 0`,  // right side pills, left flush
+                        borderLeft  : 'none',   
+                        borderBottom: 'none', 
+                        borderRadius: `0 ${FAB_SIZE / 2}px ${FAB_SIZE / 2}px 0`,
                         boxShadow   : '0 4px 16px rgba(103,58,183,0.18)',
                         display     : 'flex',
                         alignItems  : 'center',
@@ -310,23 +303,19 @@ const UserFeedback = () => {
                     {status === 'success' ? (
                         <SuccessFlash inline />
                     ) : (
-                        <Box sx={{ display: 'flex', alignItems: 'center', height: '100%', px: 0.5 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', height: '100%', px: 0.5, width: '100%' }}>
 
-                            {/* Label */}
+                            {/* Label — Cleaner seamless transition background */}
                             <Box sx={{
                                 display    : 'flex',
                                 alignItems : 'center',
                                 px         : 1.5,
                                 height     : '100%',
-                                borderRight: '1.5px solid rgba(103,58,183,0.2)',
                                 flexShrink : 0,
-                                bgcolor    : '#DDD6FE',
                             }}>
-                                <Box>
-                                    <Typography sx={{ fontSize: 13, fontWeight: 800, color: '#3B1FA3', lineHeight: 1 }}>
-                                        Page Feedback
-                                    </Typography>
-                                </Box>
+                                <Typography sx={{ fontSize: 13, fontWeight: 800, color: '#3B1FA3', lineHeight: 1 }}>
+                                    Page Feedback
+                                </Typography>
                             </Box>
 
                             {/* Widget icons */}
@@ -336,7 +325,6 @@ const UserFeedback = () => {
                                 gap        : 0.5,
                                 px         : 1,
                                 height     : '100%',
-                                borderRight: showOptions ? '1.5px solid rgba(103,58,183,0.2)' : 'none',
                                 flexShrink : 0,
                             }}>
                                 <FeedbackOptions
@@ -349,7 +337,7 @@ const UserFeedback = () => {
                                         <IconButton
                                             onClick={handleCloseOptions}
                                             size="small"
-                                            sx={{ color: '#9E93C8', '&:hover': { color: '#5B21B6' } }}
+                                            sx={{ color: '#9E93C8', '&:hover': { color: '#3B1FA3' } }}
                                         >
                                             <CloseIcon sx={{ fontSize: 14 }} />
                                         </IconButton>
@@ -357,8 +345,8 @@ const UserFeedback = () => {
                                 )}
                             </Box>
 
-                            {/* Options pills */}
-                            <Collapse in={showOptions} orientation="horizontal" unmountOnExit>
+                            {/* Options pills & Dynamic Text Field */}
+                            <Collapse in={showOptions} orientation="horizontal" unmountOnExit style={{ display: 'flex', alignItems: 'center' }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, px: 1, height: FAB_SIZE }}>
                                     {filteredOptions.slice(0, 5).map(opt => {
                                         const isSel = selectedOption?.Feedback_Option_Id === opt.Feedback_Option_Id;
@@ -383,39 +371,32 @@ const UserFeedback = () => {
                                         );
                                     })}
 
-                                    {/* Comment field for "Other" */}
+                                    {/* Expanded Clean Comment Input Field */}
                                     {isOther && (
-                                        <>
-                                            <Box sx={{ width: 1, height: 20, bgcolor: 'rgba(103,58,183,0.25)', mx: 0.25 }} />
-                                            <TextField
-                                                autoFocus size="small"
-                                                placeholder="Your comment…"
-                                                value={comment}
-                                                onChange={e => setComment(e.target.value)}
-                                                sx={{
-                                                    width: 260,
-                                                    '& .MuiOutlinedInput-root': {
-                                                        fontSize: 12, borderRadius: 2, bgcolor: '#fff',
-                                                        '& fieldset'            : { borderColor: 'rgba(103,58,183,0.3)' },
-                                                        '&:hover fieldset'      : { borderColor: '#7C3AED' },
-                                                        '&.Mui-focused fieldset': { borderColor: '#7C3AED' },
-                                                    },
-                                                }}
-                                            />
-                                        </>
+                                        <TextField
+                                            autoFocus size="small"
+                                            placeholder="Your comment…"
+                                            value={comment}
+                                            onChange={e => setComment(e.target.value)}
+                                            sx={{
+                                                minWidth: 320, // Offers spacious room for inputs visually
+                                                '& .MuiOutlinedInput-root': {
+                                                    fontSize: 12, borderRadius: 2, bgcolor: '#fff',
+                                                    height: 28,
+                                                    '& fieldset'            : { borderColor: 'rgba(103,58,183,0.3)' },
+                                                    '&:hover fieldset'      : { borderColor: '#7C3AED' },
+                                                    '&.Mui-focused fieldset': { borderColor: '#7C3AED' },
+                                                },
+                                            }}
+                                        />
                                     )}
 
                                     {/* Star rating for Widget 4 */}
                                     {selectedWidget?.Widget_Id === 4 && (
-                                        <>
-                                            <Box sx={{ width: 1, height: 20, bgcolor: 'rgba(103,58,183,0.25)', mx: 0.25 }} />
-                                            <Rating value={rating} onChange={(_, val) => setRating(val)} size="small" sx={{ color: '#388E3C' }} />
-                                        </>
+                                        <Rating value={rating} onChange={(_, val) => setRating(val)} size="small" sx={{ color: '#388E3C', mx: 0.5 }} />
                                     )}
 
-                                    <Box sx={{ width: 1, height: 20, bgcolor: 'rgba(103,58,183,0.25)', mx: 0.25 }} />
-
-                                    {/* Send */}
+                                    {/* Send Button */}
                                     <Chip
                                         label={status === 'submitting' ? 'Sending…' : 'Send'}
                                         icon={<SendIcon style={{ fontSize: 12 }} />}
@@ -438,12 +419,12 @@ const UserFeedback = () => {
                                 </Box>
                             </Collapse>
 
-                            {/* Inline close — always visible at bar's trailing edge */}
+                            {/* Inline close button at bar edge */}
                             <Tooltip title="Close" placement="top" arrow>
                                 <IconButton
                                     onClick={handleToggle}
                                     size="small"
-                                    sx={{ mx: 0.5, color: '#9E93C8', flexShrink: 0, '&:hover': { color: '#5B21B6' } }}
+                                    sx={{ mx: 0.5, color: '#9E93C8', flexShrink: 0, '&:hover': { color: '#3B1FA3' } }}
                                 >
                                     <CloseIcon sx={{ fontSize: 14 }} />
                                 </IconButton>
@@ -452,7 +433,7 @@ const UserFeedback = () => {
                     )}
                 </Box>
             </Collapse>
-        </>
+        </Box>
     );
 };
 
