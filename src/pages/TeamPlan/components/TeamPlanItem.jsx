@@ -32,7 +32,7 @@ const TeamPlanItem = ({
       <Table size="small" stickyHeader sx={{ minWidth: 900 }}>
         <TableHead>
           <TableRow>
-            {/* Header row with sticky positioning and bold labels */}
+            {/* Header row with sticky positioning */}
             {columns.map((col) => (
               <TableCell
                 key={col.key}
@@ -90,13 +90,13 @@ const TeamPlanItem = ({
                         currentTab === "OI 001" ? (
                           <Typography sx={{ fontSize: "0.85rem" }}>{row.Info_Price || row.Purchase_Preference || ""}</Typography>
                         ) : (
-                          <Select
-                            size="small"
-                            value={selectedPriceId}
-                            onFocus={() => {
-                              onEditStart && onEditStart();
-                              fetchBuyInfoLovForPart && fetchBuyInfoLovForPart(currentTab, row.Part_No);
-                            }}
+                              <Select
+                                size="small"
+                                value={selectedPriceId}
+                                onFocus={() => {
+                                  onEditStart && onEditStart();
+                                  fetchBuyInfoLovForPart && fetchBuyInfoLovForPart(currentTab, row.Part_No);
+                                }}
                             onChange={(e) => {
                               const selected = priceLov.find((p) => p.Price_Id === e.target.value);
                               const finalQty = Math.max(Number(row.Required_Quantity || 0), Number(selected?.Quantity || 0));
