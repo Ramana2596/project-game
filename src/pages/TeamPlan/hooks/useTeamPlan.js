@@ -132,7 +132,7 @@ export const useTeamPlan = (userInfo) => {
       refTypeInfo: Ref_Type_Info,
       refTypePrice: Ref_Type_Price,
       partNo,
-      cmdLine: "Buy_Info",
+      cmdLine: "Buy_Material",
     };
 
     try {
