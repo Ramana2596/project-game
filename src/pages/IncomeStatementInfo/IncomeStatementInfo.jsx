@@ -71,78 +71,36 @@ export default function IncomeStatementInfo({ productionMonth }) {
     // eslint-disable-next-line
   }, [productionMonth]);
 
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      {/* Chart type selector */}
-      <Box sx={{ mb: 2 }}>
-        <label>Select Chart Type: </label>
-        <select value={chartType} onChange={(e) => setChartType(e.target.value)}>
-          {chartConstants.chartTypes.map((type) => (
-            <option key={type} value={type}>
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </option>
-          ))}
-        </select>
-      </Box>
-
-      {/* Multiple charts arranged side-by-side */}
+return (
+  <Box sx={{ flexGrow: 1 }}>
+    {/* Two-column layout: Reports 80%, Charts 20% */}
+    <Box sx={{ display: "flex", gap: 3, height: "75vh" }}>
+      
+      {/* Reports column (80%) */}
       <Box
         sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 2,
-          backgroundColor: "#f9f9f9",
-          p: 2,
-          borderRadius: 1,
+          flex: "0 0 80%",
+          bgcolor: "#f9faff",
+          borderRadius: 2,
+          border: "1px solid #e5e7eb",
+          overflowY: "auto",
         }}
       >
-        {chartData.map((series) => (
-          <Box
-            key={series.detail}
-            sx={{
-              flex: `1 1 ${100 / chartConstants.chartsPerRow - 2}%`,
-              mb: 2,
-              backgroundColor: "#ffffff",
-              borderRadius: 1,
-              boxShadow: 1,
-            }}
-          >
-            <ResponsiveContainer width="100%" height={250}>
-              {chartType === "line" && (
-                <LineChart data={series.data}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="value"
-                    name={series.detail}
-                    stroke={chartConstants.detailColors[series.detail] || "#8884d8"}
-                  />
-                </LineChart>
-              )}
-              {chartType === "bar" && (
-                <BarChart data={series.data}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar
-                    dataKey="value"
-                    name={series.detail}
-                    fill={chartConstants.detailColors[series.detail] || "#82ca9d"}
-                  />
-                </BarChart>
-              )}
-            </ResponsiveContainer>
-            <h4 style={{ textAlign: "center" }}>{series.detail}</h4>
-          </Box>
-        ))}
-      </Box>
+        {/* Sticky header for reports */}
+        <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            bgcolor: "#f9faff",
+            p: 1,
+            borderBottom: "1px solid #e5e7eb",
+            zIndex: 1,
+          }}
+        >
+          <h3 style={{ margin: 0 }}>Income Statement Report</h3>
+        </Box>
 
-      {/* Table with dynamic headings */}
-      <Box sx={{ overflowX: "auto", backgroundColor: "#ffffff", borderRadius: 1, boxShadow: 1 }}>
+        {/* Table remains unaltered */}
         <GenericTable
           inputTableHeadings={
             dynamicHeadings.length > 0
@@ -155,6 +113,98 @@ export default function IncomeStatementInfo({ productionMonth }) {
           highlightRowsByDetail={pageConstants.vitalRows}
         />
       </Box>
+
+      {/* Charts column (20%) */}
+      <Box
+        sx={{
+          flex: "0 0 20%",
+          overflowY: "auto",
+          pr: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,   // reduced vertical gap
+          alignItems: "center",
+        }}
+      >
+        {/* Sticky header for charts */}
+        <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            bgcolor: "#ffffff",
+            p: 1,
+            borderBottom: "1px solid #e5e7eb",
+            zIndex: 1,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <h3 style={{ margin: 0 }}>Charts:</h3>
+          <select
+            value={chartType}
+            onChange={(e) => setChartType(e.target.value)}
+            style={{
+              border: "none",
+              background: "transparent",
+              fontSize: "1.2rem",
+              cursor: "pointer",
+            }}
+          >
+            {chartConstants.chartTypes.map((type) => (
+              <option key={type} value={type}>
+                {type === "line" ? "📈" : "📊"}
+              </option>
+            ))}
+          </select>
+        </Box>
+
+        {chartData.map((series) => (
+          <Box
+            key={series.detail}
+            sx={{
+              width: "100%",
+              bgcolor: "#ffffff",
+              borderRadius: 2,
+              boxShadow: 1,
+              p: 1,
+            }}
+          >
+            <ResponsiveContainer width="100%" height={180}>
+              {chartType === "line" && (
+                <LineChart data={series.data}>
+                  <XAxis dataKey="month" hide />   {/* hide duplicate X-axis labels */}
+                  <YAxis />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    name={series.detail}
+                    stroke={chartConstants.detailColors[series.detail] || "#8884d8"}
+                  />
+                </LineChart>
+              )}
+              {chartType === "bar" && (
+                <BarChart data={series.data}>
+                  <XAxis dataKey="month" hide />   {/* hide duplicate X-axis labels */}
+                  <YAxis />
+                  <Tooltip />
+                  <Bar
+                    dataKey="value"
+                    name={series.detail}
+                    fill={chartConstants.detailColors[series.detail] || "#82ca9d"}
+                  />
+                </BarChart>
+              )}
+            </ResponsiveContainer>
+            {/* Retain one title per chart at bottom */}
+            <h4 style={{ textAlign: "center", marginTop: 4 }}>{series.detail}</h4>
+          </Box>
+        ))}
+      </Box>
     </Box>
-  );
+  </Box>
+);
+
 }
