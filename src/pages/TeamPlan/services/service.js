@@ -9,9 +9,9 @@ export function getOpsPlanQuery(payload) {
 }
 
 // Bulk update API call, accepts array of rows from in-memory table (TVP)
-export function updateOpsPlanBulk(rows, userRole) {
+export function updateOpsPlanBulk(rows, userId) {
   return api.post("/api/updateOpsPlanBulk", {
     rows,
-    userRole,
+    userId,
   });
 }
