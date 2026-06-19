@@ -103,8 +103,6 @@ export const useTeamPlan = (userInfo) => {
       const resp = await getOpsPlanQuery(payload);
       const data = Array.isArray(resp.data) ? resp.data : [];
 
-      console.log("RAW Buy_Material item:", data[0]);
-
       const priceLov = data.map(item => ({
         Price_Id: item.Price_Id,
         Info_Price: item.Info_Price,
@@ -117,8 +115,7 @@ export const useTeamPlan = (userInfo) => {
         [tabKey]: { ...(p[tabKey] || {}), [partNo]: { Price_Lov: priceLov } }
       }));
 
-/*
-      // Refresh Quantity/Unit_Price for already-selected rows so Order Quantity stays in sync
+      // Auto_Sync user-edited qty, Order Quantity, unit price
       setTabDataMap(prev => {
         const rows = prev[tabKey] || [];
         let touched = [];
@@ -150,7 +147,6 @@ export const useTeamPlan = (userInfo) => {
         return { ...prev, [tabKey]: updatedRows };
       });
 
-*/
     } catch {
       setLovsMap(p => ({
         ...p,
