@@ -80,6 +80,12 @@ const TeamPlanItem = ({
                             onCellChange(rowIndex, "Required_Quantity", val);
                             fetchBuyInfoLovForPart(currentTab, row.Part_No, val);
                           }}
+                          // Fetch only after user finishes editing
+                          onBlur={(e) => {
+                            const val = e.target.value === "" ? "" : Number(e.target.value);
+                            fetchBuyInfoLovForPart(currentTab, row.Part_No, val);
+                          }}
+
                           fullWidth
                         />
                       ) :
