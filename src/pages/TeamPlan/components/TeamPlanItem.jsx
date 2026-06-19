@@ -1,5 +1,5 @@
 // File: src/pages/TeamPlan/components/TeamPlanItem.jsx
-// Purpose: Render table with Tab-specific logic (Editable Quantity for Products)
+// Render table with Tab-specific edit logic 
 
 import React from "react";
 import {
@@ -68,8 +68,8 @@ const TeamPlanItem = ({
                 <TableRow key={rowIndex} hover>
                   {columns.map((col) => (
                     <TableCell key={col.key} sx={{ verticalAlign: "middle" }}>
-                      
-                      {/* Required Quantity: Only for Material/Machinery tabs */}
+
+                      {/* Required Quantity: For Material/Machinery tabs */}
                       {col.key === "Required_Quantity" && currentTab !== "OI 001" ? (
                         <TextField
                           size="small"
@@ -78,64 +78,66 @@ const TeamPlanItem = ({
                           onChange={(e) => {
                             const val = e.target.value === "" ? "" : Number(e.target.value);
                             onCellChange(rowIndex, "Required_Quantity", val);
-                            const apiQty = Number(priceLov.find(p => p.Price_Id === row.Price_Id)?.Quantity || 0);
-                            onCellChange(rowIndex, "Quantity", Math.max(Number(val || 0), apiQty));
+                            fetchBuyInfoLovForPart(currentTab, row.Part_No, val);
                           }}
                           fullWidth
                         />
-                      ) : 
+                      ) :
 
-                      /* Info_Price: Read-only for Products & Interactive Select for Material/Machinery,  */
-                      col.key === "Info_Price" ? (
-                        currentTab === "OI 001" ? (
-                          <Typography sx={{ fontSize: "0.85rem" }}>{row.Info_Price || row.Purchase_Preference || ""}</Typography>
-                        ) : (
+                        /* Info_Price: Read-only for Products & Interactive Select for Material/Machinery,  */
+                        col.key === "Info_Price" ? (
+                          currentTab === "OI 001" ? (
+                            <Typography sx={{ fontSize: "0.85rem" }}>{row.Info_Price || row.Purchase_Preference || ""}</Typography>
+                          ) : (
                               <Select
                                 size="small"
                                 value={selectedPriceId}
                                 onFocus={() => {
                                   onEditStart && onEditStart();
-                                  fetchBuyInfoLovForPart && fetchBuyInfoLovForPart(currentTab, row.Part_No);
+                                  fetchBuyInfoLovForPart &&
+                                    fetchBuyInfoLovForPart(
+                                      currentTab,
+                                      row.Part_No,
+                                      row.Required_Quantity);
                                 }}
-                            onChange={(e) => {
-                              const selected = priceLov.find((p) => p.Price_Id === e.target.value);
-                              const finalQty = Math.max(Number(row.Required_Quantity || 0), Number(selected?.Quantity || 0));
-                              onCellChange(rowIndex, null, {
-                                ...row,
-                                Price_Id: e.target.value,
-                                Info_Price: selected?.Info_Price ?? "",
-                                Quantity: finalQty,
-                                Unit_Price: selected?.Unit_Price ?? 0,
-                              });
-                            }}
-                            fullWidth
-                          >
-                            {priceLov.map((p) => <MenuItem key={p.Price_Id} value={p.Price_Id}>{p.Info_Price}</MenuItem>)}
-                          </Select>
-                        )
-                      ) : 
+                              onChange={(e) => {
+                                const selected = priceLov.find((p) => p.Price_Id === e.target.value);
+                                onCellChange(rowIndex, null, {
+                                  ...row,
+                                  Price_Id: e.target.value,
+                                  Info_Price: selected?.Info_Price ?? "",
+                                  Quantity: selected?.Quantity ?? 0,
+                                  Unit_Price: selected?.Unit_Price ?? 0,
+                                });
+                              }}
+                              fullWidth
+                            >
+                              {priceLov.map((p) => <MenuItem key={p.Price_Id} value={p.Price_Id}>{p.Info_Price}</MenuItem>)}
+                            </Select>
+                          )
+                        ) :
 
-                      /* Quantity: Editable for Products (OI 001), Calculated Display for others */
-                      col.key === "Quantity" ? (
-                        currentTab === "OI 001" ? (
-                          <TextField
-                            size="small"
-                            value={row.Quantity ?? ""}
-                            onFocus={() => onEditStart && onEditStart()}
-                            onChange={(e) => onCellChange(rowIndex, "Quantity", e.target.value === "" ? "" : Number(e.target.value))}
-                            fullWidth
-                          />
-                        ) : (
-                          <Typography sx={{ fontWeight: 700, color: "#1976D2", textAlign: "right" }}>
-                            {row.Quantity ?? 0}
-                          </Typography>
-                        )
-                      ) : (
-                        /* Standard fallback: Handles the "not displayed" values by checking for existence */
-                        <Typography sx={{ fontSize: "0.85rem" }}>
-                          {row[col.key] !== undefined && row[col.key] !== null ? row[col.key] : ""}
-                        </Typography>
-                      )}
+                          /* Quantity: Editable for Products (OI 001), Calculated Display for others */
+                          col.key === "Quantity" ? (
+                            currentTab === "OI 001" ? (
+                              <TextField
+                                size="small"
+                                value={row.Quantity ?? ""}
+                                onFocus={() => onEditStart && onEditStart()}
+                                onChange={(e) => onCellChange(rowIndex, "Quantity", e.target.value === "" ? "" : Number(e.target.value))}
+                                fullWidth
+                              />
+                            ) : (
+                              <Typography sx={{ fontWeight: 700, color: "#1976D2", textAlign: "right" }}>
+                                {row.Quantity ?? 0}
+                              </Typography>
+                            )
+                          ) : (
+                            /* Handles the "not displayed" */
+                            <Typography sx={{ fontSize: "0.85rem" }}>
+                              {row[col.key] !== undefined && row[col.key] !== null ? row[col.key] : ""}
+                            </Typography>
+                          )}
                     </TableCell>
                   ))}
                 </TableRow>

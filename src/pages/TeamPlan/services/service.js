@@ -1,11 +1,11 @@
-// Path: src/pages/TeamPlan/services/service.js
-// API calls for Ops Business Plan
+// File: src/pages/TeamPlan/services/service.js
+// Purpose: API calls for Ops Business Plan
 
 import api from "../../../core/interceptor/api-interceptor";
 
-// GET with query parameters (frontend uses camelCase)
-export function getOpsPlanQuery(queryParams) {
-  return api.get("/api/getOpsPlanQuery", { params: queryParams });
+// POST with payload 
+export function getOpsPlanQuery(payload) {
+  return api.post("/api/getOpsPlanQuery", payload);
 }
 
 // Bulk update API call, accepts array of rows from in-memory table (TVP)
@@ -15,5 +15,3 @@ export function updateOpsPlanBulk(rows, userRole) {
     userRole,
   });
 }
-
-
