@@ -80,34 +80,112 @@ export default function BalanceSheetInfo({ productionMonth }) {
     // eslint-disable-next-line
   }, [productionMonth]);
 
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      {/* Chart type selector */}
-      <Box sx={{ mb: 2 }}>
-        <label>Select Chart Type: </label>
-        <select value={chartType} onChange={(e) => setChartType(e.target.value)}>
-          {chartConstants.chartTypes.map((type) => (
-            <option key={type} value={type}>
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </option>
-          ))}
-        </select>
+return (
+  <Box sx={{ flexGrow: 1 }}>
+    {/* Two-column layout: Reports 80%, Charts 20% */}
+    <Box sx={{ display: "flex", gap: 3, height: "75vh" }}>
+      
+      {/* Reports column (80%) */}
+      <Box
+        sx={{
+          flex: "0 0 80%",
+          bgcolor: "#f9faff",
+          borderRadius: 2,
+          border: "1px solid #e5e7eb",
+          overflowY: "auto",
+        }}
+      >
+        {/* Sticky header for reports */}
+        <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            bgcolor: "#f9faff",
+            p: 1,
+            borderBottom: "1px solid #e5e7eb",
+            zIndex: 1,
+          }}
+        >
+          <h3 style={{ margin: 0 }}>Balance Sheet Report</h3>
+        </Box>
+
+        {/* Table remains unaltered */}
+        <GenericTable
+          inputTableHeadings={
+            dynamicHeadings.length > 0
+              ? dynamicHeadings
+              : pageConstants.fallbackHeadings
+          }
+          inputTableData={tableData}
+          ifNoData={null}
+          hiddenColumns={pageConstants.hiddenColumns}
+          highlightRowsByDetail={pageConstants.vitalRows}
+        />
       </Box>
 
-      {/* Multiple charts arranged side-by-side */}
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, backgroundColor: "#f9f9f9", p: 2, borderRadius: 1 }}>
+      {/* Charts column (20%) */}
+      <Box
+        sx={{
+          flex: "0 0 20%",
+          overflowY: "auto",
+          pr: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,   // reduced vertical gap
+          alignItems: "center",
+        }}
+      >
+        {/* Sticky header for charts */}
+        <Box
+          sx={{
+            position: "sticky",
+            top: 0,
+            bgcolor: "#ffffff",
+            p: 1,
+            borderBottom: "1px solid #e5e7eb",
+            zIndex: 1,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <h3 style={{ margin: 0 }}>Charts:</h3>
+          <select
+            value={chartType}
+            onChange={(e) => setChartType(e.target.value)}
+            style={{
+              border: "none",
+              background: "transparent",
+              fontSize: "1.2rem",
+              cursor: "pointer",
+            }}
+          >
+            {chartConstants.chartTypes.map((type) => (
+              <option key={type} value={type}>
+                {type === "line" ? "📈" : "📊"}
+              </option>
+            ))}
+          </select>
+        </Box>
+
         {chartData.map((series) => (
           <Box
             key={series.detail}
-            sx={{ flex: `1 1 ${100 / chartConstants.chartsPerRow - 2}%`, mb: 2, backgroundColor: "#ffffff", borderRadius: 1, boxShadow: 1 }}
+            sx={{
+              width: "100%",
+              bgcolor: "#ffffff",
+              borderRadius: 2,
+              boxShadow: 1,
+              p: 1,
+            }}
           >
-            <ResponsiveContainer width="100%" height={250}>
+            <ResponsiveContainer width="100%" height={180}>
               {chartType === "line" && (
                 <LineChart data={series.data}>
-                  <XAxis dataKey="month" />
+                  <XAxis dataKey="month" hide />   {/* hide duplicate X-axis labels */}
                   <YAxis />
                   <Tooltip />
-                  <Legend />
                   <Line
                     type="monotone"
                     dataKey="value"
@@ -118,10 +196,9 @@ export default function BalanceSheetInfo({ productionMonth }) {
               )}
               {chartType === "bar" && (
                 <BarChart data={series.data}>
-                  <XAxis dataKey="month" />
+                  <XAxis dataKey="month" hide />   {/* hide duplicate X-axis labels */}
                   <YAxis />
                   <Tooltip />
-                  <Legend />
                   <Bar
                     dataKey="value"
                     name={series.detail}
@@ -130,25 +207,14 @@ export default function BalanceSheetInfo({ productionMonth }) {
                 </BarChart>
               )}
             </ResponsiveContainer>
-            <h4 style={{ textAlign: "center" }}>{series.detail}</h4>
+            {/* Retained one title per chart at bottom */}
+            <h4 style={{ textAlign: "center", marginTop: 4 }}>{series.detail}</h4>
           </Box>
         ))}
       </Box>
-
-
-
-      {/* Table with dynamic headings */}
-      <GenericTable
-        inputTableHeadings={
-          dynamicHeadings.length > 0
-            ? dynamicHeadings
-            : pageConstants.fallbackHeadings
-        }
-        inputTableData={tableData}
-        ifNoData={null}
-        hiddenColumns={pageConstants.hiddenColumns}
-        highlightRowsByDetail={pageConstants.vitalRows}
-      ></GenericTable>
     </Box>
-  );
+  </Box>
+);
+
+
 }
