@@ -201,7 +201,7 @@ export const useTeamPlan = (userInfo) => {
         Unit_Price: Number(r.Unit_Price || 0),
       }));
 
-      await updateOpsPlanBulk(payload, user.role);
+      await updateOpsPlanBulk(payload, userInfo.userId);
 
       setSavedDataMap(p => ({ ...p, [currentTab]: tabDataMap[currentTab] }));
       setChangedRowsMap(p => ({ ...p, [currentTab]: [] }));
