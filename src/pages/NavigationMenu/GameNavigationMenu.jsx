@@ -123,6 +123,8 @@ import SimulationHub from '../SimulationHub/SimulationHub.jsx';
 import UserRole from '../UserRole/UserRole.jsx';
 import UiAccess from '../UiAccess/UiAccess.jsx';
 import PublishMarketData from '../PublishMarketData/PublishMarketData.jsx';
+import FacultyDashboard from '../TeamPerf/FacultyDashboard.jsx';
+import TeamDashboard from '../TeamPerf/TeamDashboard.jsx';
 
 //import FormTemplate from '../FormTemplate/FormTemplate.jsx';
 
@@ -488,7 +490,9 @@ export default function MiniDrawer() {
           <Route path='/userRole' element={<UserRole />} />
           <Route path='/uiAccess' element={<UiAccess />} />
           <Route path='/publishMarketData' element={<PublishMarketData />} />
-
+          <Route path='/facultyDashboard' element={<FacultyDashboard />} />
+          <Route path='/teamDashboard' element={<TeamDashboard />} />
+          
           {/* <Route path='/formTemplate' element={<FormTemplate />} /> */}
         </Routes>
       </Box>
