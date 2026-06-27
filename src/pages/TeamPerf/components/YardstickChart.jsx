@@ -10,6 +10,13 @@ import {
 
 const YardstickChart = ({ data = [] }) => {
 
+  const yardstickColors = {
+    Profitability: "#1976d2",
+    Liquidity: "#2e7d32",
+    Leverage: "#ed6c02",
+    Growth: "#9c27b0",
+  };
+
   if (!data.length) {
     return (
       <Typography color="text.secondary">
@@ -59,7 +66,11 @@ const YardstickChart = ({ data = [] }) => {
               <Chip
                 label={value.toFixed(2)}
                 size="small"
-                color="primary"
+                sx={{
+                  color: yardstickColors[item.Yardstick_Name] || "#424242",
+                  borderColor: yardstickColors[item.Yardstick_Name] || "#90a4ae",
+                  fontWeight: 600,
+                }}
                 variant="outlined"
               />
 
@@ -71,6 +82,13 @@ const YardstickChart = ({ data = [] }) => {
               sx={{
                 height: 10,
                 borderRadius: 5,
+
+                backgroundColor: "#eceff1",
+
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor:
+                    yardstickColors[item.Yardstick_Name] || "#90a4ae",
+                },
               }}
             />
 
