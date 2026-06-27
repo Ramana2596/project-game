@@ -146,6 +146,8 @@ import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";
 import UiAccess from "../pages/UiAccess/UiAccess.jsx";
 import PublishMarketData from "../pages/PublishMarketData/PublishMarketData.jsx";
+import TeamDashboard from "../pages/TeamPerf/TeamDashboard.jsx";
+import FacultyDashboard from "../pages/TeamPerf/FacultyDashboard.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -181,6 +183,22 @@ export const componentList = [
         path: "/cashFlowStatement",
         href: "/operationGame/cashFlowStatement",
         routeElement: <CasFlowStatement />
+      },
+      {
+        iconPath: progressIcon,
+        id: "UI 24 100",
+        label: "Team Performance",
+        path: "/teamDashboard",
+        href: "/operationGame/TeamDashboard",
+        routeElement: <TeamDashboard />
+      },
+      {
+        iconPath: progressIcon,
+        id: "UI 24 110",
+        label: "Batch Performance",
+        path: "/facultyDashboard",
+        href: "/operationGame/FacultyDashboard",
+        routeElement: <FacultyDashboard />
       },
     ],
   },
