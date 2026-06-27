@@ -93,6 +93,13 @@ const TeamDashboard = () => {
     );
   }
 
+  const yardstickColors = {
+    Profitability: "#1565c0",
+    Liquidity: "#2e7d32",
+    Leverage: "#ef6c00",
+    Growth: "#6a1b9a",
+  };
+
   return (
     <Box sx={{ p: 3 }}>
 
@@ -102,75 +109,6 @@ const TeamDashboard = () => {
         header={header}
       />
 
-      {/* KPI SUMMARY SECTION */}
-      <Grid container spacing={2} sx={{ mt: 2 }}>
-
-        <Grid item xs={12} md={3}>
-          <Card elevation={2}>
-            <CardContent sx={{ textAlign: "center" }}>
-              <Typography variant="caption" color="text.secondary">
-                Overall Score
-              </Typography>
-
-              <Typography variant="h4" fontWeight={700} color="primary">
-                {Number(header.Overall_Score || 0).toFixed(2)}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={3}>
-          <Card elevation={2}>
-            <CardContent sx={{ textAlign: "center" }}>
-              <Typography variant="caption" color="text.secondary">
-                Band
-              </Typography>
-
-              <Chip
-                label={header.Band_Name}
-                color={
-                  header.Band_Seq_No === 1 ? "success" :
-                  header.Band_Seq_No === 2 ? "primary" :
-                  header.Band_Seq_No === 3 ? "info" :
-                  header.Band_Seq_No === 4 ? "warning" :
-                  "error"
-                }
-                sx={{ mt: 1 }}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={3}>
-          <Card elevation={2}>
-            <CardContent sx={{ textAlign: "center" }}>
-              <Typography variant="caption" color="text.secondary">
-                Rank
-              </Typography>
-
-              <Typography variant="h4" fontWeight={700}>
-                {header.Rank_No ?? "-"}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={3}>
-          <Card elevation={2}>
-            <CardContent sx={{ textAlign: "center" }}>
-              <Typography variant="caption" color="text.secondary">
-                Yardsticks
-              </Typography>
-
-              <Typography variant="h4" fontWeight={700}>
-                {yardsticks.length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-      </Grid>
-
       {/* MAIN CONTENT AREA */}
       <Grid container spacing={2} sx={{ mt: 2 }}>
         {/* LEFT: YARDSTICK PERFORMANCE */}
@@ -179,8 +117,8 @@ const TeamDashboard = () => {
             elevation={2}
             sx={{ p: 2, borderRadius: 2, height: "100%" }}
           >
-            <Typography variant="h6" fontWeight={600} gutterBottom>
-              Yardstick Performance
+            <Typography variant="h6" fontWeight={700} gutterBottom>
+              Performance Yardsticks
             </Typography>
 
             <Divider sx={{ mb: 2 }} />
@@ -195,19 +133,22 @@ const TeamDashboard = () => {
             elevation={2}
             sx={{ p: 2, borderRadius: 2, height: "100%" }}
           >
-            <Typography variant="h6" fontWeight={600} gutterBottom>
-              Ratio Performance Snapshot
+            <Typography variant="h6" fontWeight={700} gutterBottom>
+
+              Ratio Analysis
             </Typography>
 
             <Divider sx={{ mb: 2 }} />
 
             <Grid container spacing={2}>
 
-              {ratios.slice(0, 8).map((r) => (
-                <Grid item xs={12} sm={6} key={r.Ratio_Id}>
+              {ratios.map((r) => (
+                <Grid item xs={12} sm={6} md={4} key={r.Ratio_Id}>
                   <Card
                     variant="outlined"
                     sx={{
+                      borderLeft: `4px solid ${yardstickColors[r.Yardstick_Name] || "#bdbdbd"
+                        }`,
                       transition: "0.2s",
                       "&:hover": {
                         transform: "scale(1.02)",
@@ -215,37 +156,63 @@ const TeamDashboard = () => {
                       },
                     }}
                   >
-                    <CardContent>
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
+                    <CardContent
+                      sx={{
+                        p: 1.5,
+                        "&:last-child": {
+                          pb: 1.5,
+                        },
+                      }}
+                    >                      <Chip
+                        label={r.Yardstick_Name}
+                        size="small"
+                        sx={{
+                          bgcolor: yardstickColors[r.Yardstick_Name] || "#e0e0e0",
+                          color: "#fff",
+                          fontWeight: 600,
+                          mb: 1,
+                        }}
+                      />
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          mt: 0.5,
+                          mb: 0.5,
+                        }}
                       >
-                        {r.Yardstick_Name}
+                        <Typography
+                          variant="subtitle2"
+                          fontWeight={600}
+                          sx={{ pr: 1 }}
+                        >
+                          {r.Ratio_Name}
+                        </Typography>
+
+                        <Chip
+                          label={Number(r.Ratio_Overall || 0).toFixed(2)}
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                        />
+                      </Box>
+
+
+                      <Typography variant="body2" color="text.secondary">
+                        Actual : {Number(r.Ratio_Value || 0).toFixed(2)}
                       </Typography>
 
                       <Typography
-                        variant="subtitle2"
-                        fontWeight={600}
-                        sx={{ mt: 0.5 }}
-                      >
-                        {r.Ratio_Name}
-                      </Typography>
-
-                      <Typography
-                        variant="h6"
+                        variant="subtitle1"
                         color="primary"
-                        fontWeight={700}
-                        sx={{ mt: 1 }}
+                        fontWeight={600}
+                        sx={{ mt: 0.25 }}
                       >
-                        {Number(r.Ratio_Score || 0).toFixed(2)}
+                        {Number(r.Ratio_Score || 0).toFixed(0)}%
                       </Typography>
 
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                      >
-                        Contribution: {Number(r.Ratio_Contribution || 0).toFixed(2)}
-                      </Typography>
                     </CardContent>
                   </Card>
                 </Grid>
