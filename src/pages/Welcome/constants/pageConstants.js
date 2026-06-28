@@ -5,7 +5,7 @@
 import { Typography, Box } from '@mui/material';
 
 export const pageConstants = {
-    // ✅ Navigation sections used by WelcomeHeader and ContentSections
+    // Navigation sections: WelcomeHeader and ContentSections
     toolBarSections: [
         {
             key: 'aboutSimulation',
@@ -29,7 +29,7 @@ export const pageConstants = {
                 </>
             )
         },
-        // ✅ Green Tick: New OMTP Intro Section for independent navigation
+        // New OMTP Intro Section for independent navigation
         {
             key: 'omtpIntro',
             title: 'OMTP Guided Walkthrough',
