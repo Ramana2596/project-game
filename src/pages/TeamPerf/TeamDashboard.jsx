@@ -11,6 +11,7 @@ import {
   Divider,
   Card,
   CardContent,
+  LinearProgress,
 } from "@mui/material";
 
 import { useLocation, useNavigate } from "react-router-dom";
@@ -29,6 +30,9 @@ import YardstickChart from "./components/YardstickChart";
 const TeamDashboard = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromFaculty = location.state?.fromFaculty || false;
+  console.log("fromFaculty =", fromFaculty);
   const { userInfo } = useUser();
 
   const [loading, setLoading] = useState(true);
@@ -73,6 +77,21 @@ const TeamDashboard = () => {
         gameTeam,
       },
     });
+  };
+
+  const goToPreviousScreen = () => {
+
+    if (fromFaculty) {
+      navigate("/operationGame/FacultyDashboard", {
+        state: {
+          restore: true,
+          gameId,
+          gameBatch,
+        },
+      });
+      return;
+    }
+    navigate(-1);
   };
 
   if (loading) {
@@ -147,11 +166,10 @@ const TeamDashboard = () => {
                   <Card
                     variant="outlined"
                     sx={{
-                      borderLeft: `4px solid ${yardstickColors[r.Yardstick_Name] || "#bdbdbd"
-                        }`,
+                      borderRadius: 2,
                       transition: "0.2s",
                       "&:hover": {
-                        transform: "scale(1.02)",
+                        transform: "translateY(-2px)",
                         boxShadow: 3,
                       },
                     }}
@@ -204,14 +222,24 @@ const TeamDashboard = () => {
                         Actual : {Number(r.Ratio_Value || 0).toFixed(2)}
                       </Typography>
 
-                      <Typography
-                        variant="subtitle1"
-                        color="primary"
-                        fontWeight={600}
-                        sx={{ mt: 0.25 }}
-                      >
-                        {Number(r.Ratio_Score || 0).toFixed(0)}%
-                      </Typography>
+                      <Box sx={{ mt: 1 }}>
+
+                        <LinearProgress
+                          variant="determinate"
+                          value={Math.max(0, Math.min(100, Number(r.Ratio_Score || 0)))}
+                          sx={{
+                            height: 6,
+                            borderRadius: 3,
+                            backgroundColor: "#eceff1",
+
+                            "& .MuiLinearProgress-bar": {
+                              backgroundColor:
+                                yardstickColors[r.Yardstick_Name] || "#1976d2",
+                            },
+                          }}
+                        />
+
+                      </Box>
 
                     </CardContent>
                   </Card>
@@ -257,11 +285,18 @@ const TeamDashboard = () => {
               <Grid item xs={12} md={6}>
                 <Card
                   sx={{
-                    borderLeft: "6px solid #2e7d32",
                     height: "100%",
+                    borderRadius: 2,
                   }}
                 >
-                  <CardContent>
+                  <CardContent
+                    sx={{
+                      p: 1.5,
+                      "&:last-child": {
+                        pb: 1.5,
+                      },
+                    }}
+                  >
                     <Typography
                       variant="caption"
                       color="text.secondary"
@@ -269,28 +304,57 @@ const TeamDashboard = () => {
                       ⭐ Best Performing Ratio
                     </Typography>
 
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight={700}
-                      sx={{ mt: 1 }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mt: 1,
+                        mb: 0.5,
+                      }}
                     >
-                      {best?.Ratio_Name}
-                    </Typography>
 
-                    <Typography
-                      variant="h5"
-                      color="success.main"
-                      fontWeight={700}
-                    >
-                      {Number(best?.Ratio_Score || 0).toFixed(2)}
-                    </Typography>
+                      <Typography
+                        variant="subtitle2"
+                        fontWeight={700}
+                        sx={{ pr: 1 }}
+                      >
+                        {best?.Ratio_Name}
+                      </Typography>
 
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                    >
-                      {best?.Yardstick_Name}
-                    </Typography>
+                      <Chip
+                        label={Number(best?.Ratio_Overall || 0).toFixed(2)}
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                      />
+
+                    </Box>
+
+                    <Box sx={{ mt: 1 }}>
+
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                      >
+                        Actual : {Number(best?.Ratio_Value || 0).toFixed(2)}
+                      </Typography>
+  
+                      <LinearProgress
+                        variant="determinate"
+                        value={Math.max(0, Math.min(100, Number(best?.Ratio_Score || 0)))}
+                        sx={{
+                          height: 8,
+                          borderRadius: 4,
+                          backgroundColor: "#eceff1",
+                          "& .MuiLinearProgress-bar": {
+                            backgroundColor: "#2e7d32",
+                          },
+                        }}
+                      />
+
+                    </Box>
+
                   </CardContent>
                 </Card>
               </Grid>
@@ -299,40 +363,75 @@ const TeamDashboard = () => {
               <Grid item xs={12} md={6}>
                 <Card
                   sx={{
-                    borderLeft: "6px solid #d32f2f",
                     height: "100%",
+                    borderRadius: 2,
                   }}
                 >
-                  <CardContent>
-                    <Typography
+                  <CardContent
+                    sx={{
+                      p: 1.5,
+                      "&:last-child": {
+                        pb: 1.5,
+                      },
+                    }}
+                  >                    <Typography
                       variant="caption"
                       color="text.secondary"
                     >
                       ⚠ Needs Improvement
                     </Typography>
 
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight={700}
-                      sx={{ mt: 1 }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mt: 1,
+                        mb: 0.5,
+                      }}
                     >
-                      {worst?.Ratio_Name}
-                    </Typography>
 
-                    <Typography
-                      variant="h5"
-                      color="error.main"
-                      fontWeight={700}
-                    >
-                      {Number(worst?.Ratio_Score || 0).toFixed(2)}
-                    </Typography>
+                      <Typography
+                        variant="subtitle2"
+                        fontWeight={700}
+                        sx={{ pr: 1 }}
+                      >
+                        {worst?.Ratio_Name}
+                      </Typography>
 
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                    >
-                      {worst?.Yardstick_Name}
-                    </Typography>
+                      <Chip
+                        label={Number(worst?.Ratio_Overall || 0).toFixed(2)}
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                      />
+
+                    </Box>
+
+                    <Box sx={{ mt: 1 }}>
+
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                      >
+                        Actual : {Number(worst?.Ratio_Value || 0).toFixed(2)}
+                      </Typography>
+
+                      <LinearProgress
+                        variant="determinate"
+                        value={Math.max(0, Math.min(100, Number(worst?.Ratio_Score || 0)))}
+                        sx={{
+                          height: 7,
+                          borderRadius: 3,
+                          backgroundColor: "#eceff1",
+                          "& .MuiLinearProgress-bar": {
+                            backgroundColor: "#d32f2f",
+                          },
+                        }}
+                      />
+
+                    </Box>
+
                   </CardContent>
                 </Card>
               </Grid>
@@ -350,6 +449,17 @@ const TeamDashboard = () => {
           gap: 2,
         }}
       >
+
+        {fromFaculty && (
+          <Button
+            variant="outlined"
+            color="inherit"
+            onClick={goToPreviousScreen}
+          >
+            Previous Screen
+          </Button>
+        )}
+
         <Button
           variant="outlined"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

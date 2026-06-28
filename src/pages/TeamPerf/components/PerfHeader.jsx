@@ -127,7 +127,7 @@ const PerfHeader = ({ team, header }) => {
                   display="block"
                   color="text.secondary"
                 >
-                  Performance Band
+                  Performance
                 </Typography>
 
                 <Chip

@@ -19,7 +19,7 @@ import {
   Chip,
 } from "@mui/material";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   getBatch,
   getTeamPerf,
@@ -28,17 +28,50 @@ import {
 const FacultyDashboard = () => {
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [masterRows, setMasterRows] = useState([]);
   const [gameId, setGameId] = useState("");
   const [gameBatch, setGameBatch] = useState("");
   const [teams, setTeams] = useState([]);
+  const restoreState = location.state?.restore || false;
+  const restoreGameId = location.state?.gameId;
+  const restoreGameBatch = location.state?.gameBatch;
 
   // Load Game / Batch LOV
 
   useEffect(() => {
     loadBatch();
   }, []);
+
+ 
+  // Restore previous Faculty selection
+
+  useEffect(() => {
+
+    if (
+      restoreState &&
+      gameId &&
+      gameBatch
+    ) {
+
+      loadTeams();
+
+      // Clear restore state so refresh behaves as a normal page
+      navigate(location.pathname, {
+        replace: true,
+        state: null,
+      });
+
+    }
+
+  }, [
+    restoreState,
+    gameId,
+    gameBatch,
+    navigate,
+    location.pathname,
+  ]);
 
   const loadBatch = async () => {
     try {
@@ -51,6 +84,11 @@ const FacultyDashboard = () => {
           ? res.data.data
           : []
       );
+
+      if (restoreState) {
+        setGameId(restoreGameId);
+        setGameBatch(restoreGameBatch);
+      }
     }
     catch (err) {
       console.error(err);
@@ -115,6 +153,7 @@ const FacultyDashboard = () => {
 
     navigate("/operationGame/TeamDashboard", {
       state: {
+        fromFaculty: true,
         gameId: row.Game_Id,
         gameBatch: row.Game_Batch,
         gameTeam: row.Game_Team,
@@ -209,7 +248,7 @@ const FacultyDashboard = () => {
                 <TableCell><b>Rank</b></TableCell>
                 <TableCell><b>Team</b></TableCell>
                 <TableCell align="right"><b>Score</b></TableCell>
-                <TableCell><b>Band</b></TableCell>
+                <TableCell><b>Performance</b></TableCell>
                 <TableCell align="center"><b>Action</b></TableCell>
               </TableRow>
             </TableHead>
@@ -226,7 +265,7 @@ const FacultyDashboard = () => {
                     {row.Game_Team}
                   </TableCell>
                   <TableCell align="right">
-                    {Number(row.Overall_Score).toFixed(2)}
+                    {Number(row.Overall_Score).toFixed(0)}
                   </TableCell>
                   <TableCell>
                     <Chip
