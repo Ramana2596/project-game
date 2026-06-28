@@ -12,9 +12,9 @@ import ProfitPercentLineChart from './components/ProfitPercentLineChart.jsx';
 import { getChartInfo } from './services/gameDashboard.js';
 import { useUser } from "../../core/access/userContext.jsx";
 import CashFlowChart from './components/CashFlowChart.jsx';
-import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
-import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
-import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
+//import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
+//import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
+//import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 
 function GameDashboard() {
   const { setIsLoading } = useLoading();
@@ -129,13 +129,21 @@ function GameDashboard() {
                 <CardActionArea onClick={() => handleCardClick(child)}>
                   <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     {/* icon */}
-                    {(() => {
-                      const n = normLabel;
-                      if (n.includes('balance')) return <AccountBalanceWalletTwoToneIcon sx={{ fontSize: 40, color: 'primary.main' }} />;
-                      if (n.includes('income')) return <SummarizeTwoToneIcon sx={{ fontSize: 40, color: 'primary.main' }} />;
-                      if (n.includes('cashflow')) return <CurrencyExchangeTwoToneIcon sx={{ fontSize: 40, color: 'primary.main' }} />;
-                      return <SummarizeTwoToneIcon sx={{ fontSize: 40, color: 'primary.main' }} />;
-                    })()}
+                    <Box
+                      sx={{
+                        fontSize: 40,
+                        color: "primary.main",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        "& svg": {
+                          fontSize: 40,
+                          color: "primary.main",
+                        },
+                      }}
+                    >
+                      {child.icon}
+                    </Box>
                     <div>
                       <Typography variant="h6" component="div" gutterBottom>
                         {child.label}
