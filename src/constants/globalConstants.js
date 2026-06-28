@@ -200,7 +200,7 @@ export const componentList = [
       {
         icon: <LeaderboardTwoToneIcon />,
         id: "UI 24 110",
-        label: "Batch Performance",
+        label: "Batch Assessment",
         path: "/facultyDashboard",
         href: "/operationGame/FacultyDashboard",
         routeElement: <FacultyDashboard />
