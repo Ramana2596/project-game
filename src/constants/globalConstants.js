@@ -6,15 +6,20 @@ import MarketFactorInfoInput from "../pages/MarketFactorInfoInput/MarketFactorIn
 import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInfo";
 import IncomeStatementInfo from "../pages/IncomeStatementInfo/IncomeStatementInfo";
 import BalanceSheetInfo from "../pages/BalanceSheetInfo/BalanceSheetInfo";
-import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
-import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
+//import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
+//import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
+import AccountBalanceTwoToneIcon from "@mui/icons-material/AccountBalanceTwoTone";
+import ReceiptLongTwoToneIcon from "@mui/icons-material/ReceiptLongTwoTone";
+import CurrencyExchangeTwoToneIcon from "@mui/icons-material/CurrencyExchangeTwoTone";
+import AnalyticsTwoToneIcon from "@mui/icons-material/AnalyticsTwoTone";
+import LeaderboardTwoToneIcon from "@mui/icons-material/LeaderboardTwoTone";
 import FgStockInfo from "../pages/FgStockInfo/FgStockInfo";
 import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
 import StrategyMaster from "../pages/StrategyMaster/StrategyMaster";
 import SalesRecordInfo from "../pages/SalesRecordInfo/SalesRecordInfo";
 import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecordInfo";
 import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
-import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
+//import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
 import SystemInfoDesk from "../pages/SystemInfoDesk/SystemInfoDesk.jsx";
 import UserMgtDesk from "../pages/UserMgtDesk/UserMgtDesk.jsx";
@@ -161,7 +166,7 @@ export const componentList = [
     routeElement: <GameDashboard />,
     children: [
       {
-        icon: <SummarizeTwoToneIcon />,
+        icon: <AccountBalanceTwoToneIcon />,
         id: "UI 21 110",
         label: "Balance Sheet",
         path: "/balanceSheet",
@@ -169,7 +174,7 @@ export const componentList = [
         routeElement: <BalanceSheetInfo />
       },
       {
-        icon: <AccountBalanceWalletTwoToneIcon />,
+        icon: <ReceiptLongTwoToneIcon />,
         id: "UI 21 120",
         label: "Income Statement",
         path: "/incomeStatementInfo",
@@ -185,7 +190,7 @@ export const componentList = [
         routeElement: <CasFlowStatement />
       },
       {
-        iconPath: progressIcon,
+        icon: <AnalyticsTwoToneIcon />,
         id: "UI 24 100",
         label: "Team Performance",
         path: "/teamDashboard",
@@ -193,7 +198,7 @@ export const componentList = [
         routeElement: <TeamDashboard />
       },
       {
-        iconPath: progressIcon,
+        icon: <LeaderboardTwoToneIcon />,
         id: "UI 24 110",
         label: "Batch Performance",
         path: "/facultyDashboard",
