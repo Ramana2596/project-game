@@ -22,8 +22,8 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   getBatch,
-  getTeamPerf,
-} from "./services/teamPerfService";
+  getTeam,
+} from "./services/service";
 
 const FacultyDashboard = () => {
 
@@ -39,21 +39,14 @@ const FacultyDashboard = () => {
   const restoreGameBatch = location.state?.gameBatch;
 
   // Load Game / Batch LOV
-
   useEffect(() => {
     loadBatch();
   }, []);
 
  
   // Restore previous Faculty selection
-
   useEffect(() => {
-
-    if (
-      restoreState &&
-      gameId &&
-      gameBatch
-    ) {
+    if (restoreState && gameId && gameBatch) {
 
       loadTeams();
 
@@ -117,10 +110,9 @@ const FacultyDashboard = () => {
   // Load Teams
 
   const loadTeams = async () => {
-
     try {
       setLoading(true);
-      const res = await getTeamPerf(
+      const res = await getTeam(
         gameId,
         gameBatch
       );
@@ -165,15 +157,9 @@ const FacultyDashboard = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h5" fontWeight="bold">
-        Faculty Dashboard
+        Batch Performance Dashboard
       </Typography>
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ mb: 3 }}
-      >
-        Select Game and Batch to review team performance.
-      </Typography>
+
       <Paper sx={{ p: 2, mb: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>

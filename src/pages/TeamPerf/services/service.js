@@ -4,8 +4,7 @@
 import api from "../../../core/interceptor/api-interceptor";
 
 
-// Get Game / Batch LOV
-
+// Get Batch LOV
 export const getBatch = () => {
     return api.get("/api/getTeamPerf", {
         params: {
@@ -16,15 +15,25 @@ export const getBatch = () => {
     });
 };
 
+// Get Team
+export const getTeam = (gameId, gameBatch) => {
+    return api.get("/api/getTeamPerf", {
+        params: {
+            gameId,
+            gameBatch,
+            cmdLine: "Get_Team",
+        },
+    });
+};
 
 // Get Team Performance
-
-export const getTeamPerf = (gameId, gameBatch, gameTeam = null) => {
+export const getTeamPerf = (gameId, gameBatch, gameTeam) => {
     return api.get("/api/getTeamPerf", {
         params: {
             gameId,
             gameBatch,
             gameTeam,
+            cmdLine: "Get_Team_Perf",
         },
     });
 };

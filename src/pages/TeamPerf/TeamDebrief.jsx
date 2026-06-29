@@ -16,7 +16,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../../core/access/userContext";
 
-import { getTeamPerf } from "./services/teamPerfService";
+import { getTeamPerf } from "./services/service";
 
 import PerfHeader from "./components/PerfHeader";
 
