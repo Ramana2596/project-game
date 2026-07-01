@@ -1,11 +1,12 @@
 // ==========================================
-// Component: Walkthrough Step 7 (Continuous Improvement - Compact)
+// Component: Walkthrough Step 7 (Continuous Improvement - Variant-driven)
 // ==========================================
 
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import BaseStep from './BaseStep';
 import imgImprovement from '../../../../assets/DemoPicture/Dashboard.jpg';
+import { colors } from '../../../../ux/styles';
 
 const Step7Improve = () => {
   return (
@@ -18,7 +19,7 @@ const Step7Improve = () => {
         {/* Slimmer Label */}
         <Typography 
           variant="subtitle1" 
-          sx={{ fontWeight: 700, color: '#111827', mb: 1, fontSize: '1.05rem' }}
+          sx={{ fontWeight: 700, color: colors.title || '#1F2D3D', mb: 1 }}
         >
           Cycle back for improvement
         </Typography>
@@ -27,8 +28,8 @@ const Step7Improve = () => {
         <Box 
           sx={{ 
             p: 1, 
-            bgcolor: '#f9fafb', 
-            border: '1px solid #e5e7eb', 
+            bgcolor: colors.background?.default || '#f9fafb', 
+            border: `1px solid ${colors.border || '#E6E0F4'}`, 
             borderRadius: '12px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
           }}

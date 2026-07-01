@@ -1,9 +1,10 @@
 // ==========================================
-// Component: Walkthrough Section Container
+// Component: Walkthrough Section Container (Variant-driven)
 // ==========================================
 
 import React from 'react';
 import { Box, Typography, Container, Stack } from '@mui/material';
+import { colors } from '../../../ux/styles';
 
 // Demo Steps - Screenshots Component (Individual modules)
 import Step1 from './steps/Step1';
@@ -16,36 +17,34 @@ import Step7 from './steps/Step7';
 
 const WalkThroughSection = () => {
   return (
-    // Main section wrapper with BG and vertical padding
     <Box 
       id="how-it-works" 
       component="section" 
       sx={{ 
-        py: { xs: 8, md: 12 }, 
-        bgcolor: '#fcfaff' // Subtle tint to differentiate walkthrough zone
+        py: { xs: 8, md: 10 }, 
+        bgcolor: colors.background?.panel || '#F8F5FF'
       }}
     >
       <Container maxWidth="lg">
-        {/* Section Header: Left-aligned Title and Description */}
-        <Box sx={{ mb: 10 }}>
+        {/* Section Header */}
+        <Box sx={{ mb: 6 }}>
           <Typography 
-            variant="h3" 
+            variant="h4" 
             sx={{ 
-              fontWeight: 900, 
-              color: '#111827', 
+              fontWeight: 600, 
+              color: colors.title || '#1F2D3D', 
               mb: 2,
-              letterSpacing: '-0.02em',
-              fontSize: { xs: '2.25rem', md: '3rem' } 
+              lineHeight: 1.3,
+              letterSpacing: '-0.02em'
             }}
           >
-            How OMTP works — a 7-step guided walkthrough
+            OMTP: A 7-step guided walkthrough
           </Typography>
           <Typography 
             variant="body1" 
             sx={{ 
-              color: '#4b5563', 
-              maxWidth: '750px', 
-              fontSize: '1.15rem',
+              color: colors.body || '#546E7A', 
+              maxWidth: '650px', 
               lineHeight: 1.6
             }}
           >
@@ -54,7 +53,7 @@ const WalkThroughSection = () => {
           </Typography>
         </Box>
 
-        {/* Vertical stack for sequential step rendering with standardized spacing */}
+        {/* Sequential Steps */}
         <Stack spacing={4}>
           <Step1 />
           <Step2 />

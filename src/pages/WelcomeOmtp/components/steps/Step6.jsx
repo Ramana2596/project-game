@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 6 (Compact)
+// Component: Walkthrough Step 6 (Variant-driven)
 // ==========================================
 
 import React from 'react';
@@ -13,27 +13,34 @@ import imgBalanceSheet from '../../../../assets/DemoPicture/BalanceSheet.jpg';
 import imgKeyResultBs from '../../../../assets/DemoPicture/KeyResultBs.jpg';
 import imgKeyResultPl from '../../../../assets/DemoPicture/KeyResultPl.jpg';
 import imgFinReportBs from '../../../../assets/DemoPicture/FinReportBs.jpg';
+import { colors } from '../../../../ux/styles';
 
 // Compact FinancialCard
 const FinancialCard = ({ label, src }) => (
   <Box sx={{ mb: 1.5 }}>
     <Typography 
       variant="caption" 
-      sx={{ fontWeight: 700, color: '#374151', display: 'block', mb: 0.5, fontSize: '0.75rem', lineHeight: 1.2 }}
+      sx={{ fontWeight: 700, color: colors.title || '#1F2D3D', display: 'block', mb: 0.5, lineHeight: 1.2 }}
     >
       {label}
     </Typography>
     <Box 
       sx={{ 
-        p: 0.75, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
-        borderRadius: '10px', transition: '0.3s',
-        '&:hover': { borderColor: '#7c3aed', boxShadow: '0 2px 6px rgba(124, 58, 237, 0.1)' }
+        p: 0.75, 
+        bgcolor: colors.background?.default || '#f9fafb', 
+        border: `1px solid ${colors.border || '#E6E0F4'}`, 
+        borderRadius: '10px', 
+        transition: '0.3s',
+        '&:hover': { 
+          borderColor: colors.primary || '#7c3aed', 
+          boxShadow: `0 2px 6px ${colors.shadow || 'rgba(124, 58, 237, 0.1)'}` 
+        }
       }}
     >
       <Box 
         component="img" 
         src={src} 
-        alt={label} 
+        alt={`${label} Panel`} 
         sx={{ width: '100%', borderRadius: '6px', display: 'block' }} 
       />
     </Box>

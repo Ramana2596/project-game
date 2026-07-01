@@ -1,11 +1,12 @@
 // ==========================================
-// Component: Walkthrough Step 1 (Compact)
+// Component: Walkthrough Step 1 (Variant-driven)
 // ==========================================
 
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import BaseStep from './BaseStep';
 import imgDashboard from '../../../../assets/DemoPicture/Dashboard.jpg';
+import { colors } from '../../../../ux/styles';
 
 const Step1 = () => {
   return (
@@ -18,12 +19,7 @@ const Step1 = () => {
         {/* Slimmer Label */}
         <Typography 
           variant="subtitle1" 
-          sx={{ 
-            fontWeight: 700, 
-            color: '#111827', 
-            mb: 1,
-            fontSize: '1.1rem' 
-          }}
+          sx={{ fontWeight: 700, color: colors.title || '#1F2D3D', mb: 1 }}
         >
           Main Dashboard
         </Typography>
@@ -32,8 +28,8 @@ const Step1 = () => {
         <Box 
           sx={{ 
             p: 1, 
-            bgcolor: '#f9fafb', 
-            border: '1px solid #e5e7eb', 
+            bgcolor: colors.background?.default || '#f9fafb', 
+            border: `1px solid ${colors.border || '#E6E0F4'}`, 
             borderRadius: '12px',
             boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.02)' 
           }}
@@ -41,12 +37,8 @@ const Step1 = () => {
           <Box 
             component="img" 
             src={imgDashboard} 
-            alt="Main Dashboard" 
-            sx={{ 
-              width: '100%', 
-              borderRadius: '8px', 
-              display: 'block' 
-            }} 
+            alt="Main Dashboard Preview Layout" 
+            sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
           />
         </Box>
       </Box>
