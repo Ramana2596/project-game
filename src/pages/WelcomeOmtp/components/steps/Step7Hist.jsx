@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 7 (Historical Data - Compact)
+// Component: Walkthrough Step 7 (Historical Data - Variant-driven)
 // ==========================================
 
 import React from 'react';
@@ -7,6 +7,7 @@ import { Box, Typography, Grid } from '@mui/material';
 import BaseStep from './BaseStep';
 import imgInfoDesk1 from '../../../../assets/DemoPicture/InfoDesk1.jpg';
 import imgInfoDesk2 from '../../../../assets/DemoPicture/InfoDesk2.jpg';
+import { colors } from '../../../../ux/styles';
 
 const Step7Hist = () => {
   return (
@@ -19,7 +20,7 @@ const Step7Hist = () => {
         {/* Slimmer Label */}
         <Typography 
           variant="subtitle1" 
-          sx={{ fontWeight: 700, color: '#111827', mb: 1, fontSize: '1.05rem' }}
+          sx={{ fontWeight: 700, color: colors.title || '#1F2D3D', mb: 1 }}
         >
           Historical Data and Trend Analysis
         </Typography>
@@ -29,14 +30,16 @@ const Step7Hist = () => {
           <Grid item xs={12} md={6}>
             <Box 
               sx={{ 
-                p: 1, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
+                p: 1, 
+                bgcolor: colors.background?.default || '#f9fafb', 
+                border: `1px solid ${colors.border || '#E6E0F4'}`, 
                 borderRadius: '12px'
               }}
             >
               <Box 
                 component="img" 
                 src={imgInfoDesk1} 
-                alt="Historical Data View 1" 
+                alt="Historical Data View 1 Panel" 
                 sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
               />
             </Box>
@@ -45,14 +48,16 @@ const Step7Hist = () => {
           <Grid item xs={12} md={6}>
             <Box 
               sx={{ 
-                p: 1, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
+                p: 1, 
+                bgcolor: colors.background?.default || '#f9fafb', 
+                border: `1px solid ${colors.border || '#E6E0F4'}`, 
                 borderRadius: '12px'
               }}
             >
               <Box 
                 component="img" 
                 src={imgInfoDesk2} 
-                alt="Historical Data View 2" 
+                alt="Historical Data View 2 Panel" 
                 sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
               />
             </Box>

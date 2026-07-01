@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 5 (Compact)
+// Component: Walkthrough Step 5 (Variant-driven)
 // ==========================================
 
 import React from 'react';
@@ -7,6 +7,7 @@ import { Box, Typography, Grid } from '@mui/material';
 import BaseStep from './BaseStep';
 import imgOpsPlan from '../../../../assets/DemoPicture/OpsPlan.jpg';
 import imgSimComplete from '../../../../assets/DemoPicture/SimComplete.jpg';
+import { colors } from '../../../../ux/styles';
 
 const Step5 = () => {
   return (
@@ -21,20 +22,22 @@ const Step5 = () => {
         <Grid item xs={12} md={6}>
           <Typography 
             variant="subtitle1" 
-            sx={{ fontWeight: 700, color: '#111827', mb: 1, fontSize: '1.05rem' }}
+            sx={{ fontWeight: 700, color: colors.title || '#1F2D3D', mb: 1 }}
           >
-            Operations decisions for the month
+            Operations decision for each month
           </Typography>
           <Box 
             sx={{ 
-              p: 1, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
+              p: 1, 
+              bgcolor: colors.background?.default || '#f9fafb', 
+              border: `1px solid ${colors.border || '#E6E0F4'}`, 
               borderRadius: '12px'
             }}
           >
             <Box 
               component="img" 
               src={imgOpsPlan} 
-              alt="Operations Decisions" 
+              alt="Operations Decisions Panel" 
               sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
             />
           </Box>
@@ -44,20 +47,22 @@ const Step5 = () => {
         <Grid item xs={12} md={6}>
           <Typography 
             variant="subtitle1" 
-            sx={{ fontWeight: 700, color: '#111827', mb: 1, fontSize: '1.05rem' }}
+            sx={{ fontWeight: 700, color: colors.title || '#1F2D3D', mb: 1 }}
           >
             4 months of Simulation completed
           </Typography>
           <Box 
             sx={{ 
-              p: 1, bgcolor: '#f9fafb', border: '1px solid #e5e7eb', 
+              p: 1, 
+              bgcolor: colors.background?.default || '#f9fafb', 
+              border: `1px solid ${colors.border || '#E6E0F4'}`, 
               borderRadius: '12px'
             }}
           >
             <Box 
               component="img" 
               src={imgSimComplete} 
-              alt="Simulation Complete" 
+              alt="Simulation Complete Progress Panel" 
               sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
             />
           </Box>

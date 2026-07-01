@@ -1,18 +1,19 @@
 // ==========================================
-// Component: Footer (Sleek & Compact)
+// Component: Footer (Variant-driven)
 // ==========================================
 
 import React from 'react';
 import { Box, Container, Typography, Stack, Link, Divider } from '@mui/material';
+import { colors } from '../../../ux/styles';
 
 const Footer = () => (
   <Box 
     component="footer" 
     sx={{ 
-      py: 4,   // reduced padding top/bottom
-      borderTop: '1px solid #f3f4f6', 
-      bgcolor: '#ffffff',
-      mt: 3    // tighter margin above footer
+      py: 4,   
+      borderTop: `1px solid ${colors.border || '#e0e0e0'}`, 
+      bgcolor: colors.paper || '#ffffff',
+      mt: 3    
     }}
   >
     <Container maxWidth="lg">
@@ -20,20 +21,36 @@ const Footer = () => (
         direction={{ xs: 'column', md: 'row' }} 
         justifyContent="space-between" 
         alignItems={{ xs: 'center', md: 'flex-start' }} 
-        spacing={3}   // reduced spacing between brand and links
+        spacing={3}   
       >
         {/* Brand Info */}
         <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
           <Typography 
             variant="h6" 
-            sx={{ fontWeight: 900, color: '#111827', mb: 0.5, letterSpacing: '-0.02em' }}
+            sx={{ 
+              fontWeight: 700, 
+              color: colors.title || '#000000', 
+              mb: 0.5, 
+              letterSpacing: '-0.02em' 
+            }}
           >
             OMTP
           </Typography>
-          <Typography variant="body2" sx={{ color: '#6b7280', mb: 0.25, fontWeight: 500 }}>
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              color: colors.subtitle || '#666666', 
+              mb: 0.25 
+            }}
+          >
             Operations Management Training Platform
           </Typography>
-          <Typography variant="body2" sx={{ color: '#9ca3af' }}>
+          <Typography 
+            variant="caption" 
+            sx={{ 
+              color: colors.disabledText || '#9e9e9e' 
+            }}
+          >
             Practical Learning for Modern Business.
           </Typography>
         </Box>
@@ -41,8 +58,8 @@ const Footer = () => (
         {/* Navigation Links */}
         <Stack 
           direction="row" 
-          spacing={2.5}   // tighter link spacing
-          sx={{ flexWrap: 'wrap', justifyContent: 'center' }}
+          spacing={2.5}   
+          sx={{ flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}
         >
           {['About', 'How It Works', 'For Whom', 'Pricing'].map((item) => (
             <Link 
@@ -50,11 +67,11 @@ const Footer = () => (
               href={`#${item.toLowerCase().replace(/\s+/g, '-')}`} 
               underline="none" 
               sx={{ 
-                color: '#4b5563', 
-                fontSize: '0.85rem', 
-                fontWeight: 600,
+                color: colors.text || '#333333', 
+                fontSize: '0.92rem', 
+                fontWeight: 600, 
                 transition: 'color 0.2s',
-                '&:hover': { color: '#7c3aed' }
+                '&:hover': { color: colors.primary }
               }}
             >
               {item}
@@ -63,7 +80,7 @@ const Footer = () => (
         </Stack>
       </Stack>
 
-      <Divider sx={{ my: 3, borderColor: '#f3f4f6' }} />
+      <Divider sx={{ my: 3, borderColor: colors.border || '#e0e0e0' }} />
 
       {/* Bottom Copyright */}
       <Stack 
@@ -72,10 +89,16 @@ const Footer = () => (
         alignItems="center" 
         spacing={1.5}
       >
-        <Typography variant="caption" sx={{ color: '#9ca3af', fontWeight: 500 }}>
+        <Typography 
+          variant="caption" 
+          sx={{ color: colors.disabledText || '#9e9e9e' }}
+        >
           © {new Date().getFullYear()} OMTP. All rights reserved.
         </Typography>
-        <Typography variant="caption" sx={{ color: '#9ca3af' }}>
+        <Typography 
+          variant="caption" 
+          sx={{ color: colors.disabledText || '#9e9e9e' }}
+        >
           Contact: info@omtp.example
         </Typography>
       </Stack>
