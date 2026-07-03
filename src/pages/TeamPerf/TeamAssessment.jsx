@@ -22,12 +22,12 @@ import PerfHeader from "./components/PerfHeader";
 import YardstickChart from "./components/YardstickChart";
 
 /**
- * TeamDashboard
+ * TeamAssessment
  * - Executive Performance View
  * - Uses UI_TA_Perf_Query
  */
 
-const TeamDashboard = () => {
+const TeamAssessment = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -480,4 +480,4 @@ const TeamDashboard = () => {
   );
 };
 
-export default TeamDashboard;
+export default TeamAssessment;

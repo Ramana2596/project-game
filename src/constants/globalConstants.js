@@ -1,4 +1,4 @@
-import GameDashboard from "../pages/GameDashboard/GameDashboard";
+import Dashboard from "../pages/Dashboard/Dashboard.jsx";
 import StrategyLaunched from "../pages/LaunchStrategy/StrategyLaunched";
 import StrategyPlan from "../pages/StrategyPlanApproval/StrategyPlanApproval";
 import MarketFactorInfo from "../pages/MarketFactorInfo/MarketFactorInfo";
@@ -151,8 +151,8 @@ import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";
 import UiAccess from "../pages/UiAccess/UiAccess.jsx";
 import PublishMarketData from "../pages/PublishMarketData/PublishMarketData.jsx";
-import TeamDashboard from "../pages/TeamPerf/TeamDashboard.jsx";
-import FacultyDashboard from "../pages/TeamPerf/FacultyDashboard.jsx";
+import TeamAssessment from "../pages/TeamPerf/TeamAssessment.jsx";
+import BatchAssessment from "../pages/TeamPerf/BatchAssessment.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -160,10 +160,10 @@ export const componentList = [
   {
     iconPath: homeIcon,
     id: "UI 99 900",
-    label: "Game Dashboard",
+    label: "Dashboard",
     path: "/homePage",
     href: "/operationGame/homePage",
-    routeElement: <GameDashboard />,
+    routeElement: <Dashboard />,
     children: [
       {
         icon: <AccountBalanceTwoToneIcon />,
@@ -193,17 +193,17 @@ export const componentList = [
         icon: <AnalyticsTwoToneIcon />,
         id: "UI 24 100",
         label: "Team Performance",
-        path: "/teamDashboard",
-        href: "/operationGame/TeamDashboard",
-        routeElement: <TeamDashboard />
+        path: "/teamAssessment",
+        href: "/operationGame/TeamAssessment",
+        routeElement: <TeamAssessment />
       },
       {
         icon: <LeaderboardTwoToneIcon />,
         id: "UI 24 110",
         label: "Batch Assessment",
-        path: "/facultyDashboard",
-        href: "/operationGame/FacultyDashboard",
-        routeElement: <FacultyDashboard />
+        path: "/batchAssessment",
+        href: "/operationGame/BatchAssessment",
+        routeElement: <BatchAssessment />
       },
     ],
   },

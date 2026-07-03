@@ -32,7 +32,7 @@ import GameMaster from "../GameMaster";
 import GameBatch from "../GameBatch";
 import { Routes, Route } from "react-router-dom";
 import GameSession from "../GameSession";
-import GameDashboard from "../GameDashboard/GameDashboard";
+import Dashboard from "../Dashboard/Dashboard";
 import StrategyLaunched from "../LaunchStrategy/StrategyLaunched";
 import StrategyPlanApproval from "../StrategyPlanApproval/StrategyPlanApproval";
 import MarketFactorInfo from "../MarketFactorInfo/MarketFactorInfo";
@@ -83,7 +83,7 @@ export {
     Routes,
     Route,
     GameSession,
-    GameDashboard,
+    Dashboard,
     StrategyLaunched,
     StrategyPlanApproval,
     MarketFactorInfo,

@@ -1,4 +1,4 @@
-// File: src/pages/TeamPerf/FacultyDashboard.jsx
+// File: src/pages/TeamPerf/BatchAssessment.jsx
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -24,7 +24,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { getBatch, getTeam } from "./services/service";
 
-const FacultyDashboard = () => {
+const BatchAssessment = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -294,4 +294,4 @@ const FacultyDashboard = () => {
   );
 };
 
-export default FacultyDashboard;
+export default BatchAssessment;
