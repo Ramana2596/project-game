@@ -13,13 +13,13 @@ import { useNavigate } from "react-router-dom";
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import { componentList } from "../../constants/globalConstants.js";
-import { getChartInfo } from "./services/gameDashboard.js";
+import { getChartInfo } from "./services/service.js";
 import { useUser } from "../../core/access/userContext.jsx";
 
 import PrecisionManufacturingTwoToneIcon
   from "@mui/icons-material/PrecisionManufacturingTwoTone";
 
-function GameDashboard() {
+function Dashboard() {
 
   const { setIsLoading } = useLoading();
   const { userInfo } = useUser();
@@ -37,13 +37,13 @@ function GameDashboard() {
     Cash_Flow: [],
   });
 
-  const gameDashboardItem =
+  const dashboardItem =
     componentList.find(
       item => item.id === "UI 99 900"
     );
 
   const children =
-    gameDashboardItem?.children || [];
+    dashboardItem?.children || [];
 
   useEffect(() => {
 
@@ -373,4 +373,4 @@ return (
 
 }
 
-export default GameDashboard;
+export default Dashboard;
