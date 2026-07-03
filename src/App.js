@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Box } from "@mui/material";      // ✅ Add
+import { Box } from "@mui/material";
 
 import { useUser } from "./core/access/userContext.jsx";
 
@@ -10,7 +10,7 @@ import { LoadingProvider } from "./hooks/loadingIndicatorContext";
 import Welcome from "./pages/Welcome/Welcome";
 import WelcomeOmtp from "./pages/WelcomeOmtp/WelcomeOmtp";
 import AuthHubPage from "./pages/AuthHubPage/AuthHubPage.jsx";
-import GameNavigationMenu from "./pages/NavigationMenu/GameNavigationMenu";
+import NavigationMenu from "./pages/NavigationMenu/NavigationMenu.jsx";
 import UserFeedback from './pages/UserFeedback/UserFeedback';
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
   return (
     <LoadingProvider>
 
-      {/* Reserve space for fixed feedback bar */}
+      {/* Reserve space for fixed feedback bar - bottom-most line */}
       <Box
         sx={{
           minHeight: '100vh',
@@ -50,7 +50,7 @@ function App() {
             path="/operationGame/*"
             element={
               <ProtectedRoute>
-                <GameNavigationMenu />
+                <NavigationMenu />
               </ProtectedRoute>
             }
           />
