@@ -7,10 +7,10 @@
 export const ColorPalette = {
   // 1. Core Brand & Interactive Palette
   brand: {
-    primary: "#673AB7",
-    primaryLight: "#9575CD",
+    primary: "#7B1FA2",
+    primaryLight: "#9C27B0",
     primaryDark: "#512DA8",
-    secondary: "#5C6BC0",
+    secondary: "#673AB7",
     accent: "#7E57C2",
     hover: "#F3EDFF",
     selected: "#EDE7F6",
@@ -18,10 +18,10 @@ export const ColorPalette = {
 
   // 2. High-Energy Gradients
   gradients: {
-    pageGradient: "linear-gradient(135deg,#FAF7FF 0%,#F3EDFF 45%,#FFFFFF 100%)",
-    heroGradient: "linear-gradient(90deg,#5E35B1 0%,#7E57C2 50%,#9575CD 100%)",
+    pageGradient: "linear-gradient(135deg,#F5F3FF 0%,#FAF7FF 50%,#F0ECFF 100%)", 
+    heroGradient: "linear-gradient(135deg,#7B1FA2 0%,#512DA8 100%)",
     panelGradient: "linear-gradient(180deg,#FFFFFF 0%,#FBFAFF 100%)",
-    iconGradient: "linear-gradient(135deg,#673AB7,#9575CD)",
+    iconGradient: "linear-gradient(135deg,#7B1FA2,#512DA8)",
   },
 
   // 3. Structural Layout Backgrounds & Surfaces
@@ -109,16 +109,4 @@ export const colors = {
   disabledBackground: ColorPalette.disabled.bg,
   disabledText: ColorPalette.disabled.text,
 
-  // ==========================================================
-  // UXLab V1.0 - Standardized Typographic Metrics Scale
-  // ==========================================================
-  typography: {
-    display1: { xs: '2.25rem', md: '3.00rem' }, // Clean Hero Title Proportions
-    h4: { xs: '1.50rem', md: '2.00rem' },       // Standard Section Headings (Added)
-    body1: { xs: '0.935rem', md: '1.00rem' },   // Optimal readability across viewport screens
-    fontWeightTitle: 800,
-    fontWeightBody: 400,
-    lineHeightTitle: 1.15,
-    lineHeightBody: 1.6
-  }
 };
