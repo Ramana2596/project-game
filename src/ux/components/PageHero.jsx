@@ -1,73 +1,76 @@
 // ============================================================
-// OpsMgt UX Lab
+// OpsMgt UX Lab V1.0
 // Component : PageHero
-// Purpose   : Standard page header for all application pages (Purple Theme)
+// Purpose   : Standard page header for all application pages
 // ============================================================
 
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { colors } from "../styles/ColorPalette";
-import { typography } from "../styles/Typography";
+import { colors, semanticTypo } from "../styles";
 
 const PageHero = ({
-  title,
-  subtitle,
-  icon: IconComponent = null, // Renamed to accurately render component reference
+    title,
+    subtitle,
+    icon: IconComponent = null,
 }) => {
-
-  return (
-    <Box
-      sx={{
-        mb: 4,
-        p: 3,
-        borderRadius: 4,
-        overflow: "hidden",
-        position: "relative",
-        background: colors.heroGradient,
-        color: colors.white || "#ffffff",
-        boxShadow: `0 10px 28px ${colors.primary}38`, // Dynamic purple shadow tint
-      }}
-    >
-      {/* Watermark Icon */}
-      {IconComponent && (
+    return (
         <Box
-          sx={{
-            position: "absolute",
-            right: 20,
-            top: "50%",
-            transform: "translateY(-50%)",
-            opacity: 0.10,
-            color: colors.white || "#ffffff",
-            display: "flex",
-            alignItems: "center",
-            "& svg": {
-              fontSize: 100,
-            },
-          }}
+            sx={{
+                mb: 4,
+                p: 3,
+                borderRadius: 4,
+                overflow: "hidden",
+                position: "relative",
+                background: colors.heroGradient,
+                color: colors.white,
+                boxShadow: `0 10px 28px ${colors.primary}38`,
+            }}
         >
-          <IconComponent />
+            {/* Watermark Icon */}
+            {IconComponent && (
+                <Box
+                    sx={{
+                        position: "absolute",
+                        right: 20,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        opacity: 0.10,
+                        color: colors.white,
+                        display: "flex",
+                        alignItems: "center",
+                        "& svg": {
+                            fontSize: 100,
+                        },
+                    }}
+                >
+                    <IconComponent />
+                </Box>
+            )}
+
+            <Typography
+                variant="h1"
+                sx={{
+                    ...semanticTypo.pageTitle,
+                    color: colors.white,
+                }}
+            >
+                {title}
+            </Typography>
+
+            {subtitle && (
+                <Typography
+                    variant="body1"
+                    sx={{
+                        ...semanticTypo.pageSubtitle,
+                        color: "rgba(255,255,255,0.90)",
+                        maxWidth: 900,
+                    }}
+                >
+                    {subtitle}
+                </Typography>
+            )}
         </Box>
-      )}
-
-      <Typography
-        variant="h4"
-        sx={{
-          ...typography.pageTitle, // Directly using central Typography tokens
-        }}
-      >
-        {title}
-      </Typography>
-
-      <Typography
-        variant="subtitle1"
-        sx={{
-          ...typography.pageSubtitle, // Directly using central Typography tokens
-        }}
-      >
-        {subtitle}
-      </Typography>
-    </Box>
-  );
+    );
 };
 
 export default PageHero;
