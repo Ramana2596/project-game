@@ -4,9 +4,10 @@
 // Purpose : Standard card styles for the application (Purple Theme)
 // ============================================================
 
-import { colors } from "./ColorPalette";
+import { colors } from "./colorPalette";
+import { muiTypo, semanticTypo } from "./masterTypo";
 
-export const cardStyles = {
+export const cardStyle = {
 
   // ==========================================================
   // Standard Page Card
@@ -61,21 +62,21 @@ export const cardStyles = {
   iconBoxCircle: {
     borderRadius: "50%", // <--- This overrides to a perfect circle
   },
-
+  
   // ==========================================================
   // Card Title
   // ==========================================================
   title: {
-    fontWeight: 700,
-    color: colors.title || "#000000",
-  },
+  ...semanticTypo.cardH4,
+
+},
+
 
   // ==========================================================
   // Card Subtitle
   // ==========================================================
   subtitle: {
-    mt: 0.75,
-    color: colors.subtitle || "#666666",
-    lineHeight: 1.6,
-  },
+  ...semanticTypo.cardH5,
+  mt: 0.75,
+},
 };

@@ -4,9 +4,9 @@
 // Purpose : Standard button styles (Purple Theme)
 // ============================================================
 
-import { colors } from "./ColorPalette";
+import { colors } from "./colorPalette";
 
-export const buttonStyles = {
+export const buttonStyle = {
 
   // ==========================================================
   // Primary Button (Main Call to Action)
