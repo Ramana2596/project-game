@@ -82,7 +82,7 @@ const TeamAssessment = () => {
   const goToPreviousScreen = () => {
 
     if (fromFaculty) {
-      navigate("/operationGame/FacultyDashboard", {
+      navigate("/operationGame/BatchAssessment", {
         state: {
           restore: true,
           gameId,
