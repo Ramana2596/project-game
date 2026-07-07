@@ -1,7 +1,7 @@
 // ============================================================
 // OpsMgt UX Lab
 // File : ColorPalette.js
-// Purpose : Professional Central Color Palette (Nested Theme)
+// Professional Central Color Palette (Nested Theme)
 // ============================================================
 
 export const ColorPalette = {
@@ -32,7 +32,7 @@ export const ColorPalette = {
     panel: "#F8F5FF",
   },
 
-  // 4. Semantic Typography Hierarchy (Scores high on UX accessibility)
+  // 4. Semantic Typography Hierarchy
   text: {
     primary: "#1F2D3D",     // Maps to your original 'title'
     heading: "#32475B",
@@ -64,10 +64,10 @@ export const ColorPalette = {
   }
 };
 
-// ==========================================================
+
+
 // Compatibility Layer: Maps old flat tokens to prevent crashes
-// ==========================================================
-// Add this directly to the bottom layer of your ColorPalette.js file
+
 export const colors = {
   primary: ColorPalette.brand.primary,
   primaryLight: ColorPalette.brand.primaryLight,
