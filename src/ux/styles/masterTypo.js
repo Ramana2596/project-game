@@ -1,57 +1,53 @@
 // ============================================================
-// OpsMgt UX Lab V1.0
-// File    : masterTypo.js
-// Purpose : Master Typography System
-//
-// Contains:
-// 1. muiTypo      - Master visual scales (H1...H6, B1, B2)
-// 2. semanticTypo - UI semantic mappings (Hero, Page, Section, Card)
+// OpsMgt UX Lab V2.0
+// File    : enterpriseTypo.js
+// Purpose : Enterprise Typography System (SAP Fiori aligned)
 // ============================================================
 
 import { colors } from "./colorPalette";
 
 // ============================================================
-// MASTER TYPOGRAPHY SCALE
+// ENTERPRISE TYPOGRAPHY SCALE (SAP Fiori / Font 72 aligned)
 // ------------------------------------------------------------
-// Edit ONLY here if the application font hierarchy changes.
+// Compact, bold, accessible values tuned for enterprise dashboards.
 // ============================================================
 
 export const muiTypo = {
 
-  // H1 : Largest display text (Hero Titles)
+  // H1 : Hero Titles
   h1: {
-    fontSize: { xs: "2.50rem", md: "3.25rem" },
+    fontSize: { xs: "2.75rem", md: "3.00rem" },
     fontWeight: 700,
     lineHeight: 1.15,
     letterSpacing: "-0.02em",
     color: colors.title,
   },
 
-  // H2 : Large page titles
+  // H2 : Page Titles
   h2: {
-    fontSize: { xs: "2.10rem", md: "2.70rem" },
-    fontWeight: 700,
+    fontSize: { xs: "2.25rem", md: "2.50rem" },
+    fontWeight: 600,
     lineHeight: 1.20,
     color: colors.title,
   },
 
-  // H3 : Section titles
+  // H3 : Section Titles
   h3: {
-    fontSize: { xs: "1.75rem", md: "2.20rem" },
+    fontSize: { xs: "1.75rem", md: "2.00rem" },
     fontWeight: 600,
     lineHeight: 1.25,
     color: colors.title,
   },
 
-  // H4 : Small section headings
+  // H4 : Sub‑section / Card Headers
   h4: {
-    fontSize: { xs: "1.45rem", md: "1.80rem" },
+    fontSize: { xs: "1.45rem", md: "1.60rem" },
     fontWeight: 600,
     lineHeight: 1.30,
     color: colors.title,
   },
 
-  // H5 : Card titles
+  // H5 : Card Titles
   h5: {
     fontSize: "1.15rem",
     fontWeight: 600,
@@ -59,7 +55,7 @@ export const muiTypo = {
     color: colors.title,
   },
 
-  // H6 : Small headings / Table headings
+  // H6 : Small Headings / Table Labels
   h6: {
     fontSize: "1.00rem",
     fontWeight: 600,
@@ -67,7 +63,7 @@ export const muiTypo = {
     color: colors.title,
   },
 
-  // B1 : Standard body text
+  // Body1 : Standard body text
   b1: {
     fontSize: "1.00rem",
     fontWeight: 400,
@@ -75,7 +71,7 @@ export const muiTypo = {
     color: colors.body,
   },
 
-  // B2 : Secondary body text
+  // Body2 : Secondary body text
   b2: {
     fontSize: "0.92rem",
     fontWeight: 400,
@@ -83,7 +79,7 @@ export const muiTypo = {
     color: colors.subtitle,
   },
 
-  // Caption : Small helper text
+  // Caption : Helper text
   caption: {
     fontSize: "0.82rem",
     fontWeight: 500,
@@ -109,46 +105,36 @@ export const muiTypo = {
 export const semanticTypo = {
 
   // HERO AREA
+  heroH1: muiTypo.h1,         // Use as Std  H1
+  heroH2: muiTypo.h2,         // Use as Std  H2
+  heroB1: muiTypo.b1,         // NOT to be used, Use Std bodyB1
 
-  heroH1: muiTypo.h1,
-  heroH2: muiTypo.h2,
-  heroB1: muiTypo.b1,
-
-  // PAGE
-  pageH1: muiTypo.h1,
-  pageH2: muiTypo.h2,
-  pageH3: muiTypo.h3,
-  pageB1: muiTypo.b1,
+  // PAGE (instead of Title)
+  pageH1: muiTypo.h1,         // NOT to be used, Use Std heroH1
+  pageH2: muiTypo.h2,         // NOT to be used, Use Std heroH2
+  pageH3: muiTypo.h3,         // Use as Std  H3
+  pageH4: muiTypo.h4,         // Use as Std  H4
+  pageB1: muiTypo.b1,         // NOT to be used, Use Std bodyB1
 
   // SECTION
-
-  sectionH2: muiTypo.h2,
-  sectionH3: muiTypo.h3,
-  sectionH4: muiTypo.h4,
-  sectionB1: muiTypo.b1,
+  sectionH2: muiTypo.h2,      // NOT to be used, Use Std heroH2
+  sectionH3: muiTypo.h3,      // NOT to be used, Use Std pageH3
+  sectionH4: muiTypo.h4,      // NOT to be used, Use Std pageH4
+  sectionB1: muiTypo.b1,      // NOT to be used, Use Std bodyB1
 
   // CARD
- 
-  cardH4: muiTypo.h4,
-  cardH5: muiTypo.h5,
-  cardH6: muiTypo.h6,
-  cardB1: muiTypo.b1,
-  cardB2: muiTypo.b2,
+  cardH4: muiTypo.h4,         // NOT to be used, Use Std pageH4
+  cardH5: muiTypo.h5,         // Use as Std  H5
+  cardH6: muiTypo.h6,         // Use as Std  H6 (small headings in card/table)
+  cardB1: muiTypo.b1,         // NOT to be used, Use Std bodyB1
+  cardB2: muiTypo.b2,         // NOT to be used, Use Std bodyB2
 
   // TABLE
-
-  tableH6: muiTypo.h6,
-  tableB2: muiTypo.b2,
+  tableH6: muiTypo.h6,        // NOT to be used, Use Std bodyH6
+  tableB2: muiTypo.b2,        // NOT to be used, Use Std bodyB2
 
   // GENERIC
- 
-
-  // Standard body text
-  bodyB1: muiTypo.b1,
-
-  // Secondary body text
-  bodyB2: muiTypo.b2,
-
-  // Caption / Helper text
-  caption: muiTypo.caption,
+  bodyB1: muiTypo.b1,         // Use as Std  Body
+  bodyB2: muiTypo.b2,         // Use as Std  Body
+  caption: muiTypo.caption,   // Use as Std  Caption
 };
