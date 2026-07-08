@@ -1,3 +1,6 @@
+/*
+High level . May not be useful -- so please ignore
+
 // ============================================================
 // OpsMgt UX Lab V1.0
 // Component : PageHero
@@ -48,9 +51,9 @@ const PageHero = ({
             )}
 
             <Typography
-                variant="h1"
+                component="h1"
                 sx={{
-                    ...semanticTypo.pageTitle,
+                    ...semanticTypo.pageH2,
                     color: colors.white,
                 }}
             >
@@ -59,11 +62,12 @@ const PageHero = ({
 
             {subtitle && (
                 <Typography
-                    variant="body1"
+                    component="p"
                     sx={{
-                        ...semanticTypo.pageSubtitle,
+                        ...semanticTypo.pageB1,
                         color: "rgba(255,255,255,0.90)",
                         maxWidth: 900,
+                        mt: 1,
                     }}
                 >
                     {subtitle}
@@ -74,3 +78,4 @@ const PageHero = ({
 };
 
 export default PageHero;
+*/
