@@ -53,7 +53,7 @@ const WelcomeOmtp = () => {
 
           setUserInfo(userData);
 
-          navigate("/operationGame/demoOmtp");
+          navigate("/operationGame/demo");
         } else {
           console.error("Auth failed:", response.data.message);
         }
