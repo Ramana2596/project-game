@@ -1,78 +1,99 @@
 // ==========================================
-// Component: Walkthrough Step 2 (Variant-driven)
+// Component: Walkthrough Step 2
+// UXLab V1.0
 // ==========================================
 
-import React from 'react';
-import { Box, Typography, Grid } from '@mui/material';
-import BaseStep from './BaseStep';
-import imgStrategyDraft from '../../../../assets/DemoPicture/StrategyDraft.jpg';
-import imgStrategicPlan from '../../../../assets/DemoPicture/StrategicPlan.jpg';
-import { colors } from '../../../../ux/styles';
+import React from "react";
+import { Box, Typography, Grid } from "@mui/material";
+
+import BaseStep from "./BaseStep";
+
+import imgStrategyDraft from "../../../../assets/DemoPicture/StrategyDraft.jpg";
+import imgStrategicPlan from "../../../../assets/DemoPicture/StrategicPlan.jpg";
+
+import {
+    colors,
+    semanticTypo,
+} from "../../../../ux/styles";
 
 const Step2 = () => {
-  return (
-    <BaseStep 
-      number="2"
-      title="Choose Your Strategy"
-      description="Review the strategies available to the team and confirm the strategy chosen. This sets the direction for how the business will compete and grow."
-    >
-      <Grid container spacing={2}>
-        
-        {/* Left Column */}
-        <Grid item xs={12} md={6}>
-          <Typography 
-            variant="subtitle1" 
-            sx={{ fontWeight: 700, color: colors.title || '#1F2D3D', mb: 1 }}
-          >
-            Strategies available for the team to choose
-          </Typography>
-          <Box 
-            sx={{ 
-              p: 1, 
-              bgcolor: colors.background?.default || '#f9fafb', 
-              border: `1px solid ${colors.border || '#E6E0F4'}`, 
-              borderRadius: '12px', 
-              overflow: 'hidden' 
-            }}
-          >
-            <Box 
-              component="img" 
-              src={imgStrategyDraft} 
-              alt="Available Strategies Panel" 
-              sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
-            />
-          </Box>
-        </Grid>
+    return (
+        <BaseStep
+            number="2"
+            title="Choose Your Strategy"
+            description="Review the available strategic alternatives, select the strategy that best fits your objectives, and establish the direction for your business."
+        >
+            <Grid container spacing={3}>
 
-        {/* Right Column */}
-        <Grid item xs={12} md={6}>
-          <Typography 
-            variant="subtitle1" 
-            sx={{ fontWeight: 700, color: colors.title || '#1F2D3D', mb: 1 }}
-          >
-            Strategies chosen by the team
-          </Typography>
-          <Box 
-            sx={{ 
-              p: 1, 
-              bgcolor: colors.background?.default || '#f9fafb', 
-              border: `1px solid ${colors.border || '#E6E0F4'}`, 
-              borderRadius: '12px', 
-              overflow: 'hidden' 
-            }}
-          >
-            <Box 
-              component="img" 
-              src={imgStrategicPlan} 
-              alt="Selected Strategic Plan Panel" 
-              sx={{ width: '100%', borderRadius: '8px', display: 'block' }} 
-            />
-          </Box>
-        </Grid>
+                <Grid item xs={12} md={6}>
+                    <Typography
+                        component="h4"
+                        variant="h4"
+                        sx={{
+                            ...semanticTypo.cardH5,
+                            mb: 1.5,
+                        }}
+                    >
+                        Strategies Available
+                    </Typography>
 
-      </Grid>
-    </BaseStep>
-  );
+                    <Box
+                        sx={{
+                            bgcolor: colors.panel,
+                            border: `1px solid ${colors.border}`,
+                            borderRadius: 4,
+                            p: 1.5,
+                        }}
+                    >
+                        <Box
+                            component="img"
+                            src={imgStrategyDraft}
+                            alt="Available Strategies"
+                            sx={{
+                                width: "100%",
+                                display: "block",
+                                borderRadius: 2,
+                            }}
+                        />
+                    </Box>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                    <Typography
+                        component="h4"
+                        variant="h4"
+                        sx={{
+                            ...semanticTypo.cardH5,
+                            mb: 1.5,
+                        }}
+                    >
+                        Strategy Selected
+                    </Typography>
+
+                    <Box
+                        sx={{
+                            bgcolor: colors.panel,
+                            border: `1px solid ${colors.border}`,
+                            borderRadius: 4,
+                            p: 1.5,
+                        }}
+                    >
+                        <Box
+                            component="img"
+                            src={imgStrategicPlan}
+                            alt="Selected Strategy"
+                            sx={{
+                                width: "100%",
+                                display: "block",
+                                borderRadius: 2,
+                            }}
+                        />
+                    </Box>
+                </Grid>
+
+            </Grid>
+        </BaseStep>
+    );
 };
 
 export default Step2;
