@@ -85,18 +85,20 @@ const FinalCTA = ({ onStart }) => {
                             <Typography
                                 component="h2"
                                 sx={{
-                                    ...semanticTypo.sectionH4,
+                                    ...semanticTypo.pageH3,
                                     color: colors.white,
                                     mb: 2,
                                 }}
                             >
-                                Ready to Experience Real Business Decision-Making?
+                                Ready to experience real 
+                                <br/>
+                                Business Decision-Making?
                             </Typography>
 
                             <Typography
                                 component="p"
                                 sx={{
-                                    ...semanticTypo.pageB1,
+                                    ...semanticTypo.bodyB1,
                                     color: "rgba(255,255,255,0.92)",
                                 }}
                             >
