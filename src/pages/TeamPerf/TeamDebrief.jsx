@@ -12,6 +12,7 @@ import {
   Button,
   LinearProgress,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../../core/access/userContext";
@@ -68,7 +69,7 @@ const TeamDebrief = () => {
   };
 
   const goBack = () => {
-    navigate("/teamperf/dashboard", {
+    navigate("/operationGame/TeamAssessment", {
       state: {
         gameId,
         gameBatch,
@@ -118,7 +119,7 @@ const TeamDebrief = () => {
         </Typography>
 
         <Typography variant="body2" sx={{ mt: 1 }}>
-          This debrief provides a structured reflection of your team’s performance.
+          A structured reflection of team’s performance.
           It highlights strengths, improvement areas, and decision quality across yardsticks.
         </Typography>
       </Paper>
@@ -237,7 +238,7 @@ const TeamDebrief = () => {
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
           {[
             "What drove the strongest performance area?",
-            "Where did decision-making impact outcomes?",
+            "Where did decision-making impact outcome?",
             "How could weak ratios be improved?",
             "Was resource allocation optimal?",
             "What would you change in hindsight?",
@@ -249,8 +250,19 @@ const TeamDebrief = () => {
 
       {/* ACTION */}
       <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
-        <Button variant="contained" onClick={goBack}>
-          Back to Dashboard
+        <Button
+          variant="outlined"
+          color="secondary"
+          startIcon={<ArrowBackIcon />}
+          onClick={goBack}
+          sx={{
+            borderRadius: "999px",
+            textTransform: "none",
+            px: 3,
+            fontWeight: 600,
+          }}
+        >
+          Back
         </Button>
       </Box>
 

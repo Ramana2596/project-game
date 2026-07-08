@@ -13,6 +13,12 @@ import {
   CardContent,
   LinearProgress,
 } from "@mui/material";
+import {
+  VerticalAlignTop as VerticalAlignTopIcon,
+  ArrowForward as ArrowForwardIcon,
+  ArrowBack as ArrowBackIcon,
+} from "@mui/icons-material";
+
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../../core/access/userContext";
@@ -70,7 +76,7 @@ const TeamAssessment = () => {
   };
 
   const goToDebrief = () => {
-    navigate("/teamperf/debrief", {
+    navigate("/operationGame/TeamDebrief", {
       state: {
         gameId,
         gameBatch,
@@ -453,26 +459,48 @@ const TeamAssessment = () => {
         {fromFaculty && (
           <Button
             variant="outlined"
-            color="inherit"
+            color="secondary"
+            startIcon={<ArrowBackIcon />}
             onClick={goToPreviousScreen}
+            sx={{
+              borderRadius: "999px",
+              textTransform: "none",
+              px: 3,
+              fontWeight: 600,
+            }}
           >
-            Previous Screen
+            Back
           </Button>
         )}
 
         <Button
           variant="outlined"
+          color="secondary"
+          startIcon={<VerticalAlignTopIcon />}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          sx={{
+            borderRadius: "999px",
+            textTransform: "none",
+            px: 3,
+            fontWeight: 600,
+          }}
         >
-          Back to Top
+          Top
         </Button>
 
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
+          endIcon={<ArrowForwardIcon />}
           onClick={goToDebrief}
+          sx={{
+            borderRadius: "999px",
+            textTransform: "none",
+            px: 3,
+            fontWeight: 600,
+          }}
         >
-          Go to Debrief
+          Team Debrief
         </Button>
       </Box>
 

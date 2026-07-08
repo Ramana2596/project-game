@@ -125,7 +125,7 @@ const BatchAssessment = () => {
   return (
     <Box sx={{ p: 3, backgroundColor: "#f9f9fc", minHeight: "100vh" }}>
       <Typography variant="h4" fontWeight={700} sx={{ color: "#5e35b1", mb: 0.5 }}>
-        Batch Performance Dashboard
+        Batch Assessment
       </Typography>
       <Typography variant="body2" sx={{ mb: 3, color: "#7e57c2" }}>
         Review team performance across selected batches
@@ -176,9 +176,14 @@ const BatchAssessment = () => {
               fullWidth
               variant="contained"
               sx={{
-                height: "40px",
+                height: 40,
+                borderRadius: "999px",
+                textTransform: "none",
+                fontWeight: 600,
                 backgroundColor: "#7e57c2",
-                "&:hover": { backgroundColor: "#5e35b1" },
+                "&:hover": {
+                  backgroundColor: "#5e35b1",
+                },
               }}
               disabled={!gameId || !gameBatch}
               onClick={loadTeams}
