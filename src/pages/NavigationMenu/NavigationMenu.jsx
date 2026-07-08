@@ -125,6 +125,7 @@ import UiAccess from '../UiAccess/UiAccess.jsx';
 import PublishMarketData from '../PublishMarketData/PublishMarketData.jsx';
 import BatchAssessment from '../TeamPerf/BatchAssessment.jsx';
 import TeamAssessment from '../TeamPerf/TeamAssessment.jsx';
+import TeamDebrief from '../TeamPerf/TeamDebrief.jsx';
 
 //import FormTemplate from '../FormTemplate/FormTemplate.jsx';
 
@@ -492,6 +493,7 @@ export default function MiniDrawer() {
           <Route path='/publishMarketData' element={<PublishMarketData />} />
           <Route path='/batchAssessment' element={<BatchAssessment />} />
           <Route path='/teamAssessment' element={<TeamAssessment />} />
+          <Route path='/teamDebrief' element={<TeamDebrief />} />
           
           {/* <Route path='/formTemplate' element={<FormTemplate />} /> */}
         </Routes>

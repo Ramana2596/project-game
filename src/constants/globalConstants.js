@@ -153,6 +153,7 @@ import UiAccess from "../pages/UiAccess/UiAccess.jsx";
 import PublishMarketData from "../pages/PublishMarketData/PublishMarketData.jsx";
 import TeamAssessment from "../pages/TeamPerf/TeamAssessment.jsx";
 import BatchAssessment from "../pages/TeamPerf/BatchAssessment.jsx";
+import TeamDebrief from "../pages/TeamPerf/TeamDebrief.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -190,20 +191,28 @@ export const componentList = [
         routeElement: <CasFlowStatement />
       },
       {
-        icon: <AnalyticsTwoToneIcon />,
+        icon: <LeaderboardTwoToneIcon />,
         id: "UI 24 100",
+        label: "Batch Assessment",
+        path: "/batchAssessment",
+        href: "/operationGame/BatchAssessment",
+        routeElement: <BatchAssessment />
+      },
+      {
+        icon: <AnalyticsTwoToneIcon />,
+        id: "UI 24 110",
         label: "Team Performance",
         path: "/teamAssessment",
         href: "/operationGame/TeamAssessment",
         routeElement: <TeamAssessment />
       },
-      {
-        icon: <LeaderboardTwoToneIcon />,
-        id: "UI 24 110",
-        label: "Batch Assessment",
-        path: "/batchAssessment",
-        href: "/operationGame/BatchAssessment",
-        routeElement: <BatchAssessment />
+            {
+        icon: <AnalyticsTwoToneIcon />,
+        id: "UI 24 120",
+        label: "Team Debrief",
+        path: "/teamDebrief",
+        href: "/operationGame/TeamDebrief",
+        routeElement: <TeamDebrief />
       },
     ],
   },
