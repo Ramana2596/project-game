@@ -104,7 +104,7 @@ const BatchAssessment = () => {
   };
 
   const handleView = (row) => {
-    navigate("/operationGame/TeamDashboard", {
+    navigate("/operationGame/TeamAssessment", {
       state: {
         fromFaculty: true,
         gameId: row.Game_Id,

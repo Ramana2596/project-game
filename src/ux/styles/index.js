@@ -4,18 +4,19 @@
 // Purpose : Central export gateway (Barrel File) for UX Styles
 // ============================================================
 
-import { colors } from "./ColorPalette";
-import { typography } from "./Typography";
-import { pageStyles } from "./PageStyle";
-import { cardStyles } from "./CardStyle";
-import { tableStyles } from "./TableStyle";
-import { buttonStyles } from "./ButtonStyle";
+import { buttonStyle } from "./buttonStyle";
+import { cardStyle } from "./cardStyle";
+import { colors } from "./colorPalette";
+import { pageStyle } from "./pageStyle";
+import { tableStyle } from "./tableStyle";
+import { muiTypo, semanticTypo } from "./masterTypo";
 
 export {
-  colors,
-  typography,
-  pageStyles,
-  cardStyles,
-  tableStyles,
-  buttonStyles,
+    buttonStyle,
+    cardStyle,
+    colors,
+    pageStyle,
+    tableStyle,
+    muiTypo,
+    semanticTypo,
 };

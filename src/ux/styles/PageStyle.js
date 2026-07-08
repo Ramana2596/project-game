@@ -4,9 +4,9 @@
 // Purpose : Common page layout styles (Purple Theme)
 // ============================================================
 
-import { colors } from "./ColorPalette";
+import { colors } from "./colorPalette";
 
-export const pageStyles = {
+export const pageStyle = {
 
   // ==========================================================
   // Root Container

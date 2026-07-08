@@ -9,6 +9,10 @@ import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from '../Welcome/services/service.js'; 
 import { API_STATUS } from '../../utils/statusCodes';
+import {
+    colors,
+    pageStyle,
+} from "../../ux/styles";
 
 import OmtpNavbar from './components/OmtpNavbar';
 import HeroSection from './components/HeroSection';
@@ -49,7 +53,7 @@ const WelcomeOmtp = () => {
 
           setUserInfo(userData);
 
-          navigate("/operationGame/demo");
+          navigate("/operationGame/demoOmtp");
         } else {
           console.error("Auth failed:", response.data.message);
         }
@@ -63,13 +67,13 @@ const WelcomeOmtp = () => {
     navigate("/");
   };
 
-  // ✅ Purpose: Navigate to unified authentication hub
+  // Navigate to unified authentication hub
   const handleAuthNavigation = () => {
     navigate("/login");
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#ffffff' }}>
+    <Box sx={{ minHeight: '100vh', background: colors.page, }}>
       
       {/* Purpose: Top navigation */}
       <OmtpNavbar
@@ -87,7 +91,7 @@ const WelcomeOmtp = () => {
         <WalkThroughSection />
 
         {/* Purpose: Information dashboard preview */}
-        <Box sx={{ py: 4 }}>
+        <Box sx={pageStyle.section}>
           <InfoDeskView />
         </Box>
 
@@ -97,7 +101,7 @@ const WelcomeOmtp = () => {
         <PricingSection />
 
         {/* Purpose: Final CTA */}
-        <FinalCTA onStart={handleOpenDemo} />
+        <FinalCTA isMarketing={true} onStart={handleOpenDemo} />
       </main>
 
       {/* Purpose: Footer */}

@@ -4,9 +4,10 @@
 // Purpose : Standard table styles (Purple Theme)
 // ============================================================
 
-import { colors } from "./ColorPalette";
+import { colors } from "./colorPalette";
+import { muiTypo, semanticTypo } from "./masterTypo";
 
-export const tableStyles = {
+export const tableStyle = {
 
   // ==========================================================
   // Table Container
@@ -25,9 +26,8 @@ export const tableStyles = {
   header: {
     background: colors.heroGradient,
     "& .MuiTableCell-root": {
-      color: colors.white || "#ffffff",
-      fontWeight: 700,
-      fontSize: "0.95rem",
+      ...semanticTypo.cardH4,
+      color: colors.white,
       borderBottom: "none",
     },
   },
@@ -49,9 +49,9 @@ export const tableStyles = {
   // Body Cell
   // ==========================================================
   cell: {
-    color: colors.body || "#333333",
-    borderBottom: `1px solid ${colors.divider || "#e0e0e0"}`,
-    fontSize: "0.92rem",
+    ...semanticTypo.bodyB1,
+    color: colors.body,
+    borderBottom: `1px solid ${colors.divider}`,
     paddingTop: 12,
     paddingBottom: 12,
   },

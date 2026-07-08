@@ -1,92 +1,132 @@
 // ==========================================
-// Component: Unified Dynamic WalkThroughStep (Variant-driven)
+// Component: Unified Dynamic WalkThroughStep
+// UXLab V1.0
 // ==========================================
 
-import React from 'react';
-import { Box, Typography, Grid } from '@mui/material';
-import { colors } from '../../../../ux/styles';
+import React from "react";
+import { Box, Typography, Grid } from "@mui/material";
 
-const WalkThroughStep = ({ number, title, description, images = [], labels = [] }) => (
-  <Box 
-    sx={{ 
-      mb: 6, 
-      p: { xs: 2, md: 4 }, 
-      bgcolor: colors.card || '#ffffff', 
-      borderRadius: '24px', 
-      border: `1px solid ${colors.border || '#E6E0F4'}`,
-      boxShadow: `0 4px 6px -1px ${colors.shadowColor || 'rgba(0, 0, 0, 0.05)'}`
-    }}
-  >
-    {/* Step Info Row */}
-    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, mb: 3 }}>
-      {/* Dynamic Badge Box */}
-      <Box 
-        sx={{ 
-          minWidth: 40, 
-          height: 40, 
-          bgcolor: colors.primary || '#673AB7', 
-          color: colors.white || '#ffffff', 
-          borderRadius: '12px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          fontWeight: 800 
+import {
+    colors,
+    cardStyle,
+    semanticTypo,
+} from "../../../../ux/styles";
+
+const WalkThroughStep = ({
+    number,
+    title,
+    description,
+    images = [],
+    labels = [],
+}) => (
+    <Box
+        sx={{
+            ...cardStyle.primary,
+            p: { xs: 2.5, md: 4 },
+            mb: 6,
+            borderRadius: 6,
         }}
-      >
-        {number}
-      </Box>
-      <Box>
-        <Typography 
-          variant="h5" 
-          sx={{ fontWeight: 500, color: colors.title || '#1F2D3D', mb: 1 }}
-        >
-          {title}
-        </Typography>
-        <Typography 
-          variant="body1" 
-          sx={{ color: colors.body || '#546E7A', maxWidth: '700px', lineHeight: 1.5 }}
-        >
-          {description}
-        </Typography>
-      </Box>
-    </Box>
-
-    {/* Responsive Media Engine Mapping */}
-    <Grid container spacing={2}>
-      {images.map((img, index) => (
-        <Grid item xs={12} md={images.length > 1 ? 6 : 12} key={index}>
-          <Box 
-            sx={{ 
-              bgcolor: colors.background?.default || '#f9faff', 
-              p: 1.5, 
-              borderRadius: '12px', 
-              border: `1px solid ${colors.border || '#E6E0F4'}`, 
-              display: 'flex', 
-              flexDirection: 'column',
-              alignItems: 'flex-start', 
-              maxWidth: '500px', 
-              mx: 'auto'
+    >
+        {/* Step Header */}
+        <Box
+            sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 2,
+                mb: 3,
             }}
-          >
-            {labels[index] && (
-              <Typography 
-                variant="subtitle2" 
-                sx={{ mb: 1, color: colors.body || '#6b7280', fontWeight: 600 }}
-              >
-                {labels[index]}
-              </Typography>
-            )}
-            <Box 
-              component="img" 
-              src={img} 
-              sx={{ width: '100%', height: 'auto', borderRadius: '8px', display: 'block' }} 
-              alt={labels[index] || `Step ${number} visual`} 
-            />
-          </Box>
+        >
+            <Box
+                sx={{
+                    minWidth: 44,
+                    width: 44,
+                    height: 44,
+                    borderRadius: 3,
+                    background: colors.heroGradient,
+                    color: colors.white,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 700,
+                    fontSize: "1rem",
+                    flexShrink: 0,
+                }}
+            >
+                {number}
+            </Box>
+
+            <Box>
+                <Typography
+                    component="h3"
+                    variant="h3"
+                    sx={{
+                        ...semanticTypo.cardH4,
+                        mb: 1,
+                    }}
+                >
+                    {title}
+                </Typography>
+
+                <Typography
+                    component="p"
+                    variant="body1"
+                    sx={{
+                        ...semanticTypo.bodyB1,
+                        maxWidth: 700,
+                    }}
+                >
+                    {description}
+                </Typography>
+            </Box>
+        </Box>
+
+        {/* Images */}
+        <Grid container spacing={3}>
+            {images.map((img, index) => (
+                <Grid
+                    item
+                    xs={12}
+                    md={images.length > 1 ? 6 : 12}
+                    key={index}
+                >
+                    <Box
+                        sx={{
+                            bgcolor: colors.panel,
+                            border: `1px solid ${colors.border}`,
+                            borderRadius: 4,
+                            p: 2,
+                            maxWidth: 520,
+                            mx: "auto",
+                        }}
+                    >
+                        {labels[index] && (
+                            <Typography
+                                component="h4"
+                                variant="h6"
+                                sx={{
+                                    ...semanticTypo.cardH6,
+                                    mb: 1.5,
+                                }}
+                            >
+                                {labels[index]}
+                            </Typography>
+                        )}
+
+                        <Box
+                            component="img"
+                            src={img}
+                            alt={labels[index] || `Step ${number}`}
+                            sx={{
+                                width: "100%",
+                                display: "block",
+                                borderRadius: 2,
+                            }}
+                        />
+                    </Box>
+                </Grid>
+            ))}
         </Grid>
-      ))}
-    </Grid>
-  </Box>
+    </Box>
 );
 
 export default WalkThroughStep;

@@ -4,9 +4,15 @@
 
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box, Container } from '@mui/material';
-import { colors } from '../../../ux/styles/ColorPalette';
-import { buttonStyles } from '../../../ux/styles/ButtonStyle';
-import { cardStyles } from '../../../ux/styles/CardStyle';
+import {
+    buttonStyle,
+    cardStyle,
+    colors,
+    pageStyle,
+    tableStyle,
+    muiTypo,
+    semanticTypo,
+} from "../../../ux/styles";
 
 // Purpose: Top navigation with demo and auth access
 const OmtpNavbar = ({ onViewDemo, onGetStarted }) => (
@@ -26,7 +32,7 @@ const OmtpNavbar = ({ onViewDemo, onGetStarted }) => (
         
         {/* Logo and platform branding */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, cursor: 'pointer' }}>
-          <Box sx={{ ...cardStyles.iconBox, width: 40, height: 40, borderRadius: 2 }}>
+          <Box sx={{ ...cardStyle.iconBox, width: 40, height: 40, borderRadius: 2 }}>
             <Box sx={{ width: 18, height: 18, border: '3px solid white', borderRadius: '50%' }} />
           </Box>
           <Box>
@@ -80,7 +86,7 @@ const OmtpNavbar = ({ onViewDemo, onGetStarted }) => (
             variant="outlined" 
             onClick={onViewDemo}
             sx={{ 
-              ...buttonStyles.secondary,
+              ...buttonStyle.secondary,
               borderRadius: '100px',
               fontSize: '1rem',
               px: 3.5, 
@@ -94,7 +100,7 @@ const OmtpNavbar = ({ onViewDemo, onGetStarted }) => (
             variant="contained"
             onClick={onGetStarted}
             sx={{ 
-              ...buttonStyles.primary,
+              ...buttonStyle.primary,
               borderRadius: '100px',
               fontSize: '1rem',
               px: 3.5, 
