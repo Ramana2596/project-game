@@ -37,8 +37,8 @@ const TeamAssessment = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const location = useLocation();
-  const fromFaculty = location.state?.fromFaculty || false;
-  console.log("fromFaculty =", fromFaculty);
+  const fromBatch = location.state?.fromBatch || false;
+  console.log("fromBatch =", fromBatch);
   const { userInfo } = useUser();
 
   const [loading, setLoading] = useState(true);
@@ -69,7 +69,7 @@ const TeamAssessment = () => {
       setYardsticks(data.yardsticks || []);
       setRatios(data.ratios || []);
     } catch (err) {
-      console.error("Team Dashboard Error:", err);
+      console.error("Team Assessment Error:", err);
     } finally {
       setLoading(false);
     }
@@ -87,7 +87,7 @@ const TeamAssessment = () => {
 
   const goToPreviousScreen = () => {
 
-    if (fromFaculty) {
+    if (fromBatch) {
       navigate("/operationGame/BatchAssessment", {
         state: {
           restore: true,
@@ -456,7 +456,7 @@ const TeamAssessment = () => {
         }}
       >
 
-        {fromFaculty && (
+        {fromBatch && (
           <Button
             variant="outlined"
             color="secondary"

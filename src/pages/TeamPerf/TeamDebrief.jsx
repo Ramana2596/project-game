@@ -69,6 +69,11 @@ const TeamDebrief = () => {
   };
 
   const goBack = () => {
+    navigate(-1);
+  };
+  
+  /*
+  const goBack = () => {
     navigate("/operationGame/TeamAssessment", {
       state: {
         gameId,
@@ -77,7 +82,7 @@ const TeamDebrief = () => {
       }
     });
   };
-
+  */
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
