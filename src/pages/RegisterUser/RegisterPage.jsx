@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, Card, CardContent } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { getUserProfile, registerUser } from "./services/service.js";
+import { 
+  fetchProfession,
+  fetchLearnMode,
+  //getUserProfile, 
+  registerUser } from "./services/service.js";
 import ToastMessage from '../../components/ToastMessage.jsx';
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import RegistrationForm from './RegistrationForm.jsx';
@@ -48,8 +52,10 @@ const Register = () => {
   useEffect(() => {
     setIsLoading(true);
     Promise.all([
-      getUserProfile({ cmdLine: 'Profession', gameId: 'OpsMgt' }),
-      getUserProfile({ cmdLine: 'Learn_Mode', gameId: 'OpsMgt' })
+        fetchProfession({ gameId: 'OpsMgt' }),
+        fetchLearnMode({ gameId: 'OpsMgt' })
+//      getUserProfile({ cmdLine: 'Profession', gameId: 'OpsMgt' }),
+//      getUserProfile({ cmdLine: 'Learn_Mode', gameId: 'OpsMgt' })
     ]).then(([profResponse, learnModeResponse]) => {
       if (profResponse) {
         setProfessionData(profResponse.data);
