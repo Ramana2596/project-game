@@ -15,7 +15,9 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import { enrollUser, getUserProfile } from "../services/authApiService.js";
+import { 
+  enrollUser,  
+  fetchLearnMode} from "../services/authApiService.js";
 import { API_STATUS, API_STATUS_MAP } from "../../../utils/statusCodes.js";
 import { useUser } from "../../../core/access/userContext.jsx";
 
@@ -42,7 +44,7 @@ const EnrollUserDialog = ({
   // Purpose: Fetch available learning modes from the DB profile configuration query
   useEffect(() => {
     if (open && gameId) {
-      getUserProfile({ cmdLine: "Learn_Mode", gameId })
+      fetchLearnMode({ gameId })
         .then((res) => {
           const modes = Array.isArray(res.data) ? res.data : (res.data?.records || []);
           setLearnModes(modes);

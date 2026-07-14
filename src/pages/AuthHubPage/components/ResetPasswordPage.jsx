@@ -1,9 +1,8 @@
 // file: ResetPasswordPage.jsx
-// Directory: D:\Git_OpsMgt\project-game\src\pages\AuthHubPage\components\ResetPasswordPage.jsx
 
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { resetPassword } from '../../../services/authApiService'; // Paths set to resolve to src/services/authApiService
+import { resetPassword } from '../../../services/authApiService'; 
 
 export default function ResetPasswordPage() {
     const [searchParams] = useSearchParams();
@@ -62,7 +61,7 @@ export default function ResetPasswordPage() {
 
             if (response.data && response.data.sucValue === 0) {
                 setIsError(false);
-                setMessage('Your password has been reset successfully! Redirecting to login...');
+                setMessage('Your password is reset successfully! Redirecting to login...');
                 
                 // Route user to login page after a 3-second delay
                 setTimeout(() => {

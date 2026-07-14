@@ -1,25 +1,33 @@
-// File: src/pages/AuthHubPage/components/AuthForm.jsx
-// Toggle Login and Registration forms.
+// Component: AuthForm controls switching between Sign In and Register forms
 
 import React from "react";
 import { Box } from "@mui/material";
 import SignInForm from "./SignInForm.jsx";
 import RegisterForm from "./RegisterForm.jsx";
 
-// onSuccess: Feedback to parent-call
-// isLogin: true = show login, false = show register: 
-
-const AuthForm = ({ onSuccess, isLogin, onForgotPassword }) => { 
+const AuthForm = ({
+  onSuccess,
+  isLogin,
+  onForgotPassword,
+  oauthContext = null,  //  OAuth (like Google) User context. Null for direct login/register
+}) => {
   return (
     <Box sx={{ width: "100%" }}>
 
+      {/*          Display Login Form   */}
       {isLogin ? (
-        <SignInForm 
-          onSuccess={onSuccess} 
-          onForgotPassword={onForgotPassword} 
+        <SignInForm
+          onSuccess={onSuccess}
+          onForgotPassword={onForgotPassword}
+          oauthContext={oauthContext}
         />
       ) : (
-        <RegisterForm onSuccess={onSuccess} />
+
+        /* Display Create Account form */
+        <RegisterForm
+          onSuccess={onSuccess}
+          oauthContext={oauthContext}
+        />
       )}
 
     </Box>
