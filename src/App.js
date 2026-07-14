@@ -40,7 +40,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/login" element={<AuthHubPage />} />
-
+          <Route path="/authHubPage" element={<AuthHubPage />} />
+          
           <Route
             path="/operationGame/welcomeOmtp"
             element={<WelcomeOmtp />}
