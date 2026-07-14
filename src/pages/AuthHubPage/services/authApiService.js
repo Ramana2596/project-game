@@ -18,6 +18,11 @@ export function loginUser(payload) {
   return api.post("/api/loginUser", payload);
 }
 
+// Login existing OAuth user
+export function loginOAuthUser(payload) {
+  return api.post("/api/loginOAuthUser", payload);
+}
+
 // Password reset link/token
 export function requestPasswordReset(payload) {
   return api.post("/api/requestPasswordReset", payload);
@@ -31,7 +36,7 @@ export function resetPassword(payload) {
 /* PROFILE SERVICES */
 
 // LOV: Profession
-export function fetchProfessions(queryParams) {
+export function fetchProfession(queryParams) {
   return api.get("/api/getUserProfile", {
     params: {
       ...queryParams,
@@ -41,7 +46,7 @@ export function fetchProfessions(queryParams) {
 }
 
 // LOV: Country
-export function fetchCountries(queryParams) {
+export function fetchCountry(queryParams) {
   return api.get("/api/getUserProfile", {
     params: {
       ...queryParams,
@@ -50,12 +55,24 @@ export function fetchCountries(queryParams) {
   });
 }
 
+// LOV: Learn_Mode
+export function fetchLearnMode(queryParams) {
+  return api.get("/api/getUserProfile", {
+    params: {
+      ...queryParams,
+      cmdLine: "Learn_Mode"
+    }
+  });
+}
+
+/*
 // Fetch user profile
 export function getUserProfile(queryParams) {
   return api.get("/api/getUserProfile", {
     params: { ...queryParams }
   });
 }
+*/
 
 // Create user profile after OAuth authentication
 export function addUserProfileOauth(payload) {

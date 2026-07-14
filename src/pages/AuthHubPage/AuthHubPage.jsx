@@ -1,7 +1,7 @@
 // File: src/pages/AuthHubPage/AuthHubPage.jsx
 // Main Authentication flow (Login, Register, Password Setup, Social Redirects, Enrollment routing)
 
-import React, { useState, useEffect, useRef } from "react"; 
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Card,
@@ -24,22 +24,32 @@ import RegisterForm from "./components/RegisterForm";
 import SetPasswordForm from "./components/SetPasswordForm";
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
 
+
+import {
+  loginWithGoogle,
+  // loginWithLinkedIn,
+  //  loginWithMicrosoft,
+  //  loginWithFacebook
+} from "./services/oauthService";
+
+
 import { getAuthStatusFromUrl } from "./services/oauthService";
 import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from "../SignIn/services/signInServices.js";
+import { loginUser , loginOAuthUser} from "./services/authApiService.js";
 import { useNavigate } from "react-router-dom";
 
 // Dynamic Visibility Settings for OAuth Providers
 const SOCIAL_CONFIG = {
   GOOGLE_ENABLED: true,   // Flag: True / False 
-  LINKEDIN_ENABLED: true, // Flag: True / False
+  LINKEDIN_ENABLED: false, // Flag: True / False
 };
 
 const VIEW = {
   LOGIN: "LOGIN",
   REGISTER: "REGISTER",
   SET_PASSWORD: "SET_PASSWORD",
-  FORGOT_PASSWORD: "FORGOT_PASSWORD" 
+  FORGOT_PASSWORD: "FORGOT_PASSWORD"
 };
 
 const AuthHubPage = () => {
@@ -47,6 +57,9 @@ const AuthHubPage = () => {
   // VIEW CONTROLLER
   const [view, setView] = useState(VIEW.LOGIN);
   const [prefilledEmail, setPrefilledEmail] = useState("");
+
+  // OAuth user context (Google identity)
+  const [oauthContext, setOauthContext] = useState(null);
 
   // ENROLLMENT STATE
   const [enrollOpen, setEnrollOpen] = useState(false);
@@ -63,7 +76,7 @@ const AuthHubPage = () => {
   const [newUserContext, setNewUserContext] = useState(null);
 
   // Track layout mount state
-  const isMounted = useRef(true); 
+  const isMounted = useRef(true);
 
   useEffect(() => {
     isMounted.current = true;
@@ -73,13 +86,13 @@ const AuthHubPage = () => {
   }, []);
 
 
-  // Iinitialize user context session safely across auth types
-  const initializeUserSession = (userEmail) => { 
+  // Initialize user session after log-in both Direct and OAuth authentication
+  const initializeUserSession = (userEmail) => {
     return getUserDetails({ userEmail })
       .then((response) => {
         const apiData = response?.data?.data?.[0];
 
-        if (apiData && isMounted.current) { 
+        if (apiData && isMounted.current) {
           login({
             User_Id: apiData.User_Id,
             User_Login: apiData.User_Login,
@@ -94,7 +107,7 @@ const AuthHubPage = () => {
       })
       .catch((err) => {
         console.error("User context initialization failed:", err);
-        if (isMounted.current) { 
+        if (isMounted.current) {
           setToastMessage("Unable to initialize user session.");
 
           setAlertData({
@@ -113,16 +126,18 @@ const AuthHubPage = () => {
 
     // Student enrollment flow
     if (profession === "Student" && !isEnrolled) {
-      setPendingUser(userData); 
+      setPendingUser(userData);
       setEnrollOpen(true);
       return;
     }
 
-    initializeUserSession(userEmail); 
+    if (userEmail) {
+      initializeUserSession(userEmail);
+    }
   };
 
   // REGISTER → PASSWORD FLOW
-  
+
   // Store registration details locally
   const handleRegisterSuccess = (userData) => {
     setNewUserContext(userData);
@@ -140,7 +155,7 @@ const AuthHubPage = () => {
   };
 
   // PASSWORD RECOVERY FLOW
-  const handleForgotPasswordSuccess = (message) => { 
+  const handleForgotPasswordSuccess = (message) => {
     setToastMessage(message || "Password reset instructions sent to your email.");
     setAlertData({
       open: true,
@@ -150,20 +165,58 @@ const AuthHubPage = () => {
     setView(VIEW.LOGIN); // Returns customer to identity confirmation panel 
   };
 
-  // OAUTH HANDLER
+
+  // OAuth Handler: Determine Login or Create Account after OAuth identity verification.
   useEffect(() => {
-    const { status, userId } = getAuthStatusFromUrl();
 
-    if (status === "success" && userId) {
-      navigate(".", { replace: true }); 
+    const { status, userEmail, userName } = getAuthStatusFromUrl();
 
-      handleAuthSuccess({
-        userId,
-        profession: "Student",
-        isEnrolled: false,
+    if (status !== "success" || !userEmail) return;
+
+    // Clean up the browser URL after OAuth login.
+    navigate(".", { replace: true });
+
+    // Check whether the OAuth user already has a profile
+    loginOAuthUser({
+      email: userEmail,
+      cmdLine: "OAuth_User"
+    })
+      .then((res) => {
+        if (Array.isArray(res.data) && res.data.length > 0) {
+
+          const dbUser = res.data[0];
+
+          handleAuthSuccess({
+            userId: dbUser.User_Id,
+            profession: dbUser.Profession,
+            isEnrolled: dbUser.Is_Enrolled,
+            userEmail: dbUser.User_Email,
+          });
+
+        } else {
+
+          setOauthContext({
+            oauth: true,
+            provider: "google",
+            email: userEmail,
+            name: userName,
+          });
+
+          setView(VIEW.REGISTER);
+        }
+      })
+      .catch((err) => {
+        console.error("OAuth verification failed:", err);
+
+        setToastMessage("Unable to verify Google account.");
+
+        setAlertData({
+          open: true,
+          severity: "error",
+        });
       });
-    }
-  }, [navigate]); 
+
+  }, [navigate]);
 
   // UI LABELS
   const isLogin = view === VIEW.LOGIN;
@@ -208,10 +261,10 @@ const AuthHubPage = () => {
           />
 
           <Typography variant="h5" fontWeight={800}>
-            {view === VIEW.FORGOT_PASSWORD 
-              ? "Reset Password" 
-              : isLogin 
-                ? "Welcome Back to OMTP" 
+            {view === VIEW.FORGOT_PASSWORD
+              ? "Reset Password"
+              : isLogin
+                ? "Welcome Back to OMTP"
                 : "Join OMTP"}
           </Typography>
 
@@ -234,13 +287,18 @@ const AuthHubPage = () => {
               sx={{ mb: 3 }}
             >
               {SOCIAL_CONFIG.GOOGLE_ENABLED && (
-                <IconButton sx={{ border: "1px solid #ececec", p: 1.2 }}>
+                <IconButton
+                  sx={{ border: "1px solid #ececec", p: 1.2 }}
+                  onClick={loginWithGoogle}
+                >
                   <GoogleIcon />
                 </IconButton>
               )}
 
               {SOCIAL_CONFIG.LINKEDIN_ENABLED && (
-                <IconButton sx={{ border: "1px solid #ececec", p: 1.2 }}>
+                <IconButton
+                  sx={{ border: "1px solid #ececec", p: 1.2 }}
+                >
                   <LinkedInIcon sx={{ color: "#0077b5" }} />
                 </IconButton>
               )}
@@ -250,15 +308,17 @@ const AuthHubPage = () => {
           </>
         )}
 
+
         {/* LOGIN VIEW */}
         {view === VIEW.LOGIN && (
-          <AuthForm 
-            isLogin={true} 
-            onSuccess={handleAuthSuccess} 
+          <AuthForm
+            isLogin={true}
+            onSuccess={handleAuthSuccess}
+            oauthContext={oauthContext}
             onForgotPassword={(email) => {
               setPrefilledEmail(email || "");
               setView(VIEW.FORGOT_PASSWORD);
-            }} 
+            }}
           />
         )}
 
@@ -279,8 +339,8 @@ const AuthHubPage = () => {
         )}
 
         {/* FORGOT PASSWORD VIEW */}
-        {view === VIEW.FORGOT_PASSWORD && ( 
-          <ForgotPasswordForm 
+        {view === VIEW.FORGOT_PASSWORD && (
+          <ForgotPasswordForm
             initialEmail={prefilledEmail}
             onSuccess={handleForgotPasswordSuccess}
             onBack={() => setView(VIEW.LOGIN)}
@@ -339,7 +399,7 @@ const AuthHubPage = () => {
 
             // Navigate only for success
             if (res.severity === "success") {
-              initializeUserSession(pendingUser?.userEmail); 
+              initializeUserSession(pendingUser?.userEmail);
             }
           }}
         />

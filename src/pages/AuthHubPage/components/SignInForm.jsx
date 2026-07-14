@@ -44,8 +44,10 @@ const SignInForm = ({ onSuccess, onForgotPassword }) => {
 
     try {
       // API Call
-      const res = await loginUser(formData);
-
+      const res = await loginUser({
+        ...formData,
+        cmdLine: "Login_User",
+      });
       // map the DB Snake_Case keys to camelCase for frontend consistency
       if (Array.isArray(res.data) && res.data.length > 0) {
         const dbUser = res.data[0];

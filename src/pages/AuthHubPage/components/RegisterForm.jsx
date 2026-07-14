@@ -12,12 +12,11 @@ import {
 } from "@mui/material";
 import { Email, Person } from "@mui/icons-material";
 import {
-  fetchCountries,
-  fetchProfessions
+  fetchCountry,
+  fetchProfession,
 } from "../services/authApiService.js";
 
-const RegisterForm = ({ onSuccess }) => {
-
+const RegisterForm = ({ onSuccess, oauthContext = null }) => {
   const [loading, setLoading] = useState(false);
 
   // LOV state
@@ -28,19 +27,19 @@ const RegisterForm = ({ onSuccess }) => {
 
   // FORM STATE (User Info - NO PASSWORDS)
   const [formData, setFormData] = useState({
-    userName: "",
-    email: "",
+    userName: oauthContext?.name || "",
+    email: oauthContext?.email || "",
     professionId: "",
     countryId: ""
   });
 
   // Load dropdown values
   useEffect(() => {
-    fetchProfessions({ gameId: "OpsMgt" })
+    fetchProfession({ gameId: "OpsMgt" })
       .then((res) => setProfessions(res.data || []))
       .catch((err) => console.error("Profession fetch failed", err));
 
-    fetchCountries({ gameId: "OpsMgt" })
+    fetchCountry({ gameId: "OpsMgt" })
       .then((res) => setCountries(res.data || []))
       .catch((err) => console.error("Country fetch failed", err));
   }, []);
@@ -150,6 +149,7 @@ const RegisterForm = ({ onSuccess }) => {
         value={formData.userName}
         onChange={handleChange}
         InputProps={{
+          readOnly: oauthContext?.oauth,
           startAdornment: (
             <InputAdornment position="start">
               <Person fontSize="small" />
@@ -168,6 +168,7 @@ const RegisterForm = ({ onSuccess }) => {
         value={formData.email}
         onChange={handleChange}
         InputProps={{
+          readOnly: oauthContext?.oauth,
           startAdornment: (
             <InputAdornment position="start">
               <Email fontSize="small" />
@@ -175,7 +176,7 @@ const RegisterForm = ({ onSuccess }) => {
           )
         }}
       />
-
+ 
       {/* Profession dropdown */}
       <TextField
         fullWidth
