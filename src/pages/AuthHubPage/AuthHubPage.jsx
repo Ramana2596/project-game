@@ -12,6 +12,9 @@ import {
 } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import FacebookIcon from "@mui/icons-material/Facebook";
+//import { FaMicrosoft } from "react-icons/fa";
+import MicrosoftLogo from "../../assets/navigation-menu/microsoft.svg"; 
 import logo from "../../assets/GreenTree.png";
 import ColorModeSelect from "../SignIn/theme/ColorModeSelect";
 
@@ -27,9 +30,9 @@ import ForgotPasswordForm from "./components/ForgotPasswordForm";
 
 import {
   loginWithGoogle,
-  // loginWithLinkedIn,
-  //  loginWithMicrosoft,
-  //  loginWithFacebook
+  loginWithLinkedIn,
+  loginWithMicrosoft,
+  loginWithFacebook
 } from "./services/oauthService";
 
 
@@ -43,6 +46,8 @@ import { useNavigate } from "react-router-dom";
 const SOCIAL_CONFIG = {
   GOOGLE_ENABLED: true,   // Flag: True / False 
   LINKEDIN_ENABLED: false, // Flag: True / False
+  FACEBOOK_ENABLED: false, // Flag: True / False
+  MICROSOFT_ENABLED: false // Flag: True / False
 };
 
 const VIEW = {
@@ -223,7 +228,10 @@ const AuthHubPage = () => {
 
   // Compute status if any provider is active
   const hasSocialLogins =
-    SOCIAL_CONFIG.GOOGLE_ENABLED || SOCIAL_CONFIG.LINKEDIN_ENABLED;
+    SOCIAL_CONFIG.GOOGLE_ENABLED || 
+    SOCIAL_CONFIG.LINKEDIN_ENABLED ||
+    SOCIAL_CONFIG.FACEBOOK_ENABLED ||
+    SOCIAL_CONFIG.MICROSOFT_ENABLED;
 
   return (
     <Box
@@ -234,6 +242,7 @@ const AuthHubPage = () => {
         justifyContent: "center",
         bgcolor: "#f4f7f9",
         p: 2,
+        transform: "translateY(-15px)",
       }}
     >
 
@@ -245,19 +254,21 @@ const AuthHubPage = () => {
         sx={{
           width: "100%",
           maxWidth: 420,
-          p: 4,
+          p: 3,
+          maxHeight: "95vh",
+          overflowY: "auto",
           borderRadius: 4,
           boxShadow: "0px 10px 30px rgba(0,0,0,0.05)",
         }}
       >
 
         {/* BRAND HEADER */}
-        <Box sx={{ textAlign: "center", mb: 3 }}>
+        <Box sx={{ textAlign: "center", mb: 2 }}>
           <Box
             component="img"
             src={logo}
             alt="OMTP Logo"
-            sx={{ height: 65, mb: 2 }}
+            sx={{ height: 50, mb: 1 }}
           />
 
           <Typography variant="h5" fontWeight={800}>
@@ -282,13 +293,13 @@ const AuthHubPage = () => {
           <>
             <Stack
               direction="row"
-              spacing={2}
+              spacing={1.5}
               justifyContent="center"
-              sx={{ mb: 3 }}
+              sx={{ mb: 2 }}
             >
               {SOCIAL_CONFIG.GOOGLE_ENABLED && (
                 <IconButton
-                  sx={{ border: "1px solid #ececec", p: 1.2 }}
+                  sx={{ border: "1px solid #ececec", p: 0.8 }}
                   onClick={loginWithGoogle}
                 >
                   <GoogleIcon />
@@ -297,14 +308,41 @@ const AuthHubPage = () => {
 
               {SOCIAL_CONFIG.LINKEDIN_ENABLED && (
                 <IconButton
-                  sx={{ border: "1px solid #ececec", p: 1.2 }}
+                  sx={{ border: "1px solid #ececec", p: 0.8 }}
+                  onClick={loginWithLinkedIn}
                 >
                   <LinkedInIcon sx={{ color: "#0077b5" }} />
                 </IconButton>
               )}
+
+              {SOCIAL_CONFIG.FACEBOOK_ENABLED && (
+                <IconButton
+                  sx={{ border: "1px solid #ececec", p: 0.8 }}
+                  onClick={loginWithFacebook}
+                >
+                  <FacebookIcon sx={{ color: "#4267B2" }} />
+                </IconButton>
+              )}
+
+              {SOCIAL_CONFIG.MICROSOFT_ENABLED && (
+                <IconButton
+                  sx={{ border: "1px solid #ececec", p: 0.8 }}
+                  onClick={loginWithMicrosoft}
+                >
+                  <Box
+                    component="img"
+                    src={MicrosoftLogo}
+                    alt="Microsoft"
+                    sx={{
+                      width: 22,
+                      height: 22,
+                    }}
+                  />
+                </IconButton>
+              )}
             </Stack>
 
-            <Divider sx={{ mb: 3 }}>OR</Divider>
+            <Divider sx={{ mb: 2 }}>OR</Divider>
           </>
         )}
 
