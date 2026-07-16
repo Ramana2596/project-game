@@ -39,9 +39,9 @@ const BaseStep = ({
                 {/* Step Number */}
                 <Box
                     sx={{
-                        minWidth: 44,
-                        width: 44,
-                        height: 44,
+                        minWidth: 52,
+                        width: 52,
+                        height: 52,
                         borderRadius: "50%",
                         background: colors.heroGradient,
                         color: colors.white,
@@ -53,8 +53,7 @@ const BaseStep = ({
                         fontWeight: 700,
                         fontSize: "1rem",
 
-                        boxShadow: `0 6px 16px ${colors.shadowColor}`,
-                        flexShrink: 0,
+                        boxShadow: "0 8px 20px rgba(123,31,162,.22)", flexShrink: 0,
                     }}
                 >
                     {number}
@@ -66,7 +65,8 @@ const BaseStep = ({
                         component="h3"
                         variant="h3"
                         sx={{
-                            ...semanticTypo.cardH4,
+                            ...semanticTypo.pageH4,
+                            color: colors.primaryDark,
                             mb: 0.75,
                         }}
                     >
@@ -87,7 +87,7 @@ const BaseStep = ({
             </Box>
 
             {/* Content */}
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 3 }}>
                 {children}
             </Box>
         </Box>

@@ -38,9 +38,10 @@ const WalkThroughStep = ({
         >
             <Box
                 sx={{
-                    minWidth: 44,
-                    width: 44,
-                    height: 44,
+                    minWidth: 52,
+                    width: 52,
+                    height: 52,
+                    boxShadow: "0 8px 18px rgba(123,31,162,.22)",
                     borderRadius: 3,
                     background: colors.heroGradient,
                     color: colors.white,
@@ -60,8 +61,8 @@ const WalkThroughStep = ({
                     component="h3"
                     variant="h3"
                     sx={{
-                        ...semanticTypo.cardH4,
-                        mb: 1,
+                        ...semanticTypo.pageH4,
+                        color: colors.primaryDark,
                     }}
                 >
                     {title}
@@ -97,6 +98,13 @@ const WalkThroughStep = ({
                             p: 2,
                             maxWidth: 520,
                             mx: "auto",
+                            boxShadow: "0 8px 24px rgba(123,31,162,.08)",
+                            transition: "all .25s ease",
+
+                            "&:hover": {
+                                transform: "translateY(-4px)",
+                                boxShadow: "0 16px 36px rgba(123,31,162,.15)",
+                            },
                         }}
                     >
                         {labels[index] && (
@@ -120,6 +128,7 @@ const WalkThroughStep = ({
                                 width: "100%",
                                 display: "block",
                                 borderRadius: 2,
+                                border: `1px solid ${colors.border}`,
                             }}
                         />
                     </Box>

@@ -11,6 +11,7 @@ import {
   Grid,
   Stack,
 } from "@mui/material";
+
 import CheckIcon from "@mui/icons-material/Check";
 
 import imgDashboard from "../../../assets/DemoPicture/Dashboard.jpg";
@@ -22,6 +23,7 @@ import {
 } from "../../../ux/styles";
 
 const HeroSection = ({ handleDemoLogin }) => {
+
   const scrollToSteps = () => {
     document
       .getElementById("how-it-works")
@@ -32,14 +34,84 @@ const HeroSection = ({ handleDemoLogin }) => {
     <Box
       component="section"
       sx={{
+        position: "relative",
+        overflow: "hidden",
+
         pt: { xs: 8, md: 12 },
         pb: { xs: 8, md: 10 },
+
         background: colors.pageGradient,
+
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          inset: 0,
+          left: "-50%",
+          width: "200%",
+          background:
+            "radial-gradient(circle at 20% 50%, rgba(123,31,162,.08) 0%, transparent 50%)",
+          animation: "heroFloat 22s ease-in-out infinite",
+        },
+
+        "&::after": {
+          content: '""',
+          position: "absolute",
+          right: "-120px",
+          bottom: "-120px",
+          width: 420,
+          height: 420,
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(123,31,162,.07) 0%, transparent 70%)",
+        },
+
+        "@keyframes heroFloat": {
+          "0%": {
+            transform: "translateX(0px)",
+          },
+          "50%": {
+            transform: "translateX(60px)",
+          },
+          "100%": {
+            transform: "translateX(0px)",
+          },
+        },
+
+        "@keyframes slideInLeft": {
+          from: {
+            opacity: 0,
+            transform: "translateX(-40px)",
+          },
+          to: {
+            opacity: 1,
+            transform: "translateX(0)",
+          },
+        },
+
+        "@keyframes slideInRight": {
+          from: {
+            opacity: 0,
+            transform: "translateX(40px)",
+          },
+          to: {
+            opacity: 1,
+            transform: "translateX(0)",
+          },
+        },
       }}
     >
-      <Container maxWidth="lg">
-        <Grid container spacing={8} alignItems="center">
-
+      <Container
+        maxWidth="lg"
+        sx={{
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <Grid
+          container
+          spacing={8}
+          alignItems="center"
+        >
           {/* LEFT SIDE */}
 
           <Grid item xs={12} md={6}>
@@ -48,10 +120,11 @@ const HeroSection = ({ handleDemoLogin }) => {
               sx={{
                 textAlign: "left",
                 alignItems: "flex-start",
+                animation:
+                  "slideInLeft .8s cubic-bezier(.34,1.56,.64,1) both",
               }}
             >
-
-              {/* Label */}
+              {/* Purpose: Hero label */}
 
               <Typography
                 component="p"
@@ -71,14 +144,17 @@ const HeroSection = ({ handleDemoLogin }) => {
                 REAL-TIME BUSINESS SIMULATION
               </Typography>
 
-              {/* Hero Title */}
+              {/* Purpose: Hero title */}
 
               <Typography
                 component="h1"
-                variant="h2"
                 sx={{
                   ...semanticTypo.heroH2,
                   mb: 3,
+                  background: colors.heroGradient,
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
                 }}
               >
                 Run a Business.
@@ -88,23 +164,23 @@ const HeroSection = ({ handleDemoLogin }) => {
                 See Real Results.
               </Typography>
 
-              {/* Hero Subtitle */}
+              {/* Purpose: Hero subtitle */}
 
               <Typography
                 component="p"
-                variant="body1"
                 sx={{
-                  ...semanticTypo.heroB1,
+                  ...semanticTypo.bodyB1,
                   mb: 4,
                   maxWidth: 520,
                 }}
               >
-                Experience how strategy, market intelligence, and
-                operations connect in one complete business cycle.
-                Built for students and young professionals.
+                Experience how strategy, market intelligence,
+                and operations connect in one complete business
+                cycle. Built for students, professionals and
+                institutions.
               </Typography>
 
-              {/* Buttons */}
+              {/* Purpose: Primary actions */}
 
               <Stack
                 direction={{ xs: "column", sm: "row" }}
@@ -122,6 +198,14 @@ const HeroSection = ({ handleDemoLogin }) => {
                     px: 4.5,
                     py: 2,
                     borderRadius: "100px",
+                    boxShadow:
+                      "0 8px 24px rgba(123,31,162,.35)",
+
+                    "&:hover": {
+                      ...buttonStyle.primary["&:hover"],
+                      boxShadow:
+                        "0 12px 32px rgba(123,31,162,.45)",
+                    },
                   }}
                 >
                   Try Live Simulation
@@ -141,7 +225,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                 </Button>
               </Stack>
 
-              {/* Feature Points */}
+              {/* Purpose: Key highlights */}
 
               <Box
                 sx={{
@@ -183,7 +267,6 @@ const HeroSection = ({ handleDemoLogin }) => {
                   </Box>
                 ))}
               </Box>
-
             </Stack>
           </Grid>
 
@@ -192,33 +275,47 @@ const HeroSection = ({ handleDemoLogin }) => {
           <Grid item xs={12} md={6}>
             <Box
               sx={{
-                p: { xs: 1.5, md: 2 },
-                background: colors.heroGradient,
-                borderRadius: "24px",
-                boxShadow: `0 20px 50px -12px ${colors.shadowColor}`,
-                position: "relative",
-                width: "100%",
-                transition:
-                  "transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275)",
-
-                "&:hover": {
-                  transform: "rotate(-1deg) scale(1.02)",
-                },
+                animation:
+                  "slideInRight .8s cubic-bezier(.34,1.56,.64,1) both",
+                perspective: "1200px",
               }}
             >
               <Box
-                component="img"
-                src={imgDashboard}
-                alt="OMTP Dashboard Preview"
                 sx={{
-                  width: "100%",
-                  display: "block",
-                  borderRadius: "16px",
+                  position: "relative",
+                  p: { xs: 1.5, md: 2 },
+                  borderRadius: "24px",
+                  overflow: "hidden",
+
+                  background: colors.heroGradient,
+
+                  boxShadow:
+                    "0 20px 60px rgba(123,31,162,.25)",
+
+                  transform: "rotateY(-5deg)",
+                  transition: "all .35s ease",
+
+                  "&:hover": {
+                    transform:
+                      "rotateY(0deg) translateY(-6px)",
+                    boxShadow:
+                      "0 28px 72px rgba(123,31,162,.35)",
+                  },
                 }}
-              />
+              >
+                <Box
+                  component="img"
+                  src={imgDashboard}
+                  alt="OMTP Dashboard Preview"
+                  sx={{
+                    display: "block",
+                    width: "100%",
+                    borderRadius: "16px",
+                  }}
+                />
+              </Box>
             </Box>
           </Grid>
-
         </Grid>
       </Container>
     </Box>

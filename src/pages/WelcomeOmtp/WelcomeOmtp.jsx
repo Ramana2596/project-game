@@ -7,18 +7,18 @@ import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
-import { getUserDetails } from '../Welcome/services/service.js'; 
+import { getUserDetails } from '../Welcome/services/service.js';
 import { API_STATUS } from '../../utils/statusCodes';
 import {
-    colors,
-    pageStyle,
+  colors,
+  pageStyle,
 } from "../../ux/styles";
 
 import OmtpNavbar from './components/OmtpNavbar';
 import HeroSection from './components/HeroSection';
-import VideoIntro from './components/VideoIntro'; 
+import VideoIntro from './components/VideoIntro';
 //import CorePillars from './components/CorePillars'; 
-import ValueProps from './components/ValueProps';   
+import ValueProps from './components/ValueProps';
 import WalkThroughSection from './components/WalkThroughSection';
 import InfoDeskView from './components/InfoDeskView';
 import TargetAudience from './components/TargetAudience';
@@ -26,6 +26,24 @@ import WhatLearnersGain from './components/WhatLearnersGain';
 import PricingSection from './components/PricingSection';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
+
+// ==========================================================
+// Page Configuration
+// ==========================================================
+
+
+const IsActive = {
+  HeroSection: true,
+  VideoIntro: true,
+  ValueProps: true,
+  WalkThroughSection: true,
+  InfoDeskView: true,
+  TargetAudience: true,
+  WhatLearnersGain: true,
+  PricingSection: true,
+  FinalCTA: true,
+  Footer: true,
+};
 
 const WelcomeOmtp = () => {
   // Purpose: Navigation and global context access
@@ -73,8 +91,13 @@ const WelcomeOmtp = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', background: colors.page, }}>
-      
+    <Box
+      component="div"
+      sx={{
+        minHeight: "100vh",
+        background: colors.page,
+      }}
+    >
       {/* Purpose: Top navigation */}
       <OmtpNavbar
         onBack={handleBackToHome}
@@ -82,30 +105,68 @@ const WelcomeOmtp = () => {
         onGetStarted={handleAuthNavigation}
       />
 
-      <main>
-        {/* Purpose: Hero and feature presentation */}
-        <HeroSection handleDemoLogin={handleOpenDemo} />
-        <VideoIntro />
-        {/* <CorePillars /> */}
-        <ValueProps />
-        <WalkThroughSection />
+      <Box
+        component="main"
+        sx={{ display: "block" }}
+      >
+
+        {/* Purpose: Hero and product positioning */}
+        {IsActive.HeroSection && (
+          <HeroSection
+            handleDemoLogin={handleOpenDemo}
+          />
+        )}
+
+        {/* Purpose: Product introduction video */}
+        {IsActive.VideoIntro && (
+          <VideoIntro />
+        )}
+
+        {/* Purpose: Core value proposition */}
+        {IsActive.ValueProps && (
+          <ValueProps />
+        )}
+
+        {/* Purpose: Product walkthrough */}
+        {IsActive.WalkThroughSection && (
+          <WalkThroughSection />
+        )}
 
         {/* Purpose: Information dashboard preview */}
-        <Box sx={pageStyle.section}>
-          <InfoDeskView />
-        </Box>
+        {IsActive.InfoDeskView && (
+          <Box sx={pageStyle.section}>
+            <InfoDeskView />
+          </Box>
+        )}
 
-        {/* Purpose: Value proposition sections */}
-        <TargetAudience />
-        <WhatLearnersGain />
-        <PricingSection />
+        {/* Purpose: Target users */}
+        {IsActive.TargetAudience && (
+          <TargetAudience />
+        )}
 
-        {/* Purpose: Final CTA */}
-        <FinalCTA isMarketing={true} onStart={handleOpenDemo} />
-      </main>
+        {/* Purpose: Learning outcomes */}
+        {IsActive.WhatLearnersGain && (
+          <WhatLearnersGain />
+        )}
 
-      {/* Purpose: Footer */}
-      <Footer />
+        {/* Purpose: Pricing plans */}
+        {IsActive.PricingSection && (
+          <PricingSection />
+        )}
+
+        {/* Purpose: Final Call-to-Action */}
+        {IsActive.FinalCTA && (
+          <FinalCTA
+            onStart={handleOpenDemo}
+          />
+        )}
+        
+        {/* Purpose: Footer */}
+        {IsActive.Footer && (
+          <Footer />
+        )}
+
+      </Box>
     </Box>
   );
 };
