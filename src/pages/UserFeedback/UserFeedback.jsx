@@ -37,9 +37,9 @@ const FAB_BOTTOM = 0;    // px — flush with viewport bottom
 const FAB_LEFT   = 0;    // px — flush with viewport left
 
 const UserFeedback = () => {
-    const theme                             = useTheme();
-    const isMobile                          = useMediaQuery(theme.breakpoints.down('md'));
-    const { pathname }                      = useLocation();
+    const theme                                 = useTheme();
+    const isMobile                              = useMediaQuery(theme.breakpoints.down('md'));
+    const { pathname }                          = useLocation();
     const { userInfo, userAccessiblePages } = useUser();
 
     const userId = userInfo?.userId         || null;
@@ -97,28 +97,38 @@ const UserFeedback = () => {
         </Fade>
     );
 
-    // ── Shared floating Square FAB ────────────────────────────────────────────
+    // ── Shared floating Circle FAB ────────────────────────────────────────────
     const FeedbackFab = () => (
         <Tooltip title={open ? 'Close feedback' : 'Give feedback'} placement="right" arrow>
             <Box
                 onClick={handleToggle}
                 sx={{
-                    width         : FAB_SIZE,
-                    height        : FAB_SIZE,
-                    borderRadius  : 0,
-                    bgcolor       : '#3B1FA3', // Exact theme match with the label text color to merge beautifully
-                    color         : '#fff',
-                    display       : 'flex',
-                    alignItems    : 'center',
+                    width: FAB_SIZE,
+                    height: FAB_SIZE,
+                    minWidth: FAB_SIZE,
+                    borderRadius: open
+                        ? `${FAB_SIZE / 2}px 0 0 ${FAB_SIZE / 2}px`
+                        : '50%', display: 'flex',
+                    alignItems: 'center',
                     justifyContent: 'center',
-                    cursor        : 'pointer',
-                    boxShadow     : '0 4px 14px rgba(59,31,163,0.3)',
-                    transition    : 'background-color 0.2s, transform 0.2s',
-                    zIndex        : 1301,
-                    flexShrink    : 0,
-                    '&:hover'     : {
-                        bgcolor  : '#2E1882',
-                        transform: 'scale(1.02)',
+
+                    p: 0,
+                    bgcolor: '#673AB7',
+                    color: '#fff',
+
+                    boxShadow: open
+                        ? 'none'
+                        : '0 10px 28px rgba(103,58,183,.30)', transition:
+                        'transform .18s ease, box-shadow .25s ease, background-color .25s ease',
+
+                    '&:hover': {
+                        bgcolor: '#7C3AED',
+                        transform: 'translateY(-2px) scale(1.05)',
+                        boxShadow: '0 14px 34px rgba(103,58,183,.42)',
+                    },
+
+                    '&:active': {
+                        transform: 'scale(.95)',
                     },
                 }}
             >
@@ -144,6 +154,7 @@ const UserFeedback = () => {
                         width     : 'calc(100vw - 32px)',
                         maxWidth  : 420,
                         bgcolor   : '#EDE9FE',
+                        paddingLeft: 0,         
                         border    : '1.5px solid rgba(103,58,183,0.3)',
                         borderRadius: 3,
                         boxShadow : '0 8px 24px rgba(103,58,183,0.18)',
@@ -159,7 +170,7 @@ const UserFeedback = () => {
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
                                         <FeedbackOutlinedIcon sx={{ fontSize: 16, color: '#3B1FA3' }} />
                                         <Typography sx={{ fontSize: 13, fontWeight: 800, color: '#3B1FA3' }}>
-                                            Page Feedback
+                                            Feedback
                                         </Typography>
                                     </Box>
                                 </Box>
@@ -188,30 +199,46 @@ const UserFeedback = () => {
                                                         onClick={() => setSelectedOption(isSel ? null : opt)}
                                                         size="medium"
                                                         sx={{
-                                                            fontSize   : 13,
-                                                            fontWeight : isSel ? 600 : 400,
-                                                            bgcolor    : isSel ? '#7C3AED' : 'rgba(255,255,255,0.9)',
-                                                            color      : isSel ? '#fff'    : '#4A3880',
-                                                            border     : '1px solid',
-                                                            borderColor: isSel ? '#7C3AED' : 'rgba(103,58,183,0.3)',
-                                                            cursor     : 'pointer',
-                                                            height     : 36,
-                                                            '&:hover'  : { bgcolor: isSel ? '#6D28D9' : 'rgba(124,58,237,0.1)' },
-                                                        }}
-                                                    />
+                                                            fontSize: 12,
+
+                                                            fontWeight: isSel ? 600 : 400,
+
+                                                            bgcolor: isSel ? '#7C3AED' : 'rgba(255,255,255,.95)',
+
+                                                            color: isSel ? '#fff' : '#4A3880',
+
+                                                            border: '1px solid',
+
+                                                            borderColor: isSel ? '#7C3AED' : 'rgba(103,58,183,.30)',
+
+                                                            cursor: 'pointer',
+
+                                                            height: 28,
+
+                                                            transition: 'all .22s ease',
+
+                                                            '&:hover': {
+                                                                bgcolor: isSel ? '#6D28D9' : 'rgba(124,58,237,.10)',
+                                                                transform: 'translateY(-1px)',
+                                                            },
+
+                                                            '&:active': {
+                                                                transform: 'scale(.96)',
+                                                            },
+                                                        }} />
                                                 );
                                             })}
+                                            </Box>
                                         </Box>
-                                    </Box>
-                                )}
+                                    )}
 
-                                {isOther && (
-                                    <TextField
-                                        autoFocus fullWidth size="small"
-                                        placeholder="Your comment…"
-                                        value={comment}
-                                        onChange={e => setComment(e.target.value)}
-                                        sx={{
+                                    {isOther && (
+                                        <TextField
+                                            autoFocus fullWidth size="small"
+                                            placeholder="Your comment…"
+                                            value={comment}
+                                            onChange={e => setComment(e.target.value)}
+                                            sx={{
                                             mt: 1.5,
                                             '& .MuiOutlinedInput-root': {
                                                 fontSize: 13, borderRadius: 2, bgcolor: '#fff',
@@ -271,52 +298,95 @@ const UserFeedback = () => {
 
     // ── DESKTOP LAYOUT ────────────────────────────────────────────────────────
     return (
-        <Box 
-            sx={{ 
-                position: 'fixed', 
-                bottom: FAB_BOTTOM, 
-                left: FAB_LEFT, 
-                zIndex: 1300, 
-                display: 'flex', 
+        <Box
+            sx={{
+                position: 'fixed',
+                bottom: FAB_BOTTOM,
+                left: FAB_LEFT,
+                zIndex: 1300,
+                display: 'flex',
                 alignItems: 'center',
-                height: FAB_SIZE 
+                height: FAB_SIZE,
+                overflow: 'visible',
             }}
         >
             <FeedbackFab />
 
-            <Collapse in={open} orientation="horizontal" unmountOnExit>
+            <Collapse
+                in={open}
+                orientation="horizontal"
+                timeout={320}
+                easing={{
+                    enter: 'cubic-bezier(.22,1,.36,1)',
+                    exit: 'cubic-bezier(.22,1,.36,1)',
+                }}
+                unmountOnExit
+            >
                 <Box
                     sx={{
-                        height      : FAB_SIZE,
-                        bgcolor     : '#EDE9FE',
-                        border      : '1.5px solid rgba(103,58,183,0.3)',
-                        borderLeft  : 'none',   
-                        borderBottom: 'none', 
+                        ml: '-1px',              // <-- removes visible gap
+                        height: FAB_SIZE,
+                        bgcolor: '#EDE9FE',
+                        border: '1.5px solid rgba(103,58,183,0.3)',
+                        borderLeft: 'none',
+                        borderBottom: 'none',
                         borderRadius: `0 ${FAB_SIZE / 2}px ${FAB_SIZE / 2}px 0`,
-                        boxShadow   : '0 4px 16px rgba(103,58,183,0.18)',
-                        display     : 'flex',
-                        alignItems  : 'center',
-                        overflow    : 'hidden',
-                        whiteSpace  : 'nowrap',
+                        boxShadow: '0 4px 16px rgba(103,58,183,0.18)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
                     }}
                 >
                     {status === 'success' ? (
                         <SuccessFlash inline />
                     ) : (
-                        <Box sx={{ display: 'flex', alignItems: 'center', height: '100%', px: 0.5, width: '100%' }}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                height: '100%',
+                                px: .5,
+                                width: '100%',
 
-                            {/* Label — Cleaner seamless transition background */}
-                            <Box sx={{
-                                display    : 'flex',
-                                alignItems : 'center',
-                                px         : 1.5,
-                                height     : '100%',
-                                flexShrink : 0,
-                            }}>
-                                <Typography sx={{ fontSize: 13, fontWeight: 800, color: '#3B1FA3', lineHeight: 1 }}>
-                                    Page Feedback
-                                </Typography>
-                            </Box>
+                                opacity: open ? 1 : 0,
+
+                                transform: open
+                                    ? 'translateX(0)'
+                                    : 'translateX(-12px)',
+
+                                transition:
+                                    'opacity .22s ease .10s, transform .30s cubic-bezier(.22,1,.36,1)',
+                            }}
+                        >
+                                {/* Label — Cleaner seamless transition background */}
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+
+                                        px: 2,
+
+                                        height: '100%',
+
+                                        bgcolor: '#673AB7',
+
+                                        color: '#fff',
+
+                                        flexShrink: 0,
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            fontSize: 13,
+                                            fontWeight: 700,
+                                            color: '#fff',
+                                            lineHeight: 1,
+                                        }}
+                                    >
+                                        Feedback
+                                    </Typography>
+                                </Box>
 
                             {/* Widget icons */}
                             <Box sx={{
@@ -343,13 +413,22 @@ const UserFeedback = () => {
                                         </IconButton>
                                     </Tooltip>
                                 )}
-                            </Box>
+                                </Box>
 
-                            {/* Options pills & Dynamic Text Field */}
-                            <Collapse in={showOptions} orientation="horizontal" unmountOnExit style={{ display: 'flex', alignItems: 'center' }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, px: 1, height: FAB_SIZE }}>
-                                    {filteredOptions.slice(0, 5).map(opt => {
-                                        const isSel = selectedOption?.Feedback_Option_Id === opt.Feedback_Option_Id;
+                                {/* Options pills & Dynamic Text Field */}
+                                <Collapse
+                                    in={showOptions}
+                                    orientation="horizontal"
+                                    timeout={220}
+                                    easing={{
+                                        enter: 'cubic-bezier(.22,1,.36,1)',
+                                        exit: 'cubic-bezier(.22,1,.36,1)',
+                                    }}
+                                    unmountOnExit
+                                >
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, px: 1, height: FAB_SIZE }}>
+                                        {filteredOptions.slice(0, 5).map(opt => {
+                                            const isSel = selectedOption?.Feedback_Option_Id === opt.Feedback_Option_Id;
                                         return (
                                             <Chip
                                                 key={opt.Feedback_Option_Id}
@@ -416,20 +495,32 @@ const UserFeedback = () => {
                                     {status === 'error' && (
                                         <Typography sx={{ fontSize: 11, color: '#E24B4A' }}>{errorMsg}</Typography>
                                     )}
-                                </Box>
-                            </Collapse>
+                                    </Box>
+                                </Collapse>
 
-                            {/* Inline close button at bar edge */}
-                            <Tooltip title="Close" placement="top" arrow>
-                                <IconButton
-                                    onClick={handleToggle}
-                                    size="small"
-                                    sx={{ mx: 0.5, color: '#9E93C8', flexShrink: 0, '&:hover': { color: '#3B1FA3' } }}
-                                >
-                                    <CloseIcon sx={{ fontSize: 14 }} />
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
+                                {/* Inline close button at bar edge */}
+                                <Tooltip title="Close" placement="top" arrow>
+                                    <IconButton
+                                        onClick={handleToggle}
+                                        size="small"
+                                        sx={{
+                                            mx: .5,
+
+                                            color: '#9E93C8',
+
+                                            flexShrink: 0,
+
+                                            transition: '.25s',
+
+                                            '&:hover': {
+                                                color: '#3B1FA3',
+                                                transform: 'rotate(90deg)',
+                                            },
+                                        }}                                >
+                                        <CloseIcon sx={{ fontSize: 14 }} />
+                                    </IconButton>
+                                </Tooltip>
+                            </Box>
                     )}
                 </Box>
             </Collapse>
