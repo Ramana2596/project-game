@@ -27,18 +27,33 @@ const WalkThroughSection = () => {
             component="section"
             sx={{
                 py: { xs: 8, md: 10 },
-                bgcolor: colors.panel,
+                background: colors.pageGradient,
+                position: "relative",
+
+                "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    inset: 0,
+                    background:
+                        "radial-gradient(circle at right center, rgba(123,31,162,.05), transparent 60%)",
+                    pointerEvents: "none",
+                },
             }}
         >
             <Container maxWidth="lg">
 
-                <Box sx={{ mb: 6 }}>
+                <Box
+                    sx={{ mb: 7, position: "relative", zIndex: 1, }}
+                >
                     <Typography
                         component="h2"
                         variant="h2"
                         sx={{
-                            ...semanticTypo.sectionH3,
-                            mb: 2,
+                            ...semanticTypo.pageH3,
+                            background: colors.heroGradient,
+                            backgroundClip: "text",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent", mb: 2,
                         }}
                     >
                         OMTP: A 7-step Guided Walkthrough

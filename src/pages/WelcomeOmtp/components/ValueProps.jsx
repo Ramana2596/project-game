@@ -16,19 +16,16 @@ const valueCards = [
     title: "Real Decisions",
     desc: "Choose strategy, production, and sales inside a realistic business environment.",
     icon: "🎯",
-    iconBg: "rgba(239,68,68,0.12)",
   },
   {
     title: "Instant Feedback",
     desc: "See how every decision affects profitability and operating results.",
     icon: "📈",
-    iconBg: "rgba(56,189,248,0.15)",
   },
   {
     title: "Practical Learning",
     desc: "Build judgment through experience and repeated improvement.",
     icon: "🧠",
-    iconBg: "rgba(168,85,247,0.15)",
   },
 ];
 
@@ -37,7 +34,17 @@ const ValueProps = () => (
     component="section"
     sx={{
       py: 6,
-      bgcolor: colors.page,
+      background: colors.pageGradient,
+      position: "relative",
+
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        inset: 0,
+        background:
+          "radial-gradient(circle at left center, rgba(123,31,162,.04), transparent 55%)",
+        pointerEvents: "none",
+      },
     }}
   >
     <Container maxWidth="lg">
@@ -49,7 +56,11 @@ const ValueProps = () => (
           component="h2"
           variant="h3"
           sx={{
-            ...semanticTypo.sectionH3,
+            ...semanticTypo.pageH3,
+            background: colors.heroGradient,
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
             mb: 1,
           }}
         >
@@ -124,8 +135,9 @@ const ValueProps = () => (
                   alignItems: "center",
                   justifyContent: "center",
 
-                  bgcolor: card.iconBg,
-                  fontSize: "1.4rem",
+                  background: colors.heroGradient,
+                  color: colors.white,
+                  boxShadow: "0 6px 18px rgba(123,31,162,.22)", fontSize: "1.4rem",
                 }}
               >
                 {card.icon}

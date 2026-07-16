@@ -28,6 +28,7 @@ const Step1 = () => {
                     variant="h4"
                     sx={{
                         ...semanticTypo.cardH5,
+                        color: colors.primaryDark,
                         mb: 1.5,
                     }}
                 >
@@ -40,6 +41,14 @@ const Step1 = () => {
                         border: `1px solid ${colors.border}`,
                         borderRadius: 4,
                         p: 1.5,
+
+                        boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                        transition: "all .25s ease",
+
+                        "&:hover": {
+                            transform: "translateY(-3px)",
+                            boxShadow: "0 14px 30px rgba(123,31,162,.15)",
+                        },
                     }}
                 >
                     <Box
@@ -50,6 +59,7 @@ const Step1 = () => {
                             width: "100%",
                             display: "block",
                             borderRadius: 2,
+                            border: `1px solid ${colors.border}`,
                         }}
                     />
                 </Box>

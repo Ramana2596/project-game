@@ -25,7 +25,21 @@ const VideoIntro = () => {
       id="how-it-works"
       sx={{
         py: { xs: 8, md: 10 },
-        bgcolor: colors.paper,
+        background: colors.pageGradient,
+        position: "relative",
+        overflow: "hidden",
+
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background:
+            "radial-gradient(circle at top right, rgba(123,31,162,.05), transparent 55%)",
+          pointerEvents: "none",
+        },
       }}
     >
       <Container maxWidth="lg">
@@ -34,10 +48,13 @@ const VideoIntro = () => {
 
         <Typography
           component="h2"
-          variant="h3"
           sx={{
-            ...semanticTypo.sectionH3,
+            ...semanticTypo.pageH3,
             mb: 2,
+            background: colors.heroGradient,
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
           }}
         >
           See how OMTP works
@@ -47,7 +64,8 @@ const VideoIntro = () => {
           component="p"
           variant="body1"
           sx={{
-            ...semanticTypo.sectionB1,
+            ...semanticTypo.bodyB1,
+            color: colors.body,
             mb: 5,
             maxWidth: 720,
           }}
@@ -73,7 +91,16 @@ const VideoIntro = () => {
 
             color: colors.white,
 
-            boxShadow: `0 16px 36px ${colors.shadowColor}`,
+            boxShadow: "0 22px 60px rgba(123,31,162,.22)",
+            position: "relative",
+            zIndex: 1,
+            border: "1px solid rgba(255,255,255,.10)",
+            transition: "all .30s ease",
+
+            "&:hover": {
+              transform: "translateY(-4px)",
+              boxShadow: "0 28px 72px rgba(123,31,162,.30)",
+            },
           }}
         >
 
