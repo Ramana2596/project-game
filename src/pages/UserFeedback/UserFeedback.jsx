@@ -283,7 +283,7 @@ const UserFeedback = () => {
                                             fontSize: 13, fontWeight: 600, bgcolor: '#7C3AED', color: '#fff',
                                             cursor: 'pointer', height: 36,
                                             '&:hover'       : { bgcolor: '#6D28D9' },
-                                            '&.Mui-disabled': { bgcolor: '#C4B5F4', color: '#fff' },
+                                            '&.Mui-disabled': { bgcolor: '#E5E7EB',color: '#9CA3AF',opacity: 1,},
                                             '& .MuiChip-icon': { color: '#fff' },
                                         }}
                                     />
@@ -487,7 +487,7 @@ const UserFeedback = () => {
                                             fontWeight: 600, fontSize: 12, height: 28,
                                             cursor  : 'pointer', flexShrink: 0,
                                             '&:hover'       : { bgcolor: '#6D28D9' },
-                                            '&.Mui-disabled': { bgcolor: '#C4B5F4', color: '#fff' },
+                                            '&.Mui-disabled': { bgcolor: '#E5E7EB',color: '#9CA3AF',opacity: 1,},
                                             '& .MuiChip-icon': { color: '#fff' },
                                         }}
                                     />
