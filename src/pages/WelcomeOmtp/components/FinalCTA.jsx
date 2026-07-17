@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 
 import {
+    buttonStyle,
     colors,
     semanticTypo,
 } from "../../../ux/styles";
@@ -59,7 +60,8 @@ const FinalCTA = ({ onStart }) => {
                             borderRadius: "50%",
                             background:
                                 "radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%)",
-                        }}
+                            pointerEvents: "none",
+                            }}
                     />
 
                     <Stack
@@ -75,7 +77,7 @@ const FinalCTA = ({ onStart }) => {
                         {/* Left */}
                         <Box
                             sx={{
-                                maxWidth: 620,
+                                maxWidth: 640,
                                 textAlign: {
                                     xs: "center",
                                     lg: "left",
@@ -85,13 +87,13 @@ const FinalCTA = ({ onStart }) => {
                             <Typography
                                 component="h2"
                                 sx={{
-                                    ...semanticTypo.pageH3,
+                                    ...semanticTypo.pageH3, 
                                     color: colors.white,
                                     mb: 2,
                                 }}
                             >
-                                Ready to experience real 
-                                <br/>
+                                Ready to experience real
+                                <br />
                                 Business Decision-Making?
                             </Typography>
 
@@ -99,7 +101,7 @@ const FinalCTA = ({ onStart }) => {
                                 component="p"
                                 sx={{
                                     ...semanticTypo.bodyB1,
-                                    color: "rgba(255,255,255,0.92)",
+                                    color: "rgba(255,255,255,0.94)",
                                 }}
                             >
                                 Give learners a practical way to understand
@@ -127,34 +129,24 @@ const FinalCTA = ({ onStart }) => {
                                 variant="contained"
                                 onClick={onStart}
                                 sx={{
-                                    bgcolor: colors.white,
-                                    color: colors.primary,
-
-                                    px: 4.5,
-                                    py: 1.7,
+                                    ...buttonStyle.primary,
 
                                     minWidth: 180,
 
-                                    borderRadius: "50px",
+                                    background: colors.white,
+                                    color: colors.primary,
 
-                                    fontWeight: 700,
-                                    fontSize: "1rem",
-
-                                    textTransform: "none",
-
-                                    boxShadow:
-                                        "0 8px 20px rgba(0,0,0,0.12)",
+                                    boxShadow: "0 8px 20px rgba(0,0,0,.12)",
 
                                     "&:hover": {
-                                        bgcolor: "#F8F8F8",
+                                        ...buttonStyle.primary["&:hover"],
+                                        background: "#F8F8F8",
                                         color: colors.primaryDark,
-                                        transform: "translateY(-2px)",
+                                        boxShadow: "0 10px 24px rgba(0,0,0,.18)",
                                     },
-
-                                    transition: "all .25s ease",
                                 }}
                             >
-                                Try Live Simulation
+                                Demo
                             </Button>
 
                             {/* Secondary CTA */}
@@ -162,32 +154,20 @@ const FinalCTA = ({ onStart }) => {
                                 variant="outlined"
                                 onClick={scrollToSteps}
                                 sx={{
-                                    color: colors.white,
-
-                                    border: `2px solid ${colors.white}`,
-
-                                    px: 4,
-                                    py: 1.7,
+                                    ...buttonStyle.secondary,
 
                                     minWidth: 160,
 
-                                    borderRadius: "50px",
-
-                                    fontWeight: 700,
-                                    fontSize: "1rem",
-
-                                    textTransform: "none",
+                                    background: "transparent",
+                                    color: colors.white,
+                                    borderColor: colors.white,
 
                                     "&:hover": {
-                                        background:
-                                            "rgba(255,255,255,0.12)",
-
-                                        border: `2px solid ${colors.white}`,
-
+                                        ...buttonStyle.secondary["&:hover"],
+                                        background: "rgba(255,255,255,.12)",
+                                        borderColor: colors.white,
                                         color: colors.white,
                                     },
-
-                                    transition: "all .25s ease",
                                 }}
                             >
                                 See the 7 Steps

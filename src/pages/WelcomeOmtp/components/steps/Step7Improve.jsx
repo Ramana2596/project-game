@@ -28,7 +28,8 @@ const Step7Improve = () => {
                     variant="h6"
                     sx={{
                         ...semanticTypo.cardH5,
-                        mb: 1,
+                        color: colors.primaryDark,
+                        mb: 1.5,
                     }}
                 >
                     Review results and prepare for the next cycle
@@ -36,21 +37,29 @@ const Step7Improve = () => {
 
                 <Box
                     sx={{
-                        p: 1,
-                        bgcolor: colors.background,
+                        bgcolor: colors.panel,
                         border: `1px solid ${colors.border}`,
-                        borderRadius: 3,
-                        boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                        borderRadius: 4,
+                        p: 1.5,
+
+                        boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                        transition: "all .25s ease",
+
+                        "&:hover": {
+                            transform: "translateY(-3px)",
+                            boxShadow: "0 14px 30px rgba(123,31,162,.15)",
+                        },
                     }}
                 >
                     <Box
                         component="img"
                         src={imgImprovement}
-                        alt="Dashboard for Continuous Improvement"
+                        alt="Business dashboard supporting continuous improvement and operational planning"
                         sx={{
                             width: "100%",
                             display: "block",
                             borderRadius: 2,
+                            border: `1px solid ${colors.border}`,
                         }}
                     />
                 </Box>

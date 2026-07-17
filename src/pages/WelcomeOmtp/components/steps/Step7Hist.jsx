@@ -30,7 +30,8 @@ const Step7Hist = () => {
                     variant="h6"
                     sx={{
                         ...semanticTypo.cardH5,
-                        mb: 1,
+                        color: colors.primaryDark,
+                        mb: 1.5,
                     }}
                 >
                     Historical Data and Trend Analysis
@@ -41,20 +42,29 @@ const Step7Hist = () => {
                     <Grid item xs={12} md={6}>
                         <Box
                             sx={{
-                                p: 1,
-                                bgcolor: colors.background,
+                                bgcolor: colors.panel,
                                 border: `1px solid ${colors.border}`,
-                                borderRadius: 3,
+                                borderRadius: 4,
+                                p: 1.5,
+
+                                boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                                transition: "all .25s ease",
+
+                                "&:hover": {
+                                    transform: "translateY(-3px)",
+                                    boxShadow: "0 14px 30px rgba(123,31,162,.15)",
+                                },
                             }}
                         >
                             <Box
                                 component="img"
                                 src={imgInfoDesk1}
-                                alt="Historical Data View 1"
+                                alt="Historical business data and trend analysis dashboard"
                                 sx={{
                                     width: "100%",
                                     display: "block",
                                     borderRadius: 2,
+                                    border: `1px solid ${colors.border}`,
                                 }}
                             />
                         </Box>
@@ -63,20 +73,29 @@ const Step7Hist = () => {
                     <Grid item xs={12} md={6}>
                         <Box
                             sx={{
-                                p: 1,
-                                bgcolor: colors.background,
+                                bgcolor: colors.panel,
                                 border: `1px solid ${colors.border}`,
-                                borderRadius: 3,
+                                borderRadius: 4,
+                                p: 1.5,
+
+                                boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                                transition: "all .25s ease",
+
+                                "&:hover": {
+                                    transform: "translateY(-3px)",
+                                    boxShadow: "0 14px 30px rgba(123,31,162,.15)",
+                                },
                             }}
                         >
                             <Box
                                 component="img"
                                 src={imgInfoDesk2}
-                                alt="Historical Data View 2"
+                                alt="Historical performance reports and operational trends"
                                 sx={{
                                     width: "100%",
                                     display: "block",
                                     borderRadius: 2,
+                                    border: `1px solid ${colors.border}`,
                                 }}
                             />
                         </Box>

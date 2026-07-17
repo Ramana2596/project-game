@@ -61,7 +61,7 @@ const PricingCard = ({
         sx={{
             ...cardStyle.primary,
 
-            p: 4,
+            p: { xs: 3.5, md: 4 },
             height: "100%",
             display: "flex",
             flexDirection: "column",
@@ -70,11 +70,16 @@ const PricingCard = ({
 
             border: isPrimary
                 ? `2px solid ${colors.primary}`
-                : undefined,
+                : `2px solid ${colors.border}`,
 
             bgcolor: isPrimary
                 ? colors.hover
                 : colors.white,
+            transition: "all .25s ease",
+
+            "&:hover": {
+                transform: "translateY(-4px)",
+            },
         }}
     >
         {badge && (
@@ -124,9 +129,9 @@ const PricingCard = ({
             >
                 <Typography
                     sx={{
-                        fontSize: "2.3rem",
-                        fontWeight: 700,
-                        color: colors.title,
+                        ...semanticTypo.heroH2,
+                        color: colors.primaryDark,
+                        lineHeight: 1,
                     }}
                 >
                     {price}
@@ -172,7 +177,7 @@ const PricingSection = () => (
         component="section"
         id="pricing"
         sx={{
-            py: 10,
+            py: { xs: 8, md: 10 }, 
             bgcolor: colors.white,
         }}
     >
@@ -183,7 +188,8 @@ const PricingSection = () => (
                 <Typography
                     component="h2"
                     sx={{
-                        ...semanticTypo.sectionH3,
+                        ...semanticTypo.pageH3,
+                        color: colors.primaryDark,
                         mb: 2,
                     }}
                 >
@@ -193,7 +199,7 @@ const PricingSection = () => (
                 <Typography
                     component="p"
                     sx={{
-                        ...semanticTypo.sectionB1,
+                        ...semanticTypo.bodyB1,
                         maxWidth: 600,
                     }}
                 >

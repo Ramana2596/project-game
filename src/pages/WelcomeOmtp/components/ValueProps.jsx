@@ -14,7 +14,7 @@ import {
 const valueCards = [
   {
     title: "Real Decisions",
-    desc: "Choose strategy, production, and sales inside a realistic business environment.",
+    desc: "Choose Strategy and make Production and Sales decisions in a realistic business environment.",
     icon: "🎯",
   },
   {
@@ -75,7 +75,7 @@ const ValueProps = () => (
             maxWidth: 600,
           }}
         >
-          OMTP connects operations, strategy, and finance through one
+          OMTP connects Strategy, Operations, and Finance through one
           practical experience.
         </Typography>
       </Box>
