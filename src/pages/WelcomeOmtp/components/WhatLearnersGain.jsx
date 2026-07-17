@@ -34,7 +34,7 @@ const GainItem = ({ text }) => (
             sx={{
                 color: colors.primary,
                 mt: 0.5,
-                fontSize: "1.2rem",
+                fontSize: "1.3rem",
             }}
         />
 
@@ -43,7 +43,7 @@ const GainItem = ({ text }) => (
             variant="body1"
             sx={{
                 ...semanticTypo.bodyB1,
-                fontWeight: 500,
+                fontWeight: 600,
             }}
         >
             {text}
@@ -57,7 +57,7 @@ const WhatLearnersGain = () => {
             component="section"
             sx={{
                 py: 12,
-                bgcolor: colors.card,
+                background: colors.pageGradient,
             }}
         >
             <Container maxWidth="lg">
@@ -73,12 +73,21 @@ const WhatLearnersGain = () => {
                         <Box
                             sx={{
                                 bgcolor: colors.panel,
+                                border: `1px solid ${colors.border}`,
                                 borderRadius: 4,
-                                p: 4,
+                                p: 3,
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
                                 minHeight: 320,
+
+                                boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                                transition: "all .25s ease",
+
+                                "&:hover": {
+                                    transform: "translateY(-3px)",
+                                    boxShadow: "0 14px 30px rgba(123,31,162,.15)",
+                                },
                             }}
                         >
                             <Box
@@ -89,7 +98,6 @@ const WhatLearnersGain = () => {
                                     width: "100%",
                                     maxWidth: 360,
                                     height: "auto",
-                                    filter: `drop-shadow(0 8px 16px ${colors.shadowColor})`,
                                 }}
                             />
                         </Box>
@@ -109,8 +117,8 @@ const WhatLearnersGain = () => {
                             component="h2"
                             variant="h2"
                             sx={{
-                                ...semanticTypo.sectionH3,
-                                mb: 3,
+                                ...semanticTypo.pageH3,
+                                color: colors.primaryDark, mb: 3,
                             }}
                         >
                             What Learners Gain
@@ -120,7 +128,7 @@ const WhatLearnersGain = () => {
                             component="p"
                             variant="body1"
                             sx={{
-                                ...semanticTypo.sectionB1,
+                                ...semanticTypo.bodyB1,
                                 mb: 4,
                                 maxWidth: 500,
                             }}

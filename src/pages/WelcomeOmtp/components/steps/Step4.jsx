@@ -21,9 +21,10 @@ const Step4 = () => {
         <BaseStep
             number="4"
             title="Make Operational Decisions"
-            description="Prepare monthly forecast, production plan, sales plan and material requirements. This is where business strategy is translated into operational execution."
+            description="Prepare monthly forecast, Production plan, Sales plan and material requirements.
+             This is where business strategy is translated into operational execution."
         >
-            <Grid container spacing={3}>
+            <Grid container spacing={4}>
 
                 <Grid item xs={12} md={6}>
                     <Typography
@@ -31,6 +32,7 @@ const Step4 = () => {
                         variant="h4"
                         sx={{
                             ...semanticTypo.cardH5,
+                            color: colors.primaryDark,
                             mb: 1.5,
                         }}
                     >
@@ -43,16 +45,25 @@ const Step4 = () => {
                             border: `1px solid ${colors.border}`,
                             borderRadius: 4,
                             p: 1.5,
+
+                            boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                            transition: "all .25s ease",
+
+                            "&:hover": {
+                                transform: "translateY(-3px)",
+                                boxShadow: "0 14px 30px rgba(123,31,162,.15)",
+                            },
                         }}
                     >
                         <Box
                             component="img"
                             src={imgOpsPlanProduct}
-                            alt="Production and Sales Planning"
+                            alt="Production forecast and sales planning"
                             sx={{
                                 width: "100%",
                                 display: "block",
                                 borderRadius: 2,
+                                border: `1px solid ${colors.border}`,
                             }}
                         />
                     </Box>
@@ -64,6 +75,7 @@ const Step4 = () => {
                         variant="h4"
                         sx={{
                             ...semanticTypo.cardH5,
+                            color: colors.primaryDark,
                             mb: 1.5,
                         }}
                     >
@@ -76,16 +88,25 @@ const Step4 = () => {
                             border: `1px solid ${colors.border}`,
                             borderRadius: 4,
                             p: 1.5,
+
+                            boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                            transition: "all .25s ease",
+
+                            "&:hover": {
+                                transform: "translateY(-3px)",
+                                boxShadow: "0 14px 30px rgba(123,31,162,.15)",
+                            },
                         }}
                     >
                         <Box
                             component="img"
                             src={imgOpsPlanMatl}
-                            alt="Materials Planning"
+                            alt="Material requirements planning"
                             sx={{
                                 width: "100%",
                                 display: "block",
                                 borderRadius: 2,
+                                border: `1px solid ${colors.border}`,
                             }}
                         />
                     </Box>

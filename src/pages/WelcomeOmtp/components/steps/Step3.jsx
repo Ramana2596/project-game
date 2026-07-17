@@ -19,7 +19,8 @@ const Step3 = () => {
         <BaseStep
             number="3"
             title="Study Market Intelligence"
-            description="Analyze market demand and raw material prices before making operational decisions. This enables better planning and helps align business decisions with current market conditions."
+            description="Analyze Product demand, Pricing and Raw material prices before making operational decisions. 
+            This enables better planning and helps align business decisions with current market conditions."
         >
             <Box>
 
@@ -28,6 +29,7 @@ const Step3 = () => {
                     variant="h4"
                     sx={{
                         ...semanticTypo.cardH5,
+                        color: colors.primaryDark,
                         mb: 1.5,
                     }}
                 >
@@ -40,16 +42,25 @@ const Step3 = () => {
                         border: `1px solid ${colors.border}`,
                         borderRadius: 4,
                         p: 1.5,
+
+                        boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                        transition: "all .25s ease",
+
+                        "&:hover": {
+                            transform: "translateY(-3px)",
+                            boxShadow: "0 14px 30px rgba(123,31,162,.15)",
+                        },
                     }}
                 >
                     <Box
                         component="img"
                         src={imgMktIntelligence}
-                        alt="Market Intelligence"
+                        alt="Market intelligence showing market demand and raw material prices"
                         sx={{
                             width: "100%",
                             display: "block",
                             borderRadius: 2,
+                            border: `1px solid ${colors.border}`,
                         }}
                     />
                 </Box>

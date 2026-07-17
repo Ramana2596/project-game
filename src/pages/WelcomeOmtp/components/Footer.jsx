@@ -22,9 +22,9 @@ const Footer = () => (
   <Box
     component="footer"
     sx={{
-      py: 4,
+      py: { xs: 3, md: 3.5 },
       mt: 3,
-      bgcolor: colors.paper,
+      bgcolor: colors.panel,
       borderTop: `1px solid ${colors.border}`,
     }}
   >
@@ -44,13 +44,16 @@ const Footer = () => (
         <Box
           sx={{
             textAlign: { xs: "center", md: "left" },
+            lineHeight: 1.2,
           }}
         >
           <Typography
             component="h2"
             variant="h6"
-            sx={semanticTypo.cardH5}
-          >
+            sx={{
+              ...semanticTypo.cardH5,
+              color: colors.primaryDark,
+            }}          >
             OMTP
           </Typography>
 
@@ -78,7 +81,7 @@ const Footer = () => (
 
         <Stack
           direction="row"
-          spacing={3}
+          spacing={2}
           sx={{
             flexWrap: "wrap",
             justifyContent: "center",
@@ -100,7 +103,7 @@ const Footer = () => (
                 transition: "color .2s",
 
                 "&:hover": {
-                  color: colors.primary,
+                  color: colors.primaryDark,
                 },
               }}
             >
@@ -113,7 +116,7 @@ const Footer = () => (
 
       <Divider
         sx={{
-          my: 3,
+          my: 2.5,
           borderColor: colors.border,
         }}
       />
@@ -124,7 +127,7 @@ const Footer = () => (
         direction={{ xs: "column", sm: "row" }}
         justifyContent="space-between"
         alignItems="center"
-        spacing={1}
+        spacing={0.5}
       >
         <Typography
           component="p"

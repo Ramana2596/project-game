@@ -7,7 +7,11 @@ import { Box, Typography, Container, Stack } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School'; 
 import WorkIcon from '@mui/icons-material/Work';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import { colors } from '../../../ux/styles';
+import {
+  colors,
+  semanticTypo,
+  cardStyle,
+} from "../../../ux/styles";
 
 // Internal Card Component: Compact horizontal palette
 const AudienceCard = ({ icon: Icon, title, description }) => (
@@ -16,17 +20,17 @@ const AudienceCard = ({ icon: Icon, title, description }) => (
       p: 2.5, 
       flex: 1,
       minWidth: 0,
-      borderRadius: '32px', 
+      borderRadius: 5, 
       bgcolor: colors.card || '#ffffff',
       border: `1px solid ${colors.border || '#E6E0F4'}`,
       display: 'flex',
       alignItems: 'center',
-      transition: 'all 0.3s ease',
-      '&:hover': { 
-        borderColor: colors.accent || '#7E57C2',
-        boxShadow: `0 10px 20px ${colors.shadowColor || 'rgba(103,58,183,0.15)'}`,
-        transform: 'translateY(-2px)'
-      }
+      transition: 'all 0.25s ease',
+      "&:hover": {
+        transform: "translateY(-4px)",
+        borderColor: colors.primary,
+        boxShadow: `0 16px 32px ${colors.primary}2E`,
+      },
     }}
   >
     {/* Icon Container */}
@@ -39,15 +43,19 @@ const AudienceCard = ({ icon: Icon, title, description }) => (
 
     {/* Text Content */}
     <Box>
-      <Typography 
-        variant="subtitle2" 
-        sx={{ fontWeight: 800, color: colors.title || '#1F2D3D', mb: 0.2, lineHeight: 1.2 }}
+      <Typography
+        sx={{
+          ...semanticTypo.cardH5,
+          color: colors.primaryDark,
+          mb: 0.25,
+        }}
       >
         {title}
       </Typography>
-      <Typography 
-        variant="caption" 
-        sx={{ color: colors.body || '#546E7A', lineHeight: 1.3, display: 'block' }}
+      <Typography
+        sx={{
+          ...semanticTypo.bodyB2,
+        }}
       >
         {description}
       </Typography>
@@ -62,15 +70,20 @@ const TargetAudience = () => {
         
         {/* Section Header */}
         <Box sx={{ mb: 5 }}>
-          <Typography 
-            variant="h4" 
-            sx={{ fontWeight: 700, mb: 1.5, color: colors.title || '#1F2D3D', letterSpacing: '-0.02em' }}
+          <Typography
+            sx={{
+              ...semanticTypo.pageH3,
+              color: colors.primaryDark,
+              mb: 1.5,
+            }}
           >
             Built for future business leaders
           </Typography>
-          <Typography 
-            variant="body1" 
-            sx={{ color: colors.body || '#546E7A', maxWidth: '600px' }}
+          <Typography
+            sx={{
+              ...semanticTypo.bodyB1,
+              maxWidth: 600,
+            }}
           >
             Practical exposure to operations management without the complexity.
           </Typography>

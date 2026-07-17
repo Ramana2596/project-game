@@ -23,7 +23,7 @@ const Step2 = () => {
             title="Choose Your Strategy"
             description="Review the available strategic alternatives, select the strategy that best fits your objectives, and establish the direction for your business."
         >
-            <Grid container spacing={3}>
+            <Grid container spacing={4}>
 
                 <Grid item xs={12} md={6}>
                     <Typography
@@ -34,7 +34,7 @@ const Step2 = () => {
                             mb: 1.5,
                         }}
                     >
-                        Strategies Available
+                        Available Business Strategy Options
                     </Typography>
 
                     <Box
@@ -43,16 +43,25 @@ const Step2 = () => {
                             border: `1px solid ${colors.border}`,
                             borderRadius: 4,
                             p: 1.5,
+
+                            boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                            transition: "all .25s ease",
+
+                            "&:hover": {
+                                transform: "translateY(-3px)",
+                                boxShadow: "0 14px 30px rgba(123,31,162,.15)",
+                            },
                         }}
                     >
                         <Box
                             component="img"
                             src={imgStrategyDraft}
-                            alt="Available Strategies"
+                            alt="Available business strategy options"
                             sx={{
                                 width: "100%",
                                 display: "block",
                                 borderRadius: 2,
+                                border: `1px solid ${colors.border}`,
                             }}
                         />
                     </Box>
@@ -67,7 +76,7 @@ const Step2 = () => {
                             mb: 1.5,
                         }}
                     >
-                        Strategy Selected
+                        Selected Business Strategy
                     </Typography>
 
                     <Box
@@ -76,16 +85,25 @@ const Step2 = () => {
                             border: `1px solid ${colors.border}`,
                             borderRadius: 4,
                             p: 1.5,
+
+                            boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                            transition: "all .25s ease",
+
+                            "&:hover": {
+                                transform: "translateY(-3px)",
+                                boxShadow: "0 14px 30px rgba(123,31,162,.15)",
+                            },
                         }}
                     >
                         <Box
                             component="img"
                             src={imgStrategicPlan}
-                            alt="Selected Strategy"
+                            alt="Selected business strategy"
                             sx={{
                                 width: "100%",
                                 display: "block",
                                 borderRadius: 2,
+                                border: `1px solid ${colors.border}`,
                             }}
                         />
                     </Box>

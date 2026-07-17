@@ -28,7 +28,8 @@ const FinancialCard = ({ label, src }) => (
             variant="h6"
             sx={{
                 ...semanticTypo.cardH5,
-                mb: 0.75,
+                color: colors.primaryDark,
+                mb: 1.25,
             }}
         >
             {label}
@@ -36,15 +37,18 @@ const FinancialCard = ({ label, src }) => (
 
         <Box
             sx={{
-                p: 1,
-                bgcolor: colors.background,
+                bgcolor: colors.panel,
                 border: `1px solid ${colors.border}`,
-                borderRadius: 3,
-                transition: "0.25s ease",
+                borderRadius: 4,
+                p: 1.5,
+
+                boxShadow: "0 8px 22px rgba(123,31,162,.08)",
+                transition: "all .25s ease",
 
                 "&:hover": {
+                    transform: "translateY(-3px)",
                     borderColor: colors.primary,
-                    boxShadow: `0 4px 12px ${colors.shadowColor}`,
+                    boxShadow: "0 14px 30px rgba(123,31,162,.15)",
                 },
             }}
         >
@@ -56,6 +60,7 @@ const FinancialCard = ({ label, src }) => (
                     width: "100%",
                     display: "block",
                     borderRadius: 2,
+                    border: `1px solid ${colors.border}`,
                 }}
             />
         </Box>
@@ -93,10 +98,10 @@ const Step6 = () => {
     return (
         <BaseStep
             number="6"
-            title="Review Financial Outcomes"
+            title="Review Financial Outcome"
             description="Analyze key financial reports, business performance, income statement, cash flow statement, and balance sheet to understand the impact of operational decisions."
         >
-            <Grid container spacing={2}>
+            <Grid container spacing={4}>
                 {reports.map((report, index) => (
                     <Grid
                         item

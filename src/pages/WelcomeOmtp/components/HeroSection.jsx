@@ -208,7 +208,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                     },
                   }}
                 >
-                  Try Live Simulation
+                  Demo
                 </Button>
 
                 <Button

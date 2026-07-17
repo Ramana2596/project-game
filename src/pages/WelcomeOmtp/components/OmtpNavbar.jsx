@@ -8,9 +8,6 @@ import {
     buttonStyle,
     cardStyle,
     colors,
-    pageStyle,
-    tableStyle,
-    muiTypo,
     semanticTypo,
 } from "../../../ux/styles";
 
@@ -21,39 +18,40 @@ const OmtpNavbar = ({ onViewDemo, onGetStarted }) => (
     color="inherit" 
     elevation={0} 
     sx={{ 
-      py: 1, 
+      py: 1.25, 
       bgcolor: 'rgba(255, 255, 255, 0.95)', 
       backdropFilter: 'blur(8px)', 
       borderBottom: `1px solid ${colors.border || '#e0e0e0'}`
     }}
   >
     <Container maxWidth="lg">
-      <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
-        
+      <Toolbar
+        disableGutters
+        sx={{
+          justifyContent: "space-between",
+          minHeight: 72,
+        }}
+      >        
         {/* Logo and platform branding */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, cursor: 'pointer' }}>
           <Box sx={{ ...cardStyle.iconBox, width: 40, height: 40, borderRadius: 2 }}>
             <Box sx={{ width: 18, height: 18, border: '3px solid white', borderRadius: '50%' }} />
           </Box>
           <Box>
-            <Typography 
-              variant="h6" 
-              sx={{ 
-                fontWeight: 900, 
-                lineHeight: 1, 
-                color: colors.title || '#000000', 
-                letterSpacing: -0.5 
+            <Typography
+              sx={{
+                ...semanticTypo.cardH5,
+                color: colors.primaryDark,
+                lineHeight: 1,
               }}
             >
               OMTP
             </Typography>
-            <Typography 
-              variant="caption" 
-              sx={{ 
-                color: colors.subtitle || '#666666', 
-                fontWeight: 600, 
-                textTransform: 'uppercase', 
-                letterSpacing: 0.5 
+            <Typography
+              sx={{
+                ...semanticTypo.caption,
+                textTransform: "uppercase",
+                letterSpacing: 0.5,
               }}
             >
               Operations Management Training Platform
@@ -65,11 +63,11 @@ const OmtpNavbar = ({ onViewDemo, onGetStarted }) => (
         <Box sx={{ display: { xs: 'none', lg: 'flex' }, gap: 5 }}>
           {['About', 'How It Works', 'For Whom', 'Pricing'].map((item) => (
             <Typography 
-              key={item} 
-              variant="body1" 
-              sx={{ 
-                fontWeight: 700, 
-                color: colors.subtitle || '#666666', 
+              key={item}
+              sx={{
+                ...semanticTypo.bodyB1,
+                fontWeight: 600,
+                color: colors.body,
                 cursor: 'pointer',
                 transition: 'color 0.2s ease',
                 '&:hover': { color: colors.primary }
@@ -93,7 +91,7 @@ const OmtpNavbar = ({ onViewDemo, onGetStarted }) => (
               py: 1.25,
             }}
           >
-            View Demo
+            Demo
           </Button>
 
           <Button 
