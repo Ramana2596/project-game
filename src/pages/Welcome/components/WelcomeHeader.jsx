@@ -41,17 +41,20 @@ const WelcomeHeader = ({
       color="transparent"
       elevation={0}
       sx={{
-        background: "rgba(255,255,255,0.95)",
-        backdropFilter: "blur(12px)",
-        borderBottom: "1px solid rgba(0,0,0,0.08)",
-        transition: "all .3s ease",
+        background: "rgba(255,255,255,0.92)",
+        backdropFilter: "blur(18px)",
+        borderBottom: `1px solid ${colors.divider}`,
+        boxShadow: "0 4px 24px rgba(123,31,162,.08)",
+        transition: "all .30s ease",
       }}
     >
       <Toolbar
         sx={{
           display: "flex",
+          alignItems: "center",
           gap: 2,
-          py: 1,
+          minHeight: 72,
+          py: 0.75,
         }}
       >
         {/* Logo */}
@@ -64,8 +67,8 @@ const WelcomeHeader = ({
         >
           <Box
             sx={{
-              width: 48,
-              height: 48,
+              width: 54,
+              height: 54,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -75,7 +78,7 @@ const WelcomeHeader = ({
               src={OmtpLogo}
               alt="OMTP Logo"
               style={{
-                height: 56,
+                height: 62,
                 width: "auto",
               }}
             />
@@ -88,7 +91,7 @@ const WelcomeHeader = ({
         <Box
           sx={{
             display: "flex",
-            gap: 0.5,
+            gap: 0.75,
             alignItems: "center",
           }}
         >
@@ -136,7 +139,7 @@ const WelcomeHeader = ({
                     : "none",
 
                 transition:
-                  "all .3s cubic-bezier(0.34,1.56,0.64,1)",
+                  "all .25s cubic-bezier(.34,1.56,.64,1)",
 
                 "&:hover": {
                   color:
@@ -149,7 +152,7 @@ const WelcomeHeader = ({
                       ? colors.heroGradient
                       : colors.hover,
 
-                  transform: "translateY(-2px)",
+                  transform: "translateY(-1px)",
                 },
               }}
             >
@@ -157,39 +160,46 @@ const WelcomeHeader = ({
             </Button>
           ))}
         </Box>
-{/* Auth Buttons */}
-<Box sx={{ display: "flex", gap: 1, ml: 3 }}>
-<Button
-variant="text"
-onClick={handleDemoLogin}
-sx={{
-...buttonStyle.text,
-color: colors.primary,
-}}
->
-Demo
-</Button>
+        {/* Auth Buttons */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1.25,
+            ml: 3,
+          }}
+        >
+          <Button
+            variant="text"
+            onClick={handleDemoLogin}
+            sx={{
+              ...buttonStyle.text,
+              color: colors.primary,
+            }}
+          >
+            Demo
+          </Button>
 
-<Button
-variant="contained"
-component={Link}
-to="/login"
-sx={{
-...buttonStyle.primary,
-boxShadow: `0 4px 12px ${colors.primary}40`,
-"&:hover": {
-background: colors.heroGradient,
-boxShadow: "0 6px 18px rgba(123,31,162,.45)",
-transform: "translateY(-1px)",
-},
-}}
->
-Sign In / Sign Up
-</Button>
-</Box>
-</Toolbar>
-</AppBar>
-);
+          <Button
+            variant="contained"
+            component={Link}
+            to="/login"
+            sx={{
+              ...buttonStyle.primary,
+              boxShadow: `0 4px 12px ${colors.primary}40`,
+              "&:hover": {
+                background: colors.heroGradient,
+                boxShadow: "0 6px 18px rgba(123,31,162,.45)",
+                transform: "translateY(-1px)",
+              },
+            }}
+          >
+            Sign In / Sign Up
+          </Button>
+        </Box>
+      </Toolbar>
+    </AppBar>
+  );
 };
 
 export default WelcomeHeader;

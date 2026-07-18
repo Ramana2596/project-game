@@ -26,6 +26,8 @@ import {
 const HeroSection = ({ handleDemoLogin }) => {
     return (
         <Box
+            component="section"
+            aria-labelledby="hero-heading"
             sx={{
                 background: colors.pageGradient,
                 position: "relative",
@@ -80,6 +82,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                             }}
                         >
                             <Typography
+                                id="hero-heading"
                                 component="h1"
                                 sx={{
                                     ...semanticTypo.heroH2,
@@ -99,6 +102,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                                     ...semanticTypo.heroB1,
                                     mb: 4,
                                     maxWidth: 540,
+                                    lineHeight: 1.75,
                                 }}
                             >
                                 Learn to make strategic and operational decisions
@@ -206,6 +210,7 @@ const HeroSection = ({ handleDemoLogin }) => {
 
                                 <Typography
                                     component="h2"
+                                    variant="h2"
                                     sx={{
                                         ...semanticTypo.pageH3,
                                         color: colors.white,

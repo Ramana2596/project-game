@@ -19,23 +19,54 @@ const GamePhasesSection = () => {
 
     return (
         <Box
+            component="section"
+            aria-labelledby="simulation-phases-heading"
             sx={{
-                py: 4,
+                py: { xs: 6, md: 8 },
                 mt: 4,
-                bgcolor: colors.panel,
+                background: colors.pageGradient,
+                position: "relative",
+
+                "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    inset: 0,
+                    background:
+                        "radial-gradient(circle at right center, rgba(123,31,162,.06), transparent 55%)",
+                    pointerEvents: "none",
+                },
             }}
         >
             <Container maxWidth="lg">
 
                 <Typography
+                    id="simulation-phases-heading"
                     component="h2"
                     sx={{
-                        ...semanticTypo.sectionH3,
+                        ...semanticTypo.pageH3,
+                        color: colors.primaryDark,
                         textAlign: "center",
-                        mb: 2,
+                        mb: 1.5,
+                        position: "relative",
+                        zIndex: 1,
                     }}
                 >
-                Simulation Phases
+                    Simulation Phases
+                </Typography>
+                <Typography
+                    component="p"
+                    sx={{
+                        ...semanticTypo.bodyB1,
+                        textAlign: "center",
+                        color: colors.body,
+                        maxWidth: 700,
+                        mx: "auto",
+                        mb: 5,
+                        position: "relative",
+                        zIndex: 1,
+                    }}
+                >
+                    Experience the complete Operations Management lifecycle—from strategic planning and market analysis to simulation, financial evaluation, and performance assessment.
                 </Typography>
 
                 <Grid container spacing={3}>
@@ -53,10 +84,12 @@ const GamePhasesSection = () => {
                                     ...cardStyle.primary,
 
                                     textAlign: "center",
+                                    background: colors.panelGradient,
                                     px: 2.5,
-                                    py: 2,
+                                    py: 3,
                                     borderRadius: 6,
                                     height: "100%",
+                                    position: "relative",
 
                                     "&:hover": {
                                         ...cardStyle.primary["&:hover"],
@@ -66,8 +99,9 @@ const GamePhasesSection = () => {
                                 <Typography
                                     component="div"
                                     sx={{
-                                        fontSize: "2.4rem",
-                                        mb: 1,
+                                        fontSize: "2.7rem",
+                                        mb: 1.5,
+                                        lineHeight: 1,
                                     }}
                                 >
                                     {item.icon}

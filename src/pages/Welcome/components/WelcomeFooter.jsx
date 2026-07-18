@@ -16,8 +16,8 @@ const WelcomeFooter = () => {
                 mt: 8,
                 pt: 6,
                 pb: 4,
-                borderTop: `2px solid ${colors.border}`,
-                bgcolor: colors.background.default,
+                borderTop: `1px solid ${colors.divider}`,
+                background: colors.panelGradient,
             }}
         >
             <Container maxWidth="lg">
@@ -29,8 +29,10 @@ const WelcomeFooter = () => {
                     <Grid item xs={12} md={6}>
                         <Typography
                             component="h2"
+                            variant="h2"
                             sx={{
-                                ...semanticTypo.cardH5,
+                                ...semanticTypo.pageH4,
+                                color: colors.primaryDark,
                                 mb: 2,
                             }}
                         >
@@ -97,9 +99,11 @@ const WelcomeFooter = () => {
                         }}
                     >
                         <Typography
-                            component="p"
+                            component="small"
                             sx={{
                                 ...semanticTypo.caption,
+                                display: "block",
+                                color: colors.subtitle,
                             }}
                         >
                             © {new Date().getFullYear()} OMTP Learning     —   All rights reserved.
