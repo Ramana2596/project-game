@@ -17,6 +17,8 @@ import {
 const CTASection = ({ handleDemoLogin }) => {
     return (
         <Box
+            component="section"
+            aria-labelledby="cta-heading"
             sx={{
                 background: colors.heroGradient,
                 py: { xs: 5, md: 6 },
@@ -31,7 +33,8 @@ const CTASection = ({ handleDemoLogin }) => {
                     inset: 0,
                     opacity: 0.10,
                     backgroundImage:
-                        "radial-gradient(circle at 20% 50%, white 0%, transparent 50%)",
+                        `radial-gradient(circle at 18% 30%, rgba(255,255,255,.18), transparent 34%),
+                        radial-gradient(circle at 82% 72%, rgba(255,255,255,.10), transparent 42%)`,
                 }}
             />
 
@@ -43,6 +46,7 @@ const CTASection = ({ handleDemoLogin }) => {
                 }}
             >
                 <Typography
+                    id="cta-heading"
                     component="h2"
                     sx={{
                         ...semanticTypo.pageH3,

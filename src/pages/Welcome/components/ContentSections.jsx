@@ -14,9 +14,21 @@ const ContentSections = ({
 }) => {
     return (
         <Box
+            component="main"
             sx={{
-                bgcolor: colors.background.default,
-                py: 10,
+                background: colors.pageGradient,
+                py: { xs: 7, md: 9 },
+                position: "relative",
+                overflow: "hidden",
+
+                "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    inset: 0,
+                    background:
+                        "radial-gradient(circle at top right, rgba(123,31,162,.08), transparent 42%)",
+                    pointerEvents: "none",
+                },
             }}
         >
             {pageConstants.toolBarSections.map((section, idx) => {
@@ -41,138 +53,245 @@ const ContentSections = ({
 
                 return (
                     <Box
+                        component="section"
                         key={section.key}
                         id={section.key}
+                        aria-labelledby={`${section.key}-title`}
                         sx={{
-                            py: { xs: 4, md: 2 },
-                            scrollMarginTop:
-                                "var(--welcome-scroll-margin,80px)",
+                            py: { xs: 3, md: 4 },
+                            scrollMarginTop: "var(--welcome-scroll-margin,80px)",
+                            position: "relative",
+                            zIndex: 1,
                         }}
                     >
                         <Container maxWidth="lg">
-                            {img ? (
-                                <Grid
-                                    container
-                                    spacing={6}
-                                    alignItems="center"
-                                >
-                                    {side === "left" ? (
-                                        <>
-                                            <Grid item xs={12} md={5}>
-                                                <Box
-                                                    sx={{
-                                                        ...cardStyle.primary,
-                                                        borderRadius: 4,
-                                                        boxShadow:
-                                                            "0 12px 40px rgba(11,8,33,.10)",
-                                                        aspectRatio: "4/3",
-                                                    }}
-                                                >
-                                                    <img
-                                                        src={img}
-                                                        alt={section.title}
-                                                        style={{
-                                                            width: "100%",
-                                                            height: "100%",
-                                                            objectFit: "cover",
-                                                        }}
-                                                    />
-                                                </Box>
-                                            </Grid>
+                            <Box
+                                sx={{
+                                    ...cardStyle.primary,
+                                    p: { xs: 3, md: 5 },
+                                    borderRadius: 6,
+                                    background: colors.panelGradient,
+                                }}
+                            >
 
-                                            <Grid item xs={12} md={7}>
-                                                <Typography
-                                                    component="h2"
-                                                    sx={{
-                                                        ...semanticTypo.sectionH3,
-                                                        mb: 3,
-                                                    }}
-                                                >
-                                                    {section.title}
-                                                </Typography>
-
-                                                <Box
-                                                    sx={{
-                                                        ...semanticTypo.bodyB1,
-                                                        color: colors.body,
-                                                        lineHeight: 1.8,
-                                                    }}
-                                                >
-                                                    {section.content}
-                                                </Box>
-                                            </Grid>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Grid item xs={12} md={6}>
-                                                <Typography
-                                                    component="h2"
-                                                    sx={{
-                                                        ...semanticTypo.sectionH3,
-                                                        mb: 3,
-                                                    }}
-                                                >
-                                                    {section.title}
-                                                </Typography>
-
-                                                <Box
-                                                    sx={{
-                                                        ...semanticTypo.bodyB1,
-                                                        color: colors.body,
-                                                        lineHeight: 1.8,
-                                                    }}
-                                                >
-                                                    {section.content}
-                                                </Box>
-                                            </Grid>
-
-                                            <Grid item xs={12} md={6}>
-                                                <Box
-                                                    sx={{
-                                                        ...cardStyle.primary,
-                                                        borderRadius: 4,
-                                                        boxShadow:
-                                                            "0 12px 40px rgba(11,8,33,.10)",
-                                                        aspectRatio: "4/3",
-                                                    }}
-                                                >
-                                                    <img
-                                                        src={img}
-                                                        alt={section.title}
-                                                        style={{
-                                                            width: "100%",
-                                                            height: "100%",
-                                                            objectFit: "cover",
-                                                        }}
-                                                    />
-                                                </Box>
-                                            </Grid>
-                                        </>
-                                    )}
-                                </Grid>
-                            ) : (
-                                <Box>
-                                    <Typography
-                                        component="h2"
-                                        sx={{
-                                            ...semanticTypo.sectionH3,
-                                            mb: 3,
-                                        }}
+                                {img ? (
+                                    <Grid
+                                        container
+                                        spacing={{ xs: 4, md: 6 }} alignItems="center"
                                     >
-                                        {section.title}
-                                    </Typography>
+                                        {side === "left" ? (
+                                            <>
+                                                <Grid item xs={12} sm={12} lg={5}>                                                    <Box
+                                                        sx={{
+                                                            ...cardStyle.primary,
+                                                            borderRadius: 5,
+                                                            overflow: "hidden",
+                                                            background: colors.panelGradient,
+                                                            border: `1px solid ${colors.border}`,
+                                                            aspectRatio: "4 / 3",
+                                                            position: "relative",
 
-                                    <Box
-                                        sx={{
-                                            ...semanticTypo.bodyB1,
-                                            color: colors.body,
-                                            lineHeight: 1.8,
-                                        }}
-                                    >
-                                        {section.content}
+                                                            "&::before": {
+                                                                content: '""',
+                                                                position: "absolute",
+                                                                inset: 0,
+                                                                background:
+                                                                    "radial-gradient(circle at top right, rgba(123,31,162,.08), transparent 45%)",
+                                                                pointerEvents: "none",
+                                                                zIndex: 1,
+                                                            },
+
+                                                            "& img": {
+                                                                width: "100%",
+                                                                height: "100%",
+                                                                objectFit: "cover",
+                                                                display: "block",
+                                                                transition: "transform .35s ease",
+                                                            },
+
+                                                            "&:hover img": {
+                                                                transform: "scale(1.04)",
+                                                            },
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src={img}
+                                                            alt={`${section.title} - OMTP`}
+                                                            loading="lazy"
+                                                        />
+                                                    </Box>
+                                                </Grid>
+
+                                                <Grid item xs={12} lg={7}>
+                                                    <Box
+                                                        sx={{
+                                                            maxWidth: 700,
+                                                            mx: "auto",
+                                                        }}
+                                                    >                                                    <Typography
+                                                        id={`${section.key}-title`}
+                                                        component="h2"
+                                                        sx={{
+                                                            ...semanticTypo.pageH3,
+                                                            color: colors.primaryDark,
+                                                            mb: 2,
+                                                            position: "relative",
+                                                        }}
+                                                    >
+                                                            {section.title}
+                                                        </Typography>
+
+                                                        <Box
+                                                            sx={{
+                                                                ...semanticTypo.bodyB1,
+                                                                color: colors.body,
+                                                                lineHeight: 1.85,
+                                                                maxWidth: 680,
+
+                                                                "& p:not(:last-child)": {
+                                                                    mb: 2,
+                                                                },
+
+                                                                "& ul": {
+                                                                    pl: 3,
+                                                                    my: 2,
+                                                                },
+
+                                                                "& li": {
+                                                                    mb: 1,
+                                                                },
+                                                            }}
+                                                        >
+                                                            {section.content}
+                                                        </Box>
+                                                    </Box>
+                                                </Grid>
+                                            </>
+                                        ) : (
+                                            <>
+<Grid item xs={12} sm={12} lg={6}>                                                    <Typography
+                                                        id={`${section.key}-title`}
+                                                        component="h2"
+                                                        sx={{
+                                                            ...semanticTypo.pageH3,
+                                                            color: colors.primaryDark,
+                                                            mb: 2,
+                                                            position: "relative",
+                                                        }}
+                                                    >
+                                                        {section.title}
+                                                    </Typography>
+
+                                                    <Box
+                                                        sx={{
+                                                            ...semanticTypo.bodyB1,
+                                                            color: colors.body,
+                                                            lineHeight: 1.85,
+                                                            maxWidth: 680,
+
+                                                            "& p:not(:last-child)": {
+                                                                mb: 2,
+                                                            },
+
+                                                            "& ul": {
+                                                                pl: 3,
+                                                                my: 2,
+                                                            },
+
+                                                            "& li": {
+                                                                mb: 1,
+                                                            },
+                                                        }}
+                                                    >
+                                                        {section.content}
+                                                    </Box>
+                                                </Grid>
+
+                                                <Grid item xs={12} sm={12} md={6}>
+                                                    <Box
+                                                        sx={{
+                                                            ...cardStyle.primary,
+                                                            borderRadius: 5,
+                                                            overflow: "hidden",
+                                                            background: colors.panelGradient,
+                                                            border: `1px solid ${colors.border}`,
+                                                            aspectRatio: "4 / 3",
+                                                            position: "relative",
+
+                                                            "&::before": {
+                                                                content: '""',
+                                                                position: "absolute",
+                                                                inset: 0,
+                                                                background:
+                                                                    "radial-gradient(circle at top right, rgba(123,31,162,.08), transparent 45%)",
+                                                                pointerEvents: "none",
+                                                                zIndex: 1,
+                                                            },
+
+                                                            "& img": {
+                                                                width: "100%",
+                                                                height: "100%",
+                                                                objectFit: "cover",
+                                                                display: "block",
+                                                                transition: "transform .35s ease",
+                                                            },
+
+                                                            "&:hover img": {
+                                                                transform: "scale(1.04)",
+                                                            },
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src={img}
+                                                            alt={`${section.title} - OMTP`}
+                                                            loading="lazy"
+                                                        />
+                                                    </Box>
+                                                </Grid>
+                                            </>
+                                        )}
+                                    </Grid>
+                                ) : (
+                                    <Box>
+                                        <Typography
+                                            id={`${section.key}-title`}
+                                            component="h2"
+                                            sx={{
+                                                ...semanticTypo.pageH3,
+                                                color: colors.primaryDark,
+                                                mb: 2,
+                                                position: "relative",
+                                            }}
+                                        >
+                                            {section.title}
+                                        </Typography>
+
+                                        <Box
+                                            sx={{
+                                                ...semanticTypo.bodyB1,
+                                                color: colors.body,
+                                                lineHeight: 1.85,
+                                                maxWidth: 680,
+
+                                                "& p:not(:last-child)": {
+                                                    mb: 2,
+                                                },
+
+                                                "& ul": {
+                                                    pl: 3,
+                                                    my: 2,
+                                                },
+
+                                                "& li": {
+                                                    mb: 1,
+                                                },
+                                            }}
+                                        >
+                                            {section.content}
+                                        </Box>
                                     </Box>
-                                </Box>
-                            )}
+                                )}
+                            </Box>
                         </Container>
                     </Box>
                 );
