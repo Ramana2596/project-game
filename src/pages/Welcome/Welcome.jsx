@@ -26,6 +26,7 @@ import HeroSection from './components/HeroSection.jsx';
 import ContentSections from './components/ContentSections.jsx';
 import CTASection from './components/CTASection.jsx';
 import GamePhasesSection from './components/GamePhasesSection.jsx';
+import TrustedBy from './components/TrustedBy.jsx';
 import WelcomeFooter from './components/WelcomeFooter.jsx';
 
 const Welcome = () => {
@@ -174,6 +175,8 @@ const Welcome = () => {
             <CTASection handleDemoLogin={handleDemoLogin} />
 
             <GamePhasesSection />
+
+            <TrustedBy />
 
             <WelcomeFooter />
             
