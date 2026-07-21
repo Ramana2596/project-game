@@ -29,6 +29,22 @@ import SimulationPhase from './components/SimulationPhase.jsx';
 import TrustedBy from './components/TrustedBy.jsx';
 import WelcomeFooter from './components/WelcomeFooter.jsx';
 
+// ==========================================================
+// Page Configuration
+// ==========================================================
+
+
+const IsActive = {
+    WelcomeHeader: true,
+    HeroSection: true,
+    ContentSections: true,
+    CTASection: true,
+    SimulationPhase: true,
+    TrustedBy:  true,
+    WelcomeFooter:  true,
+};
+
+
 const Welcome = () => {
     const [activeSection, setActiveSection] = useState('aboutSimulation');
     const [displaySection, setDisplaySection] = useState(activeSection);
@@ -152,33 +168,49 @@ const Welcome = () => {
 
     return (
         <Box className="welcome-root" sx={{ minHeight: '100vh' }}>
-            <WelcomeHeader
-                activeSection={activeSection}
-                setActiveSection={setActiveSection}
-                setDisplaySection={setDisplaySection}
-                shortTitles={shortTitles}
-                handleDemoLogin={handleDemoLogin}
-                appBarRef={appBarRef}
-            />
+ 
+            {IsActive.WelcomeHeader && (
+                <WelcomeHeader
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                    setDisplaySection={setDisplaySection}
+                    shortTitles={shortTitles}
+                    handleDemoLogin={handleDemoLogin}
+                    appBarRef={appBarRef}
+                />
+            )}
 
-            <HeroSection
-                handleDemoLogin={handleDemoLogin}
-                handleAuthNavigation={handleAuthNavigation}
-            />
 
-            <ContentSections
-                pageConstants={pageConstants}
-                findImageForSection={findImageForSection}
-                imageSectionsOrder={imageSectionsOrder}
-            />
+            {IsActive.HeroSection && (
+                <HeroSection
+                    handleDemoLogin={handleDemoLogin}
+                    handleAuthNavigation={handleAuthNavigation}
+                />
+            )} 
 
-            <CTASection handleDemoLogin={handleDemoLogin} />
+            {IsActive.ContentSections && (
+                <ContentSections
+                    pageConstants={pageConstants}
+                    findImageForSection={findImageForSection}
+                    imageSectionsOrder={imageSectionsOrder} />
+            )} 
 
-            <SimulationPhase />
+            {IsActive.CTASection && (
+                <CTASection handleDemoLogin={handleDemoLogin} />
+            )}
 
-            <TrustedBy />
+            {IsActive.SimulationPhase && (
+                <SimulationPhase />
+            )}
 
-            <WelcomeFooter />
+            {IsActive.TrustedBy && (
+                <TrustedBy />
+            )}
+
+             {IsActive.WelcomeFooter && (
+                <WelcomeFooter />
+            )}
+
             
             <ToastMessage
                 open={alertData.open}
