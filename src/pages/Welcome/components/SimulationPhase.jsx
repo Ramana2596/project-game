@@ -7,7 +7,7 @@ import {
     semanticTypo,
 } from "../../../ux/styles";
 
-const GamePhasesSection = () => {
+const SimulationPhase = () => {
     const phases = [
         { icon: "🎯", title: "Strategic Decision", description: "Plan your Strategy" },
         { icon: "📊", title: "Market Dynamics", description: "Analyze Market Trends" },
@@ -135,4 +135,4 @@ const GamePhasesSection = () => {
     );
 };
 
-export default GamePhasesSection;
+export default SimulationPhase;
