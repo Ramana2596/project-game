@@ -11,7 +11,7 @@ import { getUserDetails } from '../Welcome/services/service.js';
 import { API_STATUS } from '../../utils/statusCodes';
 import {
   colors,
-  pageStyle,
+  layoutStyle,
 } from "../../ux/styles";
 
 import OmtpNavbar from './components/OmtpNavbar';
@@ -134,7 +134,7 @@ const WelcomeOmtp = () => {
 
         {/* Purpose: Information dashboard preview */}
         {IsActive.InfoDeskView && (
-          <Box sx={pageStyle.section}>
+          <Box sx={layoutStyle.section}>
             <InfoDeskView />
           </Box>
         )}

@@ -9,7 +9,17 @@ export default function SimContent({ leftContent, rightContent }) {
       <Grid item xs={12} lg={8.5}>
         {leftContent}
       </Grid>
-      <Grid item xs={12} lg={3.5}>
+      <Grid
+        item
+        xs={12}
+        lg={3.5}
+        sx={{
+          mt: {
+            xs: 0,
+            lg: -9.5,
+          },
+        }}
+      >
         {rightContent}
       </Grid>
     </Grid>

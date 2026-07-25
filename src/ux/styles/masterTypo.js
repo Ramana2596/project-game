@@ -1,20 +1,25 @@
 // ============================================================
 // OpsMgt UX Lab V2.0
-// File    : enterpriseTypo.js
-// Purpose : Enterprise Typography System (SAP Fiori aligned)
+// File    : masterTypo.js
+// Purpose : Enterprise Typography System
+//
+// Design Principles
+// ------------------------------------------------------------
+// 1. muiTypo defines the visual scale.
+// 2. semanticTypo is used by application pages.
+// 3. Typography controls ONLY text appearance.
+// 4. HTML heading (component="h1") is decided in JSX.
 // ============================================================
 
 import { colors } from "./colorPalette";
 
 // ============================================================
-// ENTERPRISE TYPOGRAPHY SCALE (SAP Fiori / Font 72 aligned)
-// ------------------------------------------------------------
-// Compact, bold, accessible values tuned for enterprise dashboards.
+// MUI TYPOGRAPHY SCALE
 // ============================================================
 
 export const muiTypo = {
 
-  // H1 : Hero Titles
+  // Hero
   h1: {
     fontSize: { xs: "2.75rem", md: "3.00rem" },
     fontWeight: 700,
@@ -23,7 +28,7 @@ export const muiTypo = {
     color: colors.title,
   },
 
-  // H2 : Page Titles
+  // Page
   h2: {
     fontSize: { xs: "2.25rem", md: "2.50rem" },
     fontWeight: 600,
@@ -31,7 +36,7 @@ export const muiTypo = {
     color: colors.title,
   },
 
-  // H3 : Section Titles
+  // Section
   h3: {
     fontSize: { xs: "1.75rem", md: "2.00rem" },
     fontWeight: 600,
@@ -39,7 +44,7 @@ export const muiTypo = {
     color: colors.title,
   },
 
-  // H4 : Sub‑section / Card Headers
+  // Sub-section
   h4: {
     fontSize: { xs: "1.45rem", md: "1.60rem" },
     fontWeight: 600,
@@ -47,7 +52,7 @@ export const muiTypo = {
     color: colors.title,
   },
 
-  // H5 : Card Titles
+  // Card / Report Title
   h5: {
     fontSize: "1.15rem",
     fontWeight: 600,
@@ -55,7 +60,7 @@ export const muiTypo = {
     color: colors.title,
   },
 
-  // H6 : Small Headings / Table Labels
+  // Small Heading / Table Header
   h6: {
     fontSize: "1.00rem",
     fontWeight: 600,
@@ -63,7 +68,7 @@ export const muiTypo = {
     color: colors.title,
   },
 
-  // Body1 : Standard body text
+  // Body
   b1: {
     fontSize: "1.00rem",
     fontWeight: 400,
@@ -71,7 +76,7 @@ export const muiTypo = {
     color: colors.body,
   },
 
-  // Body2 : Secondary body text
+  // Secondary Body
   b2: {
     fontSize: "0.92rem",
     fontWeight: 400,
@@ -79,62 +84,76 @@ export const muiTypo = {
     color: colors.subtitle,
   },
 
-  // Caption : Helper text
+  // Caption
   caption: {
     fontSize: "0.82rem",
     fontWeight: 500,
     lineHeight: 1.40,
     color: colors.muted,
   },
+
 };
 
 
 // ============================================================
 // SEMANTIC TYPOGRAPHY
-// ------------------------------------------------------------
-// Naming Convention:
 //
-// heroH1  -> Hero text using H1 visual scale
-// pageH2  -> Page title using H2 visual scale
+// Use these in application pages.
 //
-// NOTE:
-// The suffix (H1/H2/B1...) indicates VISUAL SCALE ONLY.
-// HTML heading (component="h1") is specified in JSX.
+// Examples:
+//
+// <Typography sx={semanticTypo.heroH1}>
+// <Typography sx={semanticTypo.pageH3}>
+// <Typography sx={semanticTypo.cardH5}>
+// <Typography sx={semanticTypo.tableTitle}>
 // ============================================================
 
 export const semanticTypo = {
 
-  // HERO AREA
-  heroH1: muiTypo.h1,         // Use as Std  H1
-  heroH2: muiTypo.h2,         // Use as Std  H2
-  heroB1: muiTypo.b1,         // NOT to be used, Use Std bodyB1
+  // ==========================================================
+  // Hero
+  // ==========================================================
+  heroH1: muiTypo.h1,
+  heroH2: muiTypo.h2,
 
-  // PAGE (instead of Title)
-  pageH1: muiTypo.h1,         // NOT to be used, Use Std heroH1
-  pageH2: muiTypo.h2,         // NOT to be used, Use Std heroH2
-  pageH3: muiTypo.h3,         // Use as Std  H3
-  pageH4: muiTypo.h4,         // Use as Std  H4
-  pageB1: muiTypo.b1,         // NOT to be used, Use Std bodyB1
 
-  // SECTION
-  sectionH2: muiTypo.h2,      // NOT to be used, Use Std heroH2
-  sectionH3: muiTypo.h3,      // NOT to be used, Use Std pageH3
-  sectionH4: muiTypo.h4,      // NOT to be used, Use Std pageH4
-  sectionB1: muiTypo.b1,      // NOT to be used, Use Std bodyB1
+  // ==========================================================
+  // Page
+  // ==========================================================
+  pageH3: muiTypo.h3,
+  pageH4: muiTypo.h4,
 
-  // CARD
-  cardH4: muiTypo.h4,         // NOT to be used, Use Std pageH4
-  cardH5: muiTypo.h5,         // Use as Std  H5
-  cardH6: muiTypo.h6,         // Use as Std  H6 (small headings in card/table)
-  cardB1: muiTypo.b1,         // NOT to be used, Use Std bodyB1
-  cardB2: muiTypo.b2,         // NOT to be used, Use Std bodyB2
 
-  // TABLE
-  tableH6: muiTypo.h6,        // NOT to be used, Use Std bodyH6
-  tableB2: muiTypo.b2,        // NOT to be used, Use Std bodyB2
+  // ==========================================================
+  // Cards
+  // ==========================================================
+  cardH5: muiTypo.h5,
 
-  // GENERIC
-  bodyB1: muiTypo.b1,         // Use as Std  Body
-  bodyB2: muiTypo.b2,         // Use as Std  Body
-  caption: muiTypo.caption,   // Use as Std  Caption
+
+  // ==========================================================
+  // Enterprise Reports
+  // ==========================================================
+  tableTitle: muiTypo.h5,
+  tableParameter: muiTypo.b2,
+  columnHeader: muiTypo.h6,
+
+
+  // ==========================================================
+  // Tables
+  // ==========================================================
+  tableH6: muiTypo.h6,
+
+
+  // ==========================================================
+  // Body
+  // ==========================================================
+  bodyB1: muiTypo.b1,
+  bodyB2: muiTypo.b2,
+
+
+  // ==========================================================
+  // Caption
+  // ==========================================================
+  caption: muiTypo.caption,
+
 };

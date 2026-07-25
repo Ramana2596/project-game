@@ -144,4 +144,20 @@ export const buttonStyle = {
     fontSize: "0.85rem",
     minWidth: "auto",
   },
+
+  // Icon Button
+  icon: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: 40,
+    width: 40,
+    height: 40,
+    borderRadius: "50%",
+    color: colors.primary,
+    transition: "all .20s ease",
+    "&:hover": {
+      background: colors.hover || "rgba(103,58,183,0.08)",
+    },
+  },
 };

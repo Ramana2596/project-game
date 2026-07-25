@@ -1,67 +1,88 @@
 // ============================================================
 // OpsMgt UX Lab
-// File : TableStyle.js
-// Purpose : Standard table styles (Purple Theme)
+// File : tableStyle.js
+// Purpose : Enterprise Tabular Report Styles (Purple Theme)
 // ============================================================
 
 import { colors } from "./colorPalette";
-import { muiTypo, semanticTypo } from "./masterTypo";
+import { semanticTypo } from "./masterTypo";
 
 export const tableStyle = {
-
-  // ==========================================================
-  // Table Container
-  // ==========================================================
   container: {
-    borderRadius: 4,
+    borderRadius: 3,
     overflow: "hidden",
-    border: `1px solid ${colors.border || "#e0e0e0"}`,
-    background: colors.card || "#ffffff",
-    boxShadow: `0 4px 16px ${colors.primary}14`, // Dynamic purple shadow tint
+    border: `1px solid ${colors.border}`,
+    background: colors.card,
+    boxShadow: `0 4px 16px ${colors.primary}14`,
+    borderTop: `3px solid ${colors.primary}`,
   },
 
-  // ==========================================================
-  // Header Row
-  // ==========================================================
-  header: {
+  tableTitle: {
+    ...semanticTypo.tableTitle,
+    color: colors.title,
+    px: 2,
+    pt: 2,
+    pb: 0.75,
+  },
+
+  tableParameters: {
+    ...semanticTypo.tableParameter,
+    color: colors.subtitle,
+    px: 2,
+    pb: 1.5,
+  },
+
+  toolbar: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 2,
+    mb: 2,
+  },
+
+  columnHeader: {
     background: colors.heroGradient,
     "& .MuiTableCell-root": {
-      ...semanticTypo.cardH4,
+      ...semanticTypo.columnHeader,
       color: colors.white,
       borderBottom: "none",
+      py: 1.5,
     },
   },
 
-  // ==========================================================
-  // Body Row
-  // ==========================================================
   row: {
-    "&:nth-of-type(even)": {
-      backgroundColor: colors.panel || "#FCFAFF", // Connected to central tokens
-    },
-    "&:hover": {
-      backgroundColor: colors.hover || "rgba(103,58,183,0.04)",
-    },
+    "&:nth-of-type(even)": { backgroundColor: colors.panel },
+    "&:hover": { backgroundColor: colors.hover },
     transition: "background-color .25s ease",
   },
 
-  // ==========================================================
-  // Body Cell
-  // ==========================================================
   cell: {
     ...semanticTypo.bodyB1,
     color: colors.body,
     borderBottom: `1px solid ${colors.divider}`,
-    paddingTop: 12,
-    paddingBottom: 12,
+    py: 1.5,
   },
 
-  // ==========================================================
-  // Numeric Cell (For metrics, scoring, and data sheets)
-  // ==========================================================
   numeric: {
     textAlign: "right",
-    justifyContent: "flex-end", // Layout safety fallback
     fontVariantNumeric: "tabular-nums",
+  },
+
+  footer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    px: 2,
+    py: 1.5,
+    borderTop: `1px solid ${colors.divider}`,
+    background: colors.panel,
+  },
+
+  compact: {
+    "& .MuiTableCell-root": {
+      py: 0.75,
+      fontSize: "0.90rem",
+    },
   },
 };
