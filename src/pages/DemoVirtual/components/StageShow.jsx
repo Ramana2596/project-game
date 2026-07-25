@@ -21,7 +21,7 @@ import {
   PlayArrow,
   Check,
   Lock,
-  Visibility,
+  AssessmentOutlined,
   SkipNext,
 } from "@mui/icons-material";
 
@@ -248,7 +248,7 @@ export default function StageShow({
                   },
                 }}
               >
-                <Visibility sx={{ fontSize: 22 }} />
+                < AssessmentOutlined sx={{ fontSize: 22 }} />
               </IconButton>
             </span>
           </Tooltip>

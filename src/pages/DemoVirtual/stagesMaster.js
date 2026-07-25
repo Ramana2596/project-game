@@ -3,8 +3,8 @@
 
 import React from "react";
 import { 
-  EmojiPeople, RocketLaunch, Assignment, Insights, Settings,
-  PlayCircle, AccountBalance, SportsScore
+  Business, RocketLaunch, Assignment, Insights, Settings,
+  PlayCircle, AccountBalance, SportsScore,
 } from "@mui/icons-material";
 
 // Stage definitions with toDo actionable subtitles
@@ -13,7 +13,7 @@ export const StagesMaster = [
     stageNo: 1, 
     label: "Company Profile", 
     toDo: "Set up company information and core objectives", 
-    icon: <EmojiPeople />, 
+    icon: <Business />, 
     color: "#6A1B9A", 
     isLoop: false 
   },

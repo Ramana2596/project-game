@@ -8,7 +8,11 @@ import {
   DoubleArrowRounded,
   LockRounded,
 } from "@mui/icons-material";
-import { cardStyle, colors } from "../../../ux/styles";
+import {
+  cardStyle,
+  colors,
+  semanticTypo,
+} from "../../../ux/styles";
 
 export default function StageLegendCard() {
   return (
@@ -16,12 +20,12 @@ export default function StageLegendCard() {
       {/* Render card title */}
       <Typography
         sx={{
-          fontSize: "0.80rem",
-          fontWeight: 800,
-          letterSpacing: "0.05em",
+          ...semanticTypo.caption,
           color: colors.subtitle,
+          fontWeight: 800,
           mb: 2,
           textTransform: "uppercase",
+          letterSpacing: "0.05em",
         }}
       >
         Stage Legend
@@ -34,11 +38,11 @@ export default function StageLegendCard() {
             <PlayArrowRounded sx={{ fontSize: 18 }} />
           </Avatar>
           <Box>
-            <Typography sx={{ fontSize: "0.90rem", fontWeight: 700, lineHeight: 1.2 }}>
-              Active Stage
+            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 600, }}>
+              Active
             </Typography>
             <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>
-              Current stage in progress
+              In progress
             </Typography>
           </Box>
         </Stack>
@@ -49,11 +53,26 @@ export default function StageLegendCard() {
             <CheckCircleRounded sx={{ fontSize: 18 }} />
           </Avatar>
           <Box>
-            <Typography sx={{ fontSize: "0.90rem", fontWeight: 700, lineHeight: 1.2 }}>
-              Completed Stage
+            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 600, }}>
+              Completed
             </Typography>
             <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>
-              Successfully completed
+              Successful
+            </Typography>
+          </Box>
+        </Stack>
+
+        {/* Locked Stage item */}
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Avatar sx={{ width: 30, height: 30, bgcolor: colors.disabledText, color: colors.white }}>
+            <LockRounded sx={{ fontSize: 16 }} />
+          </Avatar>
+          <Box>
+            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 600, }}>
+              Locked
+            </Typography>
+            <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>
+              Not yet available
             </Typography>
           </Box>
         </Stack>
@@ -64,7 +83,7 @@ export default function StageLegendCard() {
             <AssessmentOutlined sx={{ fontSize: 18 }} />
           </Avatar>
           <Box>
-            <Typography sx={{ fontSize: "0.90rem", fontWeight: 700, lineHeight: 1.2 }}>
+            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 800, }}>
               View Reports
             </Typography>
             <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>
@@ -96,29 +115,16 @@ export default function StageLegendCard() {
             />
           </Avatar>
           <Box>
-            <Typography sx={{ fontSize: "0.90rem", fontWeight: 700, lineHeight: 1.2, color: "#e65100" }}>
+            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 600, color: "#e65100" }}>
               Next Month
             </Typography>
             <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>
-              Advance / loop to Stage 4
+              Begin Next Cycle
             </Typography>
           </Box>
         </Stack>
 
-        {/* Locked Stage item */}
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Avatar sx={{ width: 30, height: 30, bgcolor: colors.disabledText, color: colors.white }}>
-            <LockRounded sx={{ fontSize: 16 }} />
-          </Avatar>
-          <Box>
-            <Typography sx={{ fontSize: "0.90rem", fontWeight: 700, lineHeight: 1.2 }}>
-              Locked Stage
-            </Typography>
-            <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>
-              Not yet available
-            </Typography>
-          </Box>
-        </Stack>
+
       </Stack>
     </Paper>
   );
