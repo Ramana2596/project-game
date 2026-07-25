@@ -1,4 +1,4 @@
-// Component: DemoHeader | Module: Demo Virtual Simulation | Purpose: Display enterprise page header
+// Component: SimHeader | Module: OMTP Simulation | Purpose: Display enterprise page header
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { 
@@ -18,7 +18,7 @@ import { formatDate } from "../../../utils/formatDate";
 import { colors } from "../../../ux/styles";
 import { UI_STRINGS } from "../constants/labels";
 
-export default function DemoHeader({ 
+export default function SimHeader({ 
   userInfo, 
   progressData, 
   progressPercent, 
@@ -178,7 +178,7 @@ export default function DemoHeader({
   );
 }
 
-DemoHeader.propTypes = {
+SimHeader.propTypes = {
   userInfo: PropTypes.object,
   progressData: PropTypes.object,
   progressPercent: PropTypes.number,

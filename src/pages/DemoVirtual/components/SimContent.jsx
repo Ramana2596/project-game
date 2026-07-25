@@ -1,9 +1,9 @@
-// Component: DemoContent | Module: Demo Virtual Simulation | Purpose: Display the primary simulation workspace
+// Component: SimContent | Module: OMTP Simulation | Purpose: Display the primary simulation workspace
 import React from "react";
 import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
 
-export default function DemoContent({ leftContent, rightContent }) {
+export default function SimContent({ leftContent, rightContent }) {
   return (
     <Grid container spacing={3} alignItems="flex-start">
       <Grid item xs={12} lg={8.5}>
@@ -16,7 +16,7 @@ export default function DemoContent({ leftContent, rightContent }) {
   );
 }
 
-DemoContent.propTypes = {
+SimContent.propTypes = {
   leftContent: PropTypes.node,
   rightContent: PropTypes.node,
 };

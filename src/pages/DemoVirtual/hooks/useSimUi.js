@@ -1,5 +1,5 @@
 // ============================================================
-// useDemoUi.js - OpsMgt UXLab V2.0
+// useSimUi.js - OpsMgt UXLab V2.0
 // Purpose: Transform Progress Data into Premium Stage UI
 // ============================================================
 
@@ -9,7 +9,7 @@ import { REPORT_REGISTRY } from "../components/reportRegistry";
 import { UI_STRINGS } from "../constants/labels";
 import { colors } from "../../../ux/styles";
 
-export function useDemoUi(
+export function useSimUi(
   progressData,
   userAccessiblePageIds,
   effectiveHalt,

@@ -1,14 +1,14 @@
 // ============================================================
-// Component : DemoFooter
-// Module    : Demo Virtual Simulation
-// Purpose   : Enterprise footer for Demo Virtual.
+// Component : SimFooter
+// Module    : OMTP Simulation
+// Purpose   : Enterprise footer for Sim OMTP
 // ============================================================
 
 import React from "react";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import { colors } from "../../../ux/styles";
 
-export default function DemoFooter() {
+export default function SimFooter() {
   return (
     <Box
       component="footer"
@@ -37,7 +37,7 @@ export default function DemoFooter() {
           variant="body2"
           sx={{ color: colors.subtitle }}
         >
-          Demo Virtual Simulation • UXLab V2.0
+          OMTP Simulation • UXLab V2.0
         </Typography>
       </Stack>
     </Box>

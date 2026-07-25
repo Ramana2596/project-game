@@ -1,4 +1,4 @@
-// Component: DemoVirtual | Module: Demo Virtual Simulation | Purpose: Enterprise orchestration page for Demo Virtual
+// Component: DemoVirtual | Module: OMTP Simulation | Purpose: Enterprise orchestration page for Demo Virtual
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
@@ -10,15 +10,15 @@ import { useUser } from "../../core/access/userContext";
 import ToastMessage from "../../components/ToastMessage";
 import { colors } from "../../ux/styles";
 
-import { useDemoProgress } from "./hooks/useDemoProgress";
-import { useDemoUi } from "./hooks/useDemoUi";
+import { useSimProgress } from "./hooks/useSimProgress";
+import { useSimUi } from "./hooks/useSimUi";
 import StageProp from "./components/StageProp";
 import ReportDrawer from "./components/ReportDrawer";
 
-import DemoHeader from "./components/DemoHeader";
-import DemoContent from "./components/DemoContent";
-import DemoSidebar from "./components/DemoSidebar";
-import DemoFooter from "./components/DemoFooter";
+import SimHeader from "./components/SimHeader";
+import SimContent from "./components/SimContent";
+import SimSidebar from "./components/SimSidebar";
+import SimFooter from "./components/SimFooter";
 import SimulationStatusCard from "./cards/SimulationStatusCard";
 import HelpCenterCard from "./cards/HelpCenterCard";
 import StageLegendCard from "./cards/StageLegendCard";
@@ -57,9 +57,9 @@ export default function DemoVirtual() {
     effectiveHalt,
     haltStageNo,
     setNextMonthAck,
-  } = useDemoProgress(userInfo);
+  } = useSimProgress(userInfo);
 
-  const stageUI = useDemoUi(
+  const stageUI = useSimUi(
     progressData,
     [],
     false,
@@ -266,7 +266,7 @@ export default function DemoVirtual() {
     >
 
       {/* Enterprise Header */}
-      <DemoHeader
+      <SimHeader
         userInfo={userInfo}
         progressData={progressData}
         progressPercent={progressPercent}
@@ -275,7 +275,7 @@ export default function DemoVirtual() {
       />
 
       {/* Main Simulation Workspace */}
-      <DemoContent
+      <SimContent
         leftContent={
           <StageProp
             stageUI={stageUI}
@@ -292,7 +292,7 @@ export default function DemoVirtual() {
           />
         }
         rightContent={
-          <DemoSidebar
+          <SimSidebar
             simulationStatus={
               <SimulationStatusCard
                 progressData={progressData}
@@ -346,7 +346,7 @@ export default function DemoVirtual() {
         userAccessiblePageIds={userAccessiblePageIds}
       />
       {/* Footer */}
-      <DemoFooter />
+      <SimFooter />
 
     </Box>
   );
