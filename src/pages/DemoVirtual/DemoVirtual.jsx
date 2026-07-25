@@ -1,70 +1,99 @@
-// src/pages/DemoVirtual/DemoVirtual.jsx
-// VIrtual Simulation for DEMO purpose
-// Stage Manager: Page, hooks, stage list, report drawer, RBAC Reports
-import React, { useEffect, useState } from "react";
+// Component: DemoVirtual | Module: OMTP Simulation | Purpose: Enterprise orchestration page for Demo Virtual
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Box,
+  CircularProgress,
+} from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
-import { Box, Stack, Typography, LinearProgress, Paper, Avatar, IconButton, Tooltip, CircularProgress } from "@mui/material";
-import { ExitToApp } from "@mui/icons-material";
-import omgBg from "../../assets/navigation-menu/omgBgSrp.png"
-//import heroBG from "../../assets/navigation-menu/heroOpsMgtUniversal.png"
 import { useUser } from "../../core/access/userContext";
-import { formatDate } from "../../utils/formatDate";
-import { useDemoProgress } from "./hooks/useDemoProgress";
-import { useDemoUi } from "./hooks/useDemoUi";
-import StageProp from "./components/StageProp";
-import ReportDrawer from "./wizardreports/ReportDrawer";
 import ToastMessage from "../../components/ToastMessage";
-import { STAGE_TITLE_MAP } from "./stagesMaster";
-import { UI_STRINGS } from "./constants/labels";
+import { colors } from "../../ux/styles";
+
+import { useSimProgress } from "./hooks/useSimProgress";
+import { useSimUi } from "./hooks/useSimUi";
+import StageProp from "./components/StageProp";
+import ReportDrawer from "./components/ReportDrawer";
+
+import SimHeader from "./components/SimHeader";
+import SimContent from "./components/SimContent";
+import SimSidebar from "./components/SimSidebar";
+import SimFooter from "./components/SimFooter";
+import SimulationStatusCard from "./cards/SimulationStatusCard";
+import HelpCenterCard from "./cards/HelpCenterCard";
+import StageLegendCard from "./cards/StageLegendCard";
+import HelpBannerCard from "./cards/HelpBannerCard";
+import ChecklistDialog from "./dialogs/ChecklistDialog";
+import RulesDialog from "./dialogs/RulesDialog";
+
+import {
+  getHelpCenterActions,
+  HELP_ACTION_KEYS,
+} from "./constants/helpCenterActions";
+import {
+  STAGE_TITLE_MAP,
+} from "./stagesMaster";
+
 
 export default function DemoVirtual() {
-  const { userInfo, login, setUserInfo, userAccessiblePageIds } = useUser();
+
+  // ----------------------------------------------------------
+  // 1. Navigation & User Context
+  // ----------------------------------------------------------
   const navigate = useNavigate();
+  const { userInfo, login, setUserInfo, userAccessiblePageIds } = useUser();
 
-  // Hooks for logic and state management
+
+  // ----------------------------------------------------------
+  // 2. Business Data & Simulation Hooks
+  // ----------------------------------------------------------
   const {
-    progressData, loading, actionLoading, alertData, setAlertData,
-    fetchProgress, updatePlay, effectiveHalt, haltStageNo,
-    nextMonthAck, setNextMonthAck
-  } = useDemoProgress(userInfo);
-
-  // Compute UI mapping based on virtual progress data
-
-  const stageUI = useDemoUi(
     progressData,
-    userAccessiblePageIds,
+    loading,
+    actionLoading,
+    alertData,
+    setAlertData,
+    fetchProgress,
     effectiveHalt,
+    haltStageNo,
+    setNextMonthAck,
+  } = useSimProgress(userInfo);
+
+  const stageUI = useSimUi(
+    progressData,
+    [],
+    false,
     progressData?.Is_Period_Closed ?? false,
-    progressData?.Is_Simulation_End ?? false);
+    progressData?.Is_Simulation_End ?? false
+  );
 
-  // Local state for drawer and active reporting
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [activeStageNo, setActiveStageNo] = useState(null);
-  const [buttonLoading, setButtonLoading] = useState(false);
+  // ----------------------------------------------------------
+  // 3. Page Initialization
+  // ----------------------------------------------------------
 
-  // OnClcik exit,Cleanup session and navigate to landing page
-  const handleExit = () => {
-    sessionStorage.removeItem("wizardUserInfo");
-    login(null); setUserInfo(null); navigate('/');
-  };
-
-  // Persist user data to session storage for refresh resilience
+  // Restore user session on page refresh.
   useEffect(() => {
     if (userInfo?.gameId) {
-      sessionStorage.setItem("wizardUserInfo", JSON.stringify(userInfo));
+      sessionStorage.setItem(
+        "wizardUserInfo",
+        JSON.stringify(userInfo)
+      );
+    } else {
+      const stored =
+        sessionStorage.getItem("wizardUserInfo");
+      if (stored) {
+        setUserInfo(JSON.parse(stored));
+      } else {
+        navigate("/");
+      }
     }
-  }, [userInfo]);
+  }, [
+    userInfo,
+    navigate,
+    setUserInfo,
+  ]);
 
-  // Rehydrate userInfo state from session storage if lost
-  useEffect(() => {
-    if (!userInfo?.gameId) {
-      const stored = sessionStorage.getItem("wizardUserInfo");
-      if (stored) { setUserInfo(JSON.parse(stored)); }
-      else { navigate('/'); }
-    }
-  }, [userInfo, navigate, setUserInfo]);
-
-  // Initial fetch: Passing PascalCase keys and NULL markers for first-load
+  // Load simulation progress.
   useEffect(() => {
     if (userInfo?.gameId && !progressData) {
       fetchProgress(
@@ -72,148 +101,253 @@ export default function DemoVirtual() {
         userInfo.gameBatch,
         userInfo.gameTeam,
         null,
-        null);
+        null
+      );
     }
-  }, [fetchProgress, userInfo, progressData]);
+  },
+    [
+      fetchProgress,
+      userInfo,
+      progressData,
+    ]
+  );
 
-  // Click handler marks stage as completed to advance virtual orchestration
+
+  // ----------------------------------------------------------
+  // 4. Local UI State
+  // ----------------------------------------------------------
+  const [checklistOpen, setChecklistOpen] = useState(false);
+  const [rulesOpen, setRulesOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [activeStageNo, setActiveStageNo] = useState(null);
   const [loadingStageNo, setLoadingStageNo] = useState(null);
 
-  const handleStageClick = async (Stage) => {
-    setLoadingStageNo(Stage.stageNo); // mark clicked stage
-    setTimeout(async () => {
-      await fetchProgress(
-        userInfo.gameId,
-        userInfo.gameBatch,
-        userInfo.gameTeam,
-        progressData?.Current_Period,
-        Stage.stageNo
-      );
-      setLoadingStageNo(null); // clear after fetch
-    }, 500);
+  // ----------------------------------------------------------
+  // 5. Derived View Model
+  // ----------------------------------------------------------
+  const teamInitial = userInfo?.gameTeam
+    ? userInfo.gameTeam.charAt(0).toUpperCase()
+    : "G";
+
+  const progressPercent =
+    progressData?.Progress_Percent ??
+    progressData?.Progress_Pct ??
+    0;
+
+  const activeStage = Array.isArray(stageUI)
+    ? stageUI.find((s) => s.isActive || s.isCurrent) ||
+    stageUI.find((s) => !s.isCompleted)
+    : null;
+
+  const currentStageNumber =
+    activeStage?.stageNo ||
+    progressData?.Current_Stage_No ||
+    haltStageNo;
+
+  const currentStageName = STAGE_TITLE_MAP[currentStageNumber]
+    ? `Stage ${currentStageNumber} (${STAGE_TITLE_MAP[currentStageNumber]})`
+    : currentStageNumber
+      ? `Stage ${currentStageNumber}`
+      : null;
+
+  const nextActionMessage =
+    progressData?.Is_Simulation_End
+      ? "All stages finished. Review final reports."
+      : currentStageName
+        ? `Complete ${currentStageName} to proceed`
+        : "Proceed to the next simulation period";
+
+  const helpCenterActions = getHelpCenterActions({
+    isSimulationEnd: progressData?.Is_Simulation_End ?? false,
+    currentStageNo: currentStageNumber,
+  });
+
+  // ----------------------------------------------------------
+  // 6. Event Handlers
+  // ----------------------------------------------------------
+  // Handle Help Action 
+  const handleHelpActionClick = (key) => {
+    switch (key) {
+      case HELP_ACTION_KEYS.CHECKLIST:
+        setChecklistOpen(true);
+        break;
+      case HELP_ACTION_KEYS.RULES:
+        setRulesOpen(true);
+        break;
+      case HELP_ACTION_KEYS.REPORT_GUIDE:
+        // TODO
+        break;
+      case HELP_ACTION_KEYS.HELPLINE_CONTACT:
+        // TODO
+        break;
+      case HELP_ACTION_KEYS.GENERAL_HELP:
+        // TODO
+        break;
+      default:
+        break;
+    }
   };
 
-  // Report handler to open side drawer for specific stages
+  // Handle Open Report
   const handleOpenReport = (stageNo) => {
     setActiveStageNo(Number(stageNo));
     setDrawerOpen(true);
   };
 
-  // Logic for period transition acknowledgment
-  const handleNextMonth = () => setNextMonthAck(true);
-
-  // Render full page loader during initial data acquisition
-  if (loading && !progressData) return (
-    <Box sx={{ display: "flex", justifyContent: "center", p: 10 }}><CircularProgress /></Box>
+  // Handle stage selection.
+  const handleStageClick = useCallback(
+    async (stage) => {
+      setLoadingStageNo(stage.stageNo);
+      try {
+        await fetchProgress(
+          userInfo.gameId,
+          userInfo.gameBatch,
+          userInfo.gameTeam,
+          progressData?.Current_Period,
+          stage.stageNo
+        );
+      }
+      finally {
+        setLoadingStageNo(null);
+      }
+    },
+    [
+      fetchProgress,
+      userInfo,
+      progressData,
+    ]
   );
 
-  return (
-    // Outer container with BG image and Header
-    <Box sx={{
-      minHeight: "100vh", width: "100%",
-      backgroundImage:
-        `linear-gradient(rgba(255, 255, 255, 0.75),
-       rgba(255, 255, 255, 0.40)),
-       url(${omgBg})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundAttachment: "fixed", py: 6, px: 2
-    }}>
-      {/* High-Contrast Content Card for Bright Visibility */}
-      <Box sx={{
-        maxWidth: 700, margin: "0 auto", p: 4,
-        bgcolor: "#ffffff",
-        borderRadius: 8,
-        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.1)",
-        border: "1px solid #e2e8f0"
-      }}>
+  // handle Next Month Looping
+  const handleNextMonth = () => {
+    setNextMonthAck(true);
+  };
 
-        {/* STICKY Heading: Progress and Navigation controls */}
-        <Box sx={{
-          position: "sticky",
-          top: 64,
-          zIndex: 1100,
-          bgcolor: "#ffffff",
-          pt: 1,
-          pb: 2,
-          mb: 3,
-          borderBottom: "1px solid #f1f5f9",
-        }}>
+  // Handle Exit Demo page
+  const handleExit = () => {
+    sessionStorage.removeItem("wizardUserInfo");
+    login(null);
+    setUserInfo(null);
+    navigate("/");
+  };
 
-          {/* Progress header and exit action:  */}
-          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1.5}>
-            <Typography variant="h5" fontWeight="900" color="text.primary">{UI_STRINGS.TITLE}</Typography>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Typography variant="subtitle1" color="primary" fontWeight="800">
-                {UI_STRINGS.PERIOD_DISPLAY(progressData?.Current_Period_No, progressData?.Total_Period)}
-              </Typography>
-              <Tooltip title={UI_STRINGS.EXIT_TOOLTIP} arrow>
-                <IconButton onClick={handleExit} sx={{ p: 0 }}>
-                  <Avatar sx={{ bgcolor: '#fee2e2', width: 32, height: 32, cursor: 'pointer', '&:hover': { bgcolor: '#fecaca' } }}>
-                    <ExitToApp sx={{ fontSize: 18, color: '#ef4444' }} />
-                  </Avatar>
-                </IconButton>
-              </Tooltip>
-            </Stack>
-          </Stack>
-
-          {/* Progress bar styling:  */}
-          <LinearProgress variant="determinate" value={progressData?.Progress_Percent ?? 0} sx={{ height: 10, borderRadius: 5, mb: 2, bgcolor: "#f1f5f9" }} />
-
-          {/* Team banner*/}
-          <Paper elevation={0} sx={{
-            p: 2,
-            bgcolor: progressData?.Is_Simulation_End ? "#fff9c4" : "#f8fafc",
-            borderRadius: 4,
-            border: progressData?.Is_Simulation_End ? "1px solid #fbc02d" : "1px solid #e2e8f0"
-          }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography variant="h6" fontWeight="800" color={progressData?.Is_Simulation_End ? "#af8500" : "primary.dark"}>
-                {UI_STRINGS.TEAM_PREFIX(userInfo?.gameTeam || "")}
-              </Typography>
-              <Typography variant="h6" fontWeight="800" color={progressData?.Is_Simulation_End ? "#af8500" : "primary.dark"} sx={{ textAlign: 'right' }}>
-                {progressData?.Is_Simulation_End
-                  ? UI_STRINGS.SIM_COMPLETED
-                  : `${formatDate(progressData?.Current_Period)}`
-                }
-              </Typography>
-            </Stack>
-          </Paper>
-        </Box>
-
-        {/* List of interactive stages orchestrated by progress state */}
-        <StageProp
-          stageUI={stageUI}
-          actionLoading={actionLoading}
-          effectiveHalt={effectiveHalt}
-          isSimulationEnd={progressData?.Is_Simulation_End ?? false}
-          haltStageNo={haltStageNo}
-          handleStageClick={handleStageClick}
-          handleOpenReport={handleOpenReport}
-          handleNextMonth={handleNextMonth}
-          loadingStageNo={loadingStageNo}
-        />
-
-        {/* Side-panel reports drawer with period and stage markers for historical data */}
-        <ReportDrawer
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          stageNo={activeStageNo}
-          completedPeriod={progressData?.Completed_Period}
-          completedStageNo={progressData?.Completed_Stage_No}
-          stageTitle={STAGE_TITLE_MAP[activeStageNo] || ""}
-          userAccessiblePageIds={userAccessiblePageIds} // Pass accessible reports
-          gameTeam={userInfo?.gameTeam}
-        />
-
-        {/* Toast notifications for error and status feedback */}
-        <ToastMessage
-          open={alertData.isVisible}
-          severity={alertData.severity}
-          message={alertData.message}
-          onClose={() => setAlertData({ ...alertData, isVisible: false })}
+  // Loading Screen
+  if (loading && !progressData) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          bgcolor: colors.page,
+        }}
+      >
+        <CircularProgress
+          size={52}
+          sx={{
+            color: colors.primary,
+          }}
         />
       </Box>
+    );
+  }
+
+  // ----------------------------------------------------------
+  // 7. Render Page
+  // ----------------------------------------------------------
+  return (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        bgcolor: colors.page,
+        pb: 4,
+      }}
+    >
+
+      {/* Enterprise Header */}
+      <SimHeader
+        userInfo={userInfo}
+        progressData={progressData}
+        progressPercent={progressPercent}
+        teamInitial={teamInitial}
+        handleExit={handleExit}
+      />
+
+      {/* Main Simulation Workspace */}
+      <SimContent
+        leftContent={
+          <StageProp
+            stageUI={stageUI}
+            loadingStageNo={loadingStageNo}
+            actionLoading={actionLoading}
+            effectiveHalt={effectiveHalt}
+            isSimulationEnd={progressData?.Is_Simulation_End ?? false}
+            haltStageNo={haltStageNo}
+            handleStageClick={handleStageClick}
+            handleOpenReport={handleOpenReport}
+            handleNextMonth={handleNextMonth}
+            nextActionMessage={nextActionMessage}
+            progressData={progressData}
+          />
+        }
+        rightContent={
+          <SimSidebar
+            simulationStatus={
+              <SimulationStatusCard
+                progressData={progressData}
+                nextActionMessage={nextActionMessage}
+              />
+            }
+            helpCenter={
+              <HelpCenterCard
+                helpCenterActions={helpCenterActions}
+                onHelpActionClick={handleHelpActionClick}
+              />
+            }
+            stageLegend={
+              <StageLegendCard />
+            }
+            helpBanner={
+              <HelpBannerCard />
+            }
+          />
+        }
+      />
+
+      {/* Dialogs */}
+      <ChecklistDialog
+        open={checklistOpen}
+        onClose={() => setChecklistOpen(false)}
+      />
+
+      <RulesDialog
+        open={rulesOpen}
+        onClose={() => setRulesOpen(false)}
+        currentStageName={currentStageName}
+      />
+
+      {/* Notification Messages */}
+      <ToastMessage
+        alertData={alertData}
+        setAlertData={setAlertData}
+      />
+
+      {/* Report Drawer */}
+
+      <ReportDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        stageNo={activeStageNo}
+        completedPeriod={progressData?.Completed_Period}
+        completedStageNo={progressData?.Completed_Stage_No}
+        stageTitle={STAGE_TITLE_MAP[activeStageNo] || ""}
+        gameTeam={userInfo?.gameTeam}
+        userAccessiblePageIds={userAccessiblePageIds}
+      />
+      {/* Footer */}
+      <SimFooter />
+
     </Box>
   );
 }
