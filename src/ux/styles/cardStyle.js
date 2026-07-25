@@ -79,4 +79,16 @@ export const cardStyle = {
   ...semanticTypo.cardH5,
   mt: 0.75,
 },
+
+
+// ==========================================================
+// Card Footer (Added from V2, with safe fallbacks)
+// ==========================================================
+footer: {
+  px: 3,
+  py: 2,
+  borderTop: `1px solid ${colors.divider || "#e0e0e0"}`,
+  background: colors.panel || "#f5f5f5",
+},
+
 };
