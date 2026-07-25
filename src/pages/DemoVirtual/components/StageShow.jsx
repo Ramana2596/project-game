@@ -1,10 +1,38 @@
-// src/pages/DemoVirtual/components/StageShow.jsx
-// Purpose: The actual visual bar/button, status, icons, & .Size, colour
- 
+// ============================================================
+// StageShow.jsx
+// OpsMgt UXLab V2.0
+// High-Legibility Enterprise Stage Display Card
+// ============================================================
+
 import React from "react";
-import { Box, Stack, Button, Tooltip, IconButton, Typography, CircularProgress } from "@mui/material";
-import { PlayCircle, CheckCircle, Lock, Visibility, SkipNext } from "@mui/icons-material";
+
+import {
+  Box,
+  Stack,
+  Button,
+  Tooltip,
+  IconButton,
+  Typography,
+  CircularProgress,
+  Chip,
+} from "@mui/material";
+
+import {
+  PlayArrow,
+  Check,
+  Lock,
+  Visibility,
+  SkipNext,
+} from "@mui/icons-material";
+
 import { UI_STRINGS } from "../constants/labels";
+
+import {
+  buttonStyle,
+  cardStyle,
+  semanticTypo,
+  colors,
+} from "../../../ux/styles";
 
 export default function StageShow({
   Stage,
@@ -15,103 +43,261 @@ export default function StageShow({
   handleStageClick,
   handleOpenReport,
   handleNextMonth,
-  isLoading
+  isLoading,
 }) {
- 
-  const sidebarWidth = 90; // for right sidebar
+  
+  const isCompleted = Stage.status === "COMPLETED" || Stage.status === "FINISHED";
+  const isActive = Stage.status === "ACTIVE";
+
+  const statusColor = isActive
+    ? colors.primary
+    : isCompleted
+      ? colors.success
+      : colors.muted;
 
   return (
-    <Stack direction="row" spacing={1} alignItems="center">
-      
-      {/* Stage Interactive button */}
-      <Box sx={{ flex: 1, position: 'relative', overflow: 'hidden', borderRadius: '14px' }}>
-        
-        {isLoading && (
-          <Box sx={{
-            position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-            zIndex: 2, bgcolor: 'rgba(255, 255, 255, 0.7)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            backdropFilter: 'blur(2px)'
-          }}>
-            <CircularProgress size={24} sx={{ mr: 1.5 }} />
-            <Typography variant="body2" fontWeight="700" color="primary.main">
-              Updating...
-            </Typography>
-          </Box>
-        )}
+    <Box
+      sx={{
+        ...cardStyle.primary,
+        position: "relative",
+        borderColor: isActive ? colors.primary : colors.border,
+        boxShadow: isActive 
+          ? `0 8px 24px ${colors.primary}2E` 
+          : cardStyle.primary.boxShadow,
+      }}
+    >
+      {/* Accent Indicator Bar */}
+      <Box
+        sx={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: 6,
+          bgcolor: statusColor,
+        }}
+      />
 
-        {/* Stage Button: Action with Master Styles */}
-        <Button
-          fullWidth
-          disabled={!Stage.isActive || isLoading || effectiveHalt}
-          onClick={() => handleStageClick(Stage)}
-          sx={Stage.buttonSx}
+      {/* Loading Overlay */}
+      {isLoading && (
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 5,
+            bgcolor: "rgba(255, 255, 255, 0.88)",
+            backdropFilter: "blur(4px)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <Stack direction="row" spacing={2} alignItems="center">
-            {Stage.icon}
-            {/* Stage Label format `{No: Name}` */}
-            <Typography fontWeight="700">{`${Stage.stageNo}: ${Stage.label}`}</Typography>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <CircularProgress size={24} sx={{ color: colors.primary }} />
+            <Typography
+              sx={{
+                ...semanticTypo.bodyB1,
+                fontSize: "1rem",
+                color: colors.primary,
+                fontWeight: 700,
+              }}
+            >
+              Updating Stage...
+            </Typography>
           </Stack>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {Stage.status === "ACTIVE" && <PlayCircle fontSize="small" />}
-            {Stage.status === "COMPLETED" && <CheckCircle fontSize="small" sx={{ color: "#4caf50" }} />}
-            {Stage.status === "LOCKED" && <Lock fontSize="small" sx={{ color: "#94a3b8" }} />}
-            {Stage.status === "FINISHED" && <CheckCircle fontSize="small" sx={{ color: "#2e7d32" }} />}
-          </Box>
-        </Button>
-      </Box>
+        </Box>
+      )}
 
-      {/* Sidebar actions:view reports & NextMonth triggers */}
+      {/* Main Content Row */}
       <Stack
         direction="row"
         alignItems="center"
-        spacing={0.5}
-        sx={{ width: `${sidebarWidth}px`, justifyContent: "flex-end" }}
+        justifyContent="space-between"
+        sx={{
+          py: 2.5,
+          pl: 3.5,
+          pr: 3,
+        }}
       >
-        {/* ViewIcon Report Tooltip and Button */}
-        <Tooltip title={Stage.tooltipReports || "No reports"} arrow>
-          <span>
-            <IconButton
-              onClick={() => handleOpenReport(Stage.stageNo)}
-              disabled={!Stage.canViewReports}
-              color="primary"
-              size="small"
-              sx={{ bgcolor: Stage.canViewReports ? '#f1f5f9' : 'transparent' }}
+        {/* Interactive Click Area */}
+        <Button
+          disableRipple
+          disabled={!Stage.isActive || isLoading || effectiveHalt}
+          onClick={() => handleStageClick(Stage)}
+          sx={{
+            ...buttonStyle.text,
+            p: 0,
+            flex: 1,
+            justifyContent: "flex-start",
+            textAlign: "left",
+            textTransform: "none",
+            "&:hover": {
+              bgcolor: "transparent",
+            },
+          }}
+        >
+          <Stack direction="row" spacing={3} alignItems="center">
+            {/* Stage Icon Circle */}
+            <Box
+              sx={{
+                width: 48,
+                height: 48,
+                borderRadius: "50%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexShrink: 0,
+                background: isActive || isCompleted
+                  ? colors.iconGradient
+                  : colors.disabledBackground,
+                color: isActive || isCompleted ? colors.white : colors.muted,
+                boxShadow: isActive ? `0 4px 14px ${colors.primary}40` : "none",
+                "& svg": { fontSize: 26 },
+              }}
             >
-              <Visibility />
-            </IconButton>
-          </span>
-        </Tooltip>
+              {Stage.icon}
+            </Box>
 
-        {/* NextMonth trigger with Pulse Animation */}
-        <Box sx={{ width: 34 }}>
+            {/* Stage Number */}
+            <Typography
+              sx={{
+                fontSize: "1.75rem",
+                fontWeight: 800,
+                color: statusColor,
+                minWidth: 32,
+                lineHeight: 1,
+              }}
+            >
+              {Stage.stageNo}
+            </Typography>
+
+            {/* Titles & Descriptions */}
+            <Box sx={{ pr: 2 }}>
+              <Typography
+                sx={{
+                  fontSize: "1.25rem",
+                  fontWeight: 700,
+                  color: colors.title,
+                  lineHeight: 1.3,
+                  mb: 0.5,
+                }}
+              >
+                {Stage.label}
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "0.95rem",
+                  color: Stage.toDo ? colors.body : colors.muted,
+                  lineHeight: 1.4,
+                }}
+              >
+                {Stage.toDo || "Yet to define"}
+              </Typography>
+            </Box>
+          </Stack>
+        </Button>
+
+        {/* Action Controls & Badges */}
+        <Stack direction="row" spacing={2} alignItems="center">
+          {/* Status Badge */}
+          <Chip
+            size="medium"
+            label={Stage.status}
+            sx={{
+              height: 32,
+              px: 1.5,
+              fontSize: "0.85rem",
+              fontWeight: 700,
+              borderRadius: "999px",
+              color: isActive
+                ? colors.primary
+                : isCompleted
+                  ? colors.success
+                  : colors.muted,
+              bgcolor: isActive
+                ? colors.selected
+                : isCompleted
+                  ? "#E8F5E9"
+                  : colors.panel,
+              border: `1px solid ${isActive ? colors.primaryLight : "transparent"}`,
+            }}
+          />
+
+          {/* View Reports Button */}
+          <Tooltip title={Stage.tooltipReports || "No Reports"} arrow>
+            <span>
+              <IconButton
+                onClick={() => handleOpenReport(Stage.stageNo)}
+                disabled={!Stage.canViewReports}
+                sx={{
+                  width: 42,
+                  height: 42,
+                  border: `1px solid ${colors.border}`,
+                  bgcolor: colors.paper,
+                  color: colors.primary,
+                  "&:hover": {
+                    bgcolor: colors.primary,
+                    color: colors.white,
+                    borderColor: colors.primary,
+                  },
+                  "&.Mui-disabled": {
+                    bgcolor: colors.paper,
+                    color: colors.disabledText,
+                    borderColor: colors.border,
+                  },
+                }}
+              >
+                <Visibility sx={{ fontSize: 22 }} />
+              </IconButton>
+            </span>
+          </Tooltip>
+
+          {/* Next Month Button */}
           {Stage.stageNo === haltStageNo && effectiveHalt && !isSimulationEnd && (
-            <Tooltip title={UI_STRINGS.NEXT_MONTH_TOOLTIP || "Proceed to next month"} arrow>
+            <Tooltip title={UI_STRINGS.NEXT_MONTH_TOOLTIP} arrow>
               <span>
                 <IconButton
                   onClick={handleNextMonth}
-                  size="small"
                   sx={{
-                    bgcolor: "#ff9800",
-                    color: "#fff",
-                    border: "2px solid #fff",
-                    boxShadow: "0 0 0 1px #ff9800, 0 2px 6px rgba(0,0,0,0.15)",
-                    animation: 'pulse 2s infinite',
-                    '@keyframes pulse': {
-                      '0%': { transform: 'scale(0.95)', boxShadow: '0 0 0 0px rgba(255, 152, 0, 0.7)' },
-                      '70%': { transform: 'scale(1.1)', boxShadow: '0 0 0 15px rgba(255, 152, 0, 0)' },
-                      '100%': { transform: 'scale(0.95)', boxShadow: '0 0 0 0px rgba(255, 152, 0, 0)' },
+                    width: 42,
+                    height: 42,
+                    bgcolor: colors.warning,
+                    color: colors.white,
+                    "&:hover": {
+                      bgcolor: "#D97706",
                     },
-                    "&:hover": { bgcolor: "#fb8c00", animation: 'none', transform: "scale(1.1)" }
                   }}
                 >
-                  <SkipNext fontSize="small" />
+                  <SkipNext sx={{ fontSize: 24 }} />
                 </IconButton>
               </span>
             </Tooltip>
           )}
-        </Box>
+
+          {/* Status Icon Indicator */}
+          <Box
+            sx={{
+              width: 42,
+              height: 42,
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: isActive
+                ? colors.primary
+                : isCompleted
+                  ? colors.success
+                  : colors.panel,
+              color: isActive || isCompleted ? colors.white : colors.muted,
+            }}
+          >
+            {isActive && <PlayArrow sx={{ fontSize: 24 }} />}
+            {isCompleted && <Check sx={{ fontSize: 24 }} />}
+            {Stage.status === "LOCKED" && <Lock sx={{ fontSize: 22 }} />}
+          </Box>
+        </Stack>
       </Stack>
-    </Stack>
+    </Box>
   );
 }

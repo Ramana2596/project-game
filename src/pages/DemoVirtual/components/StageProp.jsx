@@ -6,6 +6,7 @@ import { Stack } from "@mui/material";
 import StageShow from "./StageShow";
 
 export default function StageProp({
+  
   stageUI,
   actionLoading,
   effectiveHalt,
@@ -16,6 +17,7 @@ export default function StageProp({
   handleNextMonth,
   loadingStageNo
 }) {
+//   console.log("StageProp handleStageClick =", handleStageClick);
   return (
     // Disburse Props of Stage by stageNo
     <Stack spacing={2} sx={{ mt: 2 }}> 
