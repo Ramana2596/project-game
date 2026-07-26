@@ -1,0 +1,23 @@
+LEAP V1.0
+
+useLeap()
+
+Returns:
+
+{
+    rows,
+    grouped,
+    loading,
+    error,
+}
+
+Example:
+
+const {
+    grouped,
+    loading,
+} = useLeap(stageId);
+
+const checklist = grouped.CHECKLIST || [];
+const faq = grouped.FAQ || [];
+
