@@ -4,26 +4,31 @@
 // Purpose : LEAP data access service
 // ============================================================
 
-import axios from "axios";
-import { mockData } from "../mock/leapMockData";
-
-const USE_MOCK = true;
+import api from "../../../core/interceptor/api-interceptor";
 
 // ------------------------------------------------------------
-// Get Stage Content
+// Get Simulation Stages
 // ------------------------------------------------------------
-export async function getStageContent(stageId) {
-
-  if (USE_MOCK) {
-    return mockData.filter(x => x.stageId === stageId);
-  }
-
-  const response = await axios.post(
-    "/api/getLeap",
-    {
-      stageId,
-    }
-  );
-
-  return response.data;
+export function getStages(queryParams = {}) {
+    return api.get("/api/getLeap", {
+        params: {
+            ...queryParams,
+            cmdLine: "Get_Stage",
+        },
+    });
 }
+
+
+// ------------------------------------------------------------
+// Get LEAP Content
+// ------------------------------------------------------------
+
+export function getStageContent(queryParams) {
+    return api.get("/api/getLeap", {
+        params: {
+            ...queryParams,
+            cmdLine: "Get_Help",
+        },
+    });
+}
+

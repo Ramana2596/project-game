@@ -81,15 +81,26 @@ export default function LeapSection({
         </Box>
       )}
 
-      {/* Section items */}
-      <Stack spacing={2}>
-        {items.map((item) => (
-          <LeapItem
-            key={item.seqNo}
-            item={item}
-          />
-        ))}
-      </Stack>
+      {/* Section items - single card, bullet list */}
+      <Box
+        sx={{
+          borderLeft: `4px solid ${config.color}`,
+          borderRadius: 2,
+          bgcolor: colors.backgroundPaper,
+          boxShadow: 1,
+          px: 2.5,
+          py: 2,
+        }}
+      >
+        <Stack spacing={1.25}>
+          {items.map((item) => (
+            <LeapItem
+              key={item.Seq_No}
+              item={item}
+            />
+          ))}
+        </Stack>
+      </Box>
 
     </Box>
   );

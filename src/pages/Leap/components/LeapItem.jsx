@@ -25,78 +25,51 @@ import { getContentType } from "../constants/leapContentTypes";
 export default function LeapItem({ item }) {
 
   // Get content type metadata
-  const config = getContentType(item.infoType);
+  const config = getContentType(item.Info_Type);
 
   // Get icon component
   const Icon = config.icon;
 
   return (
-    <Box
-      sx={{
-        px: 2.5,
-        py: 2,
-        borderLeft: `4px solid ${config.borderColor}`,
-        borderRadius: 2,
-        bgcolor: colors.backgroundPaper,
-        boxShadow: 1,
-        transition: "all .20s ease",
-        "&:hover": {
-          boxShadow: 3,
-          transform: "translateY(-2px)",
-        },
-      }}
-    >
+    <Stack direction="row" spacing={1.25} alignItems="center">
+      {/* Bullet */}
+      <Box
+        sx={{
+          width: 6,
+          height: 6,
+          borderRadius: "50%",
+          bgcolor: config.color,
+          flexShrink: 0,
+        }}
+      />
 
-      {/* Item layout */}
-      <Stack spacing={1.25}>
-
-        {/* Item header */}
-        <Stack
-          direction="row"
-          spacing={1.25}
-          alignItems="center"
-        >
-
-          {/* Item icon */}
-          <Icon
-            sx={{
-              fontSize: 22,
-              color: config.color,
-              flexShrink: 0,
-            }}
-          />
-
-          {/* Item title */}
+      <Box sx={{ flex: 1 }}>
+        {item.Title && (
           <Typography
             sx={{
               ...semanticTypo.sectionTitle,
               color: config.color,
-              flex: 1,
+              fontSize: "0.95rem",
+              mb: 0.25,
             }}
           >
-            {item.title}
+            {item.Title}
           </Typography>
+        )}
 
-        </Stack>
-
-        {/* Item description */}
         <Typography
           sx={{
             ...semanticTypo.bodyMedium,
             color: colors.textSecondary,
-            lineHeight: 1.7,
-            pl: 4.25,
+            lineHeight: 1.6,
           }}
         >
-          {item.infoText}
+          {item.Info_Text}
         </Typography>
-
-      </Stack>
-
-    </Box>
+      </Box>
+    </Stack>
   );
 }
-
 // ============================================================
 // Component Props
 // ============================================================
