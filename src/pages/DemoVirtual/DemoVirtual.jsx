@@ -25,6 +25,7 @@ import StageLegendCard from "./cards/StageLegendCard";
 import HelpBannerCard from "./cards/HelpBannerCard";
 import ChecklistDialog from "./dialogs/ChecklistDialog";
 import RulesDialog from "./dialogs/RulesDialog";
+import LeapDialog from "../Leap/components/LeapDialog";
 
 import {
   getHelpCenterActions,
@@ -118,9 +119,11 @@ export default function DemoVirtual() {
   // ----------------------------------------------------------
   const [checklistOpen, setChecklistOpen] = useState(false);
   const [rulesOpen, setRulesOpen] = useState(false);
+  const [leapOpen, setLeapOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeStageNo, setActiveStageNo] = useState(null);
   const [loadingStageNo, setLoadingStageNo] = useState(null);
+
 
   // ----------------------------------------------------------
   // 5. Derived View Model
@@ -181,7 +184,7 @@ export default function DemoVirtual() {
         // TODO
         break;
       case HELP_ACTION_KEYS.GENERAL_HELP:
-        // TODO
+        handleLeapOpen();
         break;
       default:
         break;
@@ -252,6 +255,18 @@ export default function DemoVirtual() {
       </Box>
     );
   }
+
+  // handle LEAP Learn & Help
+
+  const handleLeapOpen = () => {
+    setLeapOpen(true);
+  };
+
+
+  const handleLeapClose = () => {
+    setLeapOpen(false);
+  };
+
 
   // ----------------------------------------------------------
   // 7. Render Page
@@ -327,6 +342,13 @@ export default function DemoVirtual() {
         currentStageName={currentStageName}
       />
 
+      <LeapDialog
+        open={leapOpen}
+        onClose={handleLeapClose}
+        stageId={currentStageNumber}
+        title="Learn & Help"
+      />
+
       {/* Notification Messages */}
       <ToastMessage
         alertData={alertData}
@@ -345,8 +367,10 @@ export default function DemoVirtual() {
         gameTeam={userInfo?.gameTeam}
         userAccessiblePageIds={userAccessiblePageIds}
       />
+
       {/* Footer */}
       <SimFooter />
+
 
     </Box>
   );
