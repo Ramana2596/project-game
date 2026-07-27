@@ -35,6 +35,7 @@ export default function LeapDialog({
 }) {
 
   const {
+    stageInfo,
     loading,
     error,
     grouped,
@@ -49,8 +50,8 @@ export default function LeapDialog({
     selectedType === "ALL"
       ? grouped
       : {
-          [selectedType]: grouped[selectedType] || [],
-        }
+        [selectedType]: grouped[selectedType] || [],
+      }
   ), [grouped, selectedType]);
 
   // Check whether content exists
@@ -77,8 +78,8 @@ export default function LeapDialog({
       {/* LEAP Header */}
       <LeapHeader
         title={title}
-        stageName="Company Profile"
-        stageDescription="Understand your company before making business decisions."
+        stageName={stageInfo?.stageName || ""}
+        stageDescription={stageInfo?.stagePurpose || ""}
         onClose={onClose}
       />
 
