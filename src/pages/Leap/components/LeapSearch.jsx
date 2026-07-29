@@ -1,5 +1,5 @@
 // ============================================================
-// File : LeapToolbar.jsx
+// File : LeapSearch.jsx
 // Purpose : Search Tool bar to Display LEAP content
 // SEO    : LEAP Toolbar, Learn Help Toolbar, Section Filter
 // ============================================================
@@ -22,7 +22,7 @@ import { getContentType } from "../constants/leapContentTypes";
 // Component
 // ============================================================
 
-export default function LeapToolbar({
+export default function LeapSearch({
   selectedType,
   availableTypes,
   onTypeChange,
@@ -130,7 +130,7 @@ export default function LeapToolbar({
 // Component Props
 // ============================================================
 
-LeapToolbar.propTypes = {
+LeapSearch.propTypes = {
   selectedType: PropTypes.string.isRequired,
   availableTypes: PropTypes.arrayOf(
     PropTypes.string
