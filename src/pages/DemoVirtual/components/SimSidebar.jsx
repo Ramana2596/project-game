@@ -1,4 +1,7 @@
-// Component: SimSidebar | Module: OMTP Simulation | Purpose: Display the right-side information panel
+// Component: SimSidebar 
+// Module: OMTP Simulation 
+// Purpose: Display the right-side information panel
+
 import React from "react";
 import PropTypes from "prop-types";
 import { Stack } from "@mui/material";

@@ -6,20 +6,10 @@ import { Grid } from "@mui/material";
 export default function SimContent({ leftContent, rightContent }) {
   return (
     <Grid container spacing={3} alignItems="flex-start">
-      <Grid item xs={12} lg={8.5}>
+      <Grid item xs={12} lg={8}>
         {leftContent}
       </Grid>
-      <Grid
-        item
-        xs={12}
-        lg={3.5}
-        sx={{
-          mt: {
-            xs: 0,
-            lg: -9.5,
-          },
-        }}
-      >
+      <Grid item xs={12} lg={4}>
         {rightContent}
       </Grid>
     </Grid>

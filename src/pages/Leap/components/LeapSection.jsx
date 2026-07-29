@@ -32,7 +32,6 @@ export default function LeapSection({
 
   // Get content type metadata
   const config = getContentType(infoType);
-
   // Get icon component
   const Icon = config.icon;
 
@@ -41,29 +40,32 @@ export default function LeapSection({
 
       {/* Section heading */}
       {showHeading && (
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ mb: 1 }}>
 
           {/* Heading layout */}
           <Stack
             direction="row"
             spacing={1}
             alignItems="center"
-            sx={{ mb: 1 }}
+            sx={{ mb: 0.5 }}
           >
 
             {/* Section icon */}
-            <Icon
-              sx={{
-                fontSize: 24,
-                color: config.color,
-              }}
-            />
+            {Icon && (
+              <Icon
+                sx={{
+                  fontSize: 20,
+                  color: config.color,
+                }}
+              />
+            )}
 
             {/* Section title */}
             <Typography
               sx={{
                 ...semanticTypo.sectionTitle,
                 color: config.color,
+                fontWeight: 700
               }}
             >
               {config.title}
@@ -71,25 +73,19 @@ export default function LeapSection({
 
           </Stack>
 
-          {/* Section divider */}
-          <Divider
-            sx={{
-              borderColor: colors.border,
-            }}
-          />
-
         </Box>
       )}
 
       {/* Section items - single card, bullet list */}
       <Box
         sx={{
-          borderLeft: `4px solid ${config.color}`,
+          borderLeft: `3px solid ${config.color}`,
           borderRadius: 2,
           bgcolor: colors.backgroundPaper,
-          boxShadow: 1,
-          px: 2.5,
-          py: 2,
+          boxShadow: 0,
+          border: `1px solid ${colors.border}`,
+          px: 2,
+          py: 1.5,
         }}
       >
         <Stack spacing={1.25}>

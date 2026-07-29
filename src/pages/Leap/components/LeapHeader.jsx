@@ -1,37 +1,34 @@
 // ============================================================
-// LEAP V1.1
+// LEAP V1.3
 // File : LeapHeader.jsx
-// Purpose : Display premium LEAP dialog header with stage information
-// SEO    : LEAP Header, Learn Help Header, Stage Header
+// Purpose : Compact header for LEAP side panel
 // ============================================================
 
 import React from "react";
 import PropTypes from "prop-types";
+
 import {
   Box,
   Chip,
-  IconButton,
   Stack,
-  Tooltip,
   Typography,
 } from "@mui/material";
-import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
-import CloseIcon from "@mui/icons-material/Close";
-import { colors, semanticTypo } from "../../../ux/styles";
 
-// ============================================================
-// Component
+import {
+  colors,
+  semanticTypo,
+  buttonStyle,
+} from "../../../ux/styles";
+
 // ============================================================
 
 export default function LeapHeader({
   title,
   stageName,
-  stageDescription,
-  stageIcon,
-  onClose,
+  infoType,
+  icon: Icon,
+  onBack,
 }) {
-
-  const Icon = stageIcon || <MenuBookOutlinedIcon fontSize="medium" />;
 
   return (
     <Box
@@ -40,11 +37,9 @@ export default function LeapHeader({
         top: 0,
         zIndex: 20,
         bgcolor: colors.backgroundPaper,
-        borderBottom: `1px solid ${colors.border}`,
       }}
     >
-
-      {/* Top accent */}
+      {/* Purple Accent */}
       <Box
         sx={{
           height: 4,
@@ -52,50 +47,36 @@ export default function LeapHeader({
         }}
       />
 
-      {/* Header */}
       <Box
         sx={{
-          px: 3,
-          py: 2.5,
+          px: 2,
+          py: 2,
         }}
       >
-
-        {/* Header layout */}
         <Stack
           direction="row"
           justifyContent="space-between"
           alignItems="flex-start"
-          spacing={2}
         >
 
-          {/* Header content */}
+          {/* Left */}
           <Stack
             direction="row"
-            spacing={2}
+            spacing={1.5}
             sx={{ flex: 1 }}
           >
+            {Icon && (
+              <Icon
+                sx={{
+                  mt: 0.25,
+                  color: colors.primary,
+                  fontSize: 28,
+                }}
+              />
+            )}
 
-            {/* Stage icon */}
-            <Box
-              sx={{
-                width: 54,
-                height: 54,
-                borderRadius: "50%",
-                bgcolor: colors.primaryLight,
-                color: colors.primary,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              {Icon}
-            </Box>
+            <Box>
 
-            {/* Text content */}
-            <Box sx={{ flex: 1 }}>
-
-              {/* Dialog title */}
               <Typography
                 sx={{
                   ...semanticTypo.overline,
@@ -108,48 +89,45 @@ export default function LeapHeader({
                 {title}
               </Typography>
 
-              {/* Stage name */}
-              <Typography
-                sx={{
-                  ...semanticTypo.pageH3,
-                  mt: 0.25,
-                }}
-              >
-                {stageName}
-              </Typography>
+              {!!stageName && (
+                <Typography
+                  sx={{
+                    ...semanticTypo.cardH5,
+                    mt: 0.25,
+                  }}
+                >
+                  {stageName}
+                </Typography>
+              )}
 
-              {/* Stage description */}
-              {!!stageDescription && (
+              {!!infoType && (
                 <Typography
                   sx={{
                     ...semanticTypo.bodyMedium,
                     color: colors.textSecondary,
-                    mt: 0.75,
-                    maxWidth: "90%",
-                    lineHeight: 1.6,
+                    mt: 0.4,
+                    fontWeight: 600,
                   }}
                 >
-                  {stageDescription}
+                  {infoType}
                 </Typography>
               )}
-
-
 
             </Box>
 
           </Stack>
 
-          {/* Close button */}
-          <Tooltip title="Close">
-            <IconButton
-              onClick={onClose}
+          {!!onBack && (
+            <Chip
+              label="Back"
+              clickable
+              onClick={onBack}
               sx={{
-                mt: -0.5,
+                ...buttonStyle.outlinedSmall,
+                minWidth: 72,
               }}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Tooltip>
+            />
+          )}
 
         </Stack>
 
@@ -160,24 +138,18 @@ export default function LeapHeader({
 }
 
 // ============================================================
-// Component Props
-// ============================================================
 
 LeapHeader.propTypes = {
   title: PropTypes.string,
   stageName: PropTypes.string,
-  stageDescription: PropTypes.string,
-  stageIcon: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
+  infoType: PropTypes.string,
+  icon: PropTypes.elementType,
+  onBack: PropTypes.func,
 };
-
-// ============================================================
-// Default Props
-// ============================================================
 
 LeapHeader.defaultProps = {
   title: "Learn & Help",
   stageName: "",
-  stageDescription: "",
-  stageIcon: null,
+  infoType: "",
+  onBack: null,
 };

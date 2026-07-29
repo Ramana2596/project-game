@@ -1,7 +1,6 @@
 // ============================================================
-// LEAP V1.1
 // File : LeapToolbar.jsx
-// Purpose : Display premium LEAP content filter toolbar
+// Purpose : Search Tool bar to Display LEAP content
 // SEO    : LEAP Toolbar, Learn Help Toolbar, Section Filter
 // ============================================================
 

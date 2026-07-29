@@ -1,7 +1,6 @@
 // ============================================================
 // StageShow.jsx
-// OpsMgt UXLab V2.0
-// High-Legibility Enterprise Stage Display Card
+// Stage Display Card
 // ============================================================
 
 import React from "react";
@@ -45,7 +44,7 @@ export default function StageShow({
   handleNextMonth,
   isLoading,
 }) {
-  
+
   const isCompleted = Stage.status === "COMPLETED" || Stage.status === "FINISHED";
   const isActive = Stage.status === "ACTIVE";
 
@@ -60,12 +59,37 @@ export default function StageShow({
       sx={{
         ...cardStyle.primary,
         position: "relative",
-        borderColor: isActive ? colors.primary : colors.border,
-        boxShadow: isActive 
-          ? `0 8px 24px ${colors.primary}2E` 
+
+        background: isActive
+          ? "linear-gradient(90deg,#D9C8FF 0%,#E8DBFF 18%,#F8F5FF 35%,#FFFFFF 55%,#FFFFFF 100%)"
+          : colors.paper,
+
+        border: isActive
+          ? `2px solid ${colors.primaryLight}`
+          : `1px solid ${colors.border}`,
+
+        boxShadow: isActive
+          ? `0 10px 28px ${colors.primary}30`
           : cardStyle.primary.boxShadow,
+
+        transform: isActive ? "scale(1.01)" : "none",
+        transition: "all .25s ease",
       }}
     >
+
+      {isActive && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 4,
+            background: colors.heroGradient,
+          }}
+        />
+      )}
+
       {/* Accent Indicator Bar */}
       <Box
         sx={{
@@ -114,9 +138,9 @@ export default function StageShow({
         alignItems="center"
         justifyContent="space-between"
         sx={{
-          py: 2.5,
-          pl: 3.5,
-          pr: 3,
+          py: 1.75,
+          pl: 3,
+          pr: 2.5,
         }}
       >
         {/* Interactive Click Area */}
@@ -136,12 +160,12 @@ export default function StageShow({
             },
           }}
         >
-          <Stack direction="row" spacing={3} alignItems="center">
+          <Stack direction="row" spacing={2} alignItems="center">
             {/* Stage Icon Circle */}
             <Box
               sx={{
-                width: 48,
-                height: 48,
+                width: 42,
+                height: 42,
                 borderRadius: "50%",
                 display: "flex",
                 justifyContent: "center",
@@ -152,7 +176,7 @@ export default function StageShow({
                   : colors.disabledBackground,
                 color: isActive || isCompleted ? colors.white : colors.muted,
                 boxShadow: isActive ? `0 4px 14px ${colors.primary}40` : "none",
-                "& svg": { fontSize: 26 },
+                "& svg": { fontSize: 22 },
               }}
             >
               {Stage.icon}
@@ -161,7 +185,7 @@ export default function StageShow({
             {/* Stage Number */}
             <Typography
               sx={{
-                fontSize: "1.75rem",
+                fontSize: "1.55rem",
                 fontWeight: 800,
                 color: statusColor,
                 minWidth: 32,
@@ -175,7 +199,7 @@ export default function StageShow({
             <Box sx={{ pr: 2 }}>
               <Typography
                 sx={{
-                  fontSize: "1.25rem",
+                  fontSize: "1.15rem",
                   fontWeight: 700,
                   color: colors.title,
                   lineHeight: 1.3,
@@ -187,7 +211,7 @@ export default function StageShow({
 
               <Typography
                 sx={{
-                  fontSize: "0.95rem",
+                  fontSize: "0.90rem",
                   color: Stage.toDo ? colors.body : colors.muted,
                   lineHeight: 1.4,
                 }}
