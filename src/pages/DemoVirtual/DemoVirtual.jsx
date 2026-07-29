@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   CircularProgress,
+  Stack,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -10,30 +11,24 @@ import { useUser } from "../../core/access/userContext";
 import ToastMessage from "../../components/ToastMessage";
 import { colors } from "../../ux/styles";
 
+
 import { useSimProgress } from "./hooks/useSimProgress";
 import { useSimUi } from "./hooks/useSimUi";
 import StageProp from "./components/StageProp";
 import ReportDrawer from "./components/ReportDrawer";
 
 import SimHeader from "./components/SimHeader";
+import SimProgressPanel from "./components/SimProgressPanel";
 import SimContent from "./components/SimContent";
 import SimSidebar from "./components/SimSidebar";
 import SimFooter from "./components/SimFooter";
-import SimulationStatusCard from "./cards/SimulationStatusCard";
-import HelpCenterCard from "./cards/HelpCenterCard";
-import StageLegendCard from "./cards/StageLegendCard";
-import HelpBannerCard from "./cards/HelpBannerCard";
-import ChecklistDialog from "./dialogs/ChecklistDialog";
-import RulesDialog from "./dialogs/RulesDialog";
-import LeapDialog from "../Leap/components/LeapDialog";
+import TeamBadge from "./cards/TeamBadge";
+// import StageLegendCompactCard from "./cards/StageLegendCompactCard";
+import { StagesMaster } from "./stagesMaster";
+import { STAGE_TITLE_MAP,} from "./stagesMaster";
 
-import {
-  getHelpCenterActions,
-  HELP_ACTION_KEYS,
-} from "./constants/helpCenterActions";
-import {
-  STAGE_TITLE_MAP,
-} from "./stagesMaster";
+import LeapCenterCard from "../Leap/components/LeapCenterCard";
+import useLeap from "../Leap/hooks/useLeap";
 
 
 export default function DemoVirtual() {
@@ -119,7 +114,6 @@ export default function DemoVirtual() {
   // ----------------------------------------------------------
   const [checklistOpen, setChecklistOpen] = useState(false);
   const [rulesOpen, setRulesOpen] = useState(false);
-  const [leapOpen, setLeapOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeStageNo, setActiveStageNo] = useState(null);
   const [loadingStageNo, setLoadingStageNo] = useState(null);
@@ -160,36 +154,22 @@ export default function DemoVirtual() {
         ? `Complete ${currentStageName} to proceed`
         : "Proceed to the next simulation period";
 
-  const helpCenterActions = getHelpCenterActions({
-    isSimulationEnd: progressData?.Is_Simulation_End ?? false,
-    currentStageNo: currentStageNumber,
-  });
+  // LEAP Contents
+  const stageInfo =
+    StagesMaster.find(
+      s => s.stageNo === currentStageNumber
+    );
+
+  const {
+    grouped,
+    availableTypes,
+    loading: leapLoading,
+    error: leapError,
+  } = useLeap(currentStageNumber);
 
   // ----------------------------------------------------------
   // 6. Event Handlers
   // ----------------------------------------------------------
-  // Handle Help Action 
-  const handleHelpActionClick = (key) => {
-    switch (key) {
-      case HELP_ACTION_KEYS.CHECKLIST:
-        setChecklistOpen(true);
-        break;
-      case HELP_ACTION_KEYS.RULES:
-        setRulesOpen(true);
-        break;
-      case HELP_ACTION_KEYS.REPORT_GUIDE:
-        // TODO
-        break;
-      case HELP_ACTION_KEYS.HELPLINE_CONTACT:
-        // TODO
-        break;
-      case HELP_ACTION_KEYS.GENERAL_HELP:
-        handleLeapOpen();
-        break;
-      default:
-        break;
-    }
-  };
 
   // Handle Open Report
   const handleOpenReport = (stageNo) => {
@@ -256,18 +236,6 @@ export default function DemoVirtual() {
     );
   }
 
-  // handle LEAP Learn & Help
-
-  const handleLeapOpen = () => {
-    setLeapOpen(true);
-  };
-
-
-  const handleLeapClose = () => {
-    setLeapOpen(false);
-  };
-
-
   // ----------------------------------------------------------
   // 7. Render Page
   // ----------------------------------------------------------
@@ -280,74 +248,62 @@ export default function DemoVirtual() {
       }}
     >
 
-      {/* Enterprise Header */}
-      <SimHeader
-        userInfo={userInfo}
+{/* Enterprise Header */}
+<SimHeader
+  title="Business Simulation Control Centre"
+  userInfo={userInfo}
+  handleExit={handleExit}
+/>
+
+{/* Main Simulation Workspace */}
+<SimContent
+  leftContent={
+    <>
+      <SimProgressPanel
         progressData={progressData}
         progressPercent={progressPercent}
-        teamInitial={teamInitial}
-        handleExit={handleExit}
       />
-
-      {/* Main Simulation Workspace */}
-      <SimContent
-        leftContent={
-          <StageProp
-            stageUI={stageUI}
-            loadingStageNo={loadingStageNo}
-            actionLoading={actionLoading}
-            effectiveHalt={effectiveHalt}
-            isSimulationEnd={progressData?.Is_Simulation_End ?? false}
-            haltStageNo={haltStageNo}
-            handleStageClick={handleStageClick}
-            handleOpenReport={handleOpenReport}
-            handleNextMonth={handleNextMonth}
-            nextActionMessage={nextActionMessage}
-            progressData={progressData}
-          />
-        }
-        rightContent={
-          <SimSidebar
-            simulationStatus={
-              <SimulationStatusCard
-                progressData={progressData}
-                nextActionMessage={nextActionMessage}
-              />
-            }
-            helpCenter={
-              <HelpCenterCard
-                helpCenterActions={helpCenterActions}
-                onHelpActionClick={handleHelpActionClick}
-              />
-            }
-            stageLegend={
-              <StageLegendCard />
-            }
-            helpBanner={
-              <HelpBannerCard />
-            }
-          />
-        }
+      <StageProp
+        stageUI={stageUI}
+        loadingStageNo={loadingStageNo}
+        actionLoading={actionLoading}
+        effectiveHalt={effectiveHalt}
+        isSimulationEnd={progressData?.Is_Simulation_End ?? false}
+        haltStageNo={haltStageNo}
+        handleStageClick={handleStageClick}
+        handleOpenReport={handleOpenReport}
+        handleNextMonth={handleNextMonth}
+        nextActionMessage={nextActionMessage}
+        progressData={progressData}
       />
+    </>
+  }
 
+ rightContent={
+  <Stack spacing={2.5}>
+    <TeamBadge
+      batch={userInfo?.gameBatch}
+      team={userInfo?.gameTeam}
+      status={progressData?.Is_Simulation_End ? "Inactive" : "Active"}
+    />
+
+    <SimSidebar
+      helpCenter={
+        <LeapCenterCard
+          stageNo={currentStageNumber}
+          stageTitle={stageInfo?.label}
+          stagePurpose={stageInfo?.toDo}
+          grouped={grouped}
+          availableTypes={availableTypes}
+          loading={leapLoading}
+          error={leapError}
+        />
+      }
+    />
+  </Stack>
+}
+/>
       {/* Dialogs */}
-      <ChecklistDialog
-        open={checklistOpen}
-        onClose={() => setChecklistOpen(false)}
-      />
-
-      <RulesDialog
-        open={rulesOpen}
-        onClose={() => setRulesOpen(false)}
-        currentStageName={currentStageName}
-      />
-
-      <LeapDialog
-        open={leapOpen}
-        onClose={handleLeapClose}
-        stageId={currentStageNumber}
-        title="Learn & Help"
-      />
 
       {/* Notification Messages */}
       <ToastMessage
