@@ -1,5 +1,5 @@
 // ============================================================
-// Component : LeapCenterCard
+// Component : LeapCenter
 // Module    : Demo Virtual
 // Purpose   : Display LEAP learning content in right-side panel
 // ============================================================
@@ -26,18 +26,25 @@ import {
 
 import LeapHeader from "./LeapHeader";
 import LeapSection from "./LeapSection";
+import useLeap from "../hooks/useLeap"; 
 
 // ============================================================
 
-export default function LeapCenterCard({
+export default function LeapCenter({
   stageNo,
   stageTitle,
   stagePurpose,
-  grouped,
-  availableTypes,
-  loading,
-  error,
 }) {
+
+  // ----------------------------------------------------------
+  // Load LEAP content directly here
+  // ----------------------------------------------------------
+  const {
+    grouped,
+    availableTypes,
+    loading,
+    error,
+  } = useLeap(stageNo);
 
   // ----------------------------------------------------------
   // Selected LEAP Topic
@@ -69,7 +76,6 @@ export default function LeapCenterCard({
             : null
         }
       />
-
 
       {/* -------------------------------------------------- */}
       {/* Loading */}
@@ -116,10 +122,8 @@ export default function LeapCenterCard({
             </Typography>
 
             <Stack
-              direction="row"
+              direction="column"
               spacing={1}
-              flexWrap="wrap"
-              useFlexGap
             >
               {availableTypes.map(type => (
                 <Chip
@@ -129,6 +133,7 @@ export default function LeapCenterCard({
                   color="primary"
                   variant="outlined"
                   onClick={() => setSelectedType(type)}
+                  sx={{ justifyContent: "flex-start", width: "fit-content" }}
                 />
               ))}
             </Stack>
@@ -147,11 +152,11 @@ export default function LeapCenterCard({
 
           <Stack spacing={2}>
 
-          <LeapSection
-            infoType={selectedType}
-            items={grouped[selectedType]}
-            showHeading={true}
-          />
+            <LeapSection
+              infoType={selectedType}
+              items={grouped[selectedType]}
+              showHeading={true}
+            />
 
           </Stack>
 
@@ -196,12 +201,8 @@ export default function LeapCenterCard({
 
 // ============================================================
 
-LeapCenterCard.propTypes = {
-  stageNo: PropTypes.number,
+LeapCenter.propTypes = {
+  stageNo: PropTypes.number.isRequired,
   stageTitle: PropTypes.string,
   stagePurpose: PropTypes.string,
-  grouped: PropTypes.object.isRequired,
-  availableTypes: PropTypes.array.isRequired,
-  loading: PropTypes.bool,
-  error: PropTypes.string,
 };

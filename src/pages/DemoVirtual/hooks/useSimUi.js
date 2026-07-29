@@ -20,18 +20,24 @@ export function useSimUi(
   const completedStage = progressData?.Completed_Stage_No ?? 0;
   const isFinished =
     (progressData?.Completed_Period_No ?? 0) ===
-      (progressData?.Total_Period ?? 1) &&
+    (progressData?.Total_Period ?? 1) &&
     completedStage >= FINAL_STAGE_NO;
 
   return useMemo(() => {
     return StagesMaster.map((s) => {
       // Stage Status
-      const status =
-        s.stageNo === FINAL_STAGE_NO && isFinished
-          ? "FINISHED"
-          : s.stageNo === currentStage
-          ? "ACTIVE"
-          : s.stageNo < currentStage
+const status =
+  s.stageNo === FINAL_STAGE_NO && isFinished
+    ? "FINISHED"
+    : effectiveHalt
+      ? s.stageNo === completedStage
+        ? "ON_HALT"
+        : s.stageNo < completedStage
+          ? "COMPLETED"
+          : "LOCKED"
+      : s.stageNo === currentStage
+        ? "ACTIVE"
+        : s.stageNo < currentStage
           ? "COMPLETED"
           : "LOCKED";
 
@@ -46,48 +52,56 @@ export function useSimUi(
         !names.length
           ? UI_STRINGS.NO_REPORTS || "No Reports"
           : names.length > 3
-          ? names.slice(0, 3).join(", ") + " ..."
-          : names.join(", ");
+            ? names.slice(0, 3).join(", ") + " ..."
+            : names.join(", ");
 
       // Status Colours
       const statusColor =
         status === "ACTIVE"
           ? colors.primary
           : status === "COMPLETED"
-          ? colors.success
-          : status === "FINISHED"
-          ? colors.success
-          : "#B0BEC5";
+            ? colors.success
+            : status === "FINISHED"
+              ? colors.success
+              : status === "ON_HALT"
+                ? colors.warning
+                : "#B0BEC5";
 
       // Background
       const background =
         status === "ACTIVE"
           ? colors.heroGradient
           : status === "COMPLETED"
-          ? "linear-gradient(180deg,#FFFFFF 0%,#F8FFF9 100%)"
-          : status === "FINISHED"
-          ? "linear-gradient(180deg,#FFFFFF 0%,#F4FFF4 100%)"
-          : colors.paper;
+            ? "linear-gradient(180deg,#FFFFFF 0%,#F8FFF9 100%)"
+            : status === "FINISHED"
+              ? "linear-gradient(180deg,#FFFFFF 0%,#F4FFF4 100%)"
+              : status === "ON_HALT"
+                ? "linear-gradient(180deg,#FFFFFF 0%,#FFF8E1 100%)"
+                : colors.paper;
 
       // Shadow
       const shadow =
         status === "ACTIVE"
           ? `0 16px 36px ${colors.primary}45`
           : status === "COMPLETED"
-          ? "0 8px 22px rgba(46,125,50,.18)"
-          : status === "FINISHED"
-          ? "0 8px 22px rgba(46,125,50,.22)"
-          : `0 4px 14px ${colors.primary}14`;
+            ? "0 8px 22px rgba(46,125,50,.18)"
+            : status === "FINISHED"
+              ? "0 8px 22px rgba(46,125,50,.22)"
+              : status === "ON_HALT"
+                ? "0 8px 22px rgba(237,108,2,.22)"
+                : `0 4px 14px ${colors.primary}14`;
 
       // Border
       const borderColor =
         status === "ACTIVE"
           ? colors.primary
           : status === "COMPLETED"
-          ? "#C8E6C9"
-          : status === "FINISHED"
-          ? "#A5D6A7"
-          : colors.border;
+            ? "#C8E6C9"
+            : status === "FINISHED"
+              ? "#A5D6A7"
+              : status === "ON_HALT"
+                ? colors.warning
+                : colors.border;
 
       return {
         ...s,
@@ -96,10 +110,9 @@ export function useSimUi(
         background,
         shadow,
         borderColor,
-        isActive: status === "ACTIVE" && !effectiveHalt && !isSimulationEnd,
+        isActive: status === "ACTIVE",
         canViewReports:
-          (status === "COMPLETED" || status === "FINISHED" || isPeriodClosed) &&
-          status !== "ACTIVE",
+          status === "COMPLETED" || status === "FINISHED" || status === "ON_HALT",
         tooltipReports,
         // Stage Button
         buttonSx: {

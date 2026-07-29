@@ -47,12 +47,15 @@ export default function StageShow({
 
   const isCompleted = Stage.status === "COMPLETED" || Stage.status === "FINISHED";
   const isActive = Stage.status === "ACTIVE";
+  const isOnHalt = Stage.status === "ON_HALT";
 
   const statusColor = isActive
     ? colors.primary
     : isCompleted
       ? colors.success
-      : colors.muted;
+      : isOnHalt
+        ? colors.warning
+        : colors.muted;
 
   return (
     <Box
@@ -238,13 +241,15 @@ export default function StageShow({
                 ? colors.primary
                 : isCompleted
                   ? colors.success
-                  : colors.muted,
+                    : colors.muted,
               bgcolor: isActive
                 ? colors.selected
                 : isCompleted
                   ? "#E8F5E9"
-                  : colors.panel,
-              border: `1px solid ${isActive ? colors.primaryLight : "transparent"}`,
+                    : colors.panel,
+              border: `1px solid ${
+                isActive ? colors.primaryLight : isOnHalt ? colors.warning : "transparent"
+              }`,
             }}
           />
 
@@ -278,7 +283,7 @@ export default function StageShow({
           </Tooltip>
 
           {/* Next Month Button */}
-          {Stage.stageNo === haltStageNo && effectiveHalt && !isSimulationEnd && (
+          {isOnHalt && !isSimulationEnd && (
             <Tooltip title={UI_STRINGS.NEXT_MONTH_TOOLTIP} arrow>
               <span>
                 <IconButton
@@ -288,6 +293,17 @@ export default function StageShow({
                     height: 42,
                     bgcolor: colors.warning,
                     color: colors.white,
+                    animation: "nextMonthPulse 0.8s ease-in-out infinite",
+                    "@keyframes nextMonthPulse": {
+                      "0%, 100%": {
+                        transform: "scale(1)",
+                        boxShadow: `0 0 0 0 ${colors.warning}80`,
+                      },
+                      "50%": {
+                        transform: "scale(1.15)",
+                        boxShadow: `0 0 0 8px ${colors.warning}00`,
+                      },
+                    },
                     "&:hover": {
                       bgcolor: "#D97706",
                     },
@@ -312,8 +328,10 @@ export default function StageShow({
                 ? colors.primary
                 : isCompleted
                   ? colors.success
-                  : colors.panel,
-              color: isActive || isCompleted ? colors.white : colors.muted,
+                  : isOnHalt
+                    ? colors.warning
+                    : colors.panel,
+              color: isActive || isCompleted || isOnHalt ? colors.white : colors.muted,
             }}
           >
             {isActive && <PlayArrow sx={{ fontSize: 24 }} />}

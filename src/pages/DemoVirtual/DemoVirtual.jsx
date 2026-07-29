@@ -23,12 +23,10 @@ import SimContent from "./components/SimContent";
 import SimSidebar from "./components/SimSidebar";
 import SimFooter from "./components/SimFooter";
 import TeamBadge from "./cards/TeamBadge";
-// import StageLegendCompactCard from "./cards/StageLegendCompactCard";
 import { StagesMaster } from "./stagesMaster";
-import { STAGE_TITLE_MAP,} from "./stagesMaster";
+import { STAGE_TITLE_MAP, } from "./stagesMaster";
 
-import LeapCenterCard from "../Leap/components/LeapCenterCard";
-import useLeap from "../Leap/hooks/useLeap";
+import LeapCenter from "../Leap/components/LeapCenter";
 
 
 export default function DemoVirtual() {
@@ -58,7 +56,7 @@ export default function DemoVirtual() {
   const stageUI = useSimUi(
     progressData,
     [],
-    false,
+    effectiveHalt,
     progressData?.Is_Period_Closed ?? false,
     progressData?.Is_Simulation_End ?? false
   );
@@ -132,14 +130,12 @@ export default function DemoVirtual() {
     0;
 
   const activeStage = Array.isArray(stageUI)
-    ? stageUI.find((s) => s.isActive || s.isCurrent) ||
-    stageUI.find((s) => !s.isCompleted)
+    ? stageUI.find((s) => s.status === "ACTIVE")
     : null;
 
-  const currentStageNumber =
-    activeStage?.stageNo ||
-    progressData?.Current_Stage_No ||
-    haltStageNo;
+  const currentStageNumber = effectiveHalt
+    ? haltStageNo
+    : activeStage?.stageNo ?? progressData?.Current_Stage_No ?? haltStageNo;
 
   const currentStageName = STAGE_TITLE_MAP[currentStageNumber]
     ? `Stage ${currentStageNumber} (${STAGE_TITLE_MAP[currentStageNumber]})`
@@ -160,12 +156,6 @@ export default function DemoVirtual() {
       s => s.stageNo === currentStageNumber
     );
 
-  const {
-    grouped,
-    availableTypes,
-    loading: leapLoading,
-    error: leapError,
-  } = useLeap(currentStageNumber);
 
   // ----------------------------------------------------------
   // 6. Event Handlers
@@ -248,61 +238,57 @@ export default function DemoVirtual() {
       }}
     >
 
-{/* Enterprise Header */}
-<SimHeader
-  title="Business Simulation Control Centre"
-  userInfo={userInfo}
-  handleExit={handleExit}
-/>
-
-{/* Main Simulation Workspace */}
-<SimContent
-  leftContent={
-    <>
-      <SimProgressPanel
-        progressData={progressData}
-        progressPercent={progressPercent}
+      {/* Enterprise Header */}
+      <SimHeader
+        title="Business Simulation Control Centre"
+        userInfo={userInfo}
+        handleExit={handleExit}
       />
-      <StageProp
-        stageUI={stageUI}
-        loadingStageNo={loadingStageNo}
-        actionLoading={actionLoading}
-        effectiveHalt={effectiveHalt}
-        isSimulationEnd={progressData?.Is_Simulation_End ?? false}
-        haltStageNo={haltStageNo}
-        handleStageClick={handleStageClick}
-        handleOpenReport={handleOpenReport}
-        handleNextMonth={handleNextMonth}
-        nextActionMessage={nextActionMessage}
-        progressData={progressData}
+
+      {/* Main Simulation Workspace */}
+      <SimContent
+        leftContent={
+          <>
+            <SimProgressPanel
+              progressData={progressData}
+              progressPercent={progressPercent}
+            />
+            <StageProp
+              stageUI={stageUI}
+              loadingStageNo={loadingStageNo}
+              actionLoading={actionLoading}
+              effectiveHalt={effectiveHalt}
+              isSimulationEnd={progressData?.Is_Simulation_End ?? false}
+              haltStageNo={haltStageNo}
+              handleStageClick={handleStageClick}
+              handleOpenReport={handleOpenReport}
+              handleNextMonth={handleNextMonth}
+              nextActionMessage={nextActionMessage}
+              progressData={progressData}
+            />
+          </>
+        }
+
+        rightContent={
+          <Stack spacing={2.5}>
+            <TeamBadge
+              batch={userInfo?.gameBatch}
+              team={userInfo?.gameTeam}
+              status={progressData?.Is_Simulation_End ? "Finished" : "In Progress"}
+            />
+
+            <SimSidebar
+              helpCenter={
+                <LeapCenter
+                  stageNo={currentStageNumber}
+                  stageTitle={stageInfo?.label}
+                  stagePurpose={stageInfo?.toDo}
+                />
+              }
+            />
+          </Stack>
+        }
       />
-    </>
-  }
-
- rightContent={
-  <Stack spacing={2.5}>
-    <TeamBadge
-      batch={userInfo?.gameBatch}
-      team={userInfo?.gameTeam}
-      status={progressData?.Is_Simulation_End ? "Inactive" : "Active"}
-    />
-
-    <SimSidebar
-      helpCenter={
-        <LeapCenterCard
-          stageNo={currentStageNumber}
-          stageTitle={stageInfo?.label}
-          stagePurpose={stageInfo?.toDo}
-          grouped={grouped}
-          availableTypes={availableTypes}
-          loading={leapLoading}
-          error={leapError}
-        />
-      }
-    />
-  </Stack>
-}
-/>
       {/* Dialogs */}
 
       {/* Notification Messages */}

@@ -39,85 +39,45 @@ export default function LeapHeader({
         bgcolor: colors.backgroundPaper,
       }}
     >
-      {/* Purple Accent */}
-      <Box
-        sx={{
-          height: 4,
-          bgcolor: colors.primary,
-        }}
-      />
-
+      {/* Title row — above purple bar */}
       <Box
         sx={{
           px: 2,
-          py: 2,
+          pt: 2,
+          pb: 1.5,
+          textAlign: "center",
         }}
       >
         <Stack
           direction="row"
-          justifyContent="space-between"
-          alignItems="flex-start"
+          justifyContent="center"
+          alignItems="center"
+          spacing={1}
         >
+          {Icon && (
+            <Icon
+              sx={{
+                color: colors.primary,
+                fontSize: 26,
+              }}
+            />
+          )}
 
-          {/* Left */}
-          <Stack
-            direction="row"
-            spacing={1.5}
-            sx={{ flex: 1 }}
+          <Typography
+            sx={{
+              ...semanticTypo.overline,
+              color: colors.primary,
+              fontWeight: 700,
+              letterSpacing: 1,
+              textTransform: "uppercase",
+            }}
           >
-            {Icon && (
-              <Icon
-                sx={{
-                  mt: 0.25,
-                  color: colors.primary,
-                  fontSize: 28,
-                }}
-              />
-            )}
+            {title}
+          </Typography>
+        </Stack>
 
-            <Box>
-
-              <Typography
-                sx={{
-                  ...semanticTypo.overline,
-                  color: colors.primary,
-                  fontWeight: 700,
-                  letterSpacing: 1,
-                  textTransform: "uppercase",
-                }}
-              >
-                {title}
-              </Typography>
-
-              {!!stageName && (
-                <Typography
-                  sx={{
-                    ...semanticTypo.cardH5,
-                    mt: 0.25,
-                  }}
-                >
-                  {stageName}
-                </Typography>
-              )}
-
-              {!!infoType && (
-                <Typography
-                  sx={{
-                    ...semanticTypo.bodyMedium,
-                    color: colors.textSecondary,
-                    mt: 0.4,
-                    fontWeight: 600,
-                  }}
-                >
-                  {infoType}
-                </Typography>
-              )}
-
-            </Box>
-
-          </Stack>
-
-          {!!onBack && (
+        {!!onBack && (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
             <Chip
               label="Back"
               clickable
@@ -127,12 +87,52 @@ export default function LeapHeader({
                 minWidth: 72,
               }}
             />
-          )}
-
-        </Stack>
-
+          </Box>
+        )}
       </Box>
 
+      {/* Purple Accent */}
+      <Box
+        sx={{
+          height: 4,
+          bgcolor: colors.primary,
+        }}
+      />
+
+      {/* Stage name — below purple bar */}
+      {(!!stageName || !!infoType) && (
+        <Box
+          sx={{
+            px: 2,
+            pt: 1.5,
+            pb: 1,
+            textAlign: "center",
+          }}
+        >
+          {!!stageName && (
+            <Typography
+              sx={{
+                ...semanticTypo.cardH5,
+              }}
+            >
+              {stageName}
+            </Typography>
+          )}
+
+          {!!infoType && (
+            <Typography
+              sx={{
+                ...semanticTypo.bodyMedium,
+                color: colors.textSecondary,
+                mt: 0.4,
+                fontWeight: 600,
+              }}
+            >
+              {infoType}
+            </Typography>
+          )}
+        </Box>
+      )}
     </Box>
   );
 }
