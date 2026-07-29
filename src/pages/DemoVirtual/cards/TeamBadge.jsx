@@ -26,6 +26,7 @@ const STATUS_MAP = {
   Active: colors.success,
   Pending: colors.warning,
   Inactive: colors.muted,
+  Completed: colors.primary,
 };
 
 export default function TeamBadgeCard({
@@ -119,5 +120,5 @@ TeamBadgeCard.propTypes = {
     PropTypes.string,
   ]),
   team: PropTypes.string,
-  status: PropTypes.oneOf(["Active", "Pending", "Inactive"]),
+  status: PropTypes.oneOf(["Active", "Pending", "Inactive", "Completed"]),
 };
