@@ -138,24 +138,28 @@ import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
-import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
-import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";
 import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
-//import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
 import KeyResultBsInfo from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
-import DemoVirtual from '../pages/DemoVirtual/DemoVirtual.jsx';
 import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
-import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
-import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";
 import UiAccess from "../pages/UiAccess/UiAccess.jsx";
 import PublishMarketData from "../pages/PublishMarketData/PublishMarketData.jsx";
 import TeamAssessment from "../pages/TeamPerf/TeamAssessment.jsx";
 import BatchAssessment from "../pages/TeamPerf/BatchAssessment.jsx";
 import TeamDebrief from "../pages/TeamPerf/TeamDebrief.jsx";
 
+import SimulationCentre from "../pages/DemoVirtual/SimulationCentre.jsx"
+// Retired  import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";   // Retired
+// Retired import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";       // Retired
+import DemoVirtual from '../pages/DemoVirtual/DemoVirtual.jsx';
+//import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
+import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
+import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
+
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
+
+
 
 export const componentList = [
   {
@@ -541,15 +545,14 @@ export const componentList = [
     href: "/operationGame/operations",
     routeElement: <Operations />,
     children: [
-      {
+     {
         iconPath: appSettings,
-        id: "UI 21 272",
+        id: "UI 21 270",
         label: "Business Plan Execution",
-        path: "/simulationHub",
-        href: "/operationGame/simulationHub",
-        routeElement: <SimulationHub />
+        path: "/SimulationCentre",
+        href: "/operationGame/SimulationCentre",
+        routeElement: <SimulationCentre />
       },
-
       {
         iconPath: approvalIcon,
         id: "UI 11 030",
@@ -566,7 +569,14 @@ export const componentList = [
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
       },
-
+      {
+        iconPath: appSettings,
+        id: "UI 21 272",
+        label: "Demo",
+        path: "/demo",
+        href: "/operationGame/demo",
+        routeElement: <DemoVirtual />
+      },
     ],
   },
   {
@@ -579,27 +589,11 @@ export const componentList = [
     children: [
       {
         iconPath: appSettings,
-        id: "UI 21 271",
+        id: "UI 21 273",
         label: "Simulation Play",
         path: "/simulationPlay",
         href: "/operationGame/SimulationPlay",
         routeElement: <SimulationPlay />
-      },
-      {
-        iconPath: appSettings,
-        id: "UI 21 270",
-        label: "Demo Wizard",
-        path: "/demoWizard",
-        href: "/operationGame/DemoWizard",
-        routeElement: <DemoWizard />
-      },
-      {
-        iconPath: appSettings,
-        id: "UI 21 273",
-        label: "Demo",
-        path: "/demo",
-        href: "/operationGame/demo",
-        routeElement: <DemoVirtual />
       },
       {
         iconPath: appSettings,
