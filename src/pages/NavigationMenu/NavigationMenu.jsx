@@ -109,23 +109,25 @@ import ToastMessage from '../../components/ToastMessage.jsx';
 import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
 import AssetCatalogBatch from '../AssetCatalogBatch/AssetCatalogBatch.jsx';
 import EnrollUserDialog from '../RegisterUser/EnrollUserDialog.jsx';
-import SimulationPlay from '../SimulationPlay/SimulationPlay.jsx';
 import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
-import DemoWizard from '../SimulationPlay/DemoWizard.jsx';
 import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
-//import SimulationSuite from '../SimulationSuite/SimulationSuite.jsx';
 import KeyResultBsInfo from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
-import DemoVirtual from '../DemoVirtual/DemoVirtual.jsx';
 import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
-import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
-import SimulationHub from '../SimulationHub/SimulationHub.jsx';
 import UserRole from '../UserRole/UserRole.jsx';
 import UiAccess from '../UiAccess/UiAccess.jsx';
 import PublishMarketData from '../PublishMarketData/PublishMarketData.jsx';
 import BatchAssessment from '../TeamPerf/BatchAssessment.jsx';
 import TeamAssessment from '../TeamPerf/TeamAssessment.jsx';
 import TeamDebrief from '../TeamPerf/TeamDebrief.jsx';
+
+import SimulationCentre from '../DemoVirtual/SimulationCentre.jsx';
+// Retired import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";   // Retired
+// Retired import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";       // Retired
+import DemoVirtual from '../DemoVirtual/DemoVirtual.jsx';
+//import SimulationSuite from '../SimulationSuite/SimulationSuite.jsx';
+import SimulationPlay from '../SimulationPlay/SimulationPlay.jsx';
+import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
 
 //import FormTemplate from '../FormTemplate/FormTemplate.jsx';
 
@@ -480,21 +482,20 @@ export default function MiniDrawer() {
           <Route path='/BatchMgt' element={<BatchMgt />} />
           <Route path='/SimulationPlay' element={<SimulationPlay />} />
           <Route path='/BatchMaster' element={<BatchMstDetails />} />
-          <Route path='/demoWizard' element={<DemoWizard />} />
           <Route path='/teamPlanScreen' element={<TeamPlanScreen />} />
           <Route path='/keyResultBsInfo' element={<KeyResultBsInfo />} />
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
           <Route path='/demo' element={<DemoVirtual />} />
           <Route path='/strategyBenefit' element={<StrategyBenefit />} />
           <Route path='/resetSimulation' element={<ResetSimulation />} />
-          <Route path='/simulationHub' element={<SimulationHub />} />
           <Route path='/userRole' element={<UserRole />} />
           <Route path='/uiAccess' element={<UiAccess />} />
           <Route path='/publishMarketData' element={<PublishMarketData />} />
           <Route path='/batchAssessment' element={<BatchAssessment />} />
           <Route path='/teamAssessment' element={<TeamAssessment />} />
           <Route path='/teamDebrief' element={<TeamDebrief />} />
-          
+          <Route path='/SimulationCentre' element ={<SimulationCentre /> } />
+
           {/* <Route path='/formTemplate' element={<FormTemplate />} /> */}
         </Routes>
       </Box>

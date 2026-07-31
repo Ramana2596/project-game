@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import {
+  Box,
   Paper,
   Stack,
   Typography,
@@ -26,7 +27,7 @@ import {
 
 import LeapHeader from "./LeapHeader";
 import LeapSection from "./LeapSection";
-import useLeap from "../hooks/useLeap"; 
+import useLeap from "../hooks/useLeap";
 
 // ============================================================
 
@@ -56,9 +57,14 @@ export default function LeapCenter({
       elevation={0}
       sx={{
         ...cardStyle.primary,
-        p: 2,
+
         display: "flex",
         flexDirection: "column",
+
+        height: "100%",
+
+        p: 2,
+
       }}
     >
 
@@ -77,124 +83,131 @@ export default function LeapCenter({
         }
       />
 
-      {/* -------------------------------------------------- */}
-      {/* Loading */}
-      {/* -------------------------------------------------- */}
+      <Box
+        sx={{
+          flex: 1,
+          mt: 2,
+        }}
+      >
 
-      {loading && (
-        <Stack alignItems="center" py={4}>
-          <CircularProgress size={28} />
-        </Stack>
-      )}
+        {/* -------------------------------------------------- */}
+        {/* Loading */}
+        {/* -------------------------------------------------- */}
 
-      {/* -------------------------------------------------- */}
-      {/* Error */}
-      {/* -------------------------------------------------- */}
+        {loading && (
+          <Stack alignItems="center" py={4}>
+            <CircularProgress size={28} />
+          </Stack>
+        )}
 
-      {!loading && error && (
-        <Typography
-          color="error"
-          variant="body2"
-        >
-          {error}
-        </Typography>
-      )}
+        {/* -------------------------------------------------- */}
+        {/* Error */}
+        {/* -------------------------------------------------- */}
 
-      {/* -------------------------------------------------- */}
-      {/* Topic Selection */}
-      {/* -------------------------------------------------- */}
+        {!loading && error && (
+          <Typography
+            color="error"
+            variant="body2"
+          >
+            {error}
+          </Typography>
+        )}
 
-      {!loading &&
-        !error &&
-        selectedType === null &&
-        availableTypes.length > 0 && (
+        {/* -------------------------------------------------- */}
+        {/* Topic Selection */}
+        {/* -------------------------------------------------- */}
 
-          <Stack spacing={1}>
+        {!loading &&
+          !error &&
+          selectedType === null &&
+          availableTypes.length > 0 && (
 
-            <Typography
-              variant="subtitle2"
-              sx={{
-                fontWeight: 700,
-                color: colors.subtitle,
-              }}
-            >
-              Select a Topic
-            </Typography>
+            <Stack spacing={1}>
 
-            <Stack
-              direction="column"
-              spacing={1}
-            >
-              {availableTypes.map(type => (
-                <Chip
-                  key={type}
-                  label={type}
-                  clickable
-                  color="primary"
-                  variant="outlined"
-                  onClick={() => setSelectedType(type)}
-                  sx={{ justifyContent: "flex-start", width: "fit-content" }}
-                />
-              ))}
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  fontWeight: 700,
+                  color: colors.subtitle,
+                }}
+              >
+                Select a Topic
+              </Typography>
+
+              <Stack
+                direction="column"
+                spacing={1}
+              >
+                {availableTypes.map(type => (
+                  <Chip
+                    key={type}
+                    label={type}
+                    clickable
+                    color="primary"
+                    variant="outlined"
+                    onClick={() => setSelectedType(type)}
+                    sx={{ justifyContent: "flex-start", width: "fit-content" }}
+                  />
+                ))}
+              </Stack>
+
             </Stack>
 
-          </Stack>
+          )}
 
-        )}
+        {/* -------------------------------------------------- */}
+        {/* Selected Topic */}
+        {/* -------------------------------------------------- */}
 
-      {/* -------------------------------------------------- */}
-      {/* Selected Topic */}
-      {/* -------------------------------------------------- */}
+        {!loading &&
+          !error &&
+          selectedType && (
 
-      {!loading &&
-        !error &&
-        selectedType && (
+            <Stack spacing={2}>
 
-          <Stack spacing={2}>
+              <LeapSection
+                infoType={selectedType}
+                items={grouped[selectedType]}
+                showHeading={true}
+              />
 
-            <LeapSection
-              infoType={selectedType}
-              items={grouped[selectedType]}
-              showHeading={true}
-            />
+            </Stack>
 
-          </Stack>
+          )}
 
-        )}
+        {/* -------------------------------------------------- */}
+        {/* Empty */}
+        {/* -------------------------------------------------- */}
 
-      {/* -------------------------------------------------- */}
-      {/* Empty */}
-      {/* -------------------------------------------------- */}
+        {!loading &&
+          !error &&
+          availableTypes.length === 0 && (
 
-      {!loading &&
-        !error &&
-        availableTypes.length === 0 && (
-
-          <Stack
-            spacing={1}
-            alignItems="center"
-            py={4}
-          >
-
-            <SchoolOutlined
-              sx={{
-                color: colors.subtitle,
-                fontSize: 32,
-              }}
-            />
-
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              align="center"
+            <Stack
+              spacing={1}
+              alignItems="center"
+              py={4}
             >
-              No LEAP information is available for this stage.
-            </Typography>
 
-          </Stack>
+              <SchoolOutlined
+                sx={{
+                  color: colors.subtitle,
+                  fontSize: 32,
+                }}
+              />
 
-        )}
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                align="center"
+              >
+                No LEAP information is available for this stage.
+              </Typography>
 
+            </Stack>
+
+          )}
+      </Box>
     </Paper>
   );
 }
