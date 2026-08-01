@@ -293,8 +293,9 @@ export default function DemoVirtual() {
 
       {/* Notification Messages */}
       <ToastMessage
-        alertData={alertData}
-        setAlertData={setAlertData}
+        open={alertData.isVisible}
+        message={alertData.message}
+        severity={alertData.severity}
       />
 
       {/* Report Drawer */}
