@@ -7,6 +7,11 @@ export const pageConstants = {
     "UOM",
     "Price Discount %", 
     "Product Name",
+    "Unit of Measure",
+    "Total Demand",
+    "Currency",
+    "Unit Price",
+    "Discount Amount",
     "Outcome",  
     "Effective Period",
   ],
@@ -15,6 +20,9 @@ export const pageConstants = {
     "Strategy",  
     "Part_Description",
     "Discount_Percent",
+    "Total_Demand",
+    "Unit_Price",
+    "Discount_Amount",
     "Accrual_Date"
   ],
     hiddenColumns: [
