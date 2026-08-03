@@ -8,6 +8,7 @@ export const pageConstants = {
     "UOM",
     "Market Demand",
     "Addl Demand",
+    "Total Demand",
     "Sales Target",
     "Sold Quantity",
     "Customer Return",
@@ -19,7 +20,7 @@ export const pageConstants = {
   [
     "Product",
     "UOM",
-    "Market_Demand",
+    "Total_Demand",
     "Sold_Quantity",
     "Currency",
     "Std_Unit_Price",
