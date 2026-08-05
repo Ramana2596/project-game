@@ -10,7 +10,7 @@ export const pageConstants = {
     "Addl Demand",
     "Total Demand",
     "Sales Target",
-    "Sold Quantity",
+    "Actual Demand / Sales",
     "Customer Return",
     "Currency",
     "Std Unit Price",
