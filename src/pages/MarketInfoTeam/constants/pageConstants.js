@@ -5,11 +5,11 @@ export const pageConstants = {
       "Period",
       "Category",
       "Part Description",
-      "UOM",
-      "Demand / Quantity",
-      "Addl Demand",
-      "Total Demand",
       "Market Info",
+      "UOM",
+      "Quantity",
+      "Addl Demand",
+      "Total Quantity",
       "Unit Price",
       "Currency",
       "Price Info"
@@ -18,11 +18,11 @@ export const pageConstants = {
       highlightedColumns:
        [
         "Part_Description",
+        "Market_Info",
         "UOM",
         "Quantity",
         "Addl_Demand",
         "Total_Demand",
-        "Market_Info",
         "Unit_Price",
         "Currency",
         "Price Info"
