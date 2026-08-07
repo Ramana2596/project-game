@@ -129,7 +129,7 @@ export default function StageShow({
                 fontWeight: 700,
               }}
             >
-              Updating Stage...
+              Processing / Simulation in Progress...
             </Typography>
           </Stack>
         </Box>
