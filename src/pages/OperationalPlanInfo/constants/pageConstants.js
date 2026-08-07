@@ -6,9 +6,9 @@ export const pageConstants = {
     "Period",
     "Category",
     "Part Description",
+    "Operation Info",
     "UOM",
     "Quantity",
-    "Operation Info",
     "Unit Price",
     "Currency",
     "Price Info",
@@ -20,9 +20,9 @@ export const pageConstants = {
   highlightedColumns:
     [
       "Part_Name",
+      "Operation_Info",
       "UOM",
       "Quantity",
-      "Operation_Info",
       "Unit_Price",
       "Currency",
    ] ,
