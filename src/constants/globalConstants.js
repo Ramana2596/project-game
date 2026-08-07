@@ -133,7 +133,7 @@ import ClassRoomSession from "../pages/ClassRoomSession/ClassRoomSession.jsx";
 import ProfessionInfo from '../pages/ProfessionInfo/ProfessionInfo.jsx';
 import ProfessionRoleInfo from '../pages/ProfessionRoleInfo/ProfessionRoleInfo.jsx';
 import UserProfileInfo from "../pages/UserProfileInfo/UserProfileInfo.jsx";
-import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
+//import MarketInputError from '../pages/MarketInputError/MarketInputError.jsx';
 //import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
@@ -502,6 +502,7 @@ export const componentList = [
         href: "/operationGame/marketFactorInfoInput",
         routeElement: <MarketFactorInfoInput />
       },
+/*     
       {
         iconPath: asterikIcon,
         id: "UI 22 270",
@@ -510,7 +511,7 @@ export const componentList = [
         href: "/operationGame/MarketInputError",
         routeElement: <MarketInputError />
       },
-/*      {
+      {
         iconPath: marketInputIcon,
         id: "UI 22 200",
         label: "Release Std Market Input",
@@ -598,7 +599,7 @@ export const componentList = [
       {
         iconPath: appSettings,
         id: "UI 21 274",
-        label: "Rollback to Start",
+        label: "Reset Simulation",
         path: "/resetSimulation",
         href: "/operationGame/ResetSimulation",
         routeElement: <ResetSimulation />
