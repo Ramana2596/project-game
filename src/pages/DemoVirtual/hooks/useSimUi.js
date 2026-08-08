@@ -112,7 +112,7 @@ const status =
         borderColor,
         isActive: status === "ACTIVE",
         canViewReports:
-          status === "COMPLETED" || status === "FINISHED" || status === "ON_HALT",
+          status === "ACTIVE" || status === "COMPLETED" || status === "FINISHED" || status === "ON_HALT",
         tooltipReports,
         // Stage Button
         buttonSx: {
