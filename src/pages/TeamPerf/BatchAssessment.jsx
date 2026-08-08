@@ -22,15 +22,17 @@ import {
   Stack,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUser } from "../../core/access/userContext";
 import { getBatch, getTeam } from "./services/service";
 
 const BatchAssessment = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { userInfo } = useUser();
 
   const [loading, setLoading] = useState(false);
   const [masterRows, setMasterRows] = useState([]);
-  const [gameId, setGameId] = useState("");
+  const [gameId, setGameId] = useState(userInfo?.gameId || "");
   const [gameBatch, setGameBatch] = useState("");
   const [teams, setTeams] = useState([]);
 
@@ -39,8 +41,10 @@ const BatchAssessment = () => {
   const restoreGameBatch = location.state?.gameBatch;
 
   useEffect(() => {
-    loadBatch();
-  }, []);
+    if (gameId) {
+      loadBatch();
+    }
+  }, [gameId]);
 
   useEffect(() => {
     if (restoreState && gameId && gameBatch) {
@@ -52,7 +56,7 @@ const BatchAssessment = () => {
   const loadBatch = async () => {
     try {
       setLoading(true);
-      const res = await getBatch();
+      const res = await getBatch(gameId);
       setMasterRows(Array.isArray(res.data.data) ? res.data.data : []);
 
       if (restoreState) {
@@ -188,7 +192,7 @@ const BatchAssessment = () => {
               disabled={!gameId || !gameBatch}
               onClick={loadTeams}
             >
-              Load Teams
+              Assess Teams
             </Button>
           </Grid>
         </Grid>
