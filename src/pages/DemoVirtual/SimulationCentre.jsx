@@ -115,6 +115,18 @@ export default function HubNew() {
   const [activeStageNo, setActiveStageNo] = useState(null);
   const [loadingStageNo, setLoadingStageNo] = useState(null);
 
+  useEffect(() => {
+    if (!alertData.isVisible) return;
+
+    const timer = setTimeout(() => {
+      setAlertData((prev) => ({
+        ...prev,
+        isVisible: false,
+      }));
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [alertData.isVisible, setAlertData]);
 
   // ----------------------------------------------------------
   // 5. Derived View Model
