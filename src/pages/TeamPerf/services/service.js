@@ -5,10 +5,10 @@ import api from "../../../core/interceptor/api-interceptor";
 
 
 // Get Batch LOV
-export const getBatch = () => {
+export const getBatch = (gameId) => {
     return api.get("/api/getTeamPerf", {
         params: {
-            gameId: "",
+            gameId,
             gameBatch: 0,
             cmdLine: "Get_Batch",
         },
