@@ -1,6 +1,6 @@
 import Dashboard from "../pages/Dashboard/Dashboard.jsx";
 import StrategyLaunched from "../pages/LaunchStrategy/StrategyLaunched";
-import StrategyPlan from "../pages/StrategyPlanApproval/StrategyPlanApproval";
+//import StrategyPlan from "../pages/StrategyPlanApproval/StrategyPlanApproval";
 import MarketFactorInfo from "../pages/MarketFactorInfo/MarketFactorInfo";
 import MarketFactorInfoInput from "../pages/MarketFactorInfoInput/MarketFactorInfoInput";
 import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInfo";
@@ -139,7 +139,7 @@ import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx"
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
-import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
+//import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 import KeyResultBsInfo from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
 import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
@@ -554,6 +554,7 @@ export const componentList = [
         href: "/operationGame/SimulationCentre",
         routeElement: <SimulationCentre />
       },
+/*
       {
         iconPath: approvalIcon,
         id: "UI 11 030",
@@ -570,6 +571,7 @@ export const componentList = [
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
       },
+*/
       {
         iconPath: appSettings,
         id: "UI 21 272",
