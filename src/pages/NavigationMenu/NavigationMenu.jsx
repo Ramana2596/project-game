@@ -38,7 +38,7 @@ import {
   GameSession,
   Dashboard,
   StrategyLaunched,
-  StrategyPlanApproval,
+  //StrategyPlanApproval,
   MarketFactorInfo,
   MarketFactorInfoInput,
   OperationalPlanInfo,
@@ -110,7 +110,7 @@ import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
 import AssetCatalogBatch from '../AssetCatalogBatch/AssetCatalogBatch.jsx';
 import EnrollUserDialog from '../RegisterUser/EnrollUserDialog.jsx';
 import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
-import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
+//import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
 import KeyResultBsInfo from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
 import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
@@ -422,7 +422,7 @@ export default function MiniDrawer() {
           <Route path="/gameBatch" element={<GameBatch />} />
           <Route path="/gameSession" element={<GameSession />} />
           <Route path="/strategyLaunched" element={<StrategyLaunched />} />
-          <Route path="/strategyPlanApproval" element={<StrategyPlanApproval />} />
+          {/*<Route path="/strategyPlanApproval" element={<StrategyPlanApproval />} />*/}
           <Route path="/marketFactorInfo" element={<MarketFactorInfo />} />
           <Route path="/marketFactorInfoInput" element={<MarketFactorInfoInput />} />
           <Route path="/operationalPlanInfo" element={<OperationalPlanInfo />} />
@@ -482,7 +482,7 @@ export default function MiniDrawer() {
           <Route path='/BatchMgt' element={<BatchMgt />} />
           <Route path='/SimulationPlay' element={<SimulationPlay />} />
           <Route path='/BatchMaster' element={<BatchMstDetails />} />
-          <Route path='/teamPlanScreen' element={<TeamPlanScreen />} />
+          {/*<Route path='/teamPlanScreen' element={<TeamPlanScreen />} />*/} 
           <Route path='/keyResultBsInfo' element={<KeyResultBsInfo />} />
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
           <Route path='/demo' element={<DemoVirtual />} />
