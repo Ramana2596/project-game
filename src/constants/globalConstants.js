@@ -1,6 +1,6 @@
 import Dashboard from "../pages/Dashboard/Dashboard.jsx";
 import StrategyLaunched from "../pages/LaunchStrategy/StrategyLaunched";
-//import StrategyPlan from "../pages/StrategyPlanApproval/StrategyPlanApproval";
+import StrategyPlan from "../pages/StrategyPlanApproval/StrategyPlanApproval";
 import MarketFactorInfo from "../pages/MarketFactorInfo/MarketFactorInfo";
 import MarketFactorInfoInput from "../pages/MarketFactorInfoInput/MarketFactorInfoInput";
 import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInfo";
@@ -139,7 +139,7 @@ import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx"
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
 import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
-//import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
+import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 import KeyResultBsInfo from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
 import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
@@ -156,6 +156,7 @@ import DemoVirtual from '../pages/DemoVirtual/DemoVirtual.jsx';
 //import SimulationSuite from '../pages/SimulationSuite/SimulationSuite.jsx';
 import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
+import CoProfile from "../pages/CoProfile/CoProfile";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -228,6 +229,16 @@ export const componentList = [
     href: "/operationGame/infoDesk",
     routeElement: <InfoDesk />,
     children: [
+      
+      {
+        iconPath: productIcon,
+        id: "UI 22 020",
+        label: "Product Profile ",
+        path: "/coprofile",
+        href: "/operationGame/CoProfile ",
+        routeElement: <CoProfile  />
+      },      
+      
       {
         iconPath: approvalIcon,
         id: "UI 21 010",
@@ -554,7 +565,6 @@ export const componentList = [
         href: "/operationGame/SimulationCentre",
         routeElement: <SimulationCentre />
       },
-/*
       {
         iconPath: approvalIcon,
         id: "UI 11 030",
@@ -571,7 +581,6 @@ export const componentList = [
         href: "/operationGame/teamPlanScreen",
         routeElement: <TeamPlanScreen />
       },
-*/
       {
         iconPath: appSettings,
         id: "UI 21 272",
