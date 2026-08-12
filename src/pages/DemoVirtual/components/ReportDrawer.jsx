@@ -1,13 +1,24 @@
 // src/pages/DemoVirtual/wizardreports/ReportDrawer.jsx
-// Purpose: Display stage-specific RBAC reports
+// Purpose: Display stage-specific reports and Decide Plan UI
 
 import React, { useMemo, useState, useEffect } from "react";
-import { Drawer, Box, Typography, Tabs, Tab, IconButton, Stack } from "@mui/material";
+import {
+  Drawer,
+  Box,
+  Typography,
+  Tabs,
+  Tab,
+  IconButton,
+  Stack,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { componentList } from "../../../constants/globalConstants";
-import { REPORT_REGISTRY } from "./reportRegistry";
+import {
+  REPORT_REGISTRY,
+  DECIDE_PLAN_REGISTRY,
+} from "./reportRegistry";
 
-// Recursive search component Vs route: Navigates global list to find matching element.
+// Find Component
 function findComponentById(list, id) {
   for (const item of list) {
     if (item.id === id) return item.routeElement;
@@ -19,44 +30,76 @@ function findComponentById(list, id) {
   return null;
 }
 
+// Report Drawer
 export default function ReportDrawer({
   open,
   onClose,
   stageNo,
+  mode = "REPORT",
   completedPeriod,
   stageTitle,
   gameTeam,
-  userAccessiblePageIds = []
+  userAccessiblePageIds = [],
 }) {
   const [tabIndex, setTabIndex] = useState(0);
 
-  // Reset tab index at the first report when drawer opens.
+  // Reset tab when drawer or stage changes.
   useEffect(() => {
     if (open) setTabIndex(0);
-  }, [open, stageNo]);
+  }, [open, stageNo, mode]);
 
-  // Date format: Month-Year format.
+  // Format simulation period.
   const formattedMonth = useMemo(() => {
     if (!completedPeriod) return "Setup Phase";
     const date = new Date(completedPeriod);
-    return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
   }, [completedPeriod]);
 
-  // Get RBAC reports for the stage.
+  // Resolve registry for current drawer mode.
   const reportsForStage = useMemo(() => {
     if (!stageNo) return [];
+
+    if (mode === "DECIDE_PLAN") {
+      const uiId = DECIDE_PLAN_REGISTRY[stageNo];
+      if (!uiId) return [];
+
+      const page = userAccessiblePageIds?.find(
+        (p) => p.uiId === uiId
+      );
+
+      return [
+        {
+          uiId,
+          shortName: page?.shortName || "Decide Plan",
+        },
+      ];
+    }
+
     const stageReports = (REPORT_REGISTRY[stageNo] || []).filter(
-      (uiId) => userAccessiblePageIds?.some((p) => p.uiId === uiId)
+      (uiId) =>
+        userAccessiblePageIds?.some(
+          (p) => p.uiId === uiId
+        )
     );
+
     return stageReports.map((uiId) => ({
       uiId,
-      shortName: userAccessiblePageIds.find((p) => p.uiId === uiId)?.shortName
+      shortName:
+        userAccessiblePageIds.find(
+          (p) => p.uiId === uiId
+        )?.shortName,
     }));
-  }, [stageNo, userAccessiblePageIds]);
+  }, [stageNo, mode, userAccessiblePageIds]);
 
   // Get component for active tab.
   const selectedElement = reportsForStage[tabIndex]
-    ? findComponentById(componentList, reportsForStage[tabIndex].uiId)
+    ? findComponentById(
+        componentList,
+        reportsForStage[tabIndex].uiId
+      )
     : null;
 
   return (
@@ -71,15 +114,18 @@ export default function ReportDrawer({
           display: "flex",
           flexDirection: "column",
           bgcolor: "#ffffff",
-          overflow: "hidden"
-        }
+          overflow: "hidden",
+        },
       }}
     >
-      {/* HEADER */}
-      {/* 1. HEADER: Team Left, Title Center, Month Right */}
+      {/* Header */}
       <Box sx={{ px: 3, pt: 10, pb: 1.5 }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          {/* Team Name Left-justified */}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          {/* Team */}
           <Typography
             variant="h6"
             sx={{
@@ -87,13 +133,13 @@ export default function ReportDrawer({
               color: "#334155",
               fontSize: "1.2rem",
               flex: 1,
-              textAlign: "left"
+              textAlign: "left",
             }}
           >
             {gameTeam}
           </Typography>
 
-          {/* Title Centered */}
+          {/* Stage Title */}
           <Typography
             variant="h5"
             sx={{
@@ -102,34 +148,52 @@ export default function ReportDrawer({
               fontSize: "1.5rem",
               letterSpacing: "-0.01em",
               flex: 1,
-              textAlign: "center"
+              textAlign: "center",
             }}
           >
             {stageTitle}
           </Typography>
 
-          {/* Month Right-justified + Close Button */}
-          <Stack direction="row" spacing={2} alignItems="center" sx={{ flex: 1, justifyContent: "flex-end" }}>
+          {/* Period and Close */}
+          <Stack
+            direction="row"
+            spacing={2}
+            alignItems="center"
+            sx={{
+              flex: 1,
+              justifyContent: "flex-end",
+            }}
+          >
             <Typography
               variant="subtitle1"
               sx={{
                 color: "primary.main",
                 fontWeight: 800,
                 fontSize: "1.1rem",
-                textAlign: "right"
+                textAlign: "right",
               }}
             >
               {formattedMonth}
             </Typography>
-            <IconButton onClick={onClose} size="small" sx={{ bgcolor: "#f1f5f9" }}>
+            <IconButton
+              onClick={onClose}
+              size="small"
+              sx={{ bgcolor: "#f1f5f9" }}
+            >
               <CloseIcon fontSize="small" />
             </IconButton>
           </Stack>
         </Stack>
       </Box>
 
-      {/* 2. TABS: */}
-      <Box sx={{ px: 2, bgcolor: "#fff", borderBottom: "1px solid #e2e8f0" }}>
+      {/* Tabs */}
+      <Box
+        sx={{
+          px: 2,
+          bgcolor: "#fff",
+          borderBottom: "1px solid #e2e8f0",
+        }}
+      >
         {reportsForStage.length > 0 && (
           <Tabs
             value={tabIndex}
@@ -147,30 +211,55 @@ export default function ReportDrawer({
                 px: 3,
                 mx: 0.5,
                 borderRadius: "6px",
-                color: "#64748b"
+                color: "#64748b",
               },
               "& .MuiTab-root.Mui-selected": {
                 bgcolor: "primary.main",
                 color: "#ffffff !important",
-                "&:hover": { bgcolor: "primary.dark" }
-              }
+                "&:hover": {
+                  bgcolor: "primary.dark",
+                },
+              },
             }}
           >
             {reportsForStage.map((r) => (
-              <Tab key={r.uiId} label={r.shortName} />
+              <Tab
+                key={r.uiId}
+                label={r.shortName}
+              />
             ))}
           </Tabs>
         )}
       </Box>
 
-      {/* Content Area */}
-      <Box sx={{ flex: 1, overflow: "auto", px: 1.5, pt: 0.5, bgcolor: "#f8fafc" }}>
-        <Box sx={{ minWidth: "1200px", bgcolor: "#fff", p: 0.5 }}>
+      {/* Content */}
+      <Box
+        sx={{
+          flex: 1,
+          overflow: "auto",
+          px: 1.5,
+          pt: 0.5,
+          bgcolor: "#f8fafc",
+        }}
+      >
+        <Box
+          sx={{
+            minWidth: "1200px",
+            bgcolor: "#fff",
+            p: 0.5,
+          }}
+        >
           {selectedElement ? (
-            React.cloneElement(selectedElement, { productionMonth: completedPeriod })
+            React.cloneElement(selectedElement, {
+              productionMonth: completedPeriod,
+            })
           ) : (
             <Box sx={{ textAlign: "center", py: 10 }}>
-              <Typography variant="h6" color="text.secondary" fontWeight="700">
+              <Typography
+                variant="h6"
+                color="text.secondary"
+                fontWeight="700"
+              >
                 No Data Available
               </Typography>
             </Box>

@@ -55,7 +55,7 @@ export default function DemoVirtual() {
 
   const stageUI = useSimUi(
     progressData,
-    [],
+    userAccessiblePageIds,
     effectiveHalt,
     progressData?.Is_Period_Closed ?? false,
     progressData?.Is_Simulation_End ?? false
@@ -115,6 +115,7 @@ export default function DemoVirtual() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeStageNo, setActiveStageNo] = useState(null);
   const [loadingStageNo, setLoadingStageNo] = useState(null);
+  const [drawerMode, setDrawerMode] = useState("REPORT");
 
   useEffect(() => {
     if (!alertData.isVisible) return;
@@ -174,10 +175,18 @@ export default function DemoVirtual() {
   // ----------------------------------------------------------
 
   // Handle Open Report
-  const handleOpenReport = (stageNo) => {
+  const handleOpenReport = useCallback((stageNo) => {
     setActiveStageNo(Number(stageNo));
+    setDrawerMode("REPORT");
     setDrawerOpen(true);
-  };
+  }, []);
+
+  // Handle Decide Plan
+  const handleDecidePlan = useCallback((stageNo) => {
+    setActiveStageNo(Number(stageNo));
+    setDrawerMode("DECIDE_PLAN");
+    setDrawerOpen(true);
+  }, []);
 
   // Handle stage selection.
   const handleStageClick = useCallback(
@@ -274,6 +283,7 @@ export default function DemoVirtual() {
               haltStageNo={haltStageNo}
               handleStageClick={handleStageClick}
               handleOpenReport={handleOpenReport}
+              handleDecidePlan={handleDecidePlan}
               handleNextMonth={handleNextMonth}
               nextActionMessage={nextActionMessage}
               progressData={progressData}
@@ -290,7 +300,7 @@ export default function DemoVirtual() {
             />
 
             <SimSidebar
-              helpCenter={
+              learningCenter={
                 <LeapCenter
                   stageNo={currentStageNumber}
                   stageTitle={stageInfo?.label}
@@ -316,6 +326,7 @@ export default function DemoVirtual() {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         stageNo={activeStageNo}
+        mode={drawerMode}
         completedPeriod={progressData?.Completed_Period}
         completedStageNo={progressData?.Completed_Stage_No}
         stageTitle={STAGE_TITLE_MAP[activeStageNo] || ""}
