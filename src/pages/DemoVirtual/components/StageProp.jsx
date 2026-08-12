@@ -1,12 +1,11 @@
 // src/pages/DemoVirtual/components/StageProp.jsx
-// Purpose: Propagates orchestrated stage data for UI of stage rows
+// Purpose: Propagates UI data of stage rows
 
 import React from "react";
 import { Stack } from "@mui/material";
 import StageShow from "./StageShow";
 
 export default function StageProp({
-  
   stageUI,
   actionLoading,
   effectiveHalt,
@@ -14,24 +13,25 @@ export default function StageProp({
   haltStageNo,
   handleStageClick,
   handleOpenReport,
+  handleDecidePlan,
   handleNextMonth,
-  loadingStageNo
+  loadingStageNo,
 }) {
-//   console.log("StageProp handleStageClick =", handleStageClick);
   return (
     // Disburse Props of Stage by stageNo
-    <Stack spacing={2} sx={{ mt: 2 }}> 
+    <Stack spacing={2} sx={{ mt: 2 }}>
       {stageUI.map((s) => (
         <StageShow
           key={s.stageNo}
-          Stage={s} 
-          actionLoading={actionLoading} 
-          effectiveHalt={effectiveHalt} 
-          isSimulationEnd={isSimulationEnd} 
-          haltStageNo={haltStageNo} 
-          handleStageClick={handleStageClick} 
-          handleOpenReport={handleOpenReport} 
-          handleNextMonth={handleNextMonth} 
+          Stage={s}
+          actionLoading={actionLoading}
+          effectiveHalt={effectiveHalt}
+          isSimulationEnd={isSimulationEnd}
+          haltStageNo={haltStageNo}
+          handleStageClick={handleStageClick}
+          handleOpenReport={handleOpenReport}
+          handleDecidePlan={handleDecidePlan}
+          handleNextMonth={handleNextMonth}
           isLoading={loadingStageNo === s.stageNo}
         />
       ))}

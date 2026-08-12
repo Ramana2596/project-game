@@ -1,10 +1,7 @@
-// ============================================================
-// StageShow.jsx
-// Stage Display Card
-// ============================================================
+// src/pages/DemoVirtual/components/StageShow.jsx
+// Purpose: Display Stage Card and Stage Actions
 
 import React from "react";
-
 import {
   Box,
   Stack,
@@ -15,17 +12,15 @@ import {
   CircularProgress,
   Chip,
 } from "@mui/material";
-
 import {
   PlayArrow,
   Check,
   Lock,
   AssessmentOutlined,
   SkipNext,
+  Gavel,
 } from "@mui/icons-material";
-
 import { UI_STRINGS } from "../constants/labels";
-
 import {
   buttonStyle,
   cardStyle,
@@ -41,11 +36,14 @@ export default function StageShow({
   haltStageNo,
   handleStageClick,
   handleOpenReport,
+  handleDecidePlan,
   handleNextMonth,
   isLoading,
 }) {
+  const isCompleted =
+    Stage.status === "COMPLETED" ||
+    Stage.status === "FINISHED";
 
-  const isCompleted = Stage.status === "COMPLETED" || Stage.status === "FINISHED";
   const isActive = Stage.status === "ACTIVE";
   const isOnHalt = Stage.status === "ON_HALT";
 
@@ -79,7 +77,7 @@ export default function StageShow({
         transition: "all .25s ease",
       }}
     >
-
+      {/* Active Stage Top Accent */}
       {isActive && (
         <Box
           sx={{
@@ -93,7 +91,7 @@ export default function StageShow({
         />
       )}
 
-      {/* Accent Indicator Bar */}
+      {/* Status Accent Bar */}
       <Box
         sx={{
           position: "absolute",
@@ -119,8 +117,16 @@ export default function StageShow({
             alignItems: "center",
           }}
         >
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            <CircularProgress size={24} sx={{ color: colors.primary }} />
+          <Stack
+            direction="row"
+            spacing={1.5}
+            alignItems="center"
+          >
+            <CircularProgress
+              size={24}
+              sx={{ color: colors.primary }}
+            />
+
             <Typography
               sx={{
                 ...semanticTypo.bodyB1,
@@ -129,7 +135,7 @@ export default function StageShow({
                 fontWeight: 700,
               }}
             >
-              Processing / Simulation in Progress...
+              Simulation is in progress. Please wait....
             </Typography>
           </Stack>
         </Box>
@@ -146,10 +152,14 @@ export default function StageShow({
           pr: 2.5,
         }}
       >
-        {/* Interactive Click Area */}
+        {/* Stage Information */}
         <Button
           disableRipple
-          disabled={!Stage.isActive || isLoading || effectiveHalt}
+          disabled={
+            !Stage.isActive ||
+            isLoading ||
+            effectiveHalt
+          }
           onClick={() => handleStageClick(Stage)}
           sx={{
             ...buttonStyle.text,
@@ -163,8 +173,12 @@ export default function StageShow({
             },
           }}
         >
-          <Stack direction="row" spacing={2} alignItems="center">
-            {/* Stage Icon Circle */}
+          <Stack
+            direction="row"
+            spacing={2}
+            alignItems="center"
+          >
+            {/* Stage Icon */}
             <Box
               sx={{
                 width: 42,
@@ -174,12 +188,20 @@ export default function StageShow({
                 justifyContent: "center",
                 alignItems: "center",
                 flexShrink: 0,
-                background: isActive || isCompleted
-                  ? colors.iconGradient
-                  : colors.disabledBackground,
-                color: isActive || isCompleted ? colors.white : colors.muted,
-                boxShadow: isActive ? `0 4px 14px ${colors.primary}40` : "none",
-                "& svg": { fontSize: 22 },
+                background:
+                  isActive || isCompleted
+                    ? colors.iconGradient
+                    : colors.disabledBackground,
+                color:
+                  isActive || isCompleted
+                    ? colors.white
+                    : colors.muted,
+                boxShadow: isActive
+                  ? `0 4px 14px ${colors.primary}40`
+                  : "none",
+                "& svg": {
+                  fontSize: 22,
+                },
               }}
             >
               {Stage.icon}
@@ -198,7 +220,7 @@ export default function StageShow({
               {Stage.stageNo}
             </Typography>
 
-            {/* Titles & Descriptions */}
+            {/* Stage Titles */}
             <Box sx={{ pr: 2 }}>
               <Typography
                 sx={{
@@ -215,7 +237,9 @@ export default function StageShow({
               <Typography
                 sx={{
                   fontSize: "0.90rem",
-                  color: Stage.toDo ? colors.body : colors.muted,
+                  color: Stage.toDo
+                    ? colors.body
+                    : colors.muted,
                   lineHeight: 1.4,
                 }}
               >
@@ -225,8 +249,12 @@ export default function StageShow({
           </Stack>
         </Button>
 
-        {/* Action Controls & Badges */}
-        <Stack direction="row" spacing={2} alignItems="center">
+        {/* Stage Actions */}
+        <Stack
+          direction="row"
+          spacing={2}
+          alignItems="center"
+        >
           {/* Status Badge */}
           <Chip
             size="medium"
@@ -241,23 +269,103 @@ export default function StageShow({
                 ? colors.primary
                 : isCompleted
                   ? colors.success
+                  : isOnHalt
+                    ? colors.warning
                     : colors.muted,
               bgcolor: isActive
                 ? colors.selected
                 : isCompleted
-                  ? "#E8F5E9"
+                  ? colors.successLight
+                  : isOnHalt
+                    ? colors.warningLight
                     : colors.panel,
-              border: `1px solid ${
-                isActive ? colors.primaryLight : isOnHalt ? colors.warning : "transparent"
-              }`,
+              border: `1px solid ${isActive
+                  ? colors.primaryLight
+                  : isOnHalt
+                    ? colors.warning
+                    : "transparent"
+                }`,
             }}
           />
 
+          {/* Decide Plan Button */}
+          {Stage.canDecidePlan && (
+            <Tooltip
+              title={
+                Stage.inputTooltip ||
+                "Decide Plan"
+              }
+              arrow
+            >
+              <span>
+                <Button
+                  variant="contained"
+                  startIcon={
+                    <Gavel 
+                      sx={{ fontSize: 21 }}
+                    />
+                  }
+                  onClick={() =>
+                    handleDecidePlan(
+                      Stage.stageNo
+                    )
+                  }
+                  disabled={
+                    !isActive ||
+                    isLoading ||
+                    effectiveHalt
+                  }
+                  sx={{
+                    ...buttonStyle.primary,
+                    minHeight: 42,
+                    px: 2,
+                    borderRadius: 3,
+                    fontWeight: 800,
+                    textTransform: "none",
+                    boxShadow: isActive
+                      ? `0 6px 18px ${colors.primary}45`
+                      : "none",
+                    animation: isActive
+                      ? "decidePlanPulse 1.8s ease-in-out infinite"
+                      : "none",
+                    "@keyframes decidePlanPulse": {
+                      "0%, 100%": {
+                        boxShadow: `0 6px 18px ${colors.primary}35`,
+                      },
+                      "50%": {
+                        boxShadow: `0 8px 24px ${colors.primary}65`,
+                      },
+                    },
+                    "&:hover": {
+                      transform: "translateY(-2px)",
+                      boxShadow: `0 10px 24px ${colors.primary}55`,
+                    },
+                    "&.Mui-disabled": {
+                      opacity: 0.55,
+                    },
+                  }}
+                >
+                  Decide Plan
+                </Button>
+              </span>
+            </Tooltip>
+          )}
+
           {/* View Reports Button */}
-          <Tooltip title={Stage.tooltipReports || "No Reports"} arrow>
+          <Tooltip
+            title={
+              Stage.tooltipReports ||
+              "No Reports"
+            }
+            arrow
+          >
             <span>
               <IconButton
-                onClick={() => handleOpenReport(Stage.stageNo)}
+                onClick={() =>
+                  handleOpenReport(
+                    Stage.stageNo
+                  )
+                }
                 disabled={!Stage.canViewReports}
                 sx={{
                   width: 42,
@@ -277,11 +385,14 @@ export default function StageShow({
                   },
                 }}
               >
-                < AssessmentOutlined sx={{ fontSize: 22 }} />
+                <AssessmentOutlined
+                  sx={{ fontSize: 22 }}
+                />
               </IconButton>
             </span>
           </Tooltip>
 
+          {/* Next Month Button */}
           {/* Next Month Button */}
           {isOnHalt && !isSimulationEnd && (
             <Tooltip title={UI_STRINGS.NEXT_MONTH_TOOLTIP} arrow>
@@ -315,7 +426,7 @@ export default function StageShow({
             </Tooltip>
           )}
 
-          {/* Status Icon Indicator */}
+          {/* Status Indicator */}
           <Box
             sx={{
               width: 42,
@@ -331,12 +442,25 @@ export default function StageShow({
                   : isOnHalt
                     ? colors.warning
                     : colors.panel,
-              color: isActive || isCompleted || isOnHalt ? colors.white : colors.muted,
+              color:
+                isActive ||
+                  isCompleted ||
+                  isOnHalt
+                  ? colors.white
+                  : colors.muted,
             }}
           >
-            {isActive && <PlayArrow sx={{ fontSize: 24 }} />}
-            {isCompleted && <Check sx={{ fontSize: 24 }} />}
-            {Stage.status === "LOCKED" && <Lock sx={{ fontSize: 22 }} />}
+            {isActive && (
+              <PlayArrow sx={{ fontSize: 24 }} />
+            )}
+
+            {isCompleted && (
+              <Check sx={{ fontSize: 24 }} />
+            )}
+
+            {Stage.status === "LOCKED" && (
+              <Lock sx={{ fontSize: 22 }} />
+            )}
           </Box>
         </Stack>
       </Stack>

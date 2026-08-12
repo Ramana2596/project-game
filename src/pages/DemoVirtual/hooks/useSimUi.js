@@ -4,10 +4,24 @@
 // ============================================================
 
 import { useMemo } from "react";
-import { FINAL_STAGE_NO, StagesMaster } from "../stagesMaster";
-import { REPORT_REGISTRY } from "../components/reportRegistry";
+
+import {
+  FINAL_STAGE_NO,
+  StagesMaster,
+} from "../stagesMaster";
+
+import {
+  REPORT_REGISTRY,
+  DECIDE_PLAN_REGISTRY,
+} from "../components/reportRegistry";
+
 import { UI_STRINGS } from "../constants/labels";
 import { colors } from "../../../ux/styles";
+
+
+// ============================================================
+// Hook
+// ============================================================
 
 export function useSimUi(
   progressData,
@@ -16,46 +30,83 @@ export function useSimUi(
   isPeriodClosed,
   isSimulationEnd
 ) {
-  const currentStage = progressData?.Current_Stage_No ?? 1;
-  const completedStage = progressData?.Completed_Stage_No ?? 0;
+
+  const currentStage =
+    progressData?.Current_Stage_No ?? 1;
+
+  const completedStage =
+    progressData?.Completed_Stage_No ?? 0;
+
   const isFinished =
     (progressData?.Completed_Period_No ?? 0) ===
-    (progressData?.Total_Period ?? 1) &&
+      (progressData?.Total_Period ?? 1) &&
     completedStage >= FINAL_STAGE_NO;
 
+
   return useMemo(() => {
+
     return StagesMaster.map((s) => {
+
       // Stage Status
-const status =
-  s.stageNo === FINAL_STAGE_NO && isFinished
-    ? "FINISHED"
-    : effectiveHalt
-      ? s.stageNo === completedStage
-        ? "ON_HALT"
-        : s.stageNo < completedStage
-          ? "COMPLETED"
-          : "LOCKED"
-      : s.stageNo === currentStage
-        ? "ACTIVE"
-        : s.stageNo < currentStage
-          ? "COMPLETED"
-          : "LOCKED";
+
+      const status =
+        s.stageNo === FINAL_STAGE_NO && isFinished
+          ? "FINISHED"
+          : effectiveHalt
+            ? s.stageNo === completedStage
+              ? "ON_HALT"
+              : s.stageNo < completedStage
+                ? "COMPLETED"
+                : "LOCKED"
+            : s.stageNo === currentStage
+              ? "ACTIVE"
+              : s.stageNo < currentStage
+                ? "COMPLETED"
+                : "LOCKED";
+
 
       // Reports
-      const reports = REPORT_REGISTRY[s.stageNo] || [];
+
+      const reports =
+        REPORT_REGISTRY[s.stageNo] || [];
+
       const names = reports
-        .map((uiId) =>
-          userAccessiblePageIds?.find((p) => p.uiId === uiId)?.shortName
+        .map(
+          (uiId) =>
+            userAccessiblePageIds?.find(
+              (p) => p.uiId === uiId
+            )?.shortName
         )
         .filter(Boolean);
+
       const tooltipReports =
         !names.length
           ? UI_STRINGS.NO_REPORTS || "No Reports"
           : names.length > 3
-            ? names.slice(0, 3).join(", ") + " ..."
+            ? `${names.slice(0, 3).join(", ")} ...`
             : names.join(", ");
 
-      // Status Colours
+
+      // Decide Plan
+
+      const decidePlanUiId =
+        DECIDE_PLAN_REGISTRY[s.stageNo] || null;
+
+
+      // Stage Capabilities
+
+      const canDecidePlan =
+        status === "ACTIVE" &&
+        Boolean(decidePlanUiId);
+
+      const canViewReports =
+        status === "COMPLETED" ||
+        status === "FINISHED" ||
+        status === "ON_HALT";
+
+
+      // Status Colour
+
       const statusColor =
         status === "ACTIVE"
           ? colors.primary
@@ -67,7 +118,9 @@ const status =
                 ? colors.warning
                 : "#B0BEC5";
 
+
       // Background
+
       const background =
         status === "ACTIVE"
           ? colors.heroGradient
@@ -79,7 +132,9 @@ const status =
                 ? "linear-gradient(180deg,#FFFFFF 0%,#FFF8E1 100%)"
                 : colors.paper;
 
+
       // Shadow
+
       const shadow =
         status === "ACTIVE"
           ? `0 16px 36px ${colors.primary}45`
@@ -91,7 +146,9 @@ const status =
                 ? "0 8px 22px rgba(237,108,2,.22)"
                 : `0 4px 14px ${colors.primary}14`;
 
+
       // Border
+
       const borderColor =
         status === "ACTIVE"
           ? colors.primary
@@ -103,36 +160,64 @@ const status =
                 ? colors.warning
                 : colors.border;
 
+
+      // Stage UI Model
+
       return {
         ...s,
+
         status,
+        isActive: status === "ACTIVE",
+
+        canDecidePlan,
+        decidePlanUiId,
+        canViewReports,
+
+        tooltipReports,
+
         statusColor,
         background,
         shadow,
         borderColor,
-        isActive: status === "ACTIVE",
-        canViewReports:
-          status === "ACTIVE" || status === "COMPLETED" || status === "FINISHED" || status === "ON_HALT",
-        tooltipReports,
+
+
         // Stage Button
+
         buttonSx: {
           justifyContent: "space-between",
           py: 2.25,
           px: 2.5,
           borderRadius: 4,
+
           background,
-          color: status === "ACTIVE" ? colors.white : colors.title,
+
+          color:
+            status === "ACTIVE"
+              ? colors.white
+              : colors.title,
+
           border: `1px solid ${borderColor}`,
           boxShadow: shadow,
+
           transition: "all .28s ease",
-          transform: status === "ACTIVE" ? "scale(1.01)" : "scale(1)",
+
+          transform:
+            status === "ACTIVE"
+              ? "scale(1.01)"
+              : "scale(1)",
+
           "&:hover": {
-            transform: status === "LOCKED" ? "none" : "translateY(-3px)",
+            transform:
+              status === "LOCKED"
+                ? "none"
+                : "translateY(-3px)",
+
             boxShadow:
               status === "LOCKED"
                 ? shadow
                 : `0 18px 40px ${colors.primary}30`,
           },
+
           "&.Mui-disabled": {
             opacity: 0.65,
             color: "#90A4AE",
@@ -140,8 +225,10 @@ const status =
         },
       };
     });
+
   }, [
     currentStage,
+    completedStage,
     isFinished,
     userAccessiblePageIds,
     effectiveHalt,

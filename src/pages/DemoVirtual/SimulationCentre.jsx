@@ -1,46 +1,41 @@
-// Component: HubNew | Module: OMTP Simulation | Purpose: Standardized Simulation Panel (SimulationHub, on DemoVirtual UX)
+// Component: HubNew | Module: OMTP Simulation | Purpose: Standardized Simulation Panel
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   CircularProgress,
   Stack,
 } from "@mui/material";
-
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../core/access/userContext";
 import ToastMessage from "../../components/ToastMessage";
 import { colors } from "../../ux/styles";
-
-
 import { useHubProgress } from "./hooks/useHubProgress";
 import { useSimUi } from "./hooks/useSimUi";
 import StageProp from "./components/StageProp";
 import ReportDrawer from "./components/ReportDrawer";
-
 import SimHeader from "./components/SimHeader";
 import SimProgressPanel from "./components/SimProgressPanel";
 import SimContent from "./components/SimContent";
 import SimSidebar from "./components/SimSidebar";
 import SimFooter from "./components/SimFooter";
 import TeamBadge from "./cards/TeamBadge";
-import { StagesMaster } from "./stagesMaster";
-import { STAGE_TITLE_MAP, } from "./stagesMaster";
-
+import { StagesMaster, STAGE_TITLE_MAP } from "./stagesMaster";
 import LeapCenter from "../Leap/components/LeapCenter";
-
 
 export default function HubNew() {
 
-  // ----------------------------------------------------------
-  // 1. Navigation & User Context
-  // ----------------------------------------------------------
+  // Navigation and User Context
   const navigate = useNavigate();
-  const { userInfo, login, setUserInfo, userAccessiblePageIds } = useUser();
+
+  const {
+    userInfo,
+    login,
+    setUserInfo,
+    userAccessiblePageIds,
+  } = useUser();
 
 
-  // ----------------------------------------------------------
-  // 2. Business Data & Simulation Hooks (API layer swapped: useHubProgress)
-  // ----------------------------------------------------------
+  // Business Data and Simulation Hooks
   const {
     progressData,
     loading,
@@ -54,19 +49,17 @@ export default function HubNew() {
     setNextMonthAck,
   } = useHubProgress(userInfo);
 
+
   const stageUI = useSimUi(
     progressData,
-    [],
+    userAccessiblePageIds,
     effectiveHalt,
     progressData?.Is_Period_Closed ?? false,
     progressData?.Is_Simulation_End ?? false
   );
 
-  // ----------------------------------------------------------
-  // 3. Page Initialization
-  // ----------------------------------------------------------
 
-  // Restore user session on page refresh.
+  // Page Initialization
   useEffect(() => {
     if (userInfo?.gameId) {
       sessionStorage.setItem(
@@ -76,6 +69,7 @@ export default function HubNew() {
     } else {
       const stored =
         sessionStorage.getItem("wizardUserInfo");
+
       if (stored) {
         setUserInfo(JSON.parse(stored));
       } else {
@@ -88,7 +82,8 @@ export default function HubNew() {
     setUserInfo,
   ]);
 
-  // Load simulation progress.
+
+  // Load Simulation Progress
   useEffect(() => {
     if (userInfo?.gameId && !progressData) {
       fetchProgress(
@@ -97,24 +92,23 @@ export default function HubNew() {
         userInfo.gameTeam
       );
     }
-  },
-    [
-      fetchProgress,
-      userInfo,
-      progressData,
-    ]
-  );
+  }, [
+    fetchProgress,
+    userInfo,
+    progressData,
+  ]);
 
 
-  // ----------------------------------------------------------
-  // 4. Local UI State
-  // ----------------------------------------------------------
+  // Local UI State
   const [checklistOpen, setChecklistOpen] = useState(false);
   const [rulesOpen, setRulesOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeStageNo, setActiveStageNo] = useState(null);
   const [loadingStageNo, setLoadingStageNo] = useState(null);
+  const [drawerMode, setDrawerMode] = useState("REPORT");
 
+
+  // Auto-hide Notification
   useEffect(() => {
     if (!alertData.isVisible) return;
 
@@ -126,11 +120,13 @@ export default function HubNew() {
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [alertData.isVisible, setAlertData]);
+  }, [
+    alertData.isVisible,
+    setAlertData,
+  ]);
 
-  // ----------------------------------------------------------
-  // 5. Derived View Model
-  // ----------------------------------------------------------
+
+  // Derived View Model
   const teamInitial = userInfo?.gameTeam
     ? userInfo.gameTeam.charAt(0).toUpperCase()
     : "G";
@@ -141,18 +137,23 @@ export default function HubNew() {
     0;
 
   const activeStage = Array.isArray(stageUI)
-    ? stageUI.find((s) => s.status === "ACTIVE")
+    ? stageUI.find(
+        (s) => s.status === "ACTIVE"
+      )
     : null;
 
   const currentStageNumber = effectiveHalt
     ? haltStageNo
-    : activeStage?.stageNo ?? progressData?.Current_Stage_No ?? haltStageNo;
+    : activeStage?.stageNo ??
+      progressData?.Current_Stage_No ??
+      haltStageNo;
 
-  const currentStageName = STAGE_TITLE_MAP[currentStageNumber]
-    ? `Stage ${currentStageNumber} (${STAGE_TITLE_MAP[currentStageNumber]})`
-    : currentStageNumber
-      ? `Stage ${currentStageNumber}`
-      : null;
+  const currentStageName =
+    STAGE_TITLE_MAP[currentStageNumber]
+      ? `Stage ${currentStageNumber} (${STAGE_TITLE_MAP[currentStageNumber]})`
+      : currentStageNumber
+        ? `Stage ${currentStageNumber}`
+        : null;
 
   const nextActionMessage =
     progressData?.Is_Simulation_End
@@ -161,35 +162,42 @@ export default function HubNew() {
         ? `Complete ${currentStageName} to proceed`
         : "Proceed to the next simulation period";
 
+
   // LEAP Contents
   const stageInfo =
     StagesMaster.find(
-      s => s.stageNo === currentStageNumber
+      (s) => s.stageNo === currentStageNumber
     );
 
 
-  // ----------------------------------------------------------
-  // 6. Event Handlers
-  // ----------------------------------------------------------
-
-  // Handle Open Report
-  const handleOpenReport = (stageNo) => {
+  // Open Reports
+  const handleOpenReport = useCallback((stageNo) => {
     setActiveStageNo(Number(stageNo));
+    setDrawerMode("REPORT");
     setDrawerOpen(true);
-  };
+  }, []);
 
-  // Handle stage selection: UPDATE (advance stage) then refresh progress.
+
+  // Open Decide Plan
+  const handleDecidePlan = useCallback((stageNo) => {
+    setActiveStageNo(Number(stageNo));
+    setDrawerMode("DECIDE_PLAN");
+    setDrawerOpen(true);
+  }, []);
+
+
+  // Handle Stage Selection
   const handleStageClick = useCallback(
     async (stage) => {
       setLoadingStageNo(stage.stageNo);
+
       try {
         await setStage(
           userInfo.gameId,
           userInfo.gameBatch,
           userInfo.gameTeam
         );
-      }
-      finally {
+      } finally {
         setLoadingStageNo(null);
       }
     },
@@ -199,18 +207,25 @@ export default function HubNew() {
     ]
   );
 
-  // handle Next Month Looping
-  const handleNextMonth = () => {
-    setNextMonthAck(true);
-  };
 
-  // Handle Exit Demo page
-  const handleExit = () => {
+  // Handle Next Month
+  const handleNextMonth = useCallback(() => {
+    setNextMonthAck(true);
+  }, [setNextMonthAck]);
+
+
+  // Handle Exit
+  const handleExit = useCallback(() => {
     sessionStorage.removeItem("wizardUserInfo");
     login(null);
     setUserInfo(null);
     navigate("/");
-  };
+  }, [
+    login,
+    setUserInfo,
+    navigate,
+  ]);
+
 
   // Loading Screen
   if (loading && !progressData) {
@@ -234,9 +249,8 @@ export default function HubNew() {
     );
   }
 
-  // ----------------------------------------------------------
-  // 7. Render Page
-  // ----------------------------------------------------------
+
+  // Render Page
   return (
     <Box
       sx={{
@@ -253,6 +267,7 @@ export default function HubNew() {
         handleExit={handleExit}
       />
 
+
       {/* Main Simulation Workspace */}
       <SimContent
         leftContent={
@@ -261,15 +276,19 @@ export default function HubNew() {
               progressData={progressData}
               progressPercent={progressPercent}
             />
+
             <StageProp
               stageUI={stageUI}
               loadingStageNo={loadingStageNo}
               actionLoading={actionLoading}
               effectiveHalt={effectiveHalt}
-              isSimulationEnd={progressData?.Is_Simulation_End ?? false}
+              isSimulationEnd={
+                progressData?.Is_Simulation_End ?? false
+              }
               haltStageNo={haltStageNo}
               handleStageClick={handleStageClick}
               handleOpenReport={handleOpenReport}
+              handleDecidePlan={handleDecidePlan}
               handleNextMonth={handleNextMonth}
               nextActionMessage={nextActionMessage}
               progressData={progressData}
@@ -279,14 +298,19 @@ export default function HubNew() {
 
         rightContent={
           <Stack spacing={2.5}>
+
             <TeamBadge
               batch={userInfo?.gameBatch}
               team={userInfo?.gameTeam}
-              status={progressData?.Is_Simulation_End ? "Finished" : "In Progress"}
+              status={
+                progressData?.Is_Simulation_End
+                  ? "Finished"
+                  : "In Progress"
+              }
             />
 
             <SimSidebar
-              helpCenter={
+              learningCenter={
                 <LeapCenter
                   stageNo={currentStageNumber}
                   stageTitle={stageInfo?.label}
@@ -294,10 +318,11 @@ export default function HubNew() {
                 />
               }
             />
+
           </Stack>
         }
       />
-      {/* Dialogs */}
+
 
       {/* Notification Messages */}
       <ToastMessage
@@ -306,22 +331,24 @@ export default function HubNew() {
         severity={alertData.severity}
       />
 
-      {/* Report Drawer */}
 
+      {/* Report and Decide Plan Drawer */}
       <ReportDrawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         stageNo={activeStageNo}
+        mode={drawerMode}
         completedPeriod={progressData?.Completed_Period}
-        completedStageNo={progressData?.Completed_Stage_No}
-        stageTitle={STAGE_TITLE_MAP[activeStageNo] || ""}
+        stageTitle={
+          STAGE_TITLE_MAP[activeStageNo] || ""
+        }
         gameTeam={userInfo?.gameTeam}
         userAccessiblePageIds={userAccessiblePageIds}
       />
 
+
       {/* Footer */}
       <SimFooter />
-
 
     </Box>
   );
