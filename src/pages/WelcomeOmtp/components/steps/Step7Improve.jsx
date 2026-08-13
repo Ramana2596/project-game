@@ -11,7 +11,7 @@ import imgImprovement from "../../../../assets/DemoPicture/Dashboard.jpg";
 
 import {
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../../ux/styles";
 
 const Step7Improve = () => {
@@ -27,7 +27,7 @@ const Step7Improve = () => {
                     component="h3"
                     variant="h6"
                     sx={{
-                        ...semanticTypo.cardH5,
+                        ...masterTypo.h5,
                         color: colors.primaryDark,
                         mb: 1.5,
                     }}

@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 5
+// Component: Contents of Walkthrough Step 5
 // UXLab V1.0
 // ==========================================
 
@@ -13,7 +13,7 @@ import imgSimComplete from "../../../../assets/DemoPicture/SimComplete.jpg";
 
 import {
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../../ux/styles";
 
 const Step5 = () => {
@@ -30,7 +30,7 @@ const Step5 = () => {
                         component="h3"
                         variant="h6"
                         sx={{
-                            ...semanticTypo.cardH5,
+                            ...masterTypo.h5,
                             color: colors.primaryDark,
                             mb: 1.5,
                         }}
@@ -73,7 +73,7 @@ const Step5 = () => {
                         component="h3"
                         variant="h6"
                         sx={{
-                            ...semanticTypo.cardH5,
+                            ...masterTypo.h5,
                             color: colors.primaryDark,
                             mb: 1.5,
                         }}

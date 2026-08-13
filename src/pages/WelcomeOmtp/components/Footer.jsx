@@ -15,7 +15,7 @@ import {
 
 import {
   colors,
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 
 const Footer = () => (
@@ -51,7 +51,7 @@ const Footer = () => (
             component="h2"
             variant="h6"
             sx={{
-              ...semanticTypo.cardH5,
+              ...masterTypo.h5,
               color: colors.primaryDark,
             }}          >
             OMTP
@@ -61,7 +61,7 @@ const Footer = () => (
             component="p"
             variant="body2"
             sx={{
-              ...semanticTypo.bodyB2,
+              ...masterTypo.body2,
               mb: 0.5,
             }}
           >
@@ -71,7 +71,7 @@ const Footer = () => (
           <Typography
             component="p"
             variant="caption"
-            sx={semanticTypo.caption}
+            sx={masterTypo.caption}
           >
             Practical Learning for Modern Business.
           </Typography>
@@ -98,7 +98,7 @@ const Footer = () => (
               href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
               underline="none"
               sx={{
-                ...semanticTypo.bodyB2,
+                ...masterTypo.body2,
                 color: colors.body,
                 transition: "color .2s",
 
@@ -132,7 +132,7 @@ const Footer = () => (
         <Typography
           component="p"
           variant="caption"
-          sx={semanticTypo.caption}
+          sx={masterTypo.caption}
         >
           © {new Date().getFullYear()} OMTP. All rights reserved.
         </Typography>
@@ -140,7 +140,7 @@ const Footer = () => (
         <Typography
           component="p"
           variant="caption"
-          sx={semanticTypo.caption}
+          sx={masterTypo.caption}
         >
           Contact: info@omtp.example
         </Typography>

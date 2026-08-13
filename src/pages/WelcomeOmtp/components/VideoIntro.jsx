@@ -1,5 +1,5 @@
 // ============================================================
-// Component: Video Introduction (UXLab V1.0)
+// Component: Video Introduction (UXLab V3)
 // ============================================================
 
 import React from "react";
@@ -9,7 +9,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {
   colors,
   buttonStyle,
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 
 const VideoIntro = () => {
@@ -48,8 +48,9 @@ const VideoIntro = () => {
 
         <Typography
           component="h2"
+          variant="h3"
           sx={{
-            ...semanticTypo.pageH3,
+            ...masterTypo.h3,
             mb: 2,
             background: colors.heroGradient,
             backgroundClip: "text",
@@ -64,7 +65,7 @@ const VideoIntro = () => {
           component="p"
           variant="body1"
           sx={{
-            ...semanticTypo.bodyB1,
+            ...masterTypo.body1,
             color: colors.body,
             mb: 5,
             maxWidth: 720,
@@ -146,7 +147,7 @@ const VideoIntro = () => {
             component="h3"
             variant="h4"
             sx={{
-              ...semanticTypo.cardH4,
+              ...masterTypo.h4,
               color: colors.white,
               textAlign: "center",
               mb: 2,
@@ -159,7 +160,7 @@ const VideoIntro = () => {
             component="p"
             variant="body2"
             sx={{
-              ...semanticTypo.bodyB2,
+              ...masterTypo.body2,
               color: "rgba(255,255,255,0.90)",
               textAlign: "center",
               maxWidth: 600,
@@ -167,7 +168,7 @@ const VideoIntro = () => {
             }}
           >
             Get a quick overview of how the platform helps learners make
-            operational decisions, review outcomes, and build practical
+            operational decisions, review outcome and build practical
             business understanding.
           </Typography>
 
@@ -199,8 +200,9 @@ const VideoIntro = () => {
 
         <Typography
           component="p"
+          variant="caption"
           sx={{
-            ...semanticTypo.caption,
+            ...masterTypo.caption,
             mt: 2.5,
             textAlign: "left",
           }}

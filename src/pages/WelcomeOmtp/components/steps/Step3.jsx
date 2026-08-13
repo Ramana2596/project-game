@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 3
+// Component: Contents of Walkthrough Step 3
 // UXLab V1.0
 // ==========================================
 
@@ -11,7 +11,7 @@ import imgMktIntelligence from "../../../../assets/DemoPicture/MktIntelligence.j
 
 import {
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../../ux/styles";
 
 const Step3 = () => {
@@ -28,7 +28,7 @@ const Step3 = () => {
                     component="h4"
                     variant="h4"
                     sx={{
-                        ...semanticTypo.cardH5,
+                        ...masterTypo.h5,
                         color: colors.primaryDark,
                         mb: 1.5,
                     }}

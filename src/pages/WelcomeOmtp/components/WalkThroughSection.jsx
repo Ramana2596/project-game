@@ -8,7 +8,7 @@ import { Box, Typography, Container, Stack } from "@mui/material";
 
 import {
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 // Demo Steps
@@ -49,7 +49,7 @@ const WalkThroughSection = () => {
                         component="h2"
                         variant="h2"
                         sx={{
-                            ...semanticTypo.pageH3,
+                            ...masterTypo.h3,
                             background: colors.heroGradient,
                             backgroundClip: "text",
                             WebkitBackgroundClip: "text",
@@ -63,7 +63,7 @@ const WalkThroughSection = () => {
                         component="p"
                         variant="body1"
                         sx={{
-                            ...semanticTypo.sectionB1,
+                            ...masterTypo.body1,
                             maxWidth: 650,
                         }}
                     >

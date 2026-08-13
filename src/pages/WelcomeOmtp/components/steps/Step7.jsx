@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 7
+// Component: Contents of Walkthrough Step 7
 // UXLab V1.0
 // ==========================================
 
@@ -11,7 +11,7 @@ import imgImprovement from "../../../../assets/DemoPicture/Dashboard.jpg";
 
 import {
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../../ux/styles";
 
 const Step7 = () => {
@@ -27,7 +27,7 @@ const Step7 = () => {
                     component="h3"
                     variant="h6"
                     sx={{
-                        ...semanticTypo.cardH5,
+                        ...masterTypo.h5,
                         color: colors.primaryDark,
                         mb: 1.5,
                     }}

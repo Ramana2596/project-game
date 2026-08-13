@@ -15,7 +15,7 @@ import {
 import {
     buttonStyle,
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 const FinalCTA = ({ onStart }) => {
@@ -87,7 +87,7 @@ const FinalCTA = ({ onStart }) => {
                             <Typography
                                 component="h2"
                                 sx={{
-                                    ...semanticTypo.pageH3, 
+                                    ...masterTypo.h3, 
                                     color: colors.white,
                                     mb: 2,
                                 }}
@@ -100,7 +100,7 @@ const FinalCTA = ({ onStart }) => {
                             <Typography
                                 component="p"
                                 sx={{
-                                    ...semanticTypo.bodyB1,
+                                    ...masterTypo.body1,
                                     color: "rgba(255,255,255,0.94)",
                                 }}
                             >

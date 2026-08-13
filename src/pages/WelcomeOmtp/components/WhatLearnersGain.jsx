@@ -18,7 +18,7 @@ import onlinestudyIcon from "../../../assets/navigation-menu/onlinestudy.png";
 
 import {
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 const GainItem = ({ text }) => (
@@ -42,7 +42,7 @@ const GainItem = ({ text }) => (
             component="p"
             variant="body1"
             sx={{
-                ...semanticTypo.bodyB1,
+                ...masterTypo.body1,
                 fontWeight: 600,
             }}
         >
@@ -117,7 +117,7 @@ const WhatLearnersGain = () => {
                             component="h2"
                             variant="h2"
                             sx={{
-                                ...semanticTypo.pageH3,
+                                ...masterTypo.h3,
                                 color: colors.primaryDark, mb: 3,
                             }}
                         >
@@ -128,7 +128,7 @@ const WhatLearnersGain = () => {
                             component="p"
                             variant="body1"
                             sx={{
-                                ...semanticTypo.bodyB1,
+                                ...masterTypo.body1,
                                 mb: 4,
                                 maxWidth: 500,
                             }}

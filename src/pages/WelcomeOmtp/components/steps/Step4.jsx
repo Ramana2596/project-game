@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 4
+// Component: Contents of Walkthrough Step 4
 // UXLab V1.0
 // ==========================================
 
@@ -13,7 +13,7 @@ import imgOpsPlanProduct from "../../../../assets/DemoPicture/OpsPlanProduct.jpg
 
 import {
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../../ux/styles";
 
 const Step4 = () => {
@@ -31,7 +31,7 @@ const Step4 = () => {
                         component="h4"
                         variant="h4"
                         sx={{
-                            ...semanticTypo.cardH5,
+                            ...masterTypo.h5,
                             color: colors.primaryDark,
                             mb: 1.5,
                         }}
@@ -74,7 +74,7 @@ const Step4 = () => {
                         component="h4"
                         variant="h4"
                         sx={{
-                            ...semanticTypo.cardH5,
+                            ...masterTypo.h5,
                             color: colors.primaryDark,
                             mb: 1.5,
                         }}
