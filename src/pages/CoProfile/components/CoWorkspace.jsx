@@ -15,7 +15,7 @@ import ProductCard from "../cards/ProductCard";
 import MfgProcess from "../../MfgProcess/MfgProcess";
 
 import {
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 
 // ------------------------------------------------------------
@@ -34,7 +34,7 @@ export default function CoWorkspace({
         {/* Workspace Title */}
         <Typography
           sx={{
-            ...semanticTypo.pageH3,
+            ...masterTypo.h3,
             mb: 1.5,
           }}
         >
@@ -45,7 +45,7 @@ export default function CoWorkspace({
         {products.length === 0 ? (
           <Typography
             sx={{
-              ...semanticTypo.body,
+              ...masterTypo.body1,
               color: "text.secondary",
             }}
           >
@@ -100,7 +100,7 @@ export default function CoWorkspace({
       {/* Domain Title */}
       <Typography
         sx={{
-          ...semanticTypo.pageH3,
+          ...masterTypo.h3,
           mb: 1,
         }}
       >
@@ -110,7 +110,7 @@ export default function CoWorkspace({
       {/* Domain Status */}
       <Typography
         sx={{
-          ...semanticTypo.body,
+          ...masterTypo.body1,
           color: "text.secondary",
         }}
       >

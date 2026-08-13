@@ -9,7 +9,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import {
   colors,
-  semanticTypo,
+  masterTypo,
   cardStyle,
 } from "../../../ux/styles";
 
@@ -45,7 +45,7 @@ const AudienceCard = ({ icon: Icon, title, description }) => (
     <Box>
       <Typography
         sx={{
-          ...semanticTypo.cardH5,
+          ...masterTypo.h5,
           color: colors.primaryDark,
           mb: 0.25,
         }}
@@ -54,7 +54,7 @@ const AudienceCard = ({ icon: Icon, title, description }) => (
       </Typography>
       <Typography
         sx={{
-          ...semanticTypo.bodyB2,
+          ...masterTypo.body2,
         }}
       >
         {description}
@@ -72,7 +72,7 @@ const TargetAudience = () => {
         <Box sx={{ mb: 5 }}>
           <Typography
             sx={{
-              ...semanticTypo.pageH3,
+              ...masterTypo.h3,
               color: colors.primaryDark,
               mb: 1.5,
             }}
@@ -81,7 +81,7 @@ const TargetAudience = () => {
           </Typography>
           <Typography
             sx={{
-              ...semanticTypo.bodyB1,
+              ...masterTypo.body1,
               maxWidth: 600,
             }}
           >

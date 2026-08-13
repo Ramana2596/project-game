@@ -4,7 +4,7 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import {
     cardStyle,
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 const ContentSections = ({
@@ -132,7 +132,7 @@ const ContentSections = ({
                                                         id={`${section.key}-title`}
                                                         component="h2"
                                                         sx={{
-                                                            ...semanticTypo.pageH3,
+                                                            ...masterTypo.h3,
                                                             color: colors.primaryDark,
                                                             mb: 2,
                                                             position: "relative",
@@ -143,7 +143,7 @@ const ContentSections = ({
 
                                                         <Box
                                                             sx={{
-                                                                ...semanticTypo.bodyB1,
+                                                                ...masterTypo.body1,
                                                                 color: colors.body,
                                                                 lineHeight: 1.85,
                                                                 maxWidth: 680,
@@ -173,7 +173,7 @@ const ContentSections = ({
                                                         id={`${section.key}-title`}
                                                         component="h2"
                                                         sx={{
-                                                            ...semanticTypo.pageH3,
+                                                            ...masterTypo.h3,
                                                             color: colors.primaryDark,
                                                             mb: 2,
                                                             position: "relative",
@@ -184,7 +184,7 @@ const ContentSections = ({
 
                                                     <Box
                                                         sx={{
-                                                            ...semanticTypo.bodyB1,
+                                                            ...masterTypo.body1,
                                                             color: colors.body,
                                                             lineHeight: 1.85,
                                                             maxWidth: 680,
@@ -257,7 +257,7 @@ const ContentSections = ({
                                             id={`${section.key}-title`}
                                             component="h2"
                                             sx={{
-                                                ...semanticTypo.pageH3,
+                                                ...masterTypo.h3,
                                                 color: colors.primaryDark,
                                                 mb: 2,
                                                 position: "relative",
@@ -268,7 +268,7 @@ const ContentSections = ({
 
                                         <Box
                                             sx={{
-                                                ...semanticTypo.bodyB1,
+                                                ...masterTypo.body1,
                                                 color: colors.body,
                                                 lineHeight: 1.85,
                                                 maxWidth: 680,

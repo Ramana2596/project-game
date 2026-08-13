@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import {
   colors,
-  semanticTypo,
+  masterTypo,
   cardStyle,
 } from "../../../ux/styles";
 import { Link } from "react-router-dom";
@@ -81,7 +81,7 @@ const TrustedBy = () => {
             id="trusted-heading"
             component="h2"
             sx={{
-              ...semanticTypo.pageH3,
+              ...masterTypo.h3,
               color: colors.primaryDark,
               textAlign: "center",
               mb: 1.5,
@@ -95,7 +95,7 @@ const TrustedBy = () => {
           <Typography
             component="p"
             sx={{
-              ...semanticTypo.cardH4,
+              ...masterTypo.h4,
               fontSize: { xs: "1.05rem", md: "1.2rem" },
               color: colors.heading,
               fontWeight: 600,
@@ -153,7 +153,7 @@ const TrustedBy = () => {
 
                   <Typography
                     sx={{
-                      ...semanticTypo.caption,
+                      ...masterTypo.caption,
                       color: colors.subtitle,
                       mt: 1,
                     }}
@@ -238,7 +238,7 @@ const TrustedBy = () => {
                             <Typography
                               component="p"
                               sx={{
-                                ...semanticTypo.caption,
+                                ...masterTypo.caption,
                                 fontWeight: 700,
                                 color: colors.title,
                                 textAlign: "center",
@@ -279,7 +279,7 @@ const TrustedBy = () => {
                         }}
                       />
                       <Typography
-                        sx={{ ...semanticTypo.caption, color: colors.subtitle }}
+                        sx={{ ...masterTypo.caption, color: colors.subtitle }}
                       >
                         {meta.label}
                       </Typography>
@@ -310,7 +310,7 @@ const TrustedBy = () => {
           >
             <Typography
               sx={{
-                ...semanticTypo.caption,
+                ...masterTypo.caption,
                 color: colors.muted,
               }}
             >
@@ -324,7 +324,7 @@ const TrustedBy = () => {
                   component={Link}
                   to={`/${link.toLowerCase()}`}
                   sx={{
-                    ...semanticTypo.caption,
+                    ...masterTypo.caption,
                     color: colors.body,
                     textDecoration: "none",
                     "&:hover": {

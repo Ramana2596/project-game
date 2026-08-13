@@ -1,5 +1,5 @@
 // ============================================================
-// Component: Base Step Card Template
+// Component: Base Step Card Template: Presents each step content
 // UXLab V1.0
 // ============================================================
 
@@ -9,7 +9,7 @@ import { Box, Typography } from "@mui/material";
 import {
     colors,
     cardStyle,
-    semanticTypo,
+    masterTypo,
 } from "../../../../ux/styles";
 
 const BaseStep = ({
@@ -65,7 +65,7 @@ const BaseStep = ({
                         component="h3"
                         variant="h3"
                         sx={{
-                            ...semanticTypo.pageH4,
+                            ...masterTypo.h4,
                             color: colors.primaryDark,
                             mb: 0.75,
                         }}
@@ -77,7 +77,7 @@ const BaseStep = ({
                         component="p"
                         variant="body1"
                         sx={{
-                            ...semanticTypo.bodyB2,
+                            ...masterTypo.body2,
                             maxWidth: 700,
                         }}
                     >

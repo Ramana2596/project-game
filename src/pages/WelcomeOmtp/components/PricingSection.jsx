@@ -19,7 +19,7 @@ import {
     buttonStyle,
     cardStyle,
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 const PricingFeature = ({ text }) => (
@@ -40,7 +40,7 @@ const PricingFeature = ({ text }) => (
 
         <Typography
             component="span"
-            sx={semanticTypo.cardB2}
+            sx={masterTypo.body2}
         >
             {text}
         </Typography>
@@ -102,7 +102,7 @@ const PricingCard = ({
             <Typography
                 component="h3"
                 sx={{
-                    ...semanticTypo.cardH5,
+                    ...masterTypo.h5,
                     mb: 1,
                 }}
             >
@@ -112,7 +112,7 @@ const PricingCard = ({
             <Typography
                 component="p"
                 sx={{
-                    ...semanticTypo.cardB2,
+                    ...masterTypo.body2,
                     mb: 3,
                     minHeight: 42,
                 }}
@@ -129,7 +129,7 @@ const PricingCard = ({
             >
                 <Typography
                     sx={{
-                        ...semanticTypo.heroH2,
+                        ...masterTypo.h2,
                         color: colors.primaryDark,
                         lineHeight: 1,
                     }}
@@ -139,7 +139,7 @@ const PricingCard = ({
 
                 <Typography
                     sx={{
-                        ...semanticTypo.cardB2,
+                        ...masterTypo.body2,
                         ml: 1,
                     }}
                 >
@@ -188,7 +188,7 @@ const PricingSection = () => (
                 <Typography
                     component="h2"
                     sx={{
-                        ...semanticTypo.pageH3,
+                        ...masterTypo.h3,
                         color: colors.primaryDark,
                         mb: 2,
                     }}
@@ -199,7 +199,7 @@ const PricingSection = () => (
                 <Typography
                     component="p"
                     sx={{
-                        ...semanticTypo.bodyB1,
+                        ...masterTypo.body1,
                         maxWidth: 600,
                     }}
                 >

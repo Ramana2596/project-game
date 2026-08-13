@@ -16,7 +16,7 @@ import {
 
 import {
   colors,
-  semanticTypo,
+  masterTypo,
   buttonStyle,
 } from "../../../ux/styles";
 
@@ -65,7 +65,7 @@ export default function LeapHeader({
 
           <Typography
             sx={{
-              ...semanticTypo.overline,
+              ...masterTypo.caption,
               color: colors.primary,
               fontWeight: 700,
               letterSpacing: 1,
@@ -112,7 +112,7 @@ export default function LeapHeader({
           {!!stageName && (
             <Typography
               sx={{
-                ...semanticTypo.cardH5,
+                ...masterTypo.h5,
               }}
             >
               {stageName}
@@ -122,7 +122,7 @@ export default function LeapHeader({
           {!!infoType && (
             <Typography
               sx={{
-                ...semanticTypo.bodyMedium,
+                ...masterTypo.body1,
                 color: colors.textSecondary,
                 mt: 0.4,
                 fontWeight: 600,

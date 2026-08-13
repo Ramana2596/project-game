@@ -9,7 +9,7 @@ import imgInfoDesk1 from '../../../assets/DemoPicture/InfoDesk1.jpg';
 import imgInfoDesk2 from '../../../assets/DemoPicture/InfoDesk2.jpg';
 import {
   colors,
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 
 const InfoDeskView = () => (
@@ -37,7 +37,7 @@ const InfoDeskView = () => (
             component="h4"
             variant="h4"
             sx={{
-              ...semanticTypo.cardH5,
+              ...masterTypo.h5,
               color: colors.primaryDark,
               mb: 1.5,
             }}
@@ -79,7 +79,7 @@ const InfoDeskView = () => (
             component="h4"
             variant="h4"
             sx={{
-              ...semanticTypo.cardH5,
+              ...masterTypo.h5,
               color: colors.primaryDark,
               mb: 1.5,
             }}

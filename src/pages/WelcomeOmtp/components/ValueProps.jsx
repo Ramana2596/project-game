@@ -8,7 +8,7 @@ import { Box, Typography, Grid, Container } from "@mui/material";
 import {
   colors,
   cardStyle,
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 
 const valueCards = [
@@ -56,7 +56,7 @@ const ValueProps = () => (
           component="h2"
           variant="h3"
           sx={{
-            ...semanticTypo.pageH3,
+            ...masterTypo.h3,
             background: colors.heroGradient,
             backgroundClip: "text",
             WebkitBackgroundClip: "text",
@@ -71,7 +71,7 @@ const ValueProps = () => (
           component="p"
           variant="body2"
           sx={{
-            ...semanticTypo.sectionB1,
+            ...masterTypo.body1,
             maxWidth: 600,
           }}
         >
@@ -149,7 +149,7 @@ const ValueProps = () => (
                 component="h3"
                 variant="h5"
                 sx={{
-                  ...semanticTypo.cardH5,
+                  ...masterTypo.h5,
                 }}
               >
                 {card.title}
@@ -161,7 +161,7 @@ const ValueProps = () => (
                 component="p"
                 variant="body2"
                 sx={{
-                  ...semanticTypo.cardB2,
+                  ...masterTypo.body2,
                   lineHeight: 1.45,
                 }}
               >

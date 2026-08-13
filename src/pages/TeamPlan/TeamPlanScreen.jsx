@@ -1,60 +1,89 @@
 // File: src/pages/TeamPlan/TeamPlanScreen.jsx
-// Purpose: Main screen for Operations Business Plan with tabs, table, and actions
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Box, Typography, Paper, Button, Tabs, Tab, Stack, alpha, Tooltip,
+  Box,
+  Typography,
+  Paper,
+  Button,
+  Tabs,
+  Tab,
+  Stack,
+  Tooltip,
+  Alert,
+  Chip
 } from "@mui/material";
-import { Save as SaveIcon, Close as CancelIcon } from "@mui/icons-material";
+import {
+  Save as SaveIcon,
+  Close as CancelIcon,
+  CheckCircle as CheckIcon,
+  Pending as PendingIcon,
+  RadioButtonUnchecked as UnseenIcon,
+  Inventory as InventoryIcon,
+  Layers as LayersIcon,
+  PrecisionManufacturing as ManufacturingIcon
+} from "@mui/icons-material";
 import { format } from "date-fns";
-import { Alert } from "@mui/material";
-
-import TeamPlanItem from "./components/TeamPlanItem.jsx"; // Table component
-import ToastMessage from "../../components/ToastMessage.jsx"; // Toast notifications
-import { useTeamPlan } from "./hooks/useTeamPlan.js"; // Custom hook with tab + table logic
-import { useUser } from "../../core/access/userContext.jsx"; // User context
-import { CATEGORY_ICON } from "./constants/categoryIcon.js"; // Tab metadata (labels, icons, tooltips)
-
-// MUI icons for each category
-import InventoryIcon from "@mui/icons-material/Inventory";
-import LayersIcon from "@mui/icons-material/Layers";
-import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import {
+  colors,
+  tableStyle,
+  buttonStyle,
+  layoutStyle,
+  masterTypo,
+  cardStyle
+} from "../../ux/styles";
+import TeamPlanItem from "./components/TeamPlanItem.jsx";
+import ToastMessage from "../../components/ToastMessage.jsx";
+import { useTeamPlan } from "./hooks/useTeamPlan.js";
+import { useUser } from "../../core/access/userContext.jsx";
+import { CATEGORY_ICON } from "./constants/categoryIcon.js";
 
 const TeamPlanScreen = () => {
-  const { userInfo } = useUser(); // Get user info from context
+  const { userInfo } = useUser();
 
-  // Initialize hook to manage production plan state and operations
   const {
-    tableData, tabDataMap, loading, currentTab, editMode, columns,
-    setEditMode, handleTabChange, handleCellChange,
-    saveTableData, cancelEdit, productionMonth, tabStatusMap, fetchBuyInfoLovForPart,
+    tableData,
+    tabDataMap,
+    loading,
+    currentTab,
+    editMode,
+    columns,
+    setEditMode,
+    handleTabChange,
+    handleCellChange,
+    saveTableData,
+    cancelEdit,
+    productionMonth,
+    tabStatusMap,
+    fetchBuyInfoLovForPart,
     lovsMap,
   } = useTeamPlan(userInfo);
 
-  // Manage feedback notifications for save/error actions
+  useEffect(() => {
+    document.title = `Operations Business Plan | Batch ${userInfo?.gameBatch || ""} - Team ${userInfo?.gameTeam || ""}`;
+  }, [userInfo?.gameBatch, userInfo?.gameTeam]);
+
   const [toast, setToast] = useState({ open: false, message: "", severity: "info" });
 
-  // Execute save operation and provide visual feedback via toast
   const onSaveClick = async () => {
     try {
       const res = await saveTableData();
-      if (res.success) {
+      if (res?.success) {
         setToast({ open: true, message: "Plan saved successfully", severity: "success" });
         setEditMode(false);
       } else {
-        setToast({ open: true, message: res.message || "Save failed", severity: "error" });
+        setToast({ open: true, message: res?.message || "Save failed", severity: "error" });
       }
-    } catch (err) {
+    } catch {
       setToast({ open: true, message: "Unexpected error while saving", severity: "error" });
     }
   };
 
-  // Logic: Pick which columns look "editable" based on the current tab using OR (||) logic
   const enhancedColumns = columns.map((col) => {
-    const isEditable = col.editable ||
+    const isEditable =
+      col.editable ||
       (currentTab === "OI 001" && col.key === "Quantity") ||
-      (currentTab !== "OI 001" && ["Required_Quantity", "Info_Price"].includes(col.key)); 
-    
+      (currentTab !== "OI 001" && ["Required_Quantity", "Info_Price"].includes(col.key));
+
     return {
       ...col,
       headerClassName: isEditable ? "editable-header-bold" : "standard-header-bold",
@@ -62,154 +91,224 @@ const TeamPlanScreen = () => {
     };
   });
 
-  // Define icon set for tab status indicators (Saved, Unsaved, Unseen)
-  const STATUS_ICONS = {
-    saved: { icon: "✅", tooltip: "Saved" },
-    unsaved: { icon: "🟡", tooltip: "Yet to Save" },
-    unseen: { icon: "⚪", tooltip: "Not yet opened" },
+  // Operational status indicators driven by colorPalette.js tokens
+  const STATUS_CONFIG = {
+    saved: {
+      icon: <CheckIcon sx={{ fontSize: 16, color: colors.success }} />,
+      tooltip: "Saved"
+    },
+    unsaved: {
+      icon: <PendingIcon sx={{ fontSize: 16, color: colors.warning }} />,
+      tooltip: "Pending Save"
+    },
+    unseen: {
+      icon: <UnseenIcon sx={{ fontSize: 16, color: colors.subtitle }} />,
+      tooltip: "Not opened"
+    },
   };
 
-  // Extract relevant rows for the active tab from the state map
   const currentRows = tabDataMap?.[currentTab] ?? tableData ?? [];
-
-  // Determine button states based on current tab's modification status
   const currentStatus = tabStatusMap?.[currentTab] || "unseen";
   const canSave = currentStatus === "unsaved" && editMode;
   const canCancel = currentStatus === "unsaved" && editMode;
 
   return (
-    <Box sx={{ p: 4, backgroundColor: "#F8F9FA" }}>
-
-      {/* Header section containing the main title and dynamic metadata */}
-      <Box sx={{ mb: 3 }}>
-
-        {/* Layout for heading info and global action buttons */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-
-          {/* Render branded heading and user session details */}
-          <Box>
-            <Typography
-              sx={{
-                fontFamily: "'Inter', sans-serif",
-                fontWeight: 700,
-                fontSize: "32px",
-                color: "#0061F2",
-                letterSpacing: "-0.3px",
-                mb: 1
-              }}
-            >
-              Operations Business Plan
-            </Typography>
-
-            <Stack direction="row" spacing={4}>
-              <Typography sx={{ fontSize: "1.1rem" }}>
-                <Box component="span" sx={{ fontWeight: 900 }}>BATCH:</Box>
-                <Box component="span" sx={{ color: "#6c757d", ml: 1 }}>{userInfo.gameBatch}</Box>
+    <Box component="main" aria-labelledby="team-plan-heading" sx={{ ...layoutStyle.root, p: 2 }}>
+      <Paper
+        component="article"
+        elevation={0}
+        sx={{
+          ...cardStyle.container,
+          overflow: "hidden",
+          // Table Header uses shared color token from colorPalette.js & structural header styles from tableStyle.js
+          "& .MuiDataGrid-columnHeaders, & .standard-header-bold, & .editable-header-bold": {
+            ...tableStyle?.header,
+            backgroundColor: colors.selected,
+            color: colors.heading || colors.primaryDark,
+            fontWeight: 700,
+            fontSize: "0.825rem",
+            letterSpacing: "0.03em",
+            borderBottom: `1px solid ${colors.border}`,
+          },
+          "& .MuiDataGrid-columnHeaderTitle": {
+            fontWeight: 700,
+            color: colors.heading || colors.primaryDark,
+          }
+        }}
+      >
+        {/* Header Title Bar */}
+        <Box sx={{ p: 3, pb: 2, borderBottom: `1px solid ${colors.border}`, background: colors.paper }}>
+          <Box sx={{ ...layoutStyle.flexRow, flexWrap: "wrap", gap: 2, alignItems: "center", justifyContent: "space-between" }}>
+            <Box sx={{ ...layoutStyle.flexColumn, gap: 1 }}>
+              <Typography
+                id="team-plan-heading"
+                component="h1"
+                sx={{ ...masterTypo.h1, fontSize: "1.4rem", color: colors.primary }}
+              >
+                Operations Business Plan
               </Typography>
 
-              <Typography sx={{ fontSize: "1.1rem" }}>
-                <Box component="span" sx={{ fontWeight: 900 }}>TEAM:</Box>
-                <Box component="span" sx={{ color: "#6c757d", ml: 1 }}>{userInfo.gameTeam}</Box>
-              </Typography>
+              <Stack direction="row" spacing={3} alignItems="center" flexWrap="wrap" component="dl" sx={{ my: 0 }}>
+                <Stack direction="row" spacing={0.75} alignItems="center">
+                  <Typography component="dt" sx={{ ...masterTypo.body2, color: colors.subtitle }}>
+                    Batch:
+                  </Typography>
+                  <Typography component="dd" sx={{ margin: 0 }}>
+                    <Chip label={userInfo.gameBatch || "—"} size="small" variant="outlined" sx={{ fontWeight: 600 }} />
+                  </Typography>
+                </Stack>
 
-              <Typography sx={{ fontSize: "1.1rem" }}>
-                <Box component="span" sx={{ fontWeight: 900 }}>PERIOD:</Box>
-                <Box component="span" sx={{ color: "#6c757d", ml: 1 }}>
-                  {productionMonth ? format(new Date(productionMonth), "MMM yyyy").toUpperCase() : ""}
-                </Box>
-              </Typography>
+                <Stack direction="row" spacing={0.75} alignItems="center">
+                  <Typography component="dt" sx={{ ...masterTypo.body2, color: colors.subtitle }}>
+                    Team:
+                  </Typography>
+                  <Typography component="dd" sx={{ margin: 0 }}>
+                    <Chip label={userInfo.gameTeam || "—"} size="small" variant="outlined" sx={{ fontWeight: 600 }} />
+                  </Typography>
+                </Stack>
+
+                <Stack direction="row" spacing={0.75} alignItems="center">
+                  <Typography component="dt" sx={{ ...masterTypo.body2, color: colors.subtitle }}>
+                    Period:
+                  </Typography>
+                  <Typography component="dd" sx={{ ...masterTypo.body1, fontWeight: 600, color: colors.heading, margin: 0 }}>
+                    {productionMonth ? format(new Date(productionMonth), "MMM yyyy") : "—"}
+                  </Typography>
+                </Stack>
+              </Stack>
+            </Box>
+
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <Button
+                variant="outlined"
+                color="inherit"
+                disabled={!canCancel}
+                onClick={cancelEdit}
+                startIcon={<CancelIcon />}
+                sx={{ ...buttonStyle.secondary, ...buttonStyle.compact }}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                variant="contained"
+                startIcon={<SaveIcon />}
+                disabled={!canSave}
+                onClick={onSaveClick}
+                sx={{ ...buttonStyle.primary, ...buttonStyle.compact }}
+              >
+                Submit Plan
+              </Button>
             </Stack>
           </Box>
-
-          {/* Action buttons for persisting or reverting table changes */}
-          <Stack direction="row" spacing={2}>
-            <Button
-              variant="contained"
-              startIcon={<SaveIcon />}
-              disabled={!canSave}
-              onClick={onSaveClick}
-              sx={{ fontWeight: 700 }}
-            >
-              Submit
-            </Button>
-
-            <Button
-              variant="contained"
-              disabled={!canCancel}
-              onClick={cancelEdit}
-              startIcon={<CancelIcon />}
-              color="inherit"
-              sx={{ fontWeight: 700 }}
-            >
-              Cancel
-            </Button>
-          </Stack>
         </Box>
 
-        {/* Display warning banner when active tab has unsaved modifications */}
+        {/* Warning Banner */}
         {tabStatusMap[currentTab] === "unsaved" && (
-          <Box
-            sx={{
-              mt: 2, px: 2, py: 1.5, borderRadius: 2,
-              backgroundColor: "#FFF3CD", border: "1px solid #FFEEBA",
-              display: "flex", justifyContent: "space-between", alignItems: "center"
-            }}
-          >
-            <Typography sx={{ fontWeight: 600, color: "#856404" }}>
-              ⚠ Changes pending !. Please Save or Cancel.
-            </Typography>
+          <Box sx={{ p: 2, pb: 0, backgroundColor: colors.warningLight || "#fffbeb" }}>
+            <Alert
+              severity="warning"
+              variant="outlined"
+              role="status"
+              aria-live="polite"
+              sx={{
+                backgroundColor: colors.warningLight || "#fff8e6",
+                borderColor: colors.warning,
+                borderRadius: 2,
+                "& .MuiAlert-message": { ...masterTypo.body2, color: colors.title || "#92400e" },
+              }}
+            >
+              Edited Data not saved yet. Submit or cancel !.
+            </Alert>
           </Box>
         )}
-      </Box>
 
-      {/* Navigation bar with category-specific icons and status indicators */}
-      <Tabs
-        value={currentTab}
-        onChange={(e, v) => handleTabChange(v)}
-        sx={{ minHeight: '48px', '& .MuiTabs-indicator': { display: 'none' } }}
-      >
-        {Object.entries(CATEGORY_ICON).map(([key, cfg]) => {
-          const isActive = currentTab === key;
-          const status = tabStatusMap[key] || "unseen";
-          const { icon, tooltip } = STATUS_ICONS[status];
+        {/* Tab Navigation Row */}
+        <Box
+          component="nav"
+          aria-label="Operations Category Navigation"
+          sx={{
+            px: 2,
+            pt: 1.5,
+            backgroundColor: colors.default || "#f8fafc",
+            borderBottom: `1px solid ${colors.border}`
+          }}
+        >
+          <Tabs
+            value={currentTab}
+            onChange={(e, v) => handleTabChange(v)}
+            TabIndicatorProps={{ style: { display: "none" } }}
+            sx={{ minHeight: "44px" }}
+          >
+            {Object.entries(CATEGORY_ICON).map(([key, cfg]) => {
+              const isActive = currentTab === key;
+              const status = tabStatusMap[key] || "unseen";
+              const statusCfg = STATUS_CONFIG[status];
 
-          {/* Switch category icons based on Operations Input ID */ }
-          let CategoryIconComponent = InventoryIcon;
-          if (key === "OI 001") CategoryIconComponent = InventoryIcon;
-          if (key === "OI 002") CategoryIconComponent = LayersIcon;
-          if (key === "OI 003") CategoryIconComponent = PrecisionManufacturingIcon;
+              let CategoryIconComponent = InventoryIcon;
+              if (key === "OI 002") CategoryIconComponent = LayersIcon;
+              if (key === "OI 003") CategoryIconComponent = ManufacturingIcon;
 
-          const rowCount = (tabDataMap?.[key] || []).length;
-          const countBadge = rowCount > 0 ? ` (${rowCount})` : "";
+              const rowCount = (tabDataMap?.[key] || []).length;
 
-          return (
-            <Tab
-              key={key}
-              value={key}
-              label={
-                <Tooltip title={`${cfg.tooltip}${countBadge} • ${tooltip}`} arrow>
-                  <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                    <CategoryIconComponent fontSize="small" />
-                    <span>{cfg.label}</span>
-                    <span>{icon}</span>
-                  </span>
-                </Tooltip>
-              }
-              sx={{
-                mr: 1.5, minHeight: '48px', borderRadius: "10px 10px 0 0",
-                fontWeight: 800, fontSize: "0.9rem",
-                backgroundColor: isActive ? "#2D3748" : "transparent",
-                color: isActive ? "#FFF !important" : "#6c757d",
-                '&:hover': { backgroundColor: isActive ? "#2D3748" : alpha("#2D3748", 0.05) }
-              }}
-            />
-          );
-        })}
-      </Tabs>
+              return (
+                <Tab
+                  key={key}
+                  value={key}
+                  label={
+                    <Tooltip title={`${cfg.tooltip} (${rowCount} items) • ${statusCfg.tooltip}`} arrow>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <CategoryIconComponent fontSize="small" sx={{ color: isActive ? colors.primary : colors.subtitle }} />
+                        <span>{cfg.label}</span>
+                        {rowCount > 0 && (
+                          <Typography
+                            component="span"
+                            variant="caption"
+                            sx={{
+                              opacity: 0.85,
+                              fontWeight: 700,
+                              color: isActive ? colors.primary : colors.subtitle
+                            }}
+                          >
+                            ({rowCount})
+                          </Typography>
+                        )}
+                        <Box sx={{ display: "inline-flex", ml: 0.5 }}>
+                          {statusCfg.icon}
+                        </Box>
+                      </Box>
+                    </Tooltip>
+                  }
+                  sx={{
+                    mr: 1,
+                    minHeight: 44,
+                    px: 2.5,
+                    borderRadius: "14px 14px 0 0",
+                    fontWeight: 700,
+                    fontSize: "0.85rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.03em",
+                    color: isActive ? colors.primary : colors.subtitle,
+                    backgroundColor: isActive ? colors.selected : colors.paper,
+                    border: `1px solid ${colors.border}`,
+                    borderBottom: isActive ? `1px solid ${colors.selected}` : `1px solid ${colors.border}`,
+                    borderTop: isActive ? `4px solid ${colors.primary}` : `1px solid ${colors.border}`,
+                    marginBottom: "-1px",
+                    zIndex: isActive ? 2 : 1,
+                    transition: "all .15s ease-in-out",
+                    "&:hover": {
+                      backgroundColor: isActive ? colors.selected : colors.hover,
+                      color: isActive ? colors.primary : colors.heading
+                    },
+                  }}
+                />
+              );
+            })}
+          </Tabs>
+        </Box>
 
-      {/* Main data display area rendering the production plan table */}
-      <Paper elevation={15} sx={{ borderRadius: "0 20px 20px 20px", border: "1px solid #DEE2E6", overflow: "hidden", mt: 2 }}>
-        <Box sx={{ p: 1 }}>
+        {/* Data Table Wrapper */}
+        <Box sx={{ ...tableStyle?.container, background: colors.paper }}>
           <TeamPlanItem
             rows={currentRows}
             loading={loading}
@@ -223,7 +322,7 @@ const TeamPlanScreen = () => {
         </Box>
       </Paper>
 
-      {/* Floating notification system for operation results */}
+      {/* Toast Notification Bar */}
       <ToastMessage {...toast} onClose={() => setToast({ ...toast, open: false })} />
     </Box>
   );

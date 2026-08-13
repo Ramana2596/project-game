@@ -20,7 +20,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {
     buttonStyle,
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 const HeroSection = ({ handleDemoLogin }) => {
@@ -85,7 +85,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                                 id="hero-heading"
                                 component="h1"
                                 sx={{
-                                    ...semanticTypo.heroH2,
+                                    ...masterTypo.h2,
                                     mb: 3,
                                     background: colors.heroGradient,
                                     backgroundClip: "text",
@@ -99,7 +99,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                             <Typography
                                 component="p"
                                 sx={{
-                                    ...semanticTypo.heroB1,
+                                    ...masterTypo.body1,
                                     mb: 4,
                                     maxWidth: 540,
                                     lineHeight: 1.75,
@@ -212,7 +212,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                                     component="h2"
                                     variant="h2"
                                     sx={{
-                                        ...semanticTypo.pageH3,
+                                        ...masterTypo.h3,
                                         color: colors.white,
                                         textAlign: "center",
                                         px: 2,

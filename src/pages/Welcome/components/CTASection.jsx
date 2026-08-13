@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import {
     colors,
     buttonStyle,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 const CTASection = ({ handleDemoLogin }) => {
@@ -49,7 +49,7 @@ const CTASection = ({ handleDemoLogin }) => {
                     id="cta-heading"
                     component="h2"
                     sx={{
-                        ...semanticTypo.pageH3,
+                        ...masterTypo.h3,
                         color: colors.white,
                         mb: 3,
                     }}
@@ -60,7 +60,7 @@ const CTASection = ({ handleDemoLogin }) => {
                 <Typography
                     component="p"
                     sx={{
-                        ...semanticTypo.bodyB1,
+                        ...masterTypo.body1,
                         color: "rgba(255,255,255,0.90)",
                         mb: 4,
                     }}

@@ -9,15 +9,17 @@ import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from '../Welcome/services/service.js';
 import { API_STATUS } from '../../utils/statusCodes';
+// Change pageStyle -> layoutStyle
 import {
   colors,
-  layoutStyle,
+  layoutStyle, // <--- replaced pageStyle
+  cardStyle,
+  buttonStyle,
 } from "../../ux/styles";
 
 import OmtpNavbar from './components/OmtpNavbar';
 import HeroSection from './components/HeroSection';
 import VideoIntro from './components/VideoIntro';
-//import CorePillars from './components/CorePillars'; 
 import ValueProps from './components/ValueProps';
 import WalkThroughSection from './components/WalkThroughSection';
 import InfoDeskView from './components/InfoDeskView';
@@ -160,7 +162,7 @@ const WelcomeOmtp = () => {
             onStart={handleOpenDemo}
           />
         )}
-        
+
         {/* Purpose: Footer */}
         {IsActive.Footer && (
           <Footer />

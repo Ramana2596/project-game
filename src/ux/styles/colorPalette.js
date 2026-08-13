@@ -1,102 +1,224 @@
 // ============================================================
-// OpsMgt UX Lab
-// File : colorPalette.js
-// Professional Central Color Palette (Flat & Nested Theme)
+// OpsMgt UXLab V3
+// File    : colorPalette.js
+// Purpose : Central Color Palette — Purple Brand
+//
+// DESIGN PRINCIPLE
+// ------------------------------------------------------------
+// One meaning = one standard token.
+//
+// Developers should be naturally guided to the obvious choice:
+//   status.success  -> success
+//   status.warning  -> warning
+//   status.error    -> error
+//   brand.primary   -> brand purple
+//
+// Accent is reserved for genuine data/category colors.
 // ============================================================
 
-// 1. Primary Flat Design System Tokens (colors)
-export const colors = {
-  // Brand & Interactive
+
+// ============================================================
+// 1. BRAND
+// ============================================================
+
+export const brand = {
   primary: "#7B1FA2",
   primaryLight: "#9C27B0",
   primaryDark: "#512DA8",
-  secondary: "#673AB7",
-  accent: "#7E57C2",
-  hover: "#F3EDFF",
-  selected: "#EDE7F6",
 
-  // High-Energy Gradients
-  pageGradient: "linear-gradient(135deg, #F5F3FF 0%, #FAF7FF 50%, #F0ECFF 100%)",
-  heroGradient: "linear-gradient(135deg, #7B1FA2 0%, #512DA8 100%)",
-  panelGradient: "linear-gradient(180deg, #FFFFFF 0%, #FBFAFF 100%)",
-  iconGradient: "linear-gradient(135deg, #7B1FA2, #512DA8)",
+  primarySoft: "#F3EDFF",
+  primarySelected: "#EDE7F6",
 
-  // Layout Backgrounds & Surfaces
+  onPrimary: "#FFFFFF",
+  onPrimarySoft: "#512DA8",
+};
+
+
+// ============================================================
+// 2. GRADIENTS
+// ============================================================
+
+export const gradients = {
+  hero:
+    "linear-gradient(135deg, #7B1FA2 0%, #512DA8 100%)",
+
+  page:
+    "linear-gradient(135deg, #F5F3FF 0%, #FAF7FF 50%, #F0ECFF 100%)",
+
+  panel:
+    "linear-gradient(180deg, #FFFFFF 0%, #FBFAFF 100%)",
+
+  icon:
+    "linear-gradient(135deg, #7B1FA2, #512DA8)",
+};
+
+
+// ============================================================
+// 3. ACCENT
+//
+// ONLY genuine data/category colors belong here.
+// ============================================================
+
+export const accent = {
+  blue: "#1E4FD8",
+  teal: "#00897B",
+};
+
+
+// ============================================================
+// 4. SURFACES
+// ============================================================
+
+export const surface = {
   page: "#FAF7FF",
   paper: "#FFFFFF",
   card: "#FFFFFF",
   panel: "#F8F5FF",
+  panelAlt: "#F5F5F5",
+};
 
-  // Typography Scale
+
+// ============================================================
+// 5. TEXT
+// ============================================================
+
+export const text = {
   title: "#1F2D3D",
   heading: "#32475B",
   body: "#546E7A",
   subtitle: "#6B6488",
   muted: "#90A4AE",
   white: "#FFFFFF",
+};
 
-  // Borders & Dividers
-  border: "#E6E0F4",
+
+// ============================================================
+// 6. BORDERS / DIVIDERS
+// ============================================================
+
+export const border = {
+  default: "#E6E0F4",
   divider: "#ECE7F7",
   shadowColor: "rgba(103, 58, 183, 0.15)",
+};
 
-  // Operational Status Alerts
+
+// ============================================================
+// 7. STATUS
+// ============================================================
+
+export const status = {
   success: "#2E7D32",
   warning: "#ED6C02",
   error: "#D32F2F",
   info: "#0288D1",
-
-  // Disabled States
-  disabledBackground: "#EAE6F2",
-  disabledText: "#A39EB2",
 };
 
-// 2. Nested Theme Model (Derived to maintain compatibility)
-export const colorPalette = {
-  brand: {
-    primary: colors.primary,
-    primaryLight: colors.primaryLight,
-    primaryDark: colors.primaryDark,
-    secondary: colors.secondary,
-    accent: colors.accent,
-    hover: colors.hover,
-    selected: colors.selected,
+
+// ============================================================
+// 8. DISABLED
+// ============================================================
+
+export const disabled = {
+  background: "#EAE6F2",
+  text: "#A39EB2",
+};
+
+
+// ============================================================
+// 9. INTERACTIVE STATES
+//
+// Every state contains BOTH background and text.
+// ============================================================
+
+export const state = {
+  default: {
+    background: gradients.hero,
+    text: brand.onPrimary,
   },
-  gradients: {
-    pageGradient: colors.pageGradient,
-    heroGradient: colors.heroGradient,
-    panelGradient: colors.panelGradient,
-    iconGradient: colors.iconGradient,
+
+  hover: {
+    background: brand.primaryDark,
+    text: brand.onPrimary,
   },
-  background: {
-    default: colors.page,
-    paper: colors.paper,
-    card: colors.card,
-    panel: colors.panel,
+
+  active: {
+    background: brand.primaryDark,
+    text: brand.onPrimary,
   },
-  text: {
-    primary: colors.title,
-    heading: colors.heading,
-    body: colors.body,
-    subtitle: colors.subtitle,
-    muted: colors.muted,
-    white: colors.white,
+
+  selected: {
+    background: brand.primarySelected,
+    text: brand.onPrimarySoft,
   },
-  borders: {
-    border: colors.border,
-    divider: colors.divider,
-    shadowColor: colors.shadowColor,
-  },
-  status: {
-    success: colors.success,
-    warning: colors.warning,
-    error: colors.error,
-    info: colors.info,
-  },
+
   disabled: {
-    bg: colors.disabledBackground,
-    text: colors.disabledText,
+    background: disabled.background,
+    text: disabled.text,
   },
 };
+
+
+// ============================================================
+// 10. STANDARD FLAT COLORS
+//
+// Convenience surface for existing/new code that uses colors.*
+// ============================================================
+
+export const colors = {
+  // Brand
+  primary: brand.primary,
+  primaryLight: brand.primaryLight,
+  primaryDark: brand.primaryDark,
+  primarySoft: brand.primarySoft,
+  primarySelected: brand.primarySelected,
+  onPrimary: brand.onPrimary,
+  onPrimarySoft: brand.onPrimarySoft,
+
+  // Gradients
+  heroGradient: gradients.hero,
+  pageGradient: gradients.page,
+  panelGradient: gradients.panel,
+  iconGradient: gradients.icon,
+
+  // Accent
+  accentBlue: accent.blue,
+  accentTeal: accent.teal,
+
+  // Surface
+  page: surface.page,
+  paper: surface.paper,
+  card: surface.card,
+  panel: surface.panel,
+  panelAlt: surface.panelAlt,
+
+  // Text
+  title: text.title,
+  heading: text.heading,
+  body: text.body,
+  subtitle: text.subtitle,
+  muted: text.muted,
+  white: text.white,
+
+  // Border
+  border: border.default,
+  divider: border.divider,
+  shadowColor: border.shadowColor,
+
+  // Status
+  success: status.success,
+  warning: status.warning,
+  error: status.error,
+  info: status.info,
+
+  // Disabled
+  disabledBackground: disabled.background,
+  disabledText: disabled.text,
+};
+
+
+// ============================================================
+// DEFAULT EXPORT
+// ============================================================
 
 export default colors;

@@ -1,94 +1,228 @@
 // ============================================================
-// OpsMgt UX Lab
-// File : CardStyle.js
-// Purpose : Standard card styles for the application (Purple Theme)
-// ============================================================
+// OpsMgt UXLab V3
+// File    : cardStyle.js
+// Purpose : Standard Surface Styles (Purple Theme)
+// ------------------------------------------------------------
 
-import { colors } from "./colorPalette";
-import { muiTypo, semanticTypo } from "./masterTypo";
+import {
+  colors,
+  brand,
+  accent,
+  surface,
+  text,
+  border,
+  status,
+} from "./colorPalette";
+
+import { masterTypo } from "./masterTypo";
+
 
 export const cardStyle = {
 
   // ==========================================================
-  // Standard Page Card
+  // STANDARD CARD SURFACE
   // ==========================================================
+
   primary: {
     height: "100%",
-    borderRadius: 5,
+    borderRadius: 3,
     overflow: "hidden",
-    background: colors.card || "#ffffff",
-    border: `1px solid ${colors.border || "#e0e0e0"}`,
-    boxShadow: `0 4px 16px ${colors.primary}14`, // Dynamic 8% opacity alpha hex
-    transition: "all .30s ease",
+
+    background: surface.card,
+    border: `1px solid ${border.default}`,
+
+    boxShadow: `0 2px 10px ${brand.primary}0F`,
+    transition: "all .25s ease",
+
     "&:hover": {
-      transform: "translateY(-6px)",
-      boxShadow: `0 16px 32px ${colors.primary}2E`, // Dynamic 18% opacity alpha hex
-      borderColor: colors.primary,
+      transform: "translateY(-4px)",
+      boxShadow: `0 12px 24px ${brand.primary}26`,
+      borderColor: brand.primary,
     },
   },
 
+
   // ==========================================================
-  // Card Content
+  // CARD CONTENT
   // ==========================================================
+
   content: {
     p: 3,
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-start", // Core fix for text layout alignment
+    justifyContent: "flex-start",
     gap: 3,
   },
 
- // ==========================================================
-  // Icon Container (Default Rounded Square - as in original)
+
   // ==========================================================
+  // ICON BOX
+  // ==========================================================
+
   iconBox: {
     width: 64,
     height: 64,
-    borderRadius: 3, // <--- This stays a rounded square
+    borderRadius: 3,
     flexShrink: 0,
+
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+
     background: colors.iconGradient,
+
     "& svg": {
       fontSize: 38,
-      color: colors.white || "#ffffff",
+      color: text.white,
     },
   },
 
-  // ==========================================================
-  // Circle Icon Variant (New Additive Style)
-  // ==========================================================
+
+  // Circular variant of iconBox
   iconBoxCircle: {
-    borderRadius: "50%", // <--- This overrides to a perfect circle
+    borderRadius: "50%",
   },
-  
+
+
   // ==========================================================
-  // Card Title
+  // CARD TYPOGRAPHY
   // ==========================================================
+
   title: {
-  ...semanticTypo.cardH4,
+    ...masterTypo.h4,
+  },
 
-},
-
-
-  // ==========================================================
-  // Card Subtitle
-  // ==========================================================
   subtitle: {
-  ...semanticTypo.cardH5,
-  mt: 0.75,
-},
+    ...masterTypo.h5,
+    mt: 0.75,
+  },
 
 
-// ==========================================================
-// Card Footer (Added from V2, with safe fallbacks)
-// ==========================================================
-footer: {
-  px: 3,
-  py: 2,
-  borderTop: `1px solid ${colors.divider || "#e0e0e0"}`,
-  background: colors.panel || "#f5f5f5",
-},
+  // ==========================================================
+  // CARD FOOTER
+  // ==========================================================
 
+  footer: {
+    px: 3,
+    py: 2,
+
+    borderTop: `1px solid ${border.divider}`,
+    background: surface.panelAlt,
+  },
+
+
+  // ==========================================================
+  // KPI / STAT CARD
+  // ==========================================================
+
+  statCard: {
+    background: surface.paper,
+
+    borderRadius: 3,
+    p: 2.5,
+
+    display: "flex",
+    alignItems: "center",
+    gap: 2,
+
+    boxShadow: `0 1px 6px ${brand.primary}0D`,
+    border: `1px solid ${border.default}`,
+  },
+
+
+  // KPI icon
+  statIconCircle: (accentColor = accent.purple) => ({
+    width: 56,
+    height: 56,
+    minWidth: 56,
+
+    borderRadius: "50%",
+
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    background: accentColor,
+
+    "& svg": {
+      fontSize: 26,
+      color: text.white,
+    },
+  }),
+
+
+  // ==========================================================
+  // INSIGHT / CALLOUT BANNER
+  // ==========================================================
+
+  banner: {
+    borderRadius: 3,
+    p: 3,
+
+    display: "flex",
+    alignItems: "center",
+    gap: 3,
+    flexWrap: "wrap",
+
+    background: `${status.success}0D`,
+    border: `1px solid ${status.success}33`,
+  },
+
+
+  // Banner icon
+  bannerIconCircle: {
+    width: 56,
+    height: 56,
+    minWidth: 56,
+
+    borderRadius: "50%",
+
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    background: `${status.success}1A`,
+
+    "& svg": {
+      fontSize: 26,
+      color: status.success,
+    },
+  },
+
+
+  // Banner chip / inline status element
+  bannerChip: {
+    display: "flex",
+    alignItems: "center",
+    gap: 1,
+  },
+
+
+  // ==========================================================
+  // STATUS / TAG PILL
+  // ==========================================================
+
+  badge: (accentColor = brand.primary) => ({
+    display: "inline-flex",
+    alignItems: "center",
+
+    borderRadius: "999px",
+
+    px: 1.5,
+    py: 0.5,
+
+    fontSize: "0.78rem",
+    fontWeight: 700,
+    lineHeight: 1.4,
+
+    background: `${accentColor}1A`,
+    color: accentColor,
+  }),
 };
+
+
+// ============================================================
+// DEFAULT EXPORT
+// ============================================================
+
+export default cardStyle;

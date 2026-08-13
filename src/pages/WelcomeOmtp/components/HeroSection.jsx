@@ -19,7 +19,7 @@ import imgDashboard from "../../../assets/DemoPicture/Dashboard.jpg";
 import {
   colors,
   buttonStyle,
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 
 const HeroSection = ({ handleDemoLogin }) => {
@@ -129,7 +129,7 @@ const HeroSection = ({ handleDemoLogin }) => {
               <Typography
                 component="p"
                 sx={{
-                  ...semanticTypo.caption,
+                  ...masterTypo.caption,
                   bgcolor: colors.hover,
                   color: colors.primary,
                   px: 2.5,
@@ -149,7 +149,7 @@ const HeroSection = ({ handleDemoLogin }) => {
               <Typography
                 component="h1"
                 sx={{
-                  ...semanticTypo.heroH2,
+                  ...masterTypo.h2,
                   mb: 3,
                   background: colors.heroGradient,
                   backgroundClip: "text",
@@ -169,7 +169,7 @@ const HeroSection = ({ handleDemoLogin }) => {
               <Typography
                 component="p"
                 sx={{
-                  ...semanticTypo.bodyB1,
+                  ...masterTypo.body1,
                   mb: 4,
                   maxWidth: 520,
                 }}
@@ -258,7 +258,7 @@ const HeroSection = ({ handleDemoLogin }) => {
                     <Typography
                       component="span"
                       sx={{
-                        ...semanticTypo.caption,
+                        ...masterTypo.caption,
                         fontWeight: 600,
                       }}
                     >

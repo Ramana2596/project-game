@@ -15,7 +15,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { KeyboardArrowDown } from "@mui/icons-material";
-import { colors, semanticTypo } from "../../../ux/styles";
+import { colors, masterTypo } from "../../../ux/styles";
 
 export default function SimHeader({
   title = "Business Simulation Control Centre",
@@ -61,7 +61,7 @@ export default function SimHeader({
             label="OMTP"
             variant="filled"
             sx={{
-              ...semanticTypo.cardH5,
+              ...masterTypo.h5,
               bgcolor: colors.white,
               color: colors.primary,
               letterSpacing: 0.5,
@@ -74,7 +74,7 @@ export default function SimHeader({
         <Typography
           noWrap
           sx={{
-            ...semanticTypo.pageH4,
+            ...masterTypo.h4,
             justifySelf: "center",
             textAlign: "center",
             color: colors.white,

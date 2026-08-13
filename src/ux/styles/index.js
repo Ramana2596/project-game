@@ -1,22 +1,31 @@
 // ============================================================
-// OpsMgt UX Lab
-// File : index.js
+// OpsMgt UXLab V3
+// File    : index.js
 // Purpose : Central export gateway (Barrel File) for UX Styles
-// ============================================================
+//
+// UX STANDARD
+// ------------------------------------------------------------
 
 import { buttonStyle } from "./buttonStyle";
 import { cardStyle } from "./cardStyle";
 import { colors } from "./colorPalette";
 import { layoutStyle } from "./layoutStyle";
 import { tableStyle } from "./tableStyle";
-import { muiTypo, semanticTypo } from "./masterTypo";
+
+import {
+  masterTypo,
+} from "./masterTypo";
+
+
+// ============================================================
+// EXPORTS
+// ============================================================
 
 export {
-    buttonStyle,
-    cardStyle,
-    colors,
-    layoutStyle,
-    tableStyle,
-    muiTypo,
-    semanticTypo,
+  colors,
+  buttonStyle,
+  cardStyle,
+  layoutStyle,
+  masterTypo,
+  tableStyle,
 };

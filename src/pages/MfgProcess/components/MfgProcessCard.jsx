@@ -9,6 +9,7 @@
 // - Product accent color is used for product identity
 // - Process identity uses process-specific icon + color
 // - Layout remains independent per Product-Process card
+// - All surfaces/shadows/borders sourced from colors + cardStyle tokens
 // ============================================================
 
 import React from "react";
@@ -25,7 +26,8 @@ import {
 
 import {
   colors,
-  semanticTypo,
+  cardStyle,
+  masterTypo,
 } from "../../../ux/styles";
 
 // ------------------------------------------------------------
@@ -34,9 +36,9 @@ import {
 // TODO: Later use the same product visual metadata as ProductCard
 // ------------------------------------------------------------
 const PRODUCT_ACCENTS = [
-  colors.success || "#159447", // Product A
-  colors.info || "#1976D2",    // Product B
-  "#EF6C00",                   // Product C
+  colors.success, // Product A
+  colors.info,    // Product B
+  colors.warning, // Product C
 ];
 
 // ------------------------------------------------------------
@@ -50,31 +52,23 @@ export default function MfgProcessCard({
   // ----------------------------------------------------------
   // Product
   // ----------------------------------------------------------
-  const productName =
-    product?.Part_Description || "Product";
+  const productName = product?.Part_Description || "Product";
 
-  const productColor =
-    PRODUCT_ACCENTS[index] ||
-    colors.primary;
+  const productColor = PRODUCT_ACCENTS[index] || colors.primary;
 
   // ----------------------------------------------------------
   // Process visual
   // ----------------------------------------------------------
   const getProcessVisual = (processName) =>
-    PROCESS_VISUALS[processName] ||
-    PROCESS_VISUALS.default;
+    PROCESS_VISUALS[processName] || PROCESS_VISUALS.default;
 
   // ----------------------------------------------------------
   // Format time
   // ----------------------------------------------------------
   const formatTime = (value) => {
     const time = Number(value);
-
     if (!Number.isFinite(time)) return "-";
-
-    return `${time % 1 === 0
-      ? time
-      : time.toFixed(2)} min`;
+    return `${time % 1 === 0 ? time : time.toFixed(2)} min`;
   };
 
   // ----------------------------------------------------------
@@ -83,15 +77,8 @@ export default function MfgProcessCard({
   return (
     <Box
       sx={{
+        ...cardStyle.primary,
         width: "100%",
-        height: "100%",
-        backgroundColor: "#FFFFFF",
-        border: "1px solid",
-        borderColor: colors.border || "#E0E0E0",
-        borderRadius: 3,
-        overflow: "hidden",
-        boxShadow:
-          "0 3px 12px rgba(80, 50, 120, 0.08)",
         display: "flex",
         flexDirection: "column",
       }}
@@ -106,31 +93,18 @@ export default function MfgProcessCard({
           pt: 1.75,
           pb: 1.5,
 
-          background:
-            "linear-gradient(135deg, rgba(123,31,162,0.045), rgba(123,31,162,0.01))",
+          background: `linear-gradient(135deg, ${colors.primary}0B, ${colors.primary}03)`,
 
           borderBottom: "1px solid",
-          borderColor: colors.border || "#E6E0EA",
+          borderColor: colors.divider,
         }}
       >
 
         {/* Product Name */}
         <Typography
           sx={{
-            ...semanticTypo.pageH3,
-
-            // Same visual emphasis as ProductCard
-            fontSize: {
-              xs: "1.45rem",
-              md: "1.65rem",
-            },
-
-            fontWeight: 800,
-            lineHeight: 1.15,
-
-            // Product identity colour
+            ...masterTypo.h4,
             color: productColor,
-
             mb: 0.65,
           }}
         >
@@ -140,65 +114,29 @@ export default function MfgProcessCard({
         {/* Product Master Information */}
         <Typography
           sx={{
-            ...semanticTypo.caption,
-
-            fontSize: "0.82rem",
-            fontWeight: 500,
-            lineHeight: 1.35,
-
-            color: colors.subtitle ||
-              "text.secondary",
+            ...masterTypo.caption,
+            color: colors.subtitle,
           }}
         >
-          <Box
-            component="span"
-            sx={{
-              fontWeight: 700,
-              color: colors.body,
-            }}
-          >
+          <Box component="span" sx={{ fontWeight: 700, color: colors.body }}>
             Material:
           </Box>{" "}
           xxxx
 
-          <Box
-            component="span"
-            sx={{
-              mx: 1,
-              color: colors.border,
-            }}
-          >
+          <Box component="span" sx={{ mx: 1, color: colors.border }}>
             |
           </Box>
 
-          <Box
-            component="span"
-            sx={{
-              fontWeight: 700,
-              color: colors.body,
-            }}
-          >
+          <Box component="span" sx={{ fontWeight: 700, color: colors.body }}>
             Opening Stock:
           </Box>{" "}
           yyyy
 
-          <Box
-            component="span"
-            sx={{
-              mx: 1,
-              color: colors.border,
-            }}
-          >
+          <Box component="span" sx={{ mx: 1, color: colors.border }}>
             |
           </Box>
 
-          <Box
-            component="span"
-            sx={{
-              fontWeight: 700,
-              color: colors.body,
-            }}
-          >
+          <Box component="span" sx={{ fontWeight: 700, color: colors.body }}>
             Per Set:
           </Box>{" "}
           nn.nn
@@ -211,60 +149,29 @@ export default function MfgProcessCard({
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns:
-            "minmax(0, 1fr) 64px 76px 52px",
-
+          gridTemplateColumns: "minmax(0, 1fr) 64px 76px 52px",
           alignItems: "center",
 
           px: 2,
           py: 0.75,
 
           borderBottom: "1px solid",
-          borderColor:
-            colors.border || "#E6E0EA",
+          borderColor: colors.divider,
         }}
       >
-
-        <Typography
-          sx={{
-            ...semanticTypo.caption,
-            fontWeight: 700,
-            color: colors.subtitle,
-          }}
-        >
+        <Typography sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.subtitle }}>
           {MFG_PROCESS_LABELS.operation}
         </Typography>
 
-        <Typography
-          align="right"
-          sx={{
-            ...semanticTypo.caption,
-            fontWeight: 700,
-            color: colors.subtitle,
-          }}
-        >
+        <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.subtitle }}>
           {MFG_PROCESS_LABELS.setupTime}
         </Typography>
 
-        <Typography
-          align="right"
-          sx={{
-            ...semanticTypo.caption,
-            fontWeight: 700,
-            color: colors.subtitle,
-          }}
-        >
+        <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.subtitle }}>
           {MFG_PROCESS_LABELS.standardTime}
         </Typography>
 
-        <Typography
-          align="right"
-          sx={{
-            ...semanticTypo.caption,
-            fontWeight: 700,
-            color: colors.subtitle,
-          }}
-        >
+        <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.subtitle }}>
           {MFG_PROCESS_LABELS.batchQuantity}
         </Typography>
       </Box>
@@ -272,22 +179,10 @@ export default function MfgProcessCard({
       {/* ================================================== */}
       {/* Process Rows */}
       {/* ================================================== */}
-      <Box
-        sx={{
-          px: 1.25,
-          py: 0.35,
-          flexGrow: 1,
-        }}
-      >
-
+      <Box sx={{ px: 1.25, py: 0.35, flexGrow: 1 }}>
         {processes.map((process, rowIndex) => {
-          const processName =
-            process?.Work_Centre_Description ||
-            "Process";
-
-          const visual =
-            getProcessVisual(processName);
-
+          const processName = process?.Work_Centre_Description || "Process";
+          const visual = getProcessVisual(processName);
           const ProcessIcon = visual.icon;
 
           return (
@@ -295,24 +190,23 @@ export default function MfgProcessCard({
               key={`${process?.Part_No}-${process?.Mfg_Seq_No}-${rowIndex}`}
               sx={{
                 display: "grid",
-                gridTemplateColumns:
-                  "minmax(0, 1fr) 64px 76px 52px",
-
+                gridTemplateColumns: "minmax(0, 1fr) 64px 76px 52px",
                 alignItems: "center",
 
                 minHeight: 58,
                 px: 0.5,
 
                 borderBottom:
-                  rowIndex <
-                  processes.length - 1
-                    ? "1px solid rgba(0,0,0,0.035)"
+                  rowIndex < processes.length - 1
+                    ? "1px solid"
                     : "none",
+                borderColor: colors.divider,
 
                 borderRadius: 1.5,
+                transition: "background-color .2s ease",
 
                 "&:hover": {
-                  backgroundColor: "#FAF7FC",
+                  backgroundColor: colors.hover,
                 },
               }}
             >
@@ -320,77 +214,52 @@ export default function MfgProcessCard({
               {/* ---------------------------------------- */}
               {/* Process */}
               {/* ---------------------------------------- */}
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  minWidth: 0,
-                }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center", minWidth: 0 }}>
 
                 {/* Sequence */}
                 <Typography
                   sx={{
                     width: 28,
                     flexShrink: 0,
-
                     fontSize: "0.72rem",
                     fontWeight: 800,
-
                     color: visual.color,
                   }}
                 >
-                  {String(
-                    process?.Mfg_Seq_No ??
-                      rowIndex + 1
-                  ).padStart(2, "0")}
+                  {String(process?.Mfg_Seq_No ?? rowIndex + 1).padStart(2, "0")}
                 </Typography>
 
                 {/* Process Icon */}
                 <Box
                   sx={{
+                    ...cardStyle.iconBox,
+                    ...cardStyle.iconBoxCircle,
                     width: 32,
                     height: 32,
-
+                    minWidth: 32,
                     flexShrink: 0,
                     mr: 1,
-
-                    borderRadius: "50%",
-
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-
-                    backgroundColor:
-                      visual.softColor,
-
+                    background: visual.softColor,
                     color: visual.color,
+                    "& svg": {
+                      fontSize: 18,
+                      color: visual.color,
+                    },
                   }}
                 >
-                  <ProcessIcon
-                    sx={{
-                      fontSize: 18,
-                    }}
-                  />
+                  <ProcessIcon sx={{ fontSize: 18 }} />
                 </Box>
 
                 {/* Process Name */}
-                <Box
-                  sx={{
-                    minWidth: 0,
-                  }}
-                >
+                <Box sx={{ minWidth: 0 }}>
                   <Typography
                     noWrap
                     sx={{
-                      ...semanticTypo.bodyB1,
-
+                      ...masterTypo.body1,
                       fontSize: "0.88rem",
                       fontWeight: 700,
                       lineHeight: 1.2,
-
-                      color: colors.title ||
-                        "#16213E",
+                      color: colors.title,
                     }}
                   >
                     {processName}
@@ -399,17 +268,12 @@ export default function MfgProcessCard({
                   <Typography
                     noWrap
                     sx={{
-                      ...semanticTypo.caption,
-
-                      fontSize: "0.72rem",
+                      ...masterTypo.caption,
                       lineHeight: 1.2,
-
-                      color: colors.subtitle ||
-                        "text.secondary",
+                      color: colors.subtitle,
                     }}
                   >
-                    {process?.Facility_Description ||
-                      ""}
+                    {process?.Facility_Description || ""}
                   </Typography>
                 </Box>
               </Box>
@@ -417,62 +281,27 @@ export default function MfgProcessCard({
               {/* ---------------------------------------- */}
               {/* Setup */}
               {/* ---------------------------------------- */}
-              <Typography
-                align="right"
-                sx={{
-                  ...semanticTypo.caption,
-
-                  fontSize: "0.78rem",
-                  fontWeight: 600,
-
-                  color: colors.body,
-                }}
-              >
-                {formatTime(
-                  process?.SetUp_Time
-                )}
+              <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 600, color: colors.body }}>
+                {formatTime(process?.SetUp_Time)}
               </Typography>
 
               {/* ---------------------------------------- */}
               {/* Standard Time */}
               {/* ---------------------------------------- */}
-              <Typography
-                align="right"
-                sx={{
-                  ...semanticTypo.caption,
-
-                  fontSize: "0.78rem",
-                  fontWeight: 700,
-
-                  color: colors.primary,
-                }}
-              >
-                {formatTime(
-                  process?.Std_Time
-                )}
+              <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.primary }}>
+                {formatTime(process?.Std_Time)}
               </Typography>
 
               {/* ---------------------------------------- */}
               {/* Batch */}
               {/* ---------------------------------------- */}
-              <Typography
-                align="right"
-                sx={{
-                  ...semanticTypo.caption,
-
-                  fontSize: "0.78rem",
-                  fontWeight: 600,
-
-                  color: colors.body,
-                }}
-              >
+              <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 600, color: colors.body }}>
                 {process?.Batch_Qty ?? "-"}
               </Typography>
 
             </Box>
           );
         })}
-
       </Box>
     </Box>
   );

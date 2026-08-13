@@ -8,7 +8,7 @@ import {
     buttonStyle,
     cardStyle,
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 // Purpose: Top navigation with demo and auth access
@@ -40,7 +40,7 @@ const OmtpNavbar = ({ onViewDemo, onGetStarted }) => (
           <Box>
             <Typography
               sx={{
-                ...semanticTypo.cardH5,
+                ...masterTypo.h5,
                 color: colors.primaryDark,
                 lineHeight: 1,
               }}
@@ -49,7 +49,7 @@ const OmtpNavbar = ({ onViewDemo, onGetStarted }) => (
             </Typography>
             <Typography
               sx={{
-                ...semanticTypo.caption,
+                ...masterTypo.caption,
                 textTransform: "uppercase",
                 letterSpacing: 0.5,
               }}
@@ -65,7 +65,7 @@ const OmtpNavbar = ({ onViewDemo, onGetStarted }) => (
             <Typography 
               key={item}
               sx={{
-                ...semanticTypo.bodyB1,
+                ...masterTypo.body1,
                 fontWeight: 600,
                 color: colors.body,
                 cursor: 'pointer',

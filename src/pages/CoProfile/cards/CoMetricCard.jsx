@@ -3,9 +3,16 @@
 // Module: Company Profile
 // Purpose: Display a company overview metric
 // AI Tags: company-profile, metric-card, overview, uxlab
+//
+// UXLab V1.0:
+// - Typography     -> masterTypo
+// - Colors         -> colors
+// - Card structure -> cardStyle
+// - Card owns metric-specific visual presentation
 // ============================================================
 
 import React from "react";
+
 import {
   Box,
   Card,
@@ -15,8 +22,43 @@ import {
 
 import {
   cardStyle,
-  semanticTypo,
+  colors,
+  masterTypo,
 } from "../../../ux/styles";
+
+// ------------------------------------------------------------
+// Format metric value
+// ------------------------------------------------------------
+function formatMetricValue(value) {
+  if (value === null || value === undefined || value === "") {
+    return "-";
+  }
+
+  // ----------------------------------------------------------
+  // Format date values as "MMM yyyy"
+  // ----------------------------------------------------------
+  if (
+    value instanceof Date ||
+    (
+      typeof value === "string" &&
+      !Number.isNaN(Date.parse(value)) &&
+      /\d{4}[-/]\d{1,2}[-/]\d{1,2}/.test(value)
+    )
+  ) {
+    const date = value instanceof Date
+      ? value
+      : new Date(value);
+
+    if (!Number.isNaN(date.getTime())) {
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      });
+    }
+  }
+
+  return value;
+}
 
 // ------------------------------------------------------------
 // Company Metric Card
@@ -28,26 +70,36 @@ export default function CoMetricCard({
   icon: Icon,
   color,
 }) {
+  // ----------------------------------------------------------
+  // Metric accent
+  // ----------------------------------------------------------
+  const metricColor = color || colors.primary;
+
+  const displayValue = formatMetricValue(value);
 
   // ----------------------------------------------------------
-  // Resolve metric color
-  // ----------------------------------------------------------
-  const metricColor = color || "#7B1FA2";
-
-  // ----------------------------------------------------------
-  // Render metric card
+  // Render
   // ----------------------------------------------------------
   return (
     <Card
       elevation={0}
       sx={{
         ...cardStyle.card,
+
         height: "100%",
+
+        backgroundColor:
+          colors.card || "#FFFFFF",
+
+        border: `1px solid ${
+          colors.border || "#E8E5EF"
+        }`,
+
         borderRadius: 2.5,
-        backgroundColor: "#FFFFFF",
-        border: "1px solid #E8E5EF",
+
         boxShadow:
-          "0 2px 6px rgba(40, 30, 70, 0.08)",
+          "0 2px 7px rgba(40, 30, 70, 0.08)",
+
         transition:
           "transform 0.2s ease, box-shadow 0.2s ease",
 
@@ -61,6 +113,7 @@ export default function CoMetricCard({
       <CardContent
         sx={{
           p: 2,
+
           "&:last-child": {
             pb: 2,
           },
@@ -74,18 +127,24 @@ export default function CoMetricCard({
             minHeight: 74,
           }}
         >
-
+          {/* ================================================= */}
           {/* Metric Icon */}
+          {/* ================================================= */}
           <Box
             sx={{
               width: 46,
               height: 46,
               minWidth: 46,
+
               borderRadius: "50%",
+
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: `${metricColor}16`,
+
+              backgroundColor:
+                `${metricColor}16`,
+
               color: metricColor,
             }}
           >
@@ -98,18 +157,26 @@ export default function CoMetricCard({
             )}
           </Box>
 
+          {/* ================================================= */}
           {/* Metric Information */}
+          {/* ================================================= */}
           <Box
             sx={{
               minWidth: 0,
               flex: 1,
             }}
           >
-            {/* Metric Label */}
+            {/* ------------------------------------------------ */}
+            {/* Label */}
+            {/* ------------------------------------------------ */}
             <Typography
               sx={{
-                ...semanticTypo.caption,
-                color: "#475569",
+                ...masterTypo.caption,
+
+                color:
+                  colors.subtitle ||
+                  "#475569",
+
                 fontSize: "0.82rem",
                 lineHeight: 1.2,
               }}
@@ -117,33 +184,51 @@ export default function CoMetricCard({
               {label}
             </Typography>
 
-            {/* Metric Value */}
+            {/* ------------------------------------------------ */}
+            {/* Value */}
+            {/* ------------------------------------------------ */}
             <Typography
               sx={{
-                ...semanticTypo.pageH3,
+                ...masterTypo.h3,
+
                 mt: 0.25,
-                color: "#172B4D",
+
+                color:
+                  colors.title ||
+                  "#172B4D",
+
                 fontSize: {
                   xs: "1.55rem",
                   md: "1.7rem",
                 },
-                fontWeight: 800,
+
+                // Reduced from 800
+                fontWeight: 700,
+
                 lineHeight: 1.15,
+
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
               }}
             >
-              {value ?? "-"}
+              {displayValue}
             </Typography>
 
-            {/* Metric Subtitle */}
+            {/* ------------------------------------------------ */}
+            {/* Subtitle */}
+            {/* ------------------------------------------------ */}
             {subtitle && (
               <Typography
                 sx={{
-                  ...semanticTypo.caption,
+                  ...masterTypo.caption,
+
                   mt: 0.3,
-                  color: "#64748B",
+
+                  color:
+                    colors.subtitle ||
+                    "#64748B",
+
                   fontSize: "0.78rem",
                   lineHeight: 1.2,
                 }}
@@ -152,7 +237,6 @@ export default function CoMetricCard({
               </Typography>
             )}
           </Box>
-
         </Box>
       </CardContent>
     </Card>

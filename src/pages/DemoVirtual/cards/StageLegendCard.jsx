@@ -11,7 +11,7 @@ import {
 import {
   cardStyle,
   colors,
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 
 export default function StageLegendCard() {
@@ -20,7 +20,7 @@ export default function StageLegendCard() {
       {/* Render card title */}
       <Typography
         sx={{
-          ...semanticTypo.caption,
+          ...masterTypo.caption,
           color: colors.subtitle,
           fontWeight: 800,
           mb: 2,
@@ -38,7 +38,7 @@ export default function StageLegendCard() {
             <PlayArrowRounded sx={{ fontSize: 18 }} />
           </Avatar>
           <Box>
-            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 600, }}>
+            <Typography sx={{ ...masterTypo.body2, fontWeight: 600, }}>
               Active
             </Typography>
             <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>
@@ -53,7 +53,7 @@ export default function StageLegendCard() {
             <CheckCircleRounded sx={{ fontSize: 18 }} />
           </Avatar>
           <Box>
-            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 600, }}>
+            <Typography sx={{ ...masterTypo.body2, fontWeight: 600, }}>
               Completed
             </Typography>
             <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>
@@ -68,7 +68,7 @@ export default function StageLegendCard() {
             <LockRounded sx={{ fontSize: 16 }} />
           </Avatar>
           <Box>
-            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 600, }}>
+            <Typography sx={{ ...masterTypo.body2, fontWeight: 600, }}>
               Locked
             </Typography>
             <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>
@@ -83,7 +83,7 @@ export default function StageLegendCard() {
             <AssessmentOutlined sx={{ fontSize: 18 }} />
           </Avatar>
           <Box>
-            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 800, }}>
+            <Typography sx={{ ...masterTypo.body2, fontWeight: 800, }}>
               View Reports
             </Typography>
             <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>
@@ -115,7 +115,7 @@ export default function StageLegendCard() {
             />
           </Avatar>
           <Box>
-            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 600, color: "#e65100" }}>
+            <Typography sx={{ ...masterTypo.body2, fontWeight: 600, color: "#e65100" }}>
               Next Month
             </Typography>
             <Typography sx={{ fontSize: "0.80rem", color: colors.subtitle }}>

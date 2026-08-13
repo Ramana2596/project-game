@@ -24,7 +24,7 @@ import { UI_STRINGS } from "../constants/labels";
 import {
   buttonStyle,
   cardStyle,
-  semanticTypo,
+  masterTypo,
   colors,
 } from "../../../ux/styles";
 
@@ -129,7 +129,7 @@ export default function StageShow({
 
             <Typography
               sx={{
-                ...semanticTypo.bodyB1,
+                ...masterTypo.body1,
                 fontSize: "1rem",
                 color: colors.primary,
                 fontWeight: 700,

@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 6
+// Component: Contents of Walkthrough Step 6
 // UXLab V1.0
 // ==========================================
 
@@ -18,7 +18,7 @@ import imgFinReportBs from "../../../../assets/DemoPicture/FinReportBs.jpg";
 
 import {
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../../ux/styles";
 
 const FinancialCard = ({ label, src }) => (
@@ -27,7 +27,7 @@ const FinancialCard = ({ label, src }) => (
             component="h3"
             variant="h6"
             sx={{
-                ...semanticTypo.cardH5,
+                ...masterTypo.h5,
                 color: colors.primaryDark,
                 mb: 1.25,
             }}

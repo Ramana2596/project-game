@@ -1,5 +1,5 @@
 // ==========================================
-// Component: Walkthrough Step 7 (Historical Data)
+// Component: Contents of Walkthrough Step 7 (Info Desk))
 // UXLab V1.0
 // ==========================================
 
@@ -13,7 +13,7 @@ import imgInfoDesk2 from "../../../../assets/DemoPicture/InfoDesk2.jpg";
 
 import {
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../../ux/styles";
 
 const Step7Hist = () => {
@@ -29,7 +29,7 @@ const Step7Hist = () => {
                     component="h3"
                     variant="h6"
                     sx={{
-                        ...semanticTypo.cardH5,
+                        ...masterTypo.h5,
                         color: colors.primaryDark,
                         mb: 1.5,
                     }}

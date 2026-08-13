@@ -8,7 +8,7 @@ import OmtpLogo from "../../../assets/GreenTree.png";
 import {
     buttonStyle,
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 const WelcomeHeader = ({
@@ -102,7 +102,7 @@ const WelcomeHeader = ({
               href={`#${section.key}`}
               onClick={() => handleNavClick(section)}
               sx={{
-                ...semanticTypo.bodyB2,
+                ...masterTypo.body2,
 
                 textTransform: "none",
 

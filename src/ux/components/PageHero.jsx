@@ -9,7 +9,7 @@ High level . May not be useful -- so please ignore
 
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { colors, semanticTypo } from "../styles";
+import { colors, masterTypo } from "../styles";
 
 const PageHero = ({
     title,
@@ -53,7 +53,7 @@ const PageHero = ({
             <Typography
                 component="h1"
                 sx={{
-                    ...semanticTypo.pageH2,
+                    ...masterTypo.h2,
                     color: colors.white,
                 }}
             >
@@ -64,7 +64,7 @@ const PageHero = ({
                 <Typography
                     component="p"
                     sx={{
-                        ...semanticTypo.pageB1,
+                        ...masterTypo.body1,
                         color: "rgba(255,255,255,0.90)",
                         maxWidth: 900,
                         mt: 1,
