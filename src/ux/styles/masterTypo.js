@@ -1,159 +1,104 @@
 // ============================================================
-// OpsMgt UX Lab V2.0
+// OpsMgt UXLab V3
 // File    : masterTypo.js
-// Purpose : Enterprise Typography System
-//
-// Design Principles
+// Purpose : SaaS Typography Standard
 // ------------------------------------------------------------
-// 1. muiTypo defines the visual scale.
-// 2. semanticTypo is used by application pages.
-// 3. Typography controls ONLY text appearance.
-// 4. HTML heading (component="h1") is decided in JSX.
-// ============================================================
-
-import { colors } from "./colorPalette";
 
 // ============================================================
-// MUI TYPOGRAPHY SCALE
+// STANDARD TYPOGRAPHY
+// ------------------------------------------------------------
+// Use directly through MUI:
+//
+// <Typography variant="h1">
+// <Typography variant="h2">
+// ...
+//
+// Font size, weight, line-height and spacing are controlled here.
 // ============================================================
 
-export const muiTypo = {
+export const masterTypo = {
 
-  // Hero
+  // ----------------------------------------------------------
+  // Headings
+  // ----------------------------------------------------------
+
   h1: {
-    fontSize: { xs: "2.75rem", md: "3.00rem" },
+    fontSize: { xs: "2.25rem", md: "3rem" },
     fontWeight: 700,
     lineHeight: 1.15,
     letterSpacing: "-0.02em",
-    color: colors.title,
   },
 
-  // Page
   h2: {
-    fontSize: { xs: "2.25rem", md: "2.50rem" },
+    fontSize: { xs: "2rem", md: "2.5rem" },
     fontWeight: 600,
-    lineHeight: 1.20,
-    color: colors.title,
+    lineHeight: 1.2,
   },
 
-  // Section
   h3: {
-    fontSize: { xs: "1.75rem", md: "2.00rem" },
+    fontSize: { xs: "1.625rem", md: "2rem" },
     fontWeight: 600,
     lineHeight: 1.25,
-    color: colors.title,
   },
 
-  // Sub-section
   h4: {
-    fontSize: { xs: "1.45rem", md: "1.60rem" },
+    fontSize: { xs: "1.375rem", md: "1.6rem" },
     fontWeight: 600,
-    lineHeight: 1.30,
-    color: colors.title,
+    lineHeight: 1.3,
   },
 
-  // Card / Report Title
   h5: {
     fontSize: "1.15rem",
     fontWeight: 600,
     lineHeight: 1.35,
-    color: colors.title,
   },
 
-  // Small Heading / Table Header
   h6: {
-    fontSize: "1.00rem",
+    fontSize: "1rem",
     fontWeight: 600,
-    lineHeight: 1.40,
-    color: colors.title,
+    lineHeight: 1.4,
   },
 
+
+  // ----------------------------------------------------------
   // Body
-  b1: {
-    fontSize: "1.00rem",
+  // ----------------------------------------------------------
+
+  body1: {
+    fontSize: "1rem",
     fontWeight: 400,
-    lineHeight: 1.60,
-    color: colors.body,
+    lineHeight: 1.6,
   },
 
-  // Secondary Body
-  b2: {
+  body2: {
     fontSize: "0.92rem",
     fontWeight: 400,
-    lineHeight: 1.60,
-    color: colors.subtitle,
+    lineHeight: 1.6,
   },
 
-  // Caption
+
+  // ----------------------------------------------------------
+  // Supporting text
+  // ----------------------------------------------------------
+
   caption: {
     fontSize: "0.82rem",
     fontWeight: 500,
-    lineHeight: 1.40,
-    color: colors.muted,
+    lineHeight: 1.4,
   },
 
+
+  // ----------------------------------------------------------
+  // Buttons
+  // ----------------------------------------------------------
+
+  button: {
+    fontSize: "0.875rem",
+    fontWeight: 600,
+    lineHeight: 1.5,
+    letterSpacing: "0.01em",
+    textTransform: "none",
+  },
 };
 
-
-// ============================================================
-// SEMANTIC TYPOGRAPHY
-//
-// Use these in application pages.
-//
-// Examples:
-//
-// <Typography sx={semanticTypo.heroH1}>
-// <Typography sx={semanticTypo.pageH3}>
-// <Typography sx={semanticTypo.cardH5}>
-// <Typography sx={semanticTypo.tableTitle}>
-// ============================================================
-
-export const semanticTypo = {
-
-  // ==========================================================
-  // Hero
-  // ==========================================================
-  heroH1: muiTypo.h1,
-  heroH2: muiTypo.h2,
-
-
-  // ==========================================================
-  // Page
-  // ==========================================================
-  pageH3: muiTypo.h3,
-  pageH4: muiTypo.h4,
-
-
-  // ==========================================================
-  // Cards
-  // ==========================================================
-  cardH5: muiTypo.h5,
-
-
-  // ==========================================================
-  // Enterprise Reports
-  // ==========================================================
-  tableTitle: muiTypo.h5,
-  tableParameter: muiTypo.b2,
-  columnHeader: muiTypo.h6,
-
-
-  // ==========================================================
-  // Tables
-  // ==========================================================
-  tableH6: muiTypo.h6,
-
-
-  // ==========================================================
-  // Body
-  // ==========================================================
-  bodyB1: muiTypo.b1,
-  bodyB2: muiTypo.b2,
-
-
-  // ==========================================================
-  // Caption
-  // ==========================================================
-  caption: muiTypo.caption,
-
-};
+export default masterTypo;

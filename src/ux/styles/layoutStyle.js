@@ -1,112 +1,126 @@
 // ============================================================
-// OpsMgt UX Lab
-// File : layoutStyle.js
-// Purpose : Common Layout styles (Purple Theme)
+// OpsMgt UXLab V3
+// File    : layoutStyle.js
+// Purpose : Standard Layout Styles — Purple Theme
+//
+// STANDARD TOKENS
+// ------------------------------------------------------------
+// root
+// content
+// section
+// sectionHeader
+// grid
+// panel
+// compactPanel
+// flexRow
+// flexColumn
+// flexCenter
+// flexRight
+// toolbar
+// pageContainer
+// pageHeader
+// pageHeaderDatePill
+// tabBar
+// sidebar
+// sidebarItem
+// sidebarItemActive
+//
+// DESIGN RULE
+// ------------------------------------------------------------
+// Layout controls structure, spacing and positioning.
+// Colors are sourced from colorPalette.
+// Active states reuse the canonical selected state.
 // ============================================================
 
-import { colors } from "./colorPalette";
+import {
+  brand,
+  gradients,
+  surface,
+  border,
+  text,
+  state,
+} from "./colorPalette";
+
 
 export const layoutStyle = {
 
   // ==========================================================
-  // Root Container
+  // PAGE STRUCTURE
   // ==========================================================
+
   root: {
     minHeight: "100vh",
-    background: colors.pageGradient,
-    // Applies the responsive layout spacing directly to your root wrapper
-    px: {
-      xs: 2,
-      sm: 3,
-      md: 4,
-    },
+    background: gradients.page,
+    px: { xs: 2, sm: 3, md: 4 },
     py: 3,
   },
 
-  // ==========================================================
-  // Main Content Area
-  // ==========================================================
   content: {
     mt: 4,
   },
 
-  // ==========================================================
-  // Standard Section
-  // ==========================================================
   section: {
     mb: 4,
   },
 
-  // ==========================================================
-  // Section Header
-  // ==========================================================
   sectionHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     mb: 2,
-    gap: 2, // Critical fix to stop elements colliding on small screens
+    gap: 2,
   },
 
-  // ==========================================================
-  // Grid Container
-  // ==========================================================
   grid: {
     mt: 1,
   },
 
+
   // ==========================================================
-  // White Panel
+  // PANELS
   // ==========================================================
+
   panel: {
     p: 3,
     borderRadius: 4,
-    background: colors.paper || "#ffffff",
-    border: `1px solid ${colors.border || "#e0e0e0"}`,
-    boxShadow: `0 4px 16px ${colors.primary}14`, // Dynamic purple shadow tint
+
+    background: surface.paper,
+    border: `1px solid ${border.default}`,
+    boxShadow: `0 4px 16px ${brand.primary}14`,
   },
 
-  // ==========================================================
-  // Compact Panel
-  // ==========================================================
   compactPanel: {
     p: 2,
     borderRadius: 3,
-    background: colors.paper || "#ffffff",
-    border: `1px solid ${colors.border || "#e0e0e0"}`,
+
+    background: surface.paper,
+    border: `1px solid ${border.default}`,
   },
 
+
   // ==========================================================
-  // Flex Row
+  // FLEX LAYOUT
   // ==========================================================
+
   flexRow: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 2, // Added spacing protection for child elements
+    gap: 2,
   },
 
-  // ==========================================================
-  // Flex Column
-  // ==========================================================
   flexColumn: {
     display: "flex",
     flexDirection: "column",
-    gap: 1.5, // Added vertical rhythm spacing for text stacks
+    gap: 1.5,
   },
 
-  // ==========================================================
-  // Center Content
-  // ==========================================================
   flexCenter: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
 
-  // ==========================================================
-  // Right Align
-  // ==========================================================
   flexRight: {
     display: "flex",
     justifyContent: "flex-end",
@@ -115,7 +129,7 @@ export const layoutStyle = {
 
 
   // ==========================================================
-  // Tool Bar
+  // TOOLBAR
   // ==========================================================
 
   toolbar: {
@@ -127,13 +141,128 @@ export const layoutStyle = {
     mb: 2,
   },
 
- // ==========================================================
- // Responsive helper
- // ==========================================================
+
+  // ==========================================================
+  // PAGE CONTAINER
+  // ==========================================================
 
   pageContainer: {
     width: "100%",
     maxWidth: "1600px",
     mx: "auto",
   },
+
+
+  // ==========================================================
+  // PAGE HEADER
+  // ==========================================================
+
+  pageHeader: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    gap: 0.5,
+    mb: 3,
+    position: "relative",
+  },
+
+  pageHeaderDatePill: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 1,
+
+    px: 1.5,
+    py: 0.75,
+
+    borderRadius: "999px",
+
+    background: surface.paper,
+    border: `1px solid ${border.default}`,
+
+    color: brand.primary,
+    fontWeight: 600,
+  },
+
+
+  // ==========================================================
+  // TAB BAR
+  //
+  // Container for buttonStyle.tab / tabActive.
+  // ==========================================================
+
+  tabBar: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 0.5,
+
+    p: 0.75,
+
+    borderRadius: "999px",
+
+    background: surface.paper,
+    border: `1px solid ${border.default}`,
+
+    mb: 3,
+  },
+
+
+  // ==========================================================
+  // SIDEBAR
+  // ==========================================================
+
+  sidebar: {
+    width: 72,
+    minHeight: "100vh",
+
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+
+    gap: 1,
+    py: 3,
+
+    background: surface.paper,
+    borderRight: `1px solid ${border.default}`,
+  },
+
+  sidebarItem: {
+    width: 44,
+    height: 44,
+
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    borderRadius: 2,
+
+    color: text.muted,
+
+    transition: "all .2s ease",
+
+    "&:hover": {
+      background: brand.primarySoft,
+      color: brand.primary,
+    },
+  },
+
+
+  // ==========================================================
+  // SIDEBAR ACTIVE
+  //
+  // Reuses the canonical selected state.
+  // No independent color definition.
+  // ==========================================================
+
+  sidebarItemActive: {
+    background: state.selected.background,
+    color: state.selected.text,
+  },
 };
+
+
+export default layoutStyle;
