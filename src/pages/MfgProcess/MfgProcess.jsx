@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 
 import { useUser } from "../../core/access/userContext.jsx";
-import { colors, semanticTypo } from "../../ux/styles";
+import { colors, masterTypo } from "../../ux/styles";
 
 import { useMfgProcess } from "./hooks/useMfgProcess";
 import MfgProcessCard from "./components/MfgProcessCard";
@@ -62,7 +62,7 @@ export default function MfgProcess() {
       <Box sx={{ py: 3 }}>
         <Typography
           sx={{
-            ...semanticTypo.body,
+            ...masterTypo.body1,
             color: "error.main",
           }}
         >
@@ -83,20 +83,8 @@ export default function MfgProcess() {
       {/* ================================================== */}
       <Typography
         sx={{
-          ...semanticTypo.pageH3,
-
-          // Reduced from large Product-style page heading
-          fontSize: {
-            xs: "2rem",
-            md: "2.35rem",
-          },
-
-          fontWeight: 800,
-          lineHeight: 1.15,
-
-          color: colors.title || "#16213E",
-
-          mb: 0.5,
+          ...masterTypo.h3,
+          mb: 1.5,
         }}
       >
         Manufacturing Process
@@ -105,15 +93,12 @@ export default function MfgProcess() {
       {/* Page Subtitle */}
       <Typography
         sx={{
-          ...semanticTypo.body,
-
-          fontSize: "0.95rem",
+          ...masterTypo.body1,
           color: colors.subtitle || "text.secondary",
-
-          mb: 2.5,
+          mb: 2,
         }}
       >
-        Product-wise manufacturing process and operating standards
+        Product-wise manufacturing process standards
       </Typography>
 
       {/* ================================================== */}
