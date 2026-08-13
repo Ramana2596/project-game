@@ -4,7 +4,7 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import {
     cardStyle,
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 const SimulationPhase = () => {
@@ -43,7 +43,7 @@ const SimulationPhase = () => {
                     id="simulation-phases-heading"
                     component="h2"
                     sx={{
-                        ...semanticTypo.pageH3,
+                        ...masterTypo.h3,
                         color: colors.primaryDark,
                         textAlign: "center",
                         mb: 1.5,
@@ -56,7 +56,7 @@ const SimulationPhase = () => {
                 <Typography
                     component="p"
                     sx={{
-                        ...semanticTypo.bodyB1,
+                        ...masterTypo.body1,
                         textAlign: "center",
                         color: colors.body,
                         maxWidth: 700,
@@ -110,7 +110,7 @@ const SimulationPhase = () => {
                                 <Typography
                                     component="h3"
                                     sx={{
-                                        ...semanticTypo.cardH5,
+                                        ...masterTypo.h5,
                                         mb: 0.75,
                                     }}
                                 >
@@ -120,7 +120,7 @@ const SimulationPhase = () => {
                                 <Typography
                                     component="p"
                                     sx={{
-                                        ...semanticTypo.bodyB2,
+                                        ...masterTypo.body2,
                                     }}
                                 >
                                     {item.description}

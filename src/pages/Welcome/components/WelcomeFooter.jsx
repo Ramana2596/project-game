@@ -5,7 +5,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 
 import {
     colors,
-    semanticTypo,
+    masterTypo,
 } from "../../../ux/styles";
 
 const WelcomeFooter = () => {
@@ -31,7 +31,7 @@ const WelcomeFooter = () => {
                             component="h2"
                             variant="h2"
                             sx={{
-                                ...semanticTypo.pageH4,
+                                ...masterTypo.h4,
                                 color: colors.primaryDark,
                                 mb: 2,
                             }}
@@ -56,7 +56,7 @@ const WelcomeFooter = () => {
                             <Typography
                                 component="p"
                                 sx={{
-                                    ...semanticTypo.bodyB2,
+                                    ...masterTypo.body2,
                                 }}
                             >
                                 info@omtp.example
@@ -79,7 +79,7 @@ const WelcomeFooter = () => {
                             <Typography
                                 component="p"
                                 sx={{
-                                    ...semanticTypo.bodyB2,
+                                    ...masterTypo.body2,
                                 }}
                             >
                                 +91 00000 00000
@@ -101,7 +101,7 @@ const WelcomeFooter = () => {
                         <Typography
                             component="small"
                             sx={{
-                                ...semanticTypo.caption,
+                                ...masterTypo.caption,
                                 display: "block",
                                 color: colors.subtitle,
                             }}
