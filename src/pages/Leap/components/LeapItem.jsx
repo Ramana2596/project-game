@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import {
   colors,
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 import { getContentType } from "../constants/leapContentTypes";
 
@@ -47,7 +47,7 @@ export default function LeapItem({ item }) {
         {item.Title && (
           <Typography
             sx={{
-              ...semanticTypo.sectionTitle,
+              ...masterTypo.h6,
               color: config.color,
               fontSize: "0.95rem",
               mb: 0.25,
@@ -59,7 +59,7 @@ export default function LeapItem({ item }) {
 
         <Typography
           sx={{
-            ...semanticTypo.bodyMedium,
+            ...masterTypo.body1,
             color: colors.textSecondary,
             lineHeight: 1.6,
           }}

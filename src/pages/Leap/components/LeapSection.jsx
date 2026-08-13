@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import {
   colors,
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 import LeapItem from "./LeapItem";
 import { getContentType } from "../constants/leapContentTypes";
@@ -63,7 +63,7 @@ export default function LeapSection({
             {/* Section title */}
             <Typography
               sx={{
-                ...semanticTypo.sectionTitle,
+                ...masterTypo.h6,
                 color: config.color,
                 fontWeight: 700
               }}
