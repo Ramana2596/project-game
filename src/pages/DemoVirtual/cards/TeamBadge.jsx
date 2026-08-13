@@ -19,7 +19,7 @@ import {
 import {
   cardStyle,
   colors,
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 
 const STATUS_MAP = {
@@ -64,7 +64,7 @@ export default function TeamBadgeCard({
         <Box sx={{ minWidth: 0, flexGrow: 1, textAlign: "center" }}>
           <Typography
             sx={{
-              ...semanticTypo.pageH4,
+              ...masterTypo.h4,
               fontWeight: 800,
               color: colors.title,
               lineHeight: 1.0,
@@ -76,7 +76,7 @@ export default function TeamBadgeCard({
           </Typography>
           <Typography
             sx={{
-              ...semanticTypo.caption,
+              ...masterTypo.caption,
               color: colors.subtitle,
               lineHeight: 1.2,
             }}
@@ -100,7 +100,7 @@ export default function TeamBadgeCard({
             />
           }
           sx={{
-            ...semanticTypo.caption,
+            ...masterTypo.caption,
             fontWeight: 700,
             borderRadius: "999px",
             bgcolor: colors.panel,

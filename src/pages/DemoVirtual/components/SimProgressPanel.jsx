@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { Box, Stack, Typography, LinearProgress, Paper } from "@mui/material";
 import { CalendarToday } from "@mui/icons-material";
 import { formatDate } from "../../../utils/formatDate";
-import { colors, semanticTypo } from "../../../ux/styles";
+import { colors, masterTypo } from "../../../ux/styles";
 import { UI_STRINGS } from "../constants/labels";
 
 export default function SimProgressPanel({ progressData, progressPercent }) {
@@ -27,18 +27,18 @@ export default function SimProgressPanel({ progressData, progressPercent }) {
     >
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={0.75}>
         <Stack direction="row" spacing={1.5} alignItems="center">
-          <Typography sx={{ ...semanticTypo.bodyB1, color: colors.primaryDark, fontWeight: 700 }}>
+          <Typography sx={{ ...masterTypo.body1, color: colors.primaryDark, fontWeight: 700 }}>
             {UI_STRINGS.PERIOD_DISPLAY(progressData?.Current_Period_No, progressData?.Total_Period)}
           </Typography>
           <Typography sx={{ fontSize: "0.90rem", color: colors.muted }}>•</Typography>
           <Stack direction="row" spacing={0.75} alignItems="center">
             <CalendarToday sx={{ fontSize: 16, color: colors.primary }} />
-            <Typography sx={{ ...semanticTypo.cardH5, color: colors.title, fontWeight: 600 }}>
+            <Typography sx={{ ...masterTypo.h5, color: colors.title, fontWeight: 600 }}>
               {progressData?.Is_Simulation_End ? UI_STRINGS.SIM_COMPLETED : formatDate(progressData?.Current_Period)}
             </Typography>
           </Stack>
         </Stack>
-        <Typography sx={{ ...semanticTypo.bodyB1, color: colors.primary, fontWeight: 700 }}>
+        <Typography sx={{ ...masterTypo.body1, color: colors.primary, fontWeight: 700 }}>
           {progressPercent}% Complete
         </Typography>
       </Stack>
