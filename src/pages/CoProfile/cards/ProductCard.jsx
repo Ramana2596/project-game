@@ -27,7 +27,7 @@ import {
   HourglassBottomOutlined,
 } from "@mui/icons-material";
 
-import { colors, semanticTypo } from "../../../ux/styles";
+import { colors, masterTypo } from "../../../ux/styles";
 
 import { PRODUCT_LIFECYCLE } from "../constants/constants";
 
@@ -129,7 +129,7 @@ function ProductInfoRow({
 
       <Typography
         sx={{
-          ...semanticTypo.body,
+          ...masterTypo.body1,
           fontSize: "0.88rem",
           color: "#475569",
           flex: 1,
@@ -140,7 +140,7 @@ function ProductInfoRow({
 
       <Typography
         sx={{
-          ...semanticTypo.body,
+          ...masterTypo.body1,
           fontSize: "0.88rem",
           fontWeight: 700,
           color: valueColor || "#172B4D",
@@ -278,7 +278,7 @@ export default function ProductCard({
           >
             <Typography
               sx={{
-                ...semanticTypo.pageH3,
+                ...masterTypo.h3,
                 color: lifecycle.color,
                 fontSize: {
                   xs: "1.35rem",
@@ -335,7 +335,7 @@ export default function ProductCard({
         {/* Business Potential */}
         <Typography
           sx={{
-            ...semanticTypo.body,
+            ...masterTypo.body1,
             mt: 2,
             mb: 1.25,
             fontSize: "0.88rem",

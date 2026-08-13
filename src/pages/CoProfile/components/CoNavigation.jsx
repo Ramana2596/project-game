@@ -3,9 +3,14 @@
 // Module: Company Profile
 // Purpose: Navigate between Company Profile information domains
 // AI Tags: company-profile, navigation, tabs, uxlab
+//
+// UX:
+// - Selected tab   -> contained / filled
+// - Unselected tab -> outlined / neutral
 // ============================================================
 
 import React from "react";
+
 import {
   Box,
   Tab,
@@ -16,7 +21,7 @@ import { PROFILE_TABS } from "../constants/constants";
 
 import {
   colors,
-  semanticTypo,
+  masterTypo,
 } from "../../../ux/styles";
 
 // ------------------------------------------------------------
@@ -35,7 +40,7 @@ export default function CoNavigation({
   };
 
   // ----------------------------------------------------------
-  // Render navigation tabs
+  // Render navigation
   // ----------------------------------------------------------
   return (
     <Box
@@ -47,8 +52,7 @@ export default function CoNavigation({
         borderColor: "#E6E0ED",
         p: 0.75,
         overflow: "hidden",
-        boxShadow:
-          "0 2px 8px rgba(55, 30, 80, 0.06)",
+        boxShadow: "0 2px 8px rgba(55, 30, 80, 0.06)",
       }}
     >
       <Tabs
@@ -60,47 +64,87 @@ export default function CoNavigation({
           minHeight: 50,
 
           // --------------------------------------------------
-          // Active tab indicator
+          // Remove default indicator
           // --------------------------------------------------
           "& .MuiTabs-indicator": {
-            height: "100%",
-            borderRadius: 2.5,
-            backgroundColor: colors.primary,
-            zIndex: 0,
+            display: "none",
           },
 
           // --------------------------------------------------
-          // Tab base style
+          // Tab base
           // --------------------------------------------------
           "& .MuiTab-root": {
             minHeight: 50,
             minWidth: 135,
+
             px: 2.25,
             gap: 0.75,
-            zIndex: 1,
-            borderRadius: 2.5,
-            textTransform: "none",
-            ...semanticTypo.body,
-            fontWeight: 650,
-            color: "#64748B",
-            transition:
-              "color 0.2s ease, background-color 0.2s ease",
 
+            borderRadius: 2.5,
+
+            textTransform: "none",
+
+            ...masterTypo.body1,
+
+            fontWeight: 650,
+
+            color:
+              colors.textSecondary || "#64748B",
+
+            border: "1px solid transparent",
+
+            backgroundColor: "transparent",
+
+            transition:
+              "background-color 0.2s ease, " +
+              "color 0.2s ease, " +
+              "border-color 0.2s ease",
+
+            // ------------------------------------------------
+            // Hover - neutral outlined treatment
+            // ------------------------------------------------
             "&:hover": {
               color: colors.primary,
-              backgroundColor: "#F7F2FA",
+
+              backgroundColor:
+                "#F7F2FA",
+
+              borderColor:
+                "#E4D5ED",
             },
           },
 
           // --------------------------------------------------
-          // Active tab
+          // Selected - contained treatment
           // --------------------------------------------------
           "& .MuiTab-root.Mui-selected": {
             color: "#FFFFFF",
+
+            backgroundColor:
+              colors.primary,
+
+            borderColor:
+              colors.primary,
+
+            boxShadow:
+              "0 2px 5px rgba(123, 31, 162, 0.20)",
           },
 
           // --------------------------------------------------
-          // Tab icon
+          // Selected hover
+          // --------------------------------------------------
+          "& .MuiTab-root.Mui-selected:hover": {
+            color: "#FFFFFF",
+
+            backgroundColor:
+              colors.primary,
+
+            borderColor:
+              colors.primary,
+          },
+
+          // --------------------------------------------------
+          // Icons
           // --------------------------------------------------
           "& .MuiTab-iconWrapper": {
             marginBottom: 0,
