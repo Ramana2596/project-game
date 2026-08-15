@@ -3,10 +3,7 @@
 // Module: Company Profile
 // Purpose: Navigate between Company Profile information domains
 // AI Tags: company-profile, navigation, tabs, uxlab
-//
-// UX:
-// - Selected tab   -> contained / filled
-// - Unselected tab -> outlined / neutral
+// UXLab V1.0 — Standardized to Company Profile Reference
 // ============================================================
 
 import React from "react";
@@ -21,6 +18,7 @@ import { PROFILE_TABS } from "../constants/constants";
 
 import {
   colors,
+  layoutStyle,
   masterTypo,
 } from "../../../ux/styles";
 
@@ -40,21 +38,11 @@ export default function CoNavigation({
   };
 
   // ----------------------------------------------------------
-  // Render navigation
+  // Render navigation — outer pill container is layoutStyle.tabBar,
+  // individual tab shape/size preserved as-is (matches reference)
   // ----------------------------------------------------------
   return (
-    <Box
-      sx={{
-        width: "100%",
-        bgcolor: "#FFFFFF",
-        borderRadius: 3,
-        border: "1px solid",
-        borderColor: "#E6E0ED",
-        p: 0.75,
-        overflow: "hidden",
-        boxShadow: "0 2px 8px rgba(55, 30, 80, 0.06)",
-      }}
-    >
+    <Box sx={layoutStyle.tabBar}>
       <Tabs
         value={activeTab}
         onChange={handleChange}
@@ -62,6 +50,7 @@ export default function CoNavigation({
         scrollButtons={false}
         sx={{
           minHeight: 50,
+          width: "100%",
 
           // --------------------------------------------------
           // Remove default indicator
@@ -88,8 +77,7 @@ export default function CoNavigation({
 
             fontWeight: 650,
 
-            color:
-              colors.textSecondary || "#64748B",
+            color: colors.subtitle,
 
             border: "1px solid transparent",
 
@@ -105,42 +93,28 @@ export default function CoNavigation({
             // ------------------------------------------------
             "&:hover": {
               color: colors.primary,
-
-              backgroundColor:
-                "#F7F2FA",
-
-              borderColor:
-                "#E4D5ED",
+              backgroundColor: colors.primarySoft,
+              borderColor: colors.border,
             },
           },
 
           // --------------------------------------------------
-          // Selected - contained treatment
+          // Selected - contained treatment, accentBlue per reference
           // --------------------------------------------------
           "& .MuiTab-root.Mui-selected": {
-            color: "#FFFFFF",
-
-            backgroundColor:
-              colors.primary,
-
-            borderColor:
-              colors.primary,
-
-            boxShadow:
-              "0 2px 5px rgba(123, 31, 162, 0.20)",
+            color: colors.white,
+            backgroundColor: colors.accentBlue,
+            borderColor: colors.accentBlue,
+            boxShadow: `0 2px 5px ${colors.accentBlue}33`,
           },
 
           // --------------------------------------------------
           // Selected hover
           // --------------------------------------------------
           "& .MuiTab-root.Mui-selected:hover": {
-            color: "#FFFFFF",
-
-            backgroundColor:
-              colors.primary,
-
-            borderColor:
-              colors.primary,
+            color: colors.white,
+            backgroundColor: colors.accentBlue,
+            borderColor: colors.accentBlue,
           },
 
           // --------------------------------------------------

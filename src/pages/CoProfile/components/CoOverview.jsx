@@ -3,6 +3,7 @@
 // Module: Company Profile
 // Purpose: Display company-level overview metrics
 // AI Tags: company-profile, metrics, overview, uxlab
+// UXLab V1.0 — Standardized to Company Profile Reference
 // ============================================================
 
 import React, { useMemo } from "react";
@@ -84,13 +85,13 @@ export default function CoOverview({ products = [] }) {
   }, [products]);
 
   // ----------------------------------------------------------
-  // Format business dates
+  // Format business dates — MMM yyyy, e.g. "Feb 2023"
+  // Sourced from each product's Launch_Date (API field)
   // ----------------------------------------------------------
   const formatDate = (date) => {
     if (!date) return "-";
 
     return date.toLocaleDateString("en-GB", {
-      day: "2-digit",
       month: "short",
       year: "numeric",
     });
@@ -112,16 +113,16 @@ export default function CoOverview({ products = [] }) {
       }}
     >
 
-      {/* Total Products */}
+      {/* Total Products — blue, per reference */}
       <CoMetricCard
         label="Total Products"
         value={metrics.totalProducts}
         subtitle="Active Products"
         icon={Inventory2OutlinedIcon}
-        color={colors.primary}
+        color={colors.accentBlue}
       />
 
-      {/* Average Profit Margin */}
+      {/* Average Profit Margin — green, per reference */}
       <CoMetricCard
         label="Avg. Profit Margin"
         value={
@@ -134,16 +135,16 @@ export default function CoOverview({ products = [] }) {
         color={colors.success}
       />
 
-      {/* Newest Product Launch */}
+      {/* Newest Product Launch — brand purple, per reference */}
       <CoMetricCard
         label="Newest Launch"
         value={formatDate(metrics.newestLaunch)}
         subtitle="Latest Product"
         icon={CalendarMonthOutlinedIcon}
-        color={colors.secondary}
+        color={colors.primary}
       />
 
-      {/* Company Currency */}
+      {/* Company Currency — orange, per reference */}
       <CoMetricCard
         label="Currency"
         value={metrics.currency}

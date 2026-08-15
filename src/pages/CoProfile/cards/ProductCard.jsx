@@ -3,9 +3,11 @@
 // Module: Company Profile
 // Purpose: Display product information as a rich UX card
 // AI Tags: company-profile, product-card, lifecycle, metrics
+// UXLab V1.0 — Standardized to Company Profile Reference
 // ============================================================
 
 import React from "react";
+
 import {
   Box,
   Card,
@@ -22,12 +24,17 @@ import {
   CalendarMonthOutlined,
   TimelineOutlined,
   AccessTimeOutlined,
-  RocketLaunchOutlined,
-  BarChartOutlined,
-  HourglassBottomOutlined,
+  RocketLaunch,
+  BarChart,
+  HourglassBottom,
+  Inventory2,
 } from "@mui/icons-material";
 
-import { colors, masterTypo } from "../../../ux/styles";
+import {
+  colors,
+  cardStyle,
+  masterTypo,
+} from "../../../ux/styles";
 
 import { PRODUCT_LIFECYCLE } from "../constants/constants";
 
@@ -72,42 +79,43 @@ const getLifecycle = (stage) => {
     PRODUCT_LIFECYCLE?.[code] ?? {
       label: "Not Available",
       color: colors.primary,
-      softColor: "#F3E8FF",
+      softColor: colors.primarySoft,
     }
   );
 };
 
 // ------------------------------------------------------------
-// Resolve lifecycle-specific product icon
-// Reference: Company Profile UX design
+// Resolve lifecycle-specific product icon — filled style,
+// matches reference (row icons below stay outline)
 // ------------------------------------------------------------
 const getLifecycleIcon = (stage) => {
   const code = normalizeLifecycleCode(stage);
 
   switch (code) {
     case "PL_02":
-      return RocketLaunchOutlined;
+      return RocketLaunch;
 
     case "PL_03":
-      return BarChartOutlined;
+      return BarChart;
 
     case "PL_04":
-      return HourglassBottomOutlined;
+      return HourglassBottom;
 
     default:
-      return Inventory2Outlined;
+      return Inventory2;
   }
 };
 
 // ------------------------------------------------------------
 // Product Information Row
+// Icon always inherits the card's single lifecycle color —
+// matches reference (all row icons share one theme color per card).
 // ------------------------------------------------------------
 function ProductInfoRow({
   icon: Icon,
-  iconColor,
+  themeColor,
   label,
   value,
-  valueColor,
 }) {
   return (
     <Stack
@@ -116,13 +124,13 @@ function ProductInfoRow({
       spacing={1}
       sx={{
         minHeight: 38,
-        py: 0.55,
+        py: 0.85,
       }}
     >
       <Icon
         sx={{
           fontSize: 20,
-          color: iconColor,
+          color: themeColor,
           flexShrink: 0,
         }}
       />
@@ -130,8 +138,7 @@ function ProductInfoRow({
       <Typography
         sx={{
           ...masterTypo.body1,
-          fontSize: "0.88rem",
-          color: "#475569",
+          color: colors.body,
           flex: 1,
         }}
       >
@@ -141,9 +148,8 @@ function ProductInfoRow({
       <Typography
         sx={{
           ...masterTypo.body1,
-          fontSize: "0.88rem",
           fontWeight: 700,
-          color: valueColor || "#172B4D",
+          color: themeColor,
           textAlign: "right",
         }}
       >
@@ -190,7 +196,7 @@ export default function ProductCard({
     lifecycle.label;
 
   // ----------------------------------------------------------
-  // Business Potential comes directly from Product Master API
+  // Business Potential
   // ----------------------------------------------------------
   const businessPotential =
     product?.Business_Potential ??
@@ -221,18 +227,16 @@ export default function ProductCard({
     <Card
       elevation={0}
       sx={{
-        height: "100%",
+        ...cardStyle.primary,
+
+        // Lifecycle is a business-semantic visual accent.
         border: `2px solid ${lifecycle.color}`,
-        borderRadius: 3,
-        backgroundColor: "#FFFFFF",
-        overflow: "hidden",
-        transition:
-          "transform 0.2s ease, box-shadow 0.2s ease",
 
         "&:hover": {
-          transform: "translateY(-2px)",
+          transform: "translateY(-6px)",
           boxShadow:
-            `0 8px 22px ${lifecycle.color}25`,
+            `0 16px 32px ${lifecycle.color}2E`,
+          borderColor: lifecycle.color,
         },
       }}
     >
@@ -242,27 +246,27 @@ export default function ProductCard({
         <Stack
           direction="row"
           alignItems="center"
-          spacing={1.25}
+          spacing={1.5}
         >
-
           {/* Product Number */}
           <Box
             sx={{
-              width: 48,
-              height: 48,
+              width: 56,
+              height: 56,
               borderRadius: 2,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               backgroundColor: lifecycle.color,
-              color: "#FFFFFF",
+              color: colors.white,
               flexShrink: 0,
             }}
           >
             <Typography
               sx={{
+                ...masterTypo.h4,
+                color: colors.white,
                 fontWeight: 800,
-                fontSize: "1rem",
               }}
             >
               {productNumber}
@@ -278,14 +282,9 @@ export default function ProductCard({
           >
             <Typography
               sx={{
-                ...masterTypo.h3,
+                ...masterTypo.h5,
                 color: lifecycle.color,
-                fontSize: {
-                  xs: "1.35rem",
-                  md: "1.55rem",
-                },
-                fontWeight: 800,
-                lineHeight: 1.15,
+                fontWeight: 700,
               }}
             >
               {productName}
@@ -297,14 +296,12 @@ export default function ProductCard({
               sx={{
                 mt: 0.6,
                 height: 24,
-                borderRadius: 3,
-                backgroundColor:
-                  lifecycle.softColor,
+                borderRadius: "999px",
+                backgroundColor: lifecycle.softColor,
                 color: lifecycle.color,
                 border:
                   `1px solid ${lifecycle.color}55`,
                 fontWeight: 700,
-                fontSize: "0.75rem",
               }}
             />
           </Box>
@@ -312,20 +309,19 @@ export default function ProductCard({
           {/* Lifecycle Product Icon */}
           <Box
             sx={{
-              width: 48,
-              height: 48,
+              width: 64,
+              height: 64,
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor:
-                lifecycle.softColor,
+              backgroundColor: lifecycle.softColor,
               flexShrink: 0,
             }}
           >
             <LifecycleIcon
               sx={{
-                fontSize: 28,
+                fontSize: 32,
                 color: lifecycle.color,
               }}
             />
@@ -338,78 +334,80 @@ export default function ProductCard({
             ...masterTypo.body1,
             mt: 2,
             mb: 1.25,
-            fontSize: "0.88rem",
-            lineHeight: 1.55,
-            color: "#334155",
+            color: colors.body,
           }}
         >
           {businessPotential}
         </Typography>
 
-        <Divider sx={{ mb: 0.5 }} />
+        {/* Single divider separates description from the stat list — matches reference */}
+        <Divider
+          sx={{
+            mb: 0.5,
+            borderColor: colors.divider,
+          }}
+        />
 
         {/* Profit Margin */}
         <ProductInfoRow
           icon={TrendingUpOutlined}
-          iconColor="#16A34A"
+          themeColor={lifecycle.color}
           label="Profit Margin"
           value={profit}
-          valueColor={lifecycle.color}
         />
-
-        <Divider />
 
         {/* Estimated Price */}
         <ProductInfoRow
           icon={LocalOfferOutlined}
-          iconColor="#7C3AED"
+          themeColor={lifecycle.color}
           label="Est. Price"
           value={price}
-          valueColor={lifecycle.color}
         />
-
-        <Divider />
-
-        {/* Launch Date */}
-        <ProductInfoRow
-          icon={CalendarMonthOutlined}
-          iconColor="#2563EB"
-          label="Date of Launch"
-          value={formatDate(product?.Launch_Date)}
-          valueColor={lifecycle.color}
-        />
-
-        <Divider />
-
-        {/* Product Life Cycle */}
-        <ProductInfoRow
-          icon={TimelineOutlined}
-          iconColor="#DB2777"
-          label="Product Life Cycle"
-          value={lifecycleLabel}
-          valueColor={lifecycle.color}
-        />
-
-        <Divider />
-
-        {/* Pricing Date */}
-        <ProductInfoRow
-          icon={AccessTimeOutlined}
-          iconColor="#EA580C"
-          label="Pricing Date"
-          value={formatDate(product?.Pricing_Date)}
-          valueColor={lifecycle.color}
-        />
-
-        <Divider />
 
         {/* Unit of Measure */}
         <ProductInfoRow
           icon={Inventory2Outlined}
-          iconColor="#0891B2"
-          label="UOM"
+          themeColor={lifecycle.color}
+          label="Unit Of Measure"
           value={product?.UOM ?? "-"}
-          valueColor={lifecycle.color}
+        />
+
+        {/* Pricing Date */}
+        <ProductInfoRow
+          icon={AccessTimeOutlined}
+          themeColor={lifecycle.color}
+          label="Pricing Date"
+          value={
+            product?.Pricing_Date
+              ? new Date(product.Pricing_Date).toLocaleDateString("en-US", {
+                month: "short",
+                year: "numeric",
+              })
+              : "—"
+          }
+        />
+
+       {/* Product Life Cycle */}
+        <ProductInfoRow
+          icon={TimelineOutlined}
+          themeColor={lifecycle.color}
+          label="Product Life Cycle"
+          value={lifecycleLabel}
+        />
+
+        {/* Launch Date */}
+        <ProductInfoRow
+          icon={CalendarMonthOutlined}
+          themeColor={lifecycle.color}
+          label="Date of Launch"
+          value={
+            product?.Launch_Date
+              ? new Date(product.Launch_Date).toLocaleDateString("en-US", {
+                month: "short",
+                year: "numeric",
+              })
+              : "—"
+          }
         />
 
       </Box>
