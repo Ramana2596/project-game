@@ -3,6 +3,7 @@
 // Module: Company Profile
 // Purpose: Manufacturing Process workspace
 // AI Tags: manufacturing-process, company-profile, uxlab
+// UXLab V1.0 — Standardized
 // ============================================================
 
 import React from "react";
@@ -18,18 +19,19 @@ import { colors, masterTypo } from "../../ux/styles";
 
 import { useMfgProcess } from "./hooks/useMfgProcess";
 import MfgProcessCard from "./components/MfgProcessCard";
+import { MFG_PROCESS_LABELS } from "./constants/pageConstants";
 
 // ------------------------------------------------------------
 // Manufacturing Process Page
 // ------------------------------------------------------------
-export default function MfgProcess() {
+export default function MfgProcess({ productionMonth }) {
   const { userInfo } = useUser();
 
   const {
     productProcesses,
     loading,
     error,
-  } = useMfgProcess(userInfo);
+  } = useMfgProcess(userInfo, productionMonth);
 
   // ----------------------------------------------------------
   // Loading
@@ -63,7 +65,7 @@ export default function MfgProcess() {
         <Typography
           sx={{
             ...masterTypo.body1,
-            color: "error.main",
+            color: colors.error,
           }}
         >
           Unable to load manufacturing process information.
@@ -79,26 +81,27 @@ export default function MfgProcess() {
     <Box sx={{ width: "100%" }}>
 
       {/* ================================================== */}
-      {/* Page Heading */}
+      {/* Page Heading — single source of truth via MFG_PROCESS_LABELS */}
       {/* ================================================== */}
       <Typography
         sx={{
           ...masterTypo.h3,
+          color: colors.title,
           mb: 1.5,
         }}
       >
-        Manufacturing Process
+        {MFG_PROCESS_LABELS.title}
       </Typography>
 
       {/* Page Subtitle */}
       <Typography
         sx={{
           ...masterTypo.body1,
-          color: colors.subtitle || "text.secondary",
+          color: colors.subtitle,
           mb: 2,
         }}
       >
-        Product-wise manufacturing process standards
+        {MFG_PROCESS_LABELS.subtitle}
       </Typography>
 
       {/* ================================================== */}
@@ -120,10 +123,12 @@ export default function MfgProcess() {
       >
         {productProcesses.map((product, index) => (
           <MfgProcessCard
-            key={product.productNo || index}
+            key={product.productNo}
             product={{
               Part_No: product.productNo,
               Part_Description: product.product,
+              PLM_Stage: product.plmStage,
+              materials: product.materials,
             }}
             processes={product.processes}
             index={index}

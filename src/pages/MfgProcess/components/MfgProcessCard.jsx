@@ -3,13 +3,7 @@
 // Module: MfgProcess
 // Purpose: Display one product's manufacturing process
 // AI Tags: manufacturing-process, product-card, process-flow, uxlab
-//
-// UXLab V1.0:
-// - Product card typography follows Company Profile ProductCard
-// - Product accent color is used for product identity
-// - Process identity uses process-specific icon + color
-// - Layout remains independent per Product-Process card
-// - All surfaces/shadows/borders sourced from colors + cardStyle tokens
+// UXLab V1.0 — Standardized
 // ============================================================
 
 import React from "react";
@@ -24,6 +18,10 @@ import {
   PROCESS_VISUALS,
 } from "../constants/pageConstants";
 
+// Reused from CoProfile — single source of truth for
+// lifecycle color/label, same as ProductCard uses.
+import { PRODUCT_LIFECYCLE } from "../../CoProfile/constants/constants";
+
 import {
   colors,
   cardStyle,
@@ -31,14 +29,35 @@ import {
 } from "../../../ux/styles";
 
 // ------------------------------------------------------------
-// Product Accent
-// Temporary visual mapping
-// TODO: Later use the same product visual metadata as ProductCard
+// Normalize lifecycle code
 // ------------------------------------------------------------
-const PRODUCT_ACCENTS = [
-  colors.success, // Product A
-  colors.info,    // Product B
-  colors.warning, // Product C
+const normalizeLifecycleCode = (value) => {
+  if (!value) return "";
+  return String(value).trim().replace(/\s+/g, "_");
+};
+
+// ------------------------------------------------------------
+// Resolve lifecycle visual treatment
+// ------------------------------------------------------------
+const getLifecycle = (stage) => {
+  const code = normalizeLifecycleCode(stage);
+
+  return (
+    PRODUCT_LIFECYCLE?.[code] ?? {
+      label: "Not Available",
+      color: colors.primary,
+      softColor: colors.primarySoft,
+    }
+  );
+};
+
+// ------------------------------------------------------------
+// Interim positional fallback
+// ------------------------------------------------------------
+const FALLBACK_ACCENTS = [
+  colors.success,
+  colors.info,
+  colors.warning,
 ];
 
 // ------------------------------------------------------------
@@ -52,24 +71,51 @@ export default function MfgProcessCard({
   // ----------------------------------------------------------
   // Product
   // ----------------------------------------------------------
-  const productName = product?.Part_Description || "Product";
+  const productName =
+    product?.Part_Description || "Product";
 
-  const productColor = PRODUCT_ACCENTS[index] || colors.primary;
+  const lifecycleCode =
+    normalizeLifecycleCode(product?.PLM_Stage);
+
+  const isLifecycleResolved =
+    Boolean(PRODUCT_LIFECYCLE?.[lifecycleCode]);
+
+  const lifecycle =
+    getLifecycle(product?.PLM_Stage);
+
+  const productColor = isLifecycleResolved
+    ? lifecycle.color
+    : FALLBACK_ACCENTS[
+    index % FALLBACK_ACCENTS.length
+    ] || lifecycle.color;
 
   // ----------------------------------------------------------
   // Process visual
   // ----------------------------------------------------------
   const getProcessVisual = (processName) =>
-    PROCESS_VISUALS[processName] || PROCESS_VISUALS.default;
+    PROCESS_VISUALS[processName] ||
+    PROCESS_VISUALS.default;
 
   // ----------------------------------------------------------
   // Format time
   // ----------------------------------------------------------
   const formatTime = (value) => {
     const time = Number(value);
+
     if (!Number.isFinite(time)) return "-";
-    return `${time % 1 === 0 ? time : time.toFixed(2)} min`;
+
+    return `${time % 1 === 0
+        ? time
+        : time.toFixed(2)
+      } min`;
   };
+
+  // ----------------------------------------------------------
+  // Material information
+  // ----------------------------------------------------------
+  const materials = Array.isArray(product?.materials)
+    ? product.materials
+    : [];
 
   // ----------------------------------------------------------
   // Render
@@ -93,7 +139,7 @@ export default function MfgProcessCard({
           pt: 1.75,
           pb: 1.5,
 
-          background: `linear-gradient(135deg, ${colors.primary}0B, ${colors.primary}03)`,
+          background: `linear-gradient(135deg, ${productColor}0B, ${productColor}03)`,
 
           borderBottom: "1px solid",
           borderColor: colors.divider,
@@ -111,36 +157,118 @@ export default function MfgProcessCard({
           {productName}
         </Typography>
 
-        {/* Product Master Information */}
-        <Typography
+        {/* ------ Material / Stock / Per Set ----------- */}
+        <Box
           sx={{
-            ...masterTypo.caption,
-            color: colors.subtitle,
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 0.75,
           }}
         >
-          <Box component="span" sx={{ fontWeight: 700, color: colors.body }}>
-            Material:
-          </Box>{" "}
-          xxxx
+          {product?.materials?.length > 0 ? (
+            product.materials.map((material, materialIndex) => (
+              <React.Fragment
+                key={`${material?.material}-${materialIndex}`}
+              >
+                <Typography
+                  sx={{
+                    ...masterTypo.caption,
+                    color: colors.subtitle,
+                  }}
+                >
+                  <Box
+                    component="span"
+                    sx={{
+                      fontWeight: 700,
+                      color: colors.body,
+                    }}
+                  >
+                    Material:
+                  </Box>{" "}
+                  {material?.material || "—"}
+                </Typography>
 
-          <Box component="span" sx={{ mx: 1, color: colors.border }}>
-            |
-          </Box>
+                <Box
+                  component="span"
+                  sx={{
+                    color: colors.border,
+                  }}
+                >
+                  |
+                </Box>
 
-          <Box component="span" sx={{ fontWeight: 700, color: colors.body }}>
-            Opening Stock:
-          </Box>{" "}
-          yyyy
+                <Typography
+                  sx={{
+                    ...masterTypo.caption,
+                    color: colors.subtitle,
+                  }}
+                >
+                  <Box
+                    component="span"
+                    sx={{
+                      fontWeight: 700,
+                      color: colors.body,
+                    }}
+                  >
+                    Stock:
+                  </Box>{" "}
+                  {material?.stock ?? "—"}{" "}
+                  {material?.uom || ""}
+                </Typography>
 
-          <Box component="span" sx={{ mx: 1, color: colors.border }}>
-            |
-          </Box>
+                <Box
+                  component="span"
+                  sx={{
+                    color: colors.border,
+                  }}
+                >
+                  |
+                </Box>
 
-          <Box component="span" sx={{ fontWeight: 700, color: colors.body }}>
-            Per Set:
-          </Box>{" "}
-          nn.nn
-        </Typography>
+                <Typography
+                  sx={{
+                    ...masterTypo.caption,
+                    color: colors.subtitle,
+                  }}
+                >
+                  <Box
+                    component="span"
+                    sx={{
+                      fontWeight: 700,
+                      color: colors.body,
+                    }}
+                  >
+                    Per Set:
+                  </Box>{" "}
+                  {material?.perSet ?? "—"}{" "}
+                  {material?.uom || ""}
+                </Typography>
+
+                {materialIndex < product.materials.length - 1 && (
+                  <Box
+                    component="span"
+                    sx={{
+                      color: colors.border,
+                      mx: 0.25,
+                    }}
+                  >
+                    •
+                  </Box>
+                )}
+              </React.Fragment>
+            ))
+          ) : (
+            <Typography
+              sx={{
+                ...masterTypo.caption,
+                color: colors.subtitle,
+              }}
+            >
+              Material: — | Stock: — | Per Set: —
+            </Typography>
+          )}
+        </Box>
       </Box>
 
       {/* ================================================== */}
@@ -149,7 +277,8 @@ export default function MfgProcessCard({
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) 64px 76px 52px",
+          gridTemplateColumns:
+            "minmax(0, 1fr) 64px 76px 52px",
           alignItems: "center",
 
           px: 2,
@@ -159,19 +288,46 @@ export default function MfgProcessCard({
           borderColor: colors.divider,
         }}
       >
-        <Typography sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.subtitle }}>
+        <Typography
+          sx={{
+            ...masterTypo.caption,
+            fontWeight: 700,
+            color: colors.subtitle,
+          }}
+        >
           {MFG_PROCESS_LABELS.operation}
         </Typography>
 
-        <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.subtitle }}>
+        <Typography
+          align="right"
+          sx={{
+            ...masterTypo.caption,
+            fontWeight: 700,
+            color: colors.subtitle,
+          }}
+        >
           {MFG_PROCESS_LABELS.setupTime}
         </Typography>
 
-        <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.subtitle }}>
+        <Typography
+          align="right"
+          sx={{
+            ...masterTypo.caption,
+            fontWeight: 700,
+            color: colors.subtitle,
+          }}
+        >
           {MFG_PROCESS_LABELS.standardTime}
         </Typography>
 
-        <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.subtitle }}>
+        <Typography
+          align="right"
+          sx={{
+            ...masterTypo.caption,
+            fontWeight: 700,
+            color: colors.subtitle,
+          }}
+        >
           {MFG_PROCESS_LABELS.batchQuantity}
         </Typography>
       </Box>
@@ -179,10 +335,21 @@ export default function MfgProcessCard({
       {/* ================================================== */}
       {/* Process Rows */}
       {/* ================================================== */}
-      <Box sx={{ px: 1.25, py: 0.35, flexGrow: 1 }}>
+      <Box
+        sx={{
+          px: 1.25,
+          py: 0.35,
+          flexGrow: 1,
+        }}
+      >
         {processes.map((process, rowIndex) => {
-          const processName = process?.Work_Centre_Description || "Process";
-          const visual = getProcessVisual(processName);
+          const processName =
+            process?.Work_Centre_Description ||
+            "Process";
+
+          const visual =
+            getProcessVisual(processName);
+
           const ProcessIcon = visual.icon;
 
           return (
@@ -190,7 +357,8 @@ export default function MfgProcessCard({
               key={`${process?.Part_No}-${process?.Mfg_Seq_No}-${rowIndex}`}
               sx={{
                 display: "grid",
-                gridTemplateColumns: "minmax(0, 1fr) 64px 76px 52px",
+                gridTemplateColumns:
+                  "minmax(0, 1fr) 64px 76px 52px",
                 alignItems: "center",
 
                 minHeight: 58,
@@ -200,13 +368,17 @@ export default function MfgProcessCard({
                   rowIndex < processes.length - 1
                     ? "1px solid"
                     : "none",
+
                 borderColor: colors.divider,
 
                 borderRadius: 1.5,
-                transition: "background-color .2s ease",
+
+                transition:
+                  "background-color .2s ease",
 
                 "&:hover": {
-                  backgroundColor: colors.hover,
+                  backgroundColor:
+                    `${productColor}0A`,
                 },
               }}
             >
@@ -214,7 +386,13 @@ export default function MfgProcessCard({
               {/* ---------------------------------------- */}
               {/* Process */}
               {/* ---------------------------------------- */}
-              <Box sx={{ display: "flex", alignItems: "center", minWidth: 0 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  minWidth: 0,
+                }}
+              >
 
                 {/* Sequence */}
                 <Typography
@@ -226,7 +404,10 @@ export default function MfgProcessCard({
                     color: visual.color,
                   }}
                 >
-                  {String(process?.Mfg_Seq_No ?? rowIndex + 1).padStart(2, "0")}
+                  {String(
+                    process?.Mfg_Seq_No ??
+                    rowIndex + 1
+                  ).padStart(2, "0")}
                 </Typography>
 
                 {/* Process Icon */}
@@ -234,20 +415,28 @@ export default function MfgProcessCard({
                   sx={{
                     ...cardStyle.iconBox,
                     ...cardStyle.iconBoxCircle,
+
                     width: 32,
                     height: 32,
                     minWidth: 32,
+
                     flexShrink: 0,
                     mr: 1,
-                    background: visual.softColor,
+
+                    background:
+                      visual.softColor,
+
                     color: visual.color,
+
                     "& svg": {
                       fontSize: 18,
                       color: visual.color,
                     },
                   }}
                 >
-                  <ProcessIcon sx={{ fontSize: 18 }} />
+                  <ProcessIcon
+                    sx={{ fontSize: 18 }}
+                  />
                 </Box>
 
                 {/* Process Name */}
@@ -273,7 +462,8 @@ export default function MfgProcessCard({
                       color: colors.subtitle,
                     }}
                   >
-                    {process?.Facility_Description || ""}
+                    {process?.Facility_Description ||
+                      ""}
                   </Typography>
                 </Box>
               </Box>
@@ -281,21 +471,46 @@ export default function MfgProcessCard({
               {/* ---------------------------------------- */}
               {/* Setup */}
               {/* ---------------------------------------- */}
-              <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 600, color: colors.body }}>
-                {formatTime(process?.SetUp_Time)}
+              <Typography
+                align="right"
+                sx={{
+                  ...masterTypo.caption,
+                  fontWeight: 600,
+                  color: colors.body,
+                }}
+              >
+                {formatTime(
+                  process?.SetUp_Time
+                )}
               </Typography>
 
               {/* ---------------------------------------- */}
               {/* Standard Time */}
               {/* ---------------------------------------- */}
-              <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.primary }}>
-                {formatTime(process?.Std_Time)}
+              <Typography
+                align="right"
+                sx={{
+                  ...masterTypo.caption,
+                  fontWeight: 700,
+                  color: colors.primary,
+                }}
+              >
+                {formatTime(
+                  process?.Std_Time
+                )}
               </Typography>
 
               {/* ---------------------------------------- */}
               {/* Batch */}
               {/* ---------------------------------------- */}
-              <Typography align="right" sx={{ ...masterTypo.caption, fontWeight: 600, color: colors.body }}>
+              <Typography
+                align="right"
+                sx={{
+                  ...masterTypo.caption,
+                  fontWeight: 600,
+                  color: colors.body,
+                }}
+              >
                 {process?.Batch_Qty ?? "-"}
               </Typography>
 
