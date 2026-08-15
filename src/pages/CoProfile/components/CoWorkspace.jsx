@@ -3,6 +3,7 @@
 // Module: Company Profile
 // Purpose: Render the active Company Profile domain
 // AI Tags: company-profile, workspace, product, process, bom
+// UXLab V1.0 — Standardized to Company Profile Reference
 // ============================================================
 
 import React from "react";
@@ -12,9 +13,12 @@ import {
 } from "@mui/material";
 
 import ProductCard from "../cards/ProductCard";
+import CoQuickInsight from "./CoQuickInsight";
 import MfgProcess from "../../MfgProcess/MfgProcess";
 
 import {
+  colors,
+  layoutStyle,
   masterTypo,
 } from "../../../ux/styles";
 
@@ -27,26 +31,17 @@ export default function CoWorkspace({
 }) {
   // ----------------------------------------------------------
   // Render Product workspace
+  // Reference shows no section heading above the product cards —
+  // the tab bar alone signals the active domain.
   // ----------------------------------------------------------
   if (activeTab === "PRODUCT") {
     return (
-      <Box>
-        {/* Workspace Title */}
-        <Typography
-          sx={{
-            ...masterTypo.h3,
-            mb: 1.5,
-          }}
-        >
-          Products
-        </Typography>
-
-        {/* Product Cards */}
+      <Box sx={layoutStyle.section}>
         {products.length === 0 ? (
           <Typography
             sx={{
               ...masterTypo.body1,
-              color: "text.secondary",
+              color: colors.muted,
             }}
           >
             No product information available.
@@ -54,6 +49,7 @@ export default function CoWorkspace({
         ) : (
           <Box
             sx={{
+              ...layoutStyle.grid,
               display: "grid",
               gridTemplateColumns: {
                 xs: "1fr",
@@ -70,6 +66,13 @@ export default function CoWorkspace({
                 index={index}
               />
             ))}
+          </Box>
+        )}
+
+        {/* Quick Insight banner — below product cards, per reference */}
+        {products.length > 0 && (
+          <Box sx={{ mt: 2 }}>
+            <CoQuickInsight products={products} />
           </Box>
         )}
       </Box>
@@ -96,12 +99,13 @@ export default function CoWorkspace({
   // Render future Company Profile domains
   // ----------------------------------------------------------
   return (
-    <Box>
+    <Box sx={layoutStyle.section}>
       {/* Domain Title */}
       <Typography
         sx={{
           ...masterTypo.h3,
           mb: 1,
+          color: colors.title,
         }}
       >
         {domainLabels[activeTab] ?? "Company Profile"}
@@ -111,7 +115,7 @@ export default function CoWorkspace({
       <Typography
         sx={{
           ...masterTypo.body1,
-          color: "text.secondary",
+          color: colors.muted,
         }}
       >
         This Company Profile section will be implemented

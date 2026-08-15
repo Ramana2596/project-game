@@ -3,6 +3,7 @@
 // Module: Company Profile
 // Purpose: Enterprise orchestration page for Company Profile
 // AI Tags: company-profile, orchestration, workspace, navigation
+// UXLab V1.0 — Standardized to Company Profile Reference
 // ============================================================
 
 import React from "react";
@@ -13,7 +14,7 @@ import {
 } from "@mui/material";
 
 import { useUser } from "../../core/access/userContext.jsx";
-import { colors } from "../../ux/styles";
+import { colors, layoutStyle } from "../../ux/styles";
 
 import { useCoProfile } from "./hooks/useCoProfile";
 
@@ -25,7 +26,9 @@ import CoWorkspace from "./components/CoWorkspace";
 // ------------------------------------------------------------
 // Company Profile Page
 // ------------------------------------------------------------
-export default function CoProfile() {
+export default function CoProfile({
+  productionMonth = null,
+}) {
 
   // ----------------------------------------------------------
   // Load authenticated user information
@@ -65,48 +68,45 @@ export default function CoProfile() {
   }
 
   // ----------------------------------------------------------
-  // Render Company Profile workspace
+  // Render Company Profile workspace — layoutStyle.root token
+  // (gradient page background + standard responsive padding)
   // ----------------------------------------------------------
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        bgcolor: colors.page,
-        p: {
-          xs: 2,
-          sm: 2.5,
-          md: 3,
-        },
-      }}
-    >
-      <Stack
-        spacing={{
-          xs: 2,
-          md: 2.5,
-        }}
-      >
+    <Box sx={layoutStyle.root}>
+      <Box sx={layoutStyle.pageContainer}>
+        <Stack
+          spacing={{
+            xs: 2,
+            md: 2.5,
+          }}
+        >
 
-        {/* Company Profile Header */}
-        <CoHeader />
+          {/* Company Profile Header */}
+          <CoHeader
+            productionMonth={productionMonth}
+          />
 
         {/* Company Overview Metrics */}
-        <CoOverview
-          products={products}
-        />
+          <CoOverview
+            products={products}
+          />
+          
+          {/* Company Profile Domain Navigation — precedes stat cards, per reference */}
+          <CoNavigation
+            activeTab={activeTab}
+            onChange={setActiveTab}
+          />
 
-        {/* Company Profile Domain Navigation */}
-        <CoNavigation
-          activeTab={activeTab}
-          onChange={setActiveTab}
-        />
+  
 
-        {/* Active Company Domain */}
-        <CoWorkspace
-          activeTab={activeTab}
-          products={products}
-        />
+          {/* Active Company Domain */}
+          <CoWorkspace
+            activeTab={activeTab}
+            products={products}
+          />
 
-      </Stack>
+        </Stack>
+      </Box>
     </Box>
   );
 }

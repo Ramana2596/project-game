@@ -6,11 +6,10 @@
 
 import api from "../../../core/interceptor/api-interceptor";
 
-// ------------------------------------------------------------
-// Get Product Master information
-// ------------------------------------------------------------
+// Get Product information
 export function getProducts(queryParams) {
   return api.get("/api/getProductMstInfo", {
     params: { ...queryParams },
   });
 }
+

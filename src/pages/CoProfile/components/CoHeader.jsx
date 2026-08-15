@@ -1,13 +1,9 @@
 // ============================================================
 // Component: CoHeader
 // Module: Company Profile
-// Purpose: Display Company Profile page heading and simulation period
+// Purpose: Display Company Profile page heading and Production Month
 // AI Tags: company-profile, header, overview, uxlab
-//
-// UXLab V1.0:
-// - Typography -> masterTypo
-// - Colors     -> colors
-// - Layout     -> component-level positioning only
+// UXLab V1.0 — Standardized to Company Profile Reference
 // ============================================================
 
 import React from "react";
@@ -22,6 +18,7 @@ import CalendarMonthOutlinedIcon from
 
 import {
   colors,
+  layoutStyle,
   masterTypo,
 } from "../../../ux/styles";
 
@@ -29,23 +26,25 @@ import {
 // Company Profile Header
 // ------------------------------------------------------------
 export default function CoHeader({
-  simulationPeriod = null,
+  productionMonth = null,
 }) {
+  const formattedPeriod = productionMonth
+    ? new Date(productionMonth).toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      })
+    : "—";
+
   return (
-    <Box
-      sx={{
-        position: "relative",
-        textAlign: "center",
-        pb: 0.75,
-      }}
-    >
+    <Box sx={layoutStyle.pageHeader}>
+
       {/* ================================================== */}
       {/* Page Title */}
       {/* ================================================== */}
       <Typography
         sx={{
           ...masterTypo.h2,
-          color: colors.primary,
+          color: colors.title,
         }}
       >
         Company Profile
@@ -57,8 +56,7 @@ export default function CoHeader({
       <Typography
         sx={{
           ...masterTypo.body1,
-          mt: 0.75,
-          color: colors.textSecondary,
+          color: colors.body,
         }}
       >
         A quick overview of our products, performance and key
@@ -66,20 +64,15 @@ export default function CoHeader({
       </Typography>
 
       {/* ================================================== */}
-      {/* Current Simulation Period */}
+      {/* Current Production Month */}
       {/* ================================================== */}
       <Box
         sx={{
+          ...layoutStyle.pageHeaderDatePill,
+
           position: {
             xs: "static",
             md: "absolute",
-          },
-
-          right: 0,
-
-          top: {
-            xs: "auto",
-            md: 4,
           },
 
           mt: {
@@ -87,40 +80,39 @@ export default function CoHeader({
             md: 0,
           },
 
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 0.75,
-
-          color: colors.primary,
+          background: "transparent",
+          border: "none",
+          px: 0,
+          py: 0,
         }}
       >
-        <CalendarMonthOutlinedIcon
+        <Typography
           sx={{
-            fontSize: 20,
+            ...masterTypo.body1,
+            fontWeight: 600,
             color: colors.primary,
           }}
-        />
+        >
+          {formattedPeriod}
+        </Typography>
 
-        <Box>
-          <Typography
+        <Box
+          sx={{
+            width: 32,
+            height: 32,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 2,
+            background: colors.panelAlt,
+          }}
+        >
+          <CalendarMonthOutlinedIcon
             sx={{
-              ...masterTypo.caption,
+              fontSize: 18,
               color: colors.primary,
-              fontWeight: 700,
             }}
-          >
-            Current Period
-          </Typography>
-
-          <Typography
-            sx={{
-              ...masterTypo.caption,
-              mt: 0.25,
-              color: colors.textSecondary,
-            }}
-          >
-            {simulationPeriod || "—"}
-          </Typography>
+          />
         </Box>
       </Box>
     </Box>
