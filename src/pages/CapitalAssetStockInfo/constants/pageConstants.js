@@ -7,9 +7,12 @@ export const pageConstants = {
     "Work Centre",
     "UOM",
     "Quantity",
+    "Capacity in Hours",
+    "Overtime Hours",
     "Currency",
     "Cost Per Machine",
-    "Hourly Rate"
+    "Hourly Rate",
+    "Overtime Rate",
   ],
     hiddenColumns: [
     "Game_Id",

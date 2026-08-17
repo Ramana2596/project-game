@@ -11,7 +11,8 @@ export const pageConstants = {
     "Profit %",
     "Currency",
     "Estd. Price",
-    "Pricing Date"
+    "Pricing Date",
+    "Business Outlook",
   ],
   // Define columns to be bold here
   highlightedColumns: [
