@@ -229,7 +229,7 @@ export default function ProductCard({
       sx={{
         ...cardStyle.primary,
 
-        // Lifecycle is a business-semantic visual accent.
+        // Lifecycle - visual accent.
         border: `2px solid ${lifecycle.color}`,
 
         "&:hover": {
@@ -356,20 +356,12 @@ export default function ProductCard({
           value={profit}
         />
 
-        {/* Estimated Price */}
+        {/* Estimated Unit Price */}
         <ProductInfoRow
           icon={LocalOfferOutlined}
           themeColor={lifecycle.color}
-          label="Est. Price"
+          label="Est. Unit Price"
           value={price}
-        />
-
-        {/* Unit of Measure */}
-        <ProductInfoRow
-          icon={Inventory2Outlined}
-          themeColor={lifecycle.color}
-          label="Unit Of Measure"
-          value={product?.UOM ?? "-"}
         />
 
         {/* Pricing Date */}

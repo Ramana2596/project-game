@@ -17,7 +17,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../../core/access/userContext";
 
-import { getTeamPerf } from "./services/service";
+import { getBatchEvaluation } from "./services/service";
 
 import PerfHeader from "./components/PerfHeader";
 
@@ -50,7 +50,7 @@ const TeamDebrief = () => {
     try {
       setLoading(true);
 
-      const res = await getTeamPerf(
+      const res = await getBatchEvaluation(
         gameId,
         gameBatch,
         gameTeam

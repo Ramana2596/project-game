@@ -22,7 +22,7 @@ import {
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../../core/access/userContext";
-import { getTeamPerf } from "./services/service";
+import { getBatchEvaluation } from "./services/service";
 
 import PerfHeader from "./components/PerfHeader";
 import YardstickChart from "./components/YardstickChart";
@@ -58,7 +58,7 @@ const TeamAssessment = () => {
     try {
       setLoading(true);
 
-      const res = await getTeamPerf(
+      const res = await getBatchEvaluation(
         gameId,
         gameBatch,
         gameTeam
