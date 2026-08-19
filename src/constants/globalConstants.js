@@ -145,9 +145,9 @@ import KeyResultPlInfo from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
 import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
 import UiAccess from "../pages/UiAccess/UiAccess.jsx";
 import PublishMarketData from "../pages/PublishMarketData/PublishMarketData.jsx";
-import TeamAssessment from "../pages/TeamPerf/TeamAssessment.jsx";
-import BatchAssessment from "../pages/TeamPerf/BatchAssessment.jsx";
-import TeamDebrief from "../pages/TeamPerf/TeamDebrief.jsx";
+import TeamAssessment from "../pages/BatchEvaluation/TeamAssessment.jsx";
+import BatchAssessment from "../pages/BatchEvaluation/BatchAssessment.jsx";
+import TeamDebrief from "../pages/BatchEvaluation/TeamDebrief.jsx";
 
 import SimulationCentre from "../pages/DemoVirtual/SimulationCentre.jsx"
 // Retired  import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";   // Retired
@@ -171,6 +171,30 @@ export const componentList = [
     href: "/operationGame/homePage",
     routeElement: <Dashboard />,
     children: [
+      {
+        iconPath: appSettings,
+        id: "UI 21 270",
+        label: "Business Plan Execution",
+        path: "/SimulationCentre",
+        href: "/operationGame/SimulationCentre",
+        routeElement: <SimulationCentre />
+      },
+      {
+        icon: <LeaderboardTwoToneIcon />,
+        id: "UI 24 100",
+        label: "Batch Assessment",
+        path: "/batchAssessment",
+        href: "/operationGame/BatchAssessment",
+        routeElement: <BatchAssessment />
+      },
+      {
+        icon: <AnalyticsTwoToneIcon />,
+        id: "UI 24 110",
+        label: "Team Performance",
+        path: "/teamAssessment",
+        href: "/operationGame/TeamAssessment",
+        routeElement: <TeamAssessment />
+      },
       {
         icon: <AccountBalanceTwoToneIcon />,
         id: "UI 21 110",
@@ -196,22 +220,6 @@ export const componentList = [
         routeElement: <CasFlowStatement />
       },
       {
-        icon: <LeaderboardTwoToneIcon />,
-        id: "UI 24 100",
-        label: "Batch Assessment",
-        path: "/batchAssessment",
-        href: "/operationGame/BatchAssessment",
-        routeElement: <BatchAssessment />
-      },
-      {
-        icon: <AnalyticsTwoToneIcon />,
-        id: "UI 24 110",
-        label: "Team Performance",
-        path: "/teamAssessment",
-        href: "/operationGame/TeamAssessment",
-        routeElement: <TeamAssessment />
-      },
-            {
         icon: <AnalyticsTwoToneIcon />,
         id: "UI 24 120",
         label: "Team Debrief",

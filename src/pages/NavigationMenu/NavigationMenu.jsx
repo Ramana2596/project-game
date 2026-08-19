@@ -117,9 +117,9 @@ import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
 import UserRole from '../UserRole/UserRole.jsx';
 import UiAccess from '../UiAccess/UiAccess.jsx';
 import PublishMarketData from '../PublishMarketData/PublishMarketData.jsx';
-import BatchAssessment from '../TeamPerf/BatchAssessment.jsx';
-import TeamAssessment from '../TeamPerf/TeamAssessment.jsx';
-import TeamDebrief from '../TeamPerf/TeamDebrief.jsx';
+import BatchAssessment from '../BatchEvaluation/BatchAssessment.jsx';
+import TeamAssessment from '../BatchEvaluation/TeamAssessment.jsx';
+import TeamDebrief from '../BatchEvaluation/TeamDebrief.jsx';
 
 import SimulationCentre from '../DemoVirtual/SimulationCentre.jsx';
 // Retired import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";   // Retired

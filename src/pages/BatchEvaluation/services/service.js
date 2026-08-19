@@ -6,7 +6,7 @@ import api from "../../../core/interceptor/api-interceptor";
 
 // Get Batch LOV
 export const getBatch = (gameId) => {
-    return api.get("/api/getTeamPerf", {
+    return api.get("/api/getBatchEvaluation", {
         params: {
             gameId,
             gameBatch: 0,
@@ -17,7 +17,7 @@ export const getBatch = (gameId) => {
 
 // Get Team
 export const getTeam = (gameId, gameBatch) => {
-    return api.get("/api/getTeamPerf", {
+    return api.get("/api/getBatchEvaluation", {
         params: {
             gameId,
             gameBatch,
@@ -27,8 +27,8 @@ export const getTeam = (gameId, gameBatch) => {
 };
 
 // Get Team Performance
-export const getTeamPerf = (gameId, gameBatch, gameTeam) => {
-    return api.get("/api/getTeamPerf", {
+export const getBatchEvaluation = (gameId, gameBatch, gameTeam) => {
+    return api.get("/api/getBatchEvaluation", {
         params: {
             gameId,
             gameBatch,
