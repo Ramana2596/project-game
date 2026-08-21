@@ -3,7 +3,7 @@
 // Module: Company Profile
 // Purpose: Enterprise orchestration page for Company Profile
 // AI Tags: company-profile, orchestration, workspace, navigation
-// UXLab V1.0 — Standardized to Company Profile Reference
+// UXLab V3 — ReportWriter Rich UX
 // ============================================================
 
 import React from "react";
@@ -23,11 +23,14 @@ import CoOverview from "./components/CoOverview";
 import CoNavigation from "./components/CoNavigation";
 import CoWorkspace from "./components/CoWorkspace";
 
+
 // ------------------------------------------------------------
 // Company Profile Page
 // ------------------------------------------------------------
 export default function CoProfile({
   productionMonth = null,
+  hideHeader = false,
+  hideNavigation = false,
 }) {
 
   // ----------------------------------------------------------
@@ -68,8 +71,7 @@ export default function CoProfile({
   }
 
   // ----------------------------------------------------------
-  // Render Company Profile workspace — layoutStyle.root token
-  // (gradient page background + standard responsive padding)
+  // Render Company Profile workspace
   // ----------------------------------------------------------
   return (
     <Box sx={layoutStyle.root}>
@@ -81,25 +83,41 @@ export default function CoProfile({
           }}
         >
 
-          {/* Company Profile Header */}
-          <CoHeader
-            productionMonth={productionMonth}
-          />
+          {/* ================================================== */}
+          {/* Existing Company Profile Header                   */}
+          {/* Hidden when rendered through ReportWriter          */}
+          {/* ================================================== */}
 
-        {/* Company Overview Metrics */}
+          {!hideHeader && (
+            <CoHeader
+              productionMonth={productionMonth}
+            />
+          )}
+
+          {/* ================================================== */}
+          {/* Existing Company Profile Navigation               */}
+          {/* Hidden when rendered through ReportWriter          */}
+          {/* ================================================== */}
+
+          {!hideNavigation && (
+            <CoNavigation
+              activeTab={activeTab}
+              onChange={setActiveTab}
+            />
+          )}
+
+          {/* ================================================== */}
+          {/* Company Overview Metrics                           */}
+          {/* ================================================== */}
+
           <CoOverview
             products={products}
           />
-          
-          {/* Company Profile Domain Navigation — precedes stat cards, per reference */}
-          <CoNavigation
-            activeTab={activeTab}
-            onChange={setActiveTab}
-          />
 
-  
+          {/* ================================================== */}
+          {/* Active Company Domain                              */}
+          {/* ================================================== */}
 
-          {/* Active Company Domain */}
           <CoWorkspace
             activeTab={activeTab}
             products={products}
