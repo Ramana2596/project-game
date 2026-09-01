@@ -157,7 +157,7 @@ import DemoVirtual from '../pages/DemoVirtual/DemoVirtual.jsx';
 import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import CoProfile from "../pages/CoProfile/CoProfile";
-
+import MfgProcess from "../pages/MfgProcess/MfgProcess";
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
 
@@ -240,13 +240,20 @@ export const componentList = [
       
       {
         iconPath: productIcon,
-        id: "UI 22 020",
+        id: "UI 22 020 UX",
         label: "Product Profile ",
         path: "/coprofile",
         href: "/operationGame/CoProfile ",
         routeElement: <CoProfile  />
       },      
-      
+      {
+        iconPath: processIcon,
+        id: "UI 22 040 UX",
+        label: "Manufacturing Process",
+        path: "/MfgProcess",
+        href: "/operationGame/MfgProcess",
+        routeElement: <MfgProcess />
+      },   
       {
         iconPath: approvalIcon,
         id: "UI 21 010",
