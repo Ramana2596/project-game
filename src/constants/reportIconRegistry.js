@@ -58,8 +58,10 @@ export const REPORT_ICON_REGISTRY = {
 
   // Company Profile
   "UI 22 020": Inventory2OutlinedIcon,
+  "UI 22 020 UX": Inventory2OutlinedIcon,
   "UI 22 030": SchemaOutlinedIcon,
   "UI 22 040": AccountTreeOutlinedIcon,
+  "UI 22 040 UX": AccountTreeOutlinedIcon,
   "UI 22 060": WarehouseOutlinedIcon,
 };
 
