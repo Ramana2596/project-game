@@ -23,6 +23,9 @@ import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 import InsightsOutlinedIcon from "@mui/icons-material/InsightsOutlined";
 import QueryStatsOutlinedIcon from "@mui/icons-material/QueryStatsOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
+import FactoryIcon from '@mui/icons-material/Factory';
+import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
+
 
 export const REPORT_ICON_REGISTRY = {
 
@@ -63,6 +66,7 @@ export const REPORT_ICON_REGISTRY = {
   "UI 22 040": AccountTreeOutlinedIcon,
   "UI 22 040 UX": AccountTreeOutlinedIcon,
   "UI 22 060": WarehouseOutlinedIcon,
+  "UI 22 060 UX": FactoryIcon,
 };
 
 export default REPORT_ICON_REGISTRY;
