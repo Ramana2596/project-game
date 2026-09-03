@@ -256,7 +256,7 @@ export const componentList = [
       }, 
       {
         iconPath: machineIcon,
-        id: "UI 22 060 UX",
+        id: "UI 22 060",
         label: "Plant Capacity & Utilization",
         path: "/PlantCapacity",
         href: "/operationGame/PlantCapacity",
