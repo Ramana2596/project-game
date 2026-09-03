@@ -158,8 +158,8 @@ import SimulationPlay from "../pages/SimulationPlay/SimulationPlay.jsx";
 import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import CoProfile from "../pages/CoProfile/CoProfile";
 import MfgProcess from "../pages/MfgProcess/MfgProcess";
+import PlantCapacity from "../pages/PlantCapacity/PlantCapacity";
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
-
 
 
 export const componentList = [
@@ -253,7 +253,31 @@ export const componentList = [
         path: "/MfgProcess",
         href: "/operationGame/MfgProcess",
         routeElement: <MfgProcess />
-      },   
+      }, 
+      {
+        iconPath: machineIcon,
+        id: "UI 22 060 UX",
+        label: "Plant Capacity & Utilization",
+        path: "/PlantCapacity",
+        href: "/operationGame/PlantCapacity",
+        routeElement: <PlantCapacity />
+      },
+      {
+        iconPath: rawIcon,
+        id: "UI 21 140",
+        label: "Raw Material Stock Info",
+        path: "/rmStockInfo",
+        href: "/operationGame/rmStockInfo",
+        routeElement: <RmStockInfo />
+      },
+      {
+        iconPath: finishedIcon,
+        id: "UI 21 150",
+        label: "Finished Goods Stock Info",
+        path: "/fgStockInfo",
+        href: "/operationGame/fgStockInfo",
+        routeElement: <FgStockInfo />
+      },
       {
         iconPath: approvalIcon,
         id: "UI 21 010",
@@ -309,22 +333,6 @@ export const componentList = [
         path: "/operationalPlanInfo",
         href: "/operationGame/operationalPlanInfo",
         routeElement: <OperationalPlanInfo />
-      },
-      {
-        iconPath: rawIcon,
-        id: "UI 21 140",
-        label: "Raw Material Stock Info",
-        path: "/rmStockInfo",
-        href: "/operationGame/rmStockInfo",
-        routeElement: <RmStockInfo />
-      },
-      {
-        iconPath: finishedIcon,
-        id: "UI 21 150",
-        label: "Finished Goods Stock Info",
-        path: "/fgStockInfo",
-        href: "/operationGame/fgStockInfo",
-        routeElement: <FgStockInfo />
       },
       {
         iconPath: productionIcon,

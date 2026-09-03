@@ -130,6 +130,7 @@ import SimulationPlay from '../SimulationPlay/SimulationPlay.jsx';
 import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
 import CoProfile from "../CoProfile/CoProfile.jsx";
 import MfgProcess from "../MfgProcess/MfgProcess.jsx";
+import PlantCapacity from "../PlantCapacity/PlantCapacity.jsx";
 
 //import FormTemplate from '../FormTemplate/FormTemplate.jsx';
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
@@ -497,6 +498,7 @@ export default function MiniDrawer() {
           <Route path='/SimulationCentre' element ={<SimulationCentre /> } />
           <Route path='/CoProfile' element={<CoProfile />} />
           <Route path='/MfgProcess' element={<MfgProcess />} />
+          <Route path='/PlantCapacity' element={<PlantCapacity />} />
           
           {/* <Route path='/formTemplate' element={<FormTemplate />} /> */}
         </Routes>
