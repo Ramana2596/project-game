@@ -4,10 +4,10 @@ export const pageConstants = {
   tableHeading: [
     "Period",
     "Capital Asset",
-    "No Of Machines",
+    "No. of Machines",
     "Capacity (Hours)",
     "Mfg. Load (Hours)",
-    "Utilised %",
+    "Utilisation %",
     "Critical Machine",
   ],
     hiddenColumns: [
