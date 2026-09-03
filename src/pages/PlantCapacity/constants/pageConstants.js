@@ -8,12 +8,14 @@ export const pageConstants = {
     "Capacity (Hours)",
     "Mfg. Load (Hours)",
     "Utilised %",
+    "Critical Machine",
   ],
     hiddenColumns: [
     "Game_Id",
     "Game_Batch",
     "Game_Team",
     "Part_No",
+    "Mfg_Work_Centre",
     "UOM",
   ]
 };
