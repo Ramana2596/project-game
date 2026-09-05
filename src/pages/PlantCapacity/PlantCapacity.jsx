@@ -1,53 +1,75 @@
-// PlantCapacity.jsx
-// Work_Centre and Plant Capacity, load, Utilisation
-
-import { Box } from "@mui/material";
-import GenericTable from "../../components/GenericTable.jsx";
+import React, { useMemo } from "react";
+import { Box, Alert } from "@mui/material";
 import { useUser } from "../../core/access/userContext.jsx";
-import { useEffect, useState } from "react";
-import { getPlantCapacity } from "./services/service.js";
-import { pageConstants } from "./constants/pageConstants.js";
+import { usePlantCapacity } from "./hooks/usePlantCapacity";
+import { PcHeader } from "./components/PcHeader";
+import { PcNavigation } from "./components/PcNavigation";
+import { PcQuickInsight } from "./components/PcQuickInsight";
+import { PcOverview } from "./components/PcOverview";
+import { PcWorkspace } from "./components/PcWorkspace";
+import { layoutStyle } from "../../ux/styles";
 
-export default function PlantCapacity() {
+export default function PlantCapacity({ productionMonth }) {
   const { userInfo } = useUser();
 
-  const payload = {
-    gameId: userInfo?.gameId,
-    gameBatch: userInfo?.gameBatch,
-    gameTeam: userInfo?.gameTeam,
-  };
+  const queryParams = useMemo(() => {
+    if (!userInfo?.gameId) return null;
+    return {
+      gameId: userInfo.gameId,
+      gameBatch: userInfo.gameBatch,
+      gameTeam: userInfo.gameTeam,
+      productionMonth: productionMonth || null,
+    };
+  }, [userInfo, productionMonth]);
 
-  const [workCentreData, setWorkCentreData] = useState([]);
-  const [plantData, setPlantData] = useState([]);
-
-  useEffect(() => {
-    getPlantCapacity(payload).then((response) => {
-      if (response?.data) {
-        setWorkCentreData(response.data.Work_Centre || []);
-        setPlantData(response.data.Plant || []);
-      }
-    });
-  }, []);
+  const {
+    plant,
+    workCentres,
+    criticalCount,
+    loading,
+    error,
+    activeTab,
+    setActiveTab,
+    filter,
+    setFilter,
+    reload,
+  } = usePlantCapacity(queryParams);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={layoutStyle.root}>
+      <Box sx={layoutStyle.pageContainer}>
+        {/* Header */}
+        <PcHeader plant={plant} gameTeam={userInfo?.gameTeam} onRefresh={reload} />
 
-      {/* Plant Summary - will be used for UX cards */}
-      {plantData.length > 0 && (
-        <Box>
-          {/* Plant summary cards will come here */}
-        </Box>
-      )}
+        {/* Navigation & Filters */}
+        <PcNavigation
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          filter={filter}
+          setFilter={setFilter}
+        />
 
-      {/* Work Centre / Machine Utilisation */}
-      <GenericTable
-        inputTableHeadings={pageConstants.tableHeading}
-        inputTableData={workCentreData}
-        ifNoData={null}
-        highlightColumnsByField={pageConstants.highlightedColumns}
-        hiddenColumns={pageConstants.hiddenColumns}
-      />
+        {/* Error Notice */}
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error}
+          </Alert>
+        )}
 
+        {/* Quick AI Insight Banner */}
+        <PcQuickInsight plant={plant} criticalCount={criticalCount} />
+
+        {/* Top KPI Cards */}
+        <PcOverview plant={plant} criticalCount={criticalCount} loading={loading} />
+
+        {/* Work Cards & Table Workspace */}
+        <PcWorkspace
+          activeTab={activeTab}
+          workCentres={workCentres}
+          plant={plant}
+          loading={loading}
+        />
+      </Box>
     </Box>
   );
 }
