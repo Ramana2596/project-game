@@ -8,10 +8,9 @@ import { PcQuickInsight } from "./components/PcQuickInsight";
 import { PcOverview } from "./components/PcOverview";
 import { PcWorkspace } from "./components/PcWorkspace";
 import { layoutStyle } from "../../ux/styles";
-
 export default function PlantCapacity({ productionMonth }) {
   const { userInfo } = useUser();
-
+  // Build API query parameters from current user and simulation period
   const queryParams = useMemo(() => {
     if (!userInfo?.gameId) return null;
     return {
@@ -21,7 +20,7 @@ export default function PlantCapacity({ productionMonth }) {
       productionMonth: productionMonth || null,
     };
   }, [userInfo, productionMonth]);
-
+  // Get Plant Capacity data and workspace state
   const {
     plant,
     workCentres,
@@ -34,10 +33,10 @@ export default function PlantCapacity({ productionMonth }) {
     setFilter,
     reload,
   } = usePlantCapacity(queryParams);
-
   return (
     <Box sx={layoutStyle.root}>
       <Box sx={layoutStyle.pageContainer}>
+
         {/* Header */}
         <PcHeader plant={plant} gameTeam={userInfo?.gameTeam} onRefresh={reload} />
 
@@ -48,7 +47,6 @@ export default function PlantCapacity({ productionMonth }) {
           filter={filter}
           setFilter={setFilter}
         />
-
         {/* Error Notice */}
         {error && (
           <Alert severity="error" sx={{ mb: 3 }}>
@@ -60,9 +58,14 @@ export default function PlantCapacity({ productionMonth }) {
         <PcQuickInsight plant={plant} criticalCount={criticalCount} />
 
         {/* Top KPI Cards */}
-        <PcOverview plant={plant} criticalCount={criticalCount} loading={loading} />
-
-        {/* Work Cards & Table Workspace */}
+        <PcOverview
+          plant={plant}
+          workCentres={workCentres}
+          criticalCount={criticalCount}
+          loading={loading}
+        />
+        
+        {/* Work Centre Cards & Table Workspace */}
         <PcWorkspace
           activeTab={activeTab}
           workCentres={workCentres}

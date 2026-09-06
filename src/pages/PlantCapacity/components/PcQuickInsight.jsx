@@ -19,7 +19,7 @@ export const PcQuickInsight = ({ plant, criticalCount }) => {
     <Box
       sx={{
         ...cardStyle.banner,
-        mb: 3,
+        mb: 1,
         borderColor: `${stColor}44`,
         background: `${stColor}0D`,
       }}
