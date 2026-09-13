@@ -1,39 +1,25 @@
-/**
- * Component Name : StBudgetCard
- * Module         : Strategy
- * Purpose        : Sticky roll-up card showing selected strategy count
- *                   and total committed USD budget. Purely presentational.
- * Author/Version : OpsMgt UX Lab / v1.0
- * AI Tags        : strategy, card, budget, summary, decision-roll-up
- */
+// Component: StBudgetCard — sticky roll-up card for strategy count and budget
+// Purpose: present summary of selected strategies and committed USD
+// Author/Version: OpsMgt UX Lab / v1.1
 
-// --------------------------------------------------------------
-// Imports
-// --------------------------------------------------------------
 import React from "react";
 import PropTypes from "prop-types";
 import { Box, Button, LinearProgress, Paper, Stack, Typography } from "@mui/material";
 import SavingsOutlinedIcon from "@mui/icons-material/SavingsOutlined";
-import { buttonStyle, colors, semanticTypo } from "../../../styles/ux";
+import { buttonStyle, colors, masterTypo } from "../../../ux/styles";
 import { CURRENCY_CODE } from "../constants/constants";
 
-/**
- * StBudgetCard
- * @param {number}  selectedCount
- * @param {number}  totalCount
- * @param {number}  totalUsd
- * @param {function} onSave
- * @param {boolean} isSaving
- */
-const StBudgetCard = ({ selectedCount, totalCount, totalUsd, onSave, isSaving }) => {
-  // ------------------------------------------------------------
-  // Derived Values
-  // ------------------------------------------------------------
+const StBudgetCard = ({
+  selectedCount = 0,
+  totalCount = 0,
+  totalUsd = 0,
+  onSave,
+  isSaving = false,
+}) => {
+  // Derived — progress percentage
   const progressPct = totalCount ? Math.round((selectedCount / totalCount) * 100) : 0;
 
-  // ------------------------------------------------------------
   // Render
-  // ------------------------------------------------------------
   return (
     <Paper
       elevation={0}
@@ -46,23 +32,23 @@ const StBudgetCard = ({ selectedCount, totalCount, totalUsd, onSave, isSaving })
         top: { md: 16 },
       }}
     >
-      {/* Header — icon + title */}
+      {/* Header */}
       <Stack direction="row" spacing={1.5} alignItems="center">
         <SavingsOutlinedIcon />
-        <Typography sx={{ ...semanticTypo.cardH4, color: colors.white }}>
+        <Typography variant="h4" sx={{ color: colors.white }}>
           Investment Summary
         </Typography>
       </Stack>
 
-      {/* Headline figure — total committed USD across YES-decided strategies */}
-      <Typography sx={{ ...semanticTypo.heroH2, color: colors.white, mt: 2 }}>
+      {/* Headline figure */}
+      <Typography sx={{ ...masterTypo.h4, color: colors.white, mt: 2 }}>
         {CURRENCY_CODE} {totalUsd.toLocaleString()}
       </Typography>
-      <Typography sx={{ ...semanticTypo.bodyB2, color: "rgba(255,255,255,0.85)" }}>
+      <Typography sx={{ ...masterTypo.body2, color: "rgba(255,255,255,0.85)" }}>
         Committed across {selectedCount} of {totalCount} strategies
       </Typography>
 
-      {/* Selection-progress bar — selectedCount / totalCount */}
+      {/* Progress bar */}
       <Box sx={{ mt: 2 }}>
         <LinearProgress
           variant="determinate"
@@ -76,7 +62,7 @@ const StBudgetCard = ({ selectedCount, totalCount, totalUsd, onSave, isSaving })
         />
       </Box>
 
-      {/* Commit action — persists decisions via the hook's onSave handler */}
+      {/* Save button */}
       <Button
         fullWidth
         disabled={isSaving}
@@ -97,15 +83,11 @@ const StBudgetCard = ({ selectedCount, totalCount, totalUsd, onSave, isSaving })
 };
 
 StBudgetCard.propTypes = {
-  selectedCount: PropTypes.number.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  totalUsd: PropTypes.number.isRequired,
+  selectedCount: PropTypes.number,
+  totalCount: PropTypes.number,
+  totalUsd: PropTypes.number,
   onSave: PropTypes.func.isRequired,
   isSaving: PropTypes.bool,
-};
-
-StBudgetCard.defaultProps = {
-  isSaving: false,
 };
 
 export default StBudgetCard;

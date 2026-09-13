@@ -1,54 +1,25 @@
-/**
- * Component Name : StToolbar
- * Module         : Strategy
- * Purpose        : Search + business-enabler filter chip row for the
- *                   strategy roster. Stateless — state is owned by
- *                   useStrategy.
- * Author/Version : OpsMgt UX Lab / v1.0
- * AI Tags        : strategy, toolbar, filter, search
- */
+// Component: StToolbar — search + enabler filter row
+// Purpose: stateless toolbar for strategy roster
+// Author/Version: OpsMgt UX Lab / v1.0
 
-// --------------------------------------------------------------
-// Imports
-// --------------------------------------------------------------
 import React from "react";
 import PropTypes from "prop-types";
 import { Chip, InputAdornment, Stack, TextField } from "@mui/material";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { BUSINESS_ENABLER } from "../constants/constants";
-import { colors, layoutStyle } from "../../../styles/ux";
+import { colors, layoutStyle } from "../../../ux/styles";
 
-// --------------------------------------------------------------
-// Constants
-// --------------------------------------------------------------
 const ALL_KEY = "ALL";
 
-/**
- * StToolbar
- * @param {Array}   availableEnablers - enabler keys present in the roster
- * @param {string}  enablerFilter     - currently active filter key
- * @param {string}  searchTerm
- * @param {function} onEnablerChange
- * @param {function} onSearchChange
- */
-const StToolbar = ({
-  availableEnablers,
-  enablerFilter,
-  searchTerm,
-  onEnablerChange,
-  onSearchChange,
-}) => {
-  // ------------------------------------------------------------
-  // Event Handlers
-  // ------------------------------------------------------------
+const StToolbar = ({ availableEnablers, enablerFilter, searchTerm, onEnablerChange, onSearchChange }) => {
+  // Handlers
   const handleSearchInput = (event) => onSearchChange(event.target.value);
   const handleChipClick = (key) => () => onEnablerChange(key);
 
-  // ------------------------------------------------------------
   // Render
-  // ------------------------------------------------------------
   return (
     <Stack sx={layoutStyle.toolbar}>
+      {/* Search box */}
       <TextField
         size="small"
         placeholder="Search strategy or benefit…"
@@ -64,6 +35,7 @@ const StToolbar = ({
         }}
       />
 
+      {/* Filter chips */}
       <Stack direction="row" spacing={1} flexWrap="wrap">
         <Chip
           label="All"
@@ -76,12 +48,12 @@ const StToolbar = ({
         />
         {availableEnablers.map((key) => {
           const enabler = BUSINESS_ENABLER[key];
-          const accent = colors[enabler.colorToken] || colors.primary;
+          const accent = colors[enabler?.colorToken] || colors.primary;
           const isActive = enablerFilter === key;
           return (
             <Chip
               key={key}
-              label={enabler.key}
+              label={key}
               onClick={handleChipClick(key)}
               sx={{
                 fontWeight: 600,
