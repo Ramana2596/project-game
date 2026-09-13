@@ -290,7 +290,7 @@ export const componentList = [
       },
       {
         iconPath: approvalIcon,
-        id: "UI 21 020 UX",
+        id: "UI 11 030 UX",
         label: "Strategy Direction",
         path: "/strategy",
         href: "/operationGame/Strategy",
