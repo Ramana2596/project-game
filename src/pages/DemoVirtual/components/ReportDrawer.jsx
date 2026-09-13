@@ -1,7 +1,8 @@
 // ============================================================
 // Component: ReportDrawer
 // Module: DemoVirtual / ReportWriter
-// Purpose: Display stage-specific reports and Decide Plan UI
+// Purpose: Display and navigate stage-specific report screens
+// Note: Handles one INPUT UI Screen ID per stage.
 // AI Tags: report-writer, report-drawer, rich-ux, navigation
 // UXLab V3 — ReportWriter Rich UX
 // ============================================================
