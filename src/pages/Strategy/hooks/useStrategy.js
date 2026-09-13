@@ -1,104 +1,121 @@
-/**
- * Component Name : useStrategy
- * Module         : Strategy
- * Purpose        : Encapsulates all business logic for the Strategy
- *                   Plan page — data loading, decision toggling with
- *                   mutual-exclusion enforcement, budget roll-up and
- *                   filtering — so UI components stay presentation-only.
- * Author/Version : OpsMgt UX Lab / v1.0
- * AI Tags        : strategy, hook, state, business-logic, mutual-exclusion
- */
+// Hook: useStrategy — business logic for Strategy page
+// Purpose: load strategies, manage decisions, enforce groups, roll up budget
+// Author/Version: OpsMgt UX Lab / v1.1
 
-// --------------------------------------------------------------
-// Imports
-// --------------------------------------------------------------
 import { useEffect, useMemo, useState } from "react";
-import { fetchStrategyPlan, saveStrategyDecisions } from "../services/strategyService";
+import { getStrategyPlan, updateStrategyPlan } from "../services/strategyService";
+import { useUser } from "../../../core/access/userContext";
 
-// --------------------------------------------------------------
-// Constants
-// --------------------------------------------------------------
 const FILTER_ALL = "ALL";
 
-/**
- * useStrategy
- * Central hook for the Strategy page.
- */
 const useStrategy = () => {
-  // ------------------------------------------------------------
+  const { userInfo } = useUser();
+
   // State
-  // ------------------------------------------------------------
   const [strategies, setStrategies] = useState([]);
-  const [decisions, setDecisions] = useState({}); // { [strategyId]: "YES" | "NO" }
+  const [decisions, setDecisions] = useState({});
   const [enablerFilter, setEnablerFilter] = useState(FILTER_ALL);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  // ------------------------------------------------------------
-  // Effects — load strategy roster on mount
-  // ------------------------------------------------------------
-  useEffect(() => {
-    let isMounted = true;
+  // NEW: expose raw values for Strategy component
+  const [outMessage, setOutMessage] = useState(null);
+  const [sucValue, setSucValue] = useState(null);
 
-    const loadPlan = async () => {
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await fetchStrategyPlan();
-        if (!isMounted) return;
-        setStrategies(data.strategies);
-        // Seed decision state from the roster's current implementDecision.
-        const seeded = {};
-        data.strategies.forEach((s) => {
-          seeded[s.strategyId] = s.implementDecision;
+        const response = await getStrategyPlan({
+          gameId: userInfo?.gameId,
+          gameBatch: userInfo?.gameBatch,
+          gameTeam: userInfo?.gameTeam,
+          cmdLine: "Get_Strategy_Plan",
         });
-        setDecisions(seeded);
-      } catch (err) {
-        if (isMounted) setError(err);
+
+        const payload = response?.data || response;
+
+        // Capture raw values always
+        if (mounted) {
+          setOutMessage(payload?.Out_Message || null);
+          setSucValue(Number(payload?.SucValue));
+        }
+
+        const raw = Array.isArray(payload?.data) ? payload.data : [];
+
+        // Map backend fields to front‑end shape
+        const roster = raw.map((s) => ({
+          strategySetNo: s.Strategy_Set_No,
+          strategyId: s.Strategy_Id,
+          strategy: s.Strategy,
+          benefit: s.Benefit,
+          businessEnabler: s.Business_Enabler,
+          costType: s.Cost_Type,
+          mutualGroup: s.Mutual_X_Group,
+          uom: s.Currency,
+          budgetAmount: s.Budget_Amount,
+          implementDecision: s.Decision,
+          fromMonthNo: s.From_Month,
+          duration: s.Duration_Month,
+          gainPct: s.Norm_Percent,
+          lossPct: s.Loss_Percent,
+          outcome: s.Resultant,
+          investPeriod: s.Implement_Date,
+        }));
+
+        if (mounted) {
+          setStrategies(roster);
+
+          const seed = {};
+          roster.forEach((s) => {
+            seed[s.strategyId] = s.implementDecision;
+          });
+          setDecisions(seed);
+        }
+      } catch (e) {
+        if (mounted) setError(e);
       } finally {
-        if (isMounted) setIsLoading(false);
+        if (mounted) setIsLoading(false);
       }
     };
-
-    loadPlan();
+    load();
     return () => {
-      isMounted = false;
+      mounted = false;
     };
-  }, []);
+  }, [userInfo]);
 
-  // ------------------------------------------------------------
-  // Derived Values
-  // ------------------------------------------------------------
-  // Distinct business enabler values present in the roster, for the filter chip row.
+  // Distinct enablers
   const availableEnablers = useMemo(
-    () => [...new Set(strategies.map((s) => s.businessEnabler))],
+    () => (Array.isArray(strategies) ? [...new Set(strategies.map((s) => s.businessEnabler))] : []),
     [strategies]
   );
 
-  // Roster filtered by enabler + free-text search on strategy/benefit.
+  // Filtered strategies
   const filteredStrategies = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    return strategies.filter((s) => {
-      const matchesEnabler = enablerFilter === FILTER_ALL || s.businessEnabler === enablerFilter;
-      const matchesTerm =
-        !term ||
-        s.strategy.toLowerCase().includes(term) ||
-        s.benefit.toLowerCase().includes(term);
-      return matchesEnabler && matchesTerm;
-    });
+    return Array.isArray(strategies)
+      ? strategies.filter((s) => {
+        const matchFilter = enablerFilter === FILTER_ALL || s.businessEnabler === enablerFilter;
+        const matchTerm =
+          !term ||
+          (s.strategy && s.strategy.toLowerCase().includes(term)) ||
+          (s.benefit && s.benefit.toLowerCase().includes(term));
+        return matchFilter && matchTerm;
+      })
+      : [];
   }, [strategies, enablerFilter, searchTerm]);
 
-  // Group strategies for rendering: independent (no mutual group) vs
-  // grouped-by-letter (radio-select) buckets, preserving roster order.
+  // Grouped strategies
   const groupedStrategies = useMemo(() => {
     const independent = [];
     const groups = {};
     filteredStrategies.forEach((s) => {
-      if (!s.mutualGroup) {
-        independent.push(s);
-      } else {
+      if (!s.mutualGroup) independent.push(s);
+      else {
         groups[s.mutualGroup] = groups[s.mutualGroup] || [];
         groups[s.mutualGroup].push(s);
       }
@@ -106,90 +123,125 @@ const useStrategy = () => {
     return { independent, groups };
   }, [filteredStrategies]);
 
-  // Budget roll-up across YES-decided strategies, split by UOM since
-  // USD and % are not summable together.
+  // Budget summary
   const budgetSummary = useMemo(() => {
-    let totalUsd = 0;
+    let totalAmount = 0;
     let selectedCount = 0;
-    strategies.forEach((s) => {
-      if (decisions[s.strategyId] === "YES") {
-        selectedCount += 1;
-        if (s.uom === "USD") totalUsd += s.budgetAmount;
-      }
-    });
-    return { totalUsd, selectedCount, totalCount: strategies.length };
+
+    if (Array.isArray(strategies)) {
+      strategies.forEach((s) => {
+        if (decisions[s.strategyId] === "YES") {
+          selectedCount += 1;
+
+          if (s.uom !== "%") {
+            totalAmount += Number(s.budgetAmount) || 0;
+          }
+        }
+      });
+    }
+
+    return {
+      totalAmount,
+      currency: strategies[0]?.uom,
+      selectedCount,
+      totalCount: strategies.length,
+    };
   }, [strategies, decisions]);
 
-  // ------------------------------------------------------------
-  // Event Handlers
-  // ------------------------------------------------------------
-  // Toggle an independent (non-grouped) strategy's YES/NO decision.
-  const handleToggleDecision = (strategyId) => {
+  // Handlers
+  const handleToggleDecision = (id) => {
     setDecisions((prev) => ({
       ...prev,
-      [strategyId]: prev[strategyId] === "YES" ? "NO" : "YES",
+      [id]: prev[id] === "YES" ? "NO" : "YES",
     }));
   };
 
-  // Select one strategy within a mutual-exclusion group; all siblings
-  // in the same group flip to NO.
-  const handleSelectGroupChoice = (groupLetter, strategyId) => {
-    const siblingIds = (groupedStrategies.groups[groupLetter] || []).map((s) => s.strategyId);
+  const handleSelectGroupChoice = (letter, id) => {
+    const ids = (groupedStrategies.groups[letter] || []).map((s) => s.strategyId);
     setDecisions((prev) => {
       const next = { ...prev };
-      siblingIds.forEach((id) => {
-        next[id] = id === strategyId ? "YES" : "NO";
+      ids.forEach((x) => {
+        next[x] = x === id ? "YES" : "NO";
       });
       return next;
     });
   };
 
-  const handleEnablerFilterChange = (enablerKey) => setEnablerFilter(enablerKey);
-  const handleSearchChange = (value) => setSearchTerm(value);
+  const handleEnablerFilterChange = (val) => setEnablerFilter(val);
+  const handleSearchChange = (val) => setSearchTerm(val);
 
   const handleSaveDecisions = async () => {
     setIsSaving(true);
     try {
-      await saveStrategyDecisions(decisions);
+      const decisionPayload = strategies.map((s) => ({
+        gameId: userInfo?.gameId,
+        gameBatch: userInfo?.gameBatch,
+        gameTeam: userInfo?.gameTeam,
+        strategySetNo: s.strategySetNo,
+        strategyId: s.strategyId,
+        playerDecision: decisions[s.strategyId] === "YES" ? "YES" : "NO", // camelCase
+        decidedBy: "Player",
+      }));
+
+      const updateResponse = await updateStrategyPlan(decisionPayload);
+      console.log("Update Strategy Plan response:", updateResponse);
+
+      const refreshed = await getStrategyPlan({
+        gameId: userInfo?.gameId,
+        gameBatch: userInfo?.gameBatch,
+        gameTeam: userInfo?.gameTeam,
+        cmdLine: "Get_Strategy_Plan",
+      });
+
+      const payload = refreshed?.data || refreshed;
+      const raw = Array.isArray(payload?.data) ? payload.data : [];
+
+      const roster = raw.map((s) => ({
+        strategySetNo: s.Strategy_Set_No,
+        strategyId: s.Strategy_Id,
+        strategy: s.Strategy,
+        benefit: s.Benefit,
+        businessEnabler: s.Business_Enabler,
+        costType: s.Cost_Type,
+        mutualGroup: s.Mutual_X_Group,
+        uom: s.Currency,
+        budgetAmount: s.Budget_Amount,
+        implementDecision: s.Decision,
+        fromMonthNo: s.From_Month,
+        duration: s.Duration_Month,
+        gainPct: s.Norm_Percent,
+        lossPct: s.Loss_Percent,
+        outcome: s.Resultant,
+        investPeriod: s.Implement_Date,
+      }));
+      setStrategies(roster);
+
+    } catch (e) {
+      console.error("Save failed:", e);
+      setError(e);
     } finally {
       setIsSaving(false);
     }
   };
 
-  // ------------------------------------------------------------
-  // AI Extension Hooks
-  // Reserved placeholders for future AI-assisted capabilities.
-  // These are inert today and must not alter current behavior.
-  // ------------------------------------------------------------
-  const aiHooks = {
-    // Decision Assessment — future: flag budget-risk or low-ROI picks.
-    onRequestDecisionAssessment: () => null,
-    // Facilitator Assistant — future: suggest a balanced strategy mix.
-    onRequestFacilitatorSuggestion: () => null,
-  };
 
   return {
-    // data
-    strategies: filteredStrategies,
     groupedStrategies,
     decisions,
     availableEnablers,
     budgetSummary,
-    // filters
     enablerFilter,
     searchTerm,
     handleEnablerFilterChange,
     handleSearchChange,
-    // decisions
     handleToggleDecision,
     handleSelectGroupChoice,
     handleSaveDecisions,
-    // status
     isLoading,
     isSaving,
     error,
-    // AI-ready extension points
-    aiHooks,
+    outMessage, // raw banner message
+    sucValue,   // raw success/failure code
   };
 };
 

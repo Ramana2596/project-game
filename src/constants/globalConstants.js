@@ -159,6 +159,8 @@ import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import CoProfile from "../pages/CoProfile/CoProfile";
 import MfgProcess from "../pages/MfgProcess/MfgProcess";
 import PlantCapacity from "../pages/PlantCapacity/PlantCapacity";
+import Strategy from "../pages/Strategy/Strategy";
+
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
 
@@ -285,6 +287,14 @@ export const componentList = [
         path: "/strategyBenefit",
         href: "/operationGame/StrategyBenefit",
         routeElement: <StrategyBenefit />
+      },
+      {
+        iconPath: approvalIcon,
+        id: "UI 21 020 UX",
+        label: "Strategy Direction",
+        path: "/strategy",
+        href: "/operationGame/Strategy",
+        routeElement: <Strategy />
       },
       {
         iconPath: strategySetsIcon,

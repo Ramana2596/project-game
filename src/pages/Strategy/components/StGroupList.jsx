@@ -1,45 +1,24 @@
-/**
- * Component Name : StGroupList
- * Module         : Strategy
- * Purpose        : Renders the strategy roster as decision cards,
- *                   separating independent (checkbox) strategies from
- *                   mutual-exclusion groups (radio-select clusters with
- *                   a group label). Orchestration only — no business logic.
- * Author/Version : OpsMgt UX Lab / v1.0
- * AI Tags        : strategy, list, mutual-exclusion, group, decision-grid
- */
+// Component: StGroupList — renders strategy roster as decision cards
+// Purpose: separate independent strategies (checkbox) and mutual groups (radio)
+// Author/Version: OpsMgt UX Lab / v1.0
 
-// --------------------------------------------------------------
-// Imports
-// --------------------------------------------------------------
 import React from "react";
 import PropTypes from "prop-types";
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import StDecisionCard from "../cards/StDecisionCard";
 import { MUTUAL_GROUP_LABEL } from "../constants/constants";
-import { colors, semanticTypo } from "../../../styles/ux";
+import { colors, masterTypo } from "../../../ux/styles";
 
-/**
- * StGroupList
- * @param {object}  groupedStrategies - { independent: [], groups: { A: [], B: [] } }
- * @param {object}  decisions         - { [strategyId]: "YES" | "NO" }
- * @param {function} onToggle
- * @param {function} onSelect
- */
 const StGroupList = ({ groupedStrategies, decisions, onToggle, onSelect }) => {
-  // ------------------------------------------------------------
-  // Derived Values
-  // ------------------------------------------------------------
+  // Derived values
   const { independent, groups } = groupedStrategies;
   const groupLetters = Object.keys(groups).sort();
 
-  // ------------------------------------------------------------
   // Render
-  // ------------------------------------------------------------
   return (
     <Stack spacing={3}>
-      {/* Independent strategies — standalone checkboxes */}
+      {/* Independent strategies */}
       {independent.length > 0 && (
         <Stack spacing={2}>
           {independent.map((strategy) => (
@@ -54,7 +33,7 @@ const StGroupList = ({ groupedStrategies, decisions, onToggle, onSelect }) => {
         </Stack>
       )}
 
-      {/* Mutual-exclusion groups — radio-select clusters */}
+      {/* Mutual-exclusion groups */}
       {groupLetters.map((letter) => (
         <Paper
           key={letter}
@@ -68,8 +47,8 @@ const StGroupList = ({ groupedStrategies, decisions, onToggle, onSelect }) => {
         >
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5, px: 1 }}>
             <LayersOutlinedIcon sx={{ fontSize: 18, color: colors.subtitle }} />
-            <Typography sx={{ ...semanticTypo.bodyB2, fontWeight: 600 }}>
-              {MUTUAL_GROUP_LABEL[letter] || `Choose one — Group ${letter}`}
+            <Typography sx={{ ...masterTypo.body2, fontWeight: 600 }}>
+              {MUTUAL_GROUP_LABEL(letter)}
             </Typography>
           </Stack>
           <Stack spacing={2}>
@@ -86,9 +65,10 @@ const StGroupList = ({ groupedStrategies, decisions, onToggle, onSelect }) => {
         </Paper>
       ))}
 
+      {/* Empty state */}
       {independent.length === 0 && groupLetters.length === 0 && (
         <Box sx={{ textAlign: "center", py: 6 }}>
-          <Typography sx={semanticTypo.bodyB2}>
+          <Typography sx={masterTypo.body2}>
             No strategies match the current filter.
           </Typography>
         </Box>
