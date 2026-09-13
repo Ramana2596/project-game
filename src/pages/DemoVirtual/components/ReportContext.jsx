@@ -1,7 +1,7 @@
 // ============================================================
 // Component: ReportContext
 // Module: DemoVirtual
-// Purpose: Provide simulation context metadata across report drawer tree
+// Purpose: Provide simulation context metadata info of reports
 // AI Tags: report-context, simulation-metadata, react-context
 // ============================================================
 

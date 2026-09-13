@@ -1,7 +1,7 @@
 // ============================================================
 // Component: ReportWriter
 // Module: DemoVirtual
-// Purpose: Resolve and render registered UI/UX report components with props
+// Purpose: Find and render registered UI/UX report components with props
 // ============================================================
 
 import React from "react";
