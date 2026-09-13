@@ -7,12 +7,12 @@ import PropTypes from "prop-types";
 import { Box, Button, LinearProgress, Paper, Stack, Typography } from "@mui/material";
 import SavingsOutlinedIcon from "@mui/icons-material/SavingsOutlined";
 import { buttonStyle, colors, masterTypo } from "../../../ux/styles";
-import { CURRENCY_CODE } from "../constants/constants";
 
 const StBudgetCard = ({
   selectedCount = 0,
   totalCount = 0,
-  totalUsd = 0,
+  totalAmount = 0,
+  currency = "",
   onSave,
   isSaving = false,
 }) => {
@@ -42,7 +42,7 @@ const StBudgetCard = ({
 
       {/* Headline figure */}
       <Typography sx={{ ...masterTypo.h4, color: colors.white, mt: 2 }}>
-        {CURRENCY_CODE} {totalUsd.toLocaleString()}
+        {currency} {Number(totalAmount).toLocaleString()}
       </Typography>
       <Typography sx={{ ...masterTypo.body2, color: "rgba(255,255,255,0.85)" }}>
         Committed across {selectedCount} of {totalCount} strategies
@@ -85,7 +85,8 @@ const StBudgetCard = ({
 StBudgetCard.propTypes = {
   selectedCount: PropTypes.number,
   totalCount: PropTypes.number,
-  totalUsd: PropTypes.number,
+  totalAmount: PropTypes.number,
+  currency: PropTypes.string,
   onSave: PropTypes.func.isRequired,
   isSaving: PropTypes.bool,
 };

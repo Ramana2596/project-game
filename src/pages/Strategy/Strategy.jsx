@@ -1,20 +1,38 @@
 // Component: Strategy — top-level page for Strategy Plan
 // Purpose: orchestrates UI components, delegates logic to useStrategy
-// Author/Version: OpsMgt UX Lab / v1.2
+// Author/Version: OpsMgt UX Lab / v1.8
 
 import React from "react";
-import { Box, Grid, Skeleton, Stack, Typography } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
+import { Box, Grid, Skeleton } from "@mui/material";
 import StHeader from "./components/StHeader";
-import StToolbar from "./components/StToolbar";
+import StBanner from "./components/StBanner";
+import StFilterChips from "./components/StFilterChips";
+import StSearchBox from "./components/StSearchBox";
 import StGroupList from "./components/StGroupList";
 import StBudgetCard from "./cards/StBudgetCard";
 import useStrategy from "./hooks/useStrategy";
-import { layoutStyle, cardStyle, masterTypo } from "../../ux/styles";
+
+import { layoutStyle } from "../../ux/styles";
+
+const MESSAGE_SLOT_WIDTH = 420;
+const MESSAGE_SLOT_HEIGHT = 36;
 
 const PAGE_TITLE = "Strategies for You";
 const PAGE_SUBTITLE =
-  "Review each strategy, weigh the investment against its gain, and decide what to implement .";
+  "Review each strategy, weigh the investment against its gain, and decide what to implement.";
+
+const severityForSucValue = (val) => {
+  switch (val) {
+    case 0:
+      return "success";
+    case 1:
+      return "warning";
+    case -1:
+      return "error";
+    default:
+      return "info";
+  }
+};
 
 const Strategy = () => {
   const {
@@ -31,43 +49,66 @@ const Strategy = () => {
     handleSaveDecisions,
     isLoading,
     isSaving,
-    outMessage,   // banner message
-    sucValue,     // success/failure code
+    outMessage,
+    sucValue,
     error,
   } = useStrategy();
 
   return (
     <Box sx={layoutStyle.root}>
       <Box sx={layoutStyle.pageContainer}>
-        {/* Header */}
-        <Box sx={layoutStyle.section}>
-          <StHeader title={PAGE_TITLE} subtitle={PAGE_SUBTITLE} />
-        </Box>
+        <StHeader title={PAGE_TITLE} subtitle={PAGE_SUBTITLE} />
 
-        {/* Error state */}
-        {error && (
-          <Typography sx={masterTypo.body1} color="error">
-            Error loading strategies
-          </Typography>
-        )}
+        {/* 
+          Grid layout aligned precisely with the content columns below:
+          - Left column (Banner + Filter chips) aligns with StGroupList.
+          - Right column expands StSearchBox to match StBudgetCard's full width edge-to-edge.
+        */}
+        <Grid container spacing={3} sx={{ mb: 2, alignItems: "center" }}>
+          {/* Left Side: Banner and Filter Chips */}
+          <Grid item xs={12} md={8}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { xs: "stretch", sm: "center" },
+                gap: 1.5,
+              }}
+            >
+              <Box
+                sx={{
+                  width: { xs: "100%", sm: MESSAGE_SLOT_WIDTH },
+                  height: MESSAGE_SLOT_HEIGHT,
+                  flexShrink: 0,
+                }}
+              >
+                {error && <StBanner severity="error">Error loading strategies</StBanner>}
+                {!error && outMessage && (
+                  <StBanner severity={severityForSucValue(sucValue)}>{outMessage}</StBanner>
+                )}
+              </Box>
 
-        {/* Banner always */}
-        {outMessage && (
-          <Box sx={cardStyle.banner}>
-            <Box sx={cardStyle.bannerIconCircle}>
-              <InfoIcon />
+              <StFilterChips
+                availableEnablers={availableEnablers}
+                enablerFilter={enablerFilter}
+                onEnablerChange={handleEnablerFilterChange}
+              />
             </Box>
-            <Typography sx={masterTypo.body1}>{outMessage}</Typography>
-          </Box>
-        )}
+          </Grid>
 
-        {/* Show workspace only if success */}
+          {/* Right Side: SearchBox sized edge-to-edge with StBudgetCard */}
+          <Grid item xs={12} md={4}>
+            <Box sx={{ width: "100%", "& > *": { width: "100% !important" } }}>
+              <StSearchBox searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+            </Box>
+          </Grid>
+        </Grid>
+
         {sucValue === 0 ? (
           isLoading ? (
-            // Loading skeletons
             <Grid container spacing={3}>
               <Grid item xs={12} md={8}>
-                <Stack spacing={2}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   {[0, 1, 2].map((i) => (
                     <Skeleton
                       key={i}
@@ -76,7 +117,7 @@ const Strategy = () => {
                       sx={{ borderRadius: 5 }}
                     />
                   ))}
-                </Stack>
+                </Box>
               </Grid>
               <Grid item xs={12} md={4}>
                 <Skeleton
@@ -87,19 +128,8 @@ const Strategy = () => {
               </Grid>
             </Grid>
           ) : (
-            // Main workspace
             <Grid container spacing={3}>
-              {/* Decision workspace */}
               <Grid item xs={12} md={8}>
-                <Box sx={layoutStyle.section}>
-                  <StToolbar
-                    availableEnablers={availableEnablers}
-                    enablerFilter={enablerFilter}
-                    searchTerm={searchTerm}
-                    onEnablerChange={handleEnablerFilterChange}
-                    onSearchChange={handleSearchChange}
-                  />
-                </Box>
                 <StGroupList
                   groupedStrategies={groupedStrategies}
                   decisions={decisions}
@@ -108,17 +138,16 @@ const Strategy = () => {
                 />
               </Grid>
 
-              {/* Budget roll-up */}
-                <Grid item xs={12} md={4}>
-                  <Box sx={layoutStyle.panel}>
-                    <StBudgetCard
-                      selectedCount={budgetSummary.selectedCount}
-                      totalCount={budgetSummary.totalCount}
-                      totalAmount={budgetSummary.totalAmount}
-                      currency={budgetSummary.currency}
-                      onSave={handleSaveDecisions}
-                      isSaving={isSaving}
-                    />
+              <Grid item xs={12} md={4}>
+                <Box sx={layoutStyle.panel}>
+                  <StBudgetCard
+                    selectedCount={budgetSummary.selectedCount}
+                    totalCount={budgetSummary.totalCount}
+                    totalAmount={budgetSummary.totalAmount}
+                    currency={budgetSummary.currency}
+                    onSave={handleSaveDecisions}
+                    isSaving={isSaving}
+                  />
                 </Box>
               </Grid>
             </Grid>

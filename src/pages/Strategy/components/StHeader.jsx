@@ -1,16 +1,20 @@
 // Component: StHeader — page-level header for Strategy Plan
-// Purpose: show title and subtitle
-// Author/Version: OpsMgt UX Lab / v1.1
+// Purpose: show title and subtitle (primary page identifier — breadcrumb TBD)
+// Author/Version: OpsMgt UX Lab / v1.3
 
 import React from "react";
 import PropTypes from "prop-types";
 import { Box, Typography } from "@mui/material";
-import { masterTypo } from "../../../ux/styles";
+import { colors, masterTypo } from "../../../ux/styles";
 
 const StHeader = ({ title, subtitle = "" }) => (
-  <Box>
-    <Typography sx={masterTypo.h3}>{title}</Typography>
-    <Typography sx={{ ...masterTypo.body2, mt: 1 }}>{subtitle}</Typography>
+  <Box sx={{ mb: 2 }}>
+    <Typography sx={masterTypo.h4}>{title}</Typography>
+    {subtitle && (
+      <Typography sx={{ ...masterTypo.body2, color: colors.subtitle, mt: 0.5 }}>
+        {subtitle}
+      </Typography>
+    )}
   </Box>
 );
 
