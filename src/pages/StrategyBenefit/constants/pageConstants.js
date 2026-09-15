@@ -7,6 +7,7 @@ export const pageConstants = {
     "Enabler",
     "Benefit",
     "Choice Group",
+    "Cost Type",
     "UOM",
     "Budget Amount",
     "Milestone Month",
