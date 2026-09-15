@@ -4,11 +4,10 @@ export const pageConstants = {
   tableHeading: [
     "S No",
     "Strategy", 
-    "UOM",
-    "Price Discount %", 
+    "Discount %", 
     "Product Name",
-    "Unit of Measure",
-    "Total Demand",
+    "Unit",
+    "Quantity",
     "Currency",
     "Unit Price",
     "Discount Amount",
@@ -20,9 +19,6 @@ export const pageConstants = {
     "Strategy",  
     "Part_Description",
     "Discount_Percent",
-    "Total_Demand",
-    "Unit_Price",
-    "Discount_Amount",
     "Accrual_Date"
   ],
     hiddenColumns: [
@@ -32,6 +28,7 @@ export const pageConstants = {
     "Team",
     "Strategy_Set_No",
     "Strategy_Id",
+    "UOM",
     "Product",
   ]
 };
