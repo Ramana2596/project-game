@@ -9,8 +9,8 @@ export const pageConstants = {
     "Strategy",  
     "Outcome",  
     "Product Name",
+     "ProductDemand",
     "Demand %",
-    "Product Demand",
     "Additional Demand",
     "Accrual Period",
   ],
@@ -19,8 +19,6 @@ export const pageConstants = {
     "Strategy",  
     "Part_Description",
     "Demand_Percent",
-    "Product_Demand",
-    "Additional_Demand",
     "Accrual_Date"
    ],
    hiddenColumns: [
