@@ -56,12 +56,12 @@ const useStrategy = () => {
           businessEnabler: s.Business_Enabler,
           costType: s.Cost_Type,
           mutualGroup: s.Mutual_X_Group,
-          uom: s.Currency,
-          budgetAmount: s.Budget_Amount,
+          uom: s.UOM,
+          budgetAmount: s.Implied_Cost,
           implementDecision: s.Decision,
           fromMonthNo: s.From_Month,
           duration: s.Duration_Month,
-          gainPct: s.Norm_Percent,
+          gainPct: s.Gain_Percent,
           lossPct: s.Loss_Percent,
           outcome: s.Resultant,
           investPeriod: s.Implement_Date,
@@ -130,10 +130,13 @@ const useStrategy = () => {
 
     if (Array.isArray(strategies)) {
       strategies.forEach((s) => {
-        if (decisions[s.strategyId] === "YES") {
+        const decision = (decisions[s.strategyId] || "").toUpperCase();
+        const costType = (s.costType || "").toUpperCase();
+
+        if (decision === "YES") {
           selectedCount += 1;
 
-          if (s.uom !== "%") {
+          if (costType === "FIXED") {
             totalAmount += Number(s.budgetAmount) || 0;
           }
         }
@@ -142,11 +145,12 @@ const useStrategy = () => {
 
     return {
       totalAmount,
-      currency: strategies[0]?.uom,
+      currency: (strategies[0]?.uom || "").toUpperCase(),
       selectedCount,
       totalCount: strategies.length,
     };
   }, [strategies, decisions]);
+
 
   // Handlers
   const handleToggleDecision = (id) => {
@@ -204,12 +208,12 @@ const useStrategy = () => {
         businessEnabler: s.Business_Enabler,
         costType: s.Cost_Type,
         mutualGroup: s.Mutual_X_Group,
-        uom: s.Currency,
-        budgetAmount: s.Budget_Amount,
+        uom: s.UOM,
+        budgetAmount: s.Implied_Cost,
         implementDecision: s.Decision,
         fromMonthNo: s.From_Month,
         duration: s.Duration_Month,
-        gainPct: s.Norm_Percent,
+        gainPct: s.Gain_Percent,
         lossPct: s.Loss_Percent,
         outcome: s.Resultant,
         investPeriod: s.Implement_Date,
