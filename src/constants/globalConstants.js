@@ -1,6 +1,14 @@
 import Dashboard from "../pages/Dashboard/Dashboard.jsx";
+import StrategyMaster from "../pages/StrategyMaster/StrategyMaster";
+import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
+import StrategyBank from "../pages/StrategyBank/StrategyBank.jsx";
+import StrategySetCollection from '../pages/StrategySetCollection/StrategySetCollection.jsx';
 import StrategyLaunched from "../pages/LaunchStrategy/StrategyLaunched";
 import StrategyPlan from "../pages/StrategyPlanApproval/StrategyPlanApproval";
+import StrategyPlanTeam from '../pages/StrategyPlanTeam/StrategyPlanTeam.jsx';
+import StrategyBudgetInfo from "../pages/StrategyBudgetInfo/StrategyBudgetInfo.jsx";
+import StrategyLaunchGist from "../pages/StrategyLaunchGist/StrategyLaunchGist.jsx";
+import Strategy from "../pages/Strategy/Strategy.jsx";
 import MarketFactorInfo from "../pages/MarketFactorInfo/MarketFactorInfo";
 import MarketFactorInfoInput from "../pages/MarketFactorInfoInput/MarketFactorInfoInput";
 import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInfo";
@@ -15,7 +23,6 @@ import AnalyticsTwoToneIcon from "@mui/icons-material/AnalyticsTwoTone";
 import LeaderboardTwoToneIcon from "@mui/icons-material/LeaderboardTwoTone";
 import FgStockInfo from "../pages/FgStockInfo/FgStockInfo";
 import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
-import StrategyMaster from "../pages/StrategyMaster/StrategyMaster";
 import SalesRecordInfo from "../pages/SalesRecordInfo/SalesRecordInfo";
 import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecordInfo";
 import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
@@ -47,6 +54,8 @@ import payableIcon from '../assets/navigation-menu/payables.png';
 import receivableIcon from '../assets/navigation-menu/receivable.png';
 import savingsIcon from '../assets/navigation-menu/savings.png';
 import strategyIcon from '../assets/navigation-menu/strategy.png';
+import strategySetsIcon from '../assets/navigation-menu/strategySets.png'
+import businessStrategyIcon from '../assets/navigation-menu/business-strategy.png'
 import partIcon from '../assets/navigation-menu/part.png'
 import bomIcon from '../assets/navigation-menu/bom.png'
 import asterikIcon from '../assets/navigation-menu/asterik.png'
@@ -64,7 +73,6 @@ import valueStreamIcon from '../assets/navigation-menu/valueChain.png'
 import productIcon from '../assets/navigation-menu/productLaunch.png'
 import benefitsIcon from '../assets/navigation-menu/benefits.png'
 import referenceIcon from '../assets/navigation-menu/reference.png'
-import strategySetsIcon from '../assets/navigation-menu/strategySets.png'
 import demandIcon from '../assets/navigation-menu/demand.png'
 import discountIcon from '../assets/navigation-menu/discount.png'
 import cashBookIcon from '../assets/navigation-menu/cashBook.png'
@@ -74,7 +82,6 @@ import factoryPerfIcon from '../assets/navigation-menu/factoryPerf.png'
 import supplierPerfIcon from '../assets/navigation-menu/supplierPerf.png'
 import progressIcon from '../assets/navigation-menu/progress.png'
 import processIcon from '../assets/navigation-menu/process.png'
-import businessStrategyIcon from '../assets/navigation-menu/business-strategy.png'
 import resultIcon from '../assets/navigation-menu/result.png'
 import actionableIcon from '../assets/navigation-menu/actionable.png'
 import statisticsIcon from '../assets/navigation-menu/statistics.png'
@@ -106,9 +113,6 @@ import RBACInfo from '../pages/RBACInfo/RBACInfo.jsx';
 import ReferenceInfo from '../pages/ReferenceInfo/ReferenceInfo.jsx';
 import ScreenInfo from '../pages/ScreenInfo/ScreenInfo.jsx';
 import StdNormInfo from '../pages/StdNormInfo/StdNormInfo.jsx';
-import StrategyBudgetInfo from "../pages/StrategyBudgetInfo/StrategyBudgetInfo.jsx";
-import StrategyLaunchGist from "../pages/StrategyLaunchGist/StrategyLaunchGist.jsx";
-import StrategyPlanTeam from '../pages/StrategyPlanTeam/StrategyPlanTeam.jsx';
 import CapitalAssetStockInfo from '../pages/CapitalAssetStockInfo/CapitalAssetStockInfo.jsx';
 import CashBookInfo from '../pages/CashBookInfo/CashBookInfo.jsx';
 import TeamProgressInfo from '../pages/TeamProgressInfo/TeamProgressInfo.jsx';
@@ -125,7 +129,6 @@ import MfgWorkCentreInfo from '../pages/MfgWorkCentreInfo/MfgWorkCentreInfo.jsx'
 import ValidInputCodes from '../pages/ValidInputCodes/ValidInputCodes.jsx';
 import LiabilityInfo from '../pages/LiabilityInfo/LiabilityInfo.jsx';
 import RoleInfo from '../pages/RoleInfo/RoleInfo.jsx';
-import StrategySetCollection from '../pages/StrategySetCollection/StrategySetCollection.jsx';
 import ProductMstInfo from "../pages/ProductMstInfo/ProductMstInfo.jsx";
 import ValueStream from '../pages/ValueStream/ValueStream.jsx';
 import ValueStreamMap from "../pages/ValueStreamMap/ValueStreamMap.jsx";
@@ -142,7 +145,6 @@ import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 import KeyResultBsInfo from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo from '../pages/KeyResultPlInfo/KeyResultPlInfo.jsx';
-import StrategyBenefit from "../pages/StrategyBenefit/StrategyBenefit.jsx";
 import UiAccess from "../pages/UiAccess/UiAccess.jsx";
 import PublishMarketData from "../pages/PublishMarketData/PublishMarketData.jsx";
 import TeamAssessment from "../pages/BatchEvaluation/TeamAssessment.jsx";
@@ -159,8 +161,6 @@ import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import CoProfile from "../pages/CoProfile/CoProfile";
 import MfgProcess from "../pages/MfgProcess/MfgProcess";
 import PlantCapacity from "../pages/PlantCapacity/PlantCapacity";
-import Strategy from "../pages/Strategy/Strategy";
-
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
 
@@ -282,12 +282,22 @@ export const componentList = [
       },
       {
         iconPath: approvalIcon,
+        id: "UI 21 010 UX",
+        label: "Strategy Bank",
+        path: "/strategyBank",
+        href: "/operationGame/StrategyBank",
+        routeElement: <StrategyBank />
+      },
+      /*
+      {
+        iconPath: approvalIcon,
         id: "UI 21 010",
         label: "Strategy Formulation",
         path: "/strategyBenefit",
         href: "/operationGame/StrategyBenefit",
         routeElement: <StrategyBenefit />
       },
+      */
       {
         iconPath: approvalIcon,
         id: "UI 11 030 UX",

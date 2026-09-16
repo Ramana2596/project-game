@@ -69,9 +69,13 @@ import RBACInfo from '../RBACInfo/RBACInfo.jsx';
 import ReferenceInfo from '../ReferenceInfo/ReferenceInfo.jsx';
 import ScreenInfo from '../ScreenInfo/ScreenInfo.jsx';
 import StdNormInfo from '../StdNormInfo/StdNormInfo.jsx';
+import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
+import StrategyBank from '../StrategyBank/StrategyBank.jsx';
+import StrategySetCollection from '../StrategySetCollection/StrategySetCollection.jsx';
 import StrategyBudgetInfo from '../StrategyBudgetInfo/StrategyBudgetInfo.jsx';
-import StrategyLaunchGist from '../StrategyLaunchGist/StrategyLaunchGist.jsx';
 import StrategyPlanTeam from '../StrategyPlanTeam/StrategyPlanTeam.jsx';
+import StrategyLaunchGist from '../StrategyLaunchGist/StrategyLaunchGist.jsx';
+import Strategy from '../Strategy/Strategy.jsx';
 import TeamProgressInfo from '../TeamProgressInfo/TeamProgressInfo.jsx';
 import CapitalAssetStockInfo from '../CapitalAssetStockInfo/CapitalAssetStockInfo.jsx';
 import CashBookInfo from '../CashBookInfo/CashBookInfo.jsx';
@@ -91,7 +95,6 @@ import MarketScenario from '../MarketScenario/MarketScenario.jsx';
 import ValidInputCodes from '../ValidInputCodes/ValidInputCodes.jsx';
 import LiabilityInfo from '../LiabilityInfo/LiabilityInfo.jsx';
 import RoleInfo from '../RoleInfo/RoleInfo.jsx';
-import StrategySetCollection from '../StrategySetCollection/StrategySetCollection.jsx';
 import ProductMstInfo from '../ProductMstInfo/ProductMstInfo.jsx';
 import ValueStream from '../ValueStream/ValueStream.jsx';
 import ValueStreamMap from '../ValueStreamMap/ValueStreamMap.jsx';
@@ -113,7 +116,6 @@ import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
 import TeamPlanScreen from '../TeamPlan/TeamPlanScreen.jsx';
 import KeyResultBsInfo from '../KeyResultBsInfo/KeyResultBsInfo.jsx';
 import KeyResultPlInfo from '../KeyResultPlInfo/KeyResultPlInfo.jsx';
-import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
 import UserRole from '../UserRole/UserRole.jsx';
 import UiAccess from '../UiAccess/UiAccess.jsx';
 import PublishMarketData from '../PublishMarketData/PublishMarketData.jsx';
@@ -131,7 +133,6 @@ import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
 import CoProfile from "../CoProfile/CoProfile.jsx";
 import MfgProcess from "../MfgProcess/MfgProcess.jsx";
 import PlantCapacity from "../PlantCapacity/PlantCapacity.jsx";
-import Strategy from "../Strategy/Strategy.jsx";
 
 //import FormTemplate from '../FormTemplate/FormTemplate.jsx';
 //import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
@@ -423,8 +424,16 @@ export default function MiniDrawer() {
           <Route path="/gameMaster" element={<GameMaster />} />
           <Route path="/gameBatch" element={<GameBatch />} />
           <Route path="/gameSession" element={<GameSession />} />
+          <Route path="/strategyMaster" element={<StrategyMaster />} />
+          <Route path='/strategyBenefit' element={<StrategyBenefit />} />
+          <Route path='/strategyBank' element={<StrategyBank />} />
+          <Route path='/StrategySetCollection' element={<StrategySetCollection />} />
           <Route path="/strategyLaunched" element={<StrategyLaunched />} />
           <Route path="/strategyPlanApproval" element={<StrategyPlanApproval />} />
+          <Route path="/StrategyBudgetInfo" element={<StrategyBudgetInfo />} />
+          <Route path="/StrategyPlanTeam" element={<StrategyPlanTeam />} />
+          <Route path="/StrategyLaunchGist" element={<StrategyLaunchGist />} />
+          <Route path="/Strategy" element={<Strategy />} />
           <Route path="/marketFactorInfo" element={<MarketFactorInfo />} />
           <Route path="/marketFactorInfoInput" element={<MarketFactorInfoInput />} />
           <Route path="/operationalPlanInfo" element={<OperationalPlanInfo />} />
@@ -432,7 +441,6 @@ export default function MiniDrawer() {
           <Route path="/balanceSheet" element={<BalanceSheetInfo />} />
           <Route path="/fgStockInfo" element={<FgStockInfo />} />
           <Route path="/rmStockInfo" element={<RmStockInfo />} />
-          <Route path="/strategyMaster" element={<StrategyMaster />} />
           <Route path="/salesRecord" element={<SalesRecordInfo />} />
           <Route path="/productionRecordInfo" element={<ProductionRecordInfo />} />
           <Route path="/cashFlowStatement" element={<CasFlowStatement />} />
@@ -445,9 +453,7 @@ export default function MiniDrawer() {
           <Route path="/ReferenceInfo" element={<ReferenceInfo />} />
           <Route path="/ScreenInfo" element={<ScreenInfo />} />
           <Route path="/StdNormInfo" element={<StdNormInfo />} />
-          <Route path="/StrategyBudgetInfo" element={<StrategyBudgetInfo />} />
-          <Route path="/StrategyLaunchGist" element={<StrategyLaunchGist />} />
-          <Route path="/StrategyPlanTeam" element={<StrategyPlanTeam />} />
+
           <Route path="/TeamProgressInfo" element={<TeamProgressInfo />} />
           <Route path="/CapitalAssetStockInfo" element={<CapitalAssetStockInfo />} />
           <Route path="/CashBookInfo" element={<CashBookInfo />} />
@@ -467,7 +473,6 @@ export default function MiniDrawer() {
           <Route path='/ValidInputCodes' element={<ValidInputCodes />} />
           <Route path='/LiabilityInfo' element={<LiabilityInfo />} />
           <Route path='/RoleInfo' element={<RoleInfo />} />
-          <Route path='/StrategySetCollection' element={<StrategySetCollection />} />
           <Route path='/ProductMstInfo' element={<ProductMstInfo />} />
           <Route path='/ValueStream' element={<ValueStream />} />
           <Route path='/ValueStreamMap' element={<ValueStreamMap />} />
@@ -488,7 +493,6 @@ export default function MiniDrawer() {
           <Route path='/keyResultBsInfo' element={<KeyResultBsInfo />} />
           <Route path='/keyResultPlInfo' element={<KeyResultPlInfo />} />
           <Route path='/demo' element={<DemoVirtual />} />
-          <Route path='/strategyBenefit' element={<StrategyBenefit />} />
           <Route path='/resetSimulation' element={<ResetSimulation />} />
           <Route path='/userRole' element={<UserRole />} />
           <Route path='/uiAccess' element={<UiAccess />} />
@@ -500,8 +504,7 @@ export default function MiniDrawer() {
           <Route path='/CoProfile' element={<CoProfile />} />
           <Route path='/MfgProcess' element={<MfgProcess />} />
           <Route path='/PlantCapacity' element={<PlantCapacity />} />
-          <Route path='/Strategy' element={<Strategy />} />
-
+          
           {/* <Route path='/formTemplate' element={<FormTemplate />} /> */}
         </Routes>
       </Box>
