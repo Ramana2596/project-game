@@ -62,6 +62,10 @@ export const gradients = {
 export const accent = {
   blue: "#1E4FD8",
   teal: "#00897B",
+  purple: "#8E24AA",
+  indigo: "#3F51B5",
+  orange: "#EF6C00",
+  rose: "#E91E63",
 };
 
 
@@ -184,6 +188,10 @@ export const colors = {
   // Accent
   accentBlue: accent.blue,
   accentTeal: accent.teal,
+  accentPurple: accent.purple,
+  accentIndigo: accent.indigo,
+  accentOrange: accent.orange,
+  accentRose: accent.rose,
 
   // Surface
   page: surface.page,
