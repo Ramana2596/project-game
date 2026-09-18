@@ -161,6 +161,8 @@ import ResetSimulation from "../pages/ResetSimulation/ResetSimulation.jsx";
 import CoProfile from "../pages/CoProfile/CoProfile";
 import MfgProcess from "../pages/MfgProcess/MfgProcess";
 import PlantCapacity from "../pages/PlantCapacity/PlantCapacity";
+import MarketIntel from "../pages/MarketIntel/MarketIntel.jsx";
+
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
 
@@ -345,6 +347,14 @@ export const componentList = [
         path: "/marketInfoTeam",
         href: "/operationGame/marketInfoTeam",
         routeElement: <MarketInfoTeam />
+      },   
+      {
+        iconPath: marketfactorInfoIcon,
+        id: "UI 21 090 UX",
+        label: "Market Intelligence",
+        path: "/marketIntel",
+        href: "/operationGame/marketIntel",
+        routeElement: <MarketIntel />
       },
       {
         iconPath: operationalDecisionIcon,
