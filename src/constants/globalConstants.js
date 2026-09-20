@@ -13,20 +13,13 @@ import MarketFactorInfo from "../pages/MarketFactorInfo/MarketFactorInfo";
 import MarketFactorInfoInput from "../pages/MarketFactorInfoInput/MarketFactorInfoInput";
 import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInfo";
 import IncomeStatementInfo from "../pages/IncomeStatementInfo/IncomeStatementInfo";
-import BalanceSheetInfo from "../pages/BalanceSheetInfo/BalanceSheetInfo";
-//import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
-//import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
-import AccountBalanceTwoToneIcon from "@mui/icons-material/AccountBalanceTwoTone";
-import ReceiptLongTwoToneIcon from "@mui/icons-material/ReceiptLongTwoTone";
-import CurrencyExchangeTwoToneIcon from "@mui/icons-material/CurrencyExchangeTwoTone";
-import AnalyticsTwoToneIcon from "@mui/icons-material/AnalyticsTwoTone";
-import LeaderboardTwoToneIcon from "@mui/icons-material/LeaderboardTwoTone";
+//import BalanceSheetInfo from "../pages/BalanceSheetInfo/BalanceSheetInfo";
+import FinBS from "../pages/FinBS/FinBS.jsx";
 import FgStockInfo from "../pages/FgStockInfo/FgStockInfo";
 import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
 import SalesRecordInfo from "../pages/SalesRecordInfo/SalesRecordInfo";
 import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecordInfo";
 import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
-//import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
 import InfoDesk from "../pages/InfoDesk/InfoDesk";
 import SystemInfoDesk from "../pages/SystemInfoDesk/SystemInfoDesk.jsx";
 import UserMgtDesk from "../pages/UserMgtDesk/UserMgtDesk.jsx";
@@ -35,14 +28,36 @@ import Simulation from "../pages/Simulation/Simulation";
 import BatchMgt from "../pages/BatchMgt/BatchMgt.jsx";
 
 // start of png
+// First: Sidebar Menu Icons
+// image icons - Old Icons
+/*
 import homeIcon from '../assets/navigation-menu/home.png';
+import infoIcon from '../assets/navigation-menu/information.png';
+import marketIcon from '../assets/navigation-menu/market.png'
+import operationsIcon from '../assets/navigation-menu/operation.png';
+import manufacturingIcon from '../assets/navigation-menu/manufacturing.png'
+import softwareIcon from '../assets/navigation-menu/software.png'
+import secureAccessIcon from '../assets/navigation-menu/secure-access.png';
+import schoolIcon from '../assets/navigation-menu/school.png'
+import FeedbackOutlinedIcon   from '@mui/icons-material/FeedbackOutlined';
+*/
+
+// MUI Icons - New Icons
+import homeIcon from '@mui/icons-material/HomeOutlined';
+import infoIcon from '@mui/icons-material/InfoOutlined';
+import marketIcon from '@mui/icons-material/QueryStatsOutlined';
+import operationsIcon from '@mui/icons-material/SettingsOutlined';
+import manufacturingIcon from '@mui/icons-material/PrecisionManufacturingOutlined';
+import softwareIcon from '@mui/icons-material/ComputerOutlined';
+import secureAccessIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import schoolIcon from '@mui/icons-material/SchoolOutlined';
+import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
+
+// Rest of the Icons
 import productionIcon from '../assets/navigation-menu/production.png';
 import salesIcon from '../assets/navigation-menu/sales.png';
 import finishedIcon from '../assets/navigation-menu/finished.png';
 import rawIcon from '../assets/navigation-menu/raw-material.png';
-import secureAccessIcon from '../assets/navigation-menu/secure-access.png';
-import infoIcon from '../assets/navigation-menu/information.png';
-import operationsIcon from '../assets/navigation-menu/operation.png';
 import launchIcon from '../assets/navigation-menu/startup.png';
 import approvalIcon from '../assets/navigation-menu/agenda.png';
 import marketfactorInfoIcon from '../assets/navigation-menu/productInfo.png';
@@ -60,7 +75,7 @@ import partIcon from '../assets/navigation-menu/part.png'
 import bomIcon from '../assets/navigation-menu/bom.png'
 import asterikIcon from '../assets/navigation-menu/asterik.png'
 import budgetIcon from '../assets/navigation-menu/budget.png'
-import marketIcon from '../assets/navigation-menu/market.png'
+
 import choiceIcon from '../assets/navigation-menu/choice.png'
 import loanIcon from '../assets/navigation-menu/loan.png'
 import roleIcon from '../assets/navigation-menu/role.png'
@@ -86,7 +101,6 @@ import resultIcon from '../assets/navigation-menu/result.png'
 import actionableIcon from '../assets/navigation-menu/actionable.png'
 import statisticsIcon from '../assets/navigation-menu/statistics.png'
 import onlinestudyIcon from '../assets/navigation-menu/onlinestudy.png'
-import softwareIcon from '../assets/navigation-menu/software.png'
 import professionalIcon from '../assets/navigation-menu/professional.png'
 import IdCardIcon from '../assets/navigation-menu/IdCard.png'
 import userIcon from '../assets/navigation-menu/user.png'
@@ -94,12 +108,21 @@ import verifiedIcon from '../assets/navigation-menu/verified.png'
 import operationInputIcon from '../assets/navigation-menu/potential.png'
 import marketInputIcon from '../assets/navigation-menu/marketInput.png'
 import peopleIcon from '../assets/navigation-menu/people.png'
-import schoolIcon from '../assets/navigation-menu/school.png'
-import manufacturingIcon from '../assets/navigation-menu/manufacturing.png'
+
 import dashboardIcon from '../assets/navigation-menu/dash-board.png';
 import perfOpsIcon from '../assets/navigation-menu/perfOps.png';
 import perfCoIcon from "../assets/navigation-menu/perfCo.png";
 import omgBg from "../assets/navigation-menu/omgBgSrp.png";
+import AccountBalanceTwoToneIcon from "@mui/icons-material/AccountBalanceTwoTone";
+import ReceiptLongTwoToneIcon from "@mui/icons-material/ReceiptLongTwoTone";
+import CurrencyExchangeTwoToneIcon from "@mui/icons-material/CurrencyExchangeTwoTone";
+import AnalyticsTwoToneIcon from "@mui/icons-material/AnalyticsTwoTone";
+import LeaderboardTwoToneIcon from "@mui/icons-material/LeaderboardTwoTone";
+
+//import AccountBalanceWalletTwoToneIcon from '@mui/icons-material/AccountBalanceWalletTwoTone';
+//import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
+//import CurrencyExchangeTwoToneIcon from '@mui/icons-material/CurrencyExchangeTwoTone';
+
 // end of png 
 
 import Operations from "../pages/Operations/Operations";
@@ -201,12 +224,22 @@ export const componentList = [
       },
       {
         icon: <AccountBalanceTwoToneIcon />,
+        id: "UI 21 110 UX",
+        label: "Balance Sheet Analytics",
+        path: "/finBS",
+        href: "/operationGame/FinBS",
+        routeElement: <FinBS />
+      },
+    /*
+      {
+        icon: <AccountBalanceTwoToneIcon />,
         id: "UI 21 110",
         label: "Balance Sheet",
         path: "/balanceSheet",
         href: "/operationGame/balanceSheet",
         routeElement: <BalanceSheetInfo />
       },
+      */
       {
         icon: <ReceiptLongTwoToneIcon />,
         id: "UI 21 120",
