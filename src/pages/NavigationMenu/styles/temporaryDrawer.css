@@ -2,16 +2,18 @@
     z-index: 1000;
 }
 
+/* UXLab V3: Drawer color is controlled by NavigationMenu.jsx using UX color tokens */
 .drawer-container {
-    .MuiPaper-root {
-        background-image: radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%)) !important;
-    }
+    border-right: none !important;
+}
 
-    border-right: 2px solid var(--separator-gray) !important;
+/* UXLab V3: Remove legacy background so colors.primary controls the Drawer */
+.drawer-container .MuiPaper-root {
+    background-image: none !important;
 }
 
 .drawer-header {
-    border-bottom: 1px solid var(--separator-gray);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .drawer.expanded+.content,

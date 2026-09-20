@@ -122,16 +122,22 @@ import PublishMarketData from '../PublishMarketData/PublishMarketData.jsx';
 import BatchAssessment from '../BatchEvaluation/BatchAssessment.jsx';
 import TeamAssessment from '../BatchEvaluation/TeamAssessment.jsx';
 import TeamDebrief from '../BatchEvaluation/TeamDebrief.jsx';
+
 import SimulationCentre from '../DemoVirtual/SimulationCentre.jsx';
+// Retired import SimulationHub from "../pages/SimulationHub/SimulationHub.jsx";   // Retired
+// Retired import DemoWizard from "../pages/SimulationPlay/DemoWizard.jsx";       // Retired
 import DemoVirtual from '../DemoVirtual/DemoVirtual.jsx';
+//import SimulationSuite from '../SimulationSuite/SimulationSuite.jsx';
 import SimulationPlay from '../SimulationPlay/SimulationPlay.jsx';
 import ResetSimulation from '../ResetSimulation/ResetSimulation.jsx';
 import CoProfile from "../CoProfile/CoProfile.jsx";
 import MfgProcess from "../MfgProcess/MfgProcess.jsx";
 import PlantCapacity from "../PlantCapacity/PlantCapacity.jsx";
 import MarketIntel from "../MarketIntel/MarketIntel.jsx";
-import FinBS from '../FinBS/FinBS.jsx';
-import { colors } from '../../ux/styles';
+
+//import FormTemplate from '../FormTemplate/FormTemplate.jsx';
+//import AssetCatalog from '../AssetCatalog/AssetCatalog.jsx';
+
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -145,6 +151,7 @@ export default function MiniDrawer() {
     isVisible: false,
   });
 
+  // Parameters Game_Id and RL_Id are used to fetch user access page IDs
   useEffect(() => {
     if (userInfo?.gameId && user?.rlId) {
       setIsLoading(true);
@@ -159,18 +166,22 @@ export default function MiniDrawer() {
     }
   }, [userInfo?.gameId, user?.rlId]);
 
+  // Menu open handler
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
+  // Menu close handler
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  // Drawer open handler
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
+  // Drawer close handler
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -178,7 +189,7 @@ export default function MiniDrawer() {
   const currentRoute = location.pathname;
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <CssBaseline />
 
       {/* Main Application AppBar */}
@@ -186,76 +197,43 @@ export default function MiniDrawer() {
         position="fixed"
         open={open}
         sx={{
-          backgroundColor: colors.primary,
-          backgroundImage: 'none',
-          color: colors.onPrimary,
-
-          // '&&' doubles the specificity so this beats MUI defaults and global CSS.
-          // Covers BreadCrumb (Link, Breadcrumbs, header-title Typography), icons and buttons.
-          '&& .MuiToolbar-root, && .MuiTypography-root, && .header-title, && .MuiLink-root, && .MuiBreadcrumbs-root, && .MuiBreadcrumbs-li, && .MuiIconButton-root, && .MuiSvgIcon-root': {
-            color: `${colors.onPrimary} !important`,
-            opacity: 1,
-            filter: 'none',
-          },
-
-          // Breadcrumb separator (the > icon): slightly softer, still white
-          '&& .MuiBreadcrumbs-separator, && .MuiBreadcrumbs-separator .MuiSvgIcon-root': {
-            color: 'rgba(255,255,255,0.8) !important',
-          },
-
-          // Breadcrumb links: no default link color, underline on hover only
-          '&& .MuiLink-root': {
-            textDecoration: 'none',
-            '&:hover': { textDecoration: 'underline' },
-          },
+          backgroundImage: 'radial-gradient(ellipse at 50% 100%, hsl(213, 100%, 87%), hsl(0, 0%, 100%))'
         }}
       >
-        <Toolbar
-          style={{ paddingLeft: 0 }}
-          sx={{
-            backgroundColor: colors.primary,
-            color: colors.onPrimary,
-            minHeight: 64
-          }}
-        >
+        <Toolbar style={{ paddingLeft: 0 }} sx={{ backgroundImage: 'inherit' }}>
+
+          {/* Logo Image */}
           <img src={OmtpLogo} alt="OMTP Logo" style={{ width: 65, height: 65 }} />
 
+          {/* Drawer Open Button */}
           <IconButton
             className="hover-effect"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={{
-              marginLeft: 1,
-              color: colors.onPrimary,
-              ...(open && { display: 'none' }),
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.10)'
-              }
-            }}
+            sx={{ marginLeft: 1, ...(open && { display: 'none' }) }}
           >
             <ArrowForwardIosIcon />
           </IconButton>
 
+          {/* Drawer Close Button */}
           <IconButton
             className="hover-effect"
             aria-label="close drawer"
             onClick={handleDrawerClose}
             edge="start"
-            sx={{
-              color: colors.onPrimary,
-              ...(!open && { display: 'none' }),
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.10)'
-              }
-            }}
+            sx={{ ...(!open && { display: 'none' }) }}
           >
             <ArrowBackIosIcon />
           </IconButton>
 
+          {/* Breadcrumb Navigation */}
           <BreadCrumb currentRoute={currentRoute} />
 
-          <div style={{ marginLeft: "auto", display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* Right-side Header Actions */}
+          <div style={{ marginLeft: "auto", display: 'flex', alignItems: 'center', gap: 2 }}>
+
+            {/* Logged-in Batch / Team Identity Badge */}
             {userInfo?.gameBatch && userInfo?.gameTeam && (
               <Box
                 sx={{
@@ -264,16 +242,17 @@ export default function MiniDrawer() {
                   px: 2,
                   py: 0.8,
                   borderRadius: '999px',
-                  backgroundColor: 'rgba(255,255,255,0.16)',
-                  border: '1px solid rgba(255,255,255,0.65)',
+                  background: 'linear-gradient(135deg, #eef2ff, #f5f3ff)',
+                  border: '1px solid #c7d2fe',
+                  boxShadow: '0 2px 8px rgba(99, 102, 241, 0.10)',
                   minHeight: 42
                 }}
               >
                 <Typography
                   sx={{
                     fontSize: '0.82rem',
-                    fontWeight: 700,
-                    color: `${colors.onPrimary} !important`,
+                    fontWeight: 800,
+                    color: '#4338ca',
                     letterSpacing: 0.3,
                     lineHeight: 1,
                     whiteSpace: 'nowrap'
@@ -284,42 +263,64 @@ export default function MiniDrawer() {
               </Box>
             )}
 
+            {/* Account Menu Button */}
             <div>
-              <Button
-                className="hover-effect"
-                onClick={handleMenu}
-                color="inherit"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  textTransform: "none",
-                  border: "1px solid rgba(255,255,255,0.55)",
-                  borderRadius: "30px",
-                  padding: "4px 12px",
-                  minWidth: 52,
-                  minHeight: 44,
-                  backgroundColor: "rgba(255,255,255,0.08)",
-                  color: `${colors.onPrimary} !important`,
-                  '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.16)',
-                    borderColor: colors.onPrimary
-                  },
-                  '& .MuiSvgIcon-root': {
-                    color: `${colors.onPrimary} !important`
-                  }
-                }}
-              >
-                <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
-              </Button>
+              {userInfo ? (
+                <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", width: "100%" }}>
+
+                  {/* Always show AccountCircle */}
+                  <Button
+                    className="hover-effect"
+                    onClick={handleMenu}
+                    color="inherit"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      textTransform: "none",
+                      border: "1px solid",
+                      borderRadius: "30px",
+                      padding: "5px 20px",
+                      backgroundColor: "#FFFFFF",
+                      color: "#180081"
+                    }}
+                  >
+                    <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
+                  </Button>
+                </Box>
+              ) : (
+                <Button
+                  className="hover-effect"
+                  onClick={handleMenu}
+                  color="inherit"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    textTransform: "none",
+                    border: "1px solid",
+                    borderRadius: "30px",
+                    padding: "5px 20px",
+                    backgroundColor: "#FFFFFF",
+                    color: "#180081"
+                  }}
+                >
+                  <AccountCircle className="account-icon" sx={{ fontSize: 40 }} />
+                </Button>
+              )}
             </div>
 
+            {/* User Menu */}
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
               keepMounted
-              transformOrigin={{ vertical: "top", horizontal: "right" }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
               open={Boolean(anchorEl)}
               onClose={handleClose}
               sx={{
@@ -331,14 +332,18 @@ export default function MiniDrawer() {
                 },
               }}
             >
-              <Typography className="standard-text-color">
+              <Typography className="standard-text-color" disabled>
                 {userInfo?.loginId}
               </Typography>
+
               <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
-              <Typography className="standard-text-color">
+
+              <Typography className="standard-text-color" disabled>
                 {user?.role}
               </Typography>
+
               <Divider sx={{ backgroundColor: '#D3D3D3', my: 1 }} />
+
               <Typography
                 onClick={handleClose}
                 sx={{
@@ -354,51 +359,21 @@ export default function MiniDrawer() {
                 <SignOutButton />
               </Typography>
             </Menu>
+
           </div>
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar / Left Navigation Drawer with Purple Theme */}
-      <Drawer
-        className="drawer-container"
-        variant="permanent"
-        open={open}
-        sx={{
-          height: '100vh',
-          minHeight: '100vh',
-          '& .MuiDrawer-paper': {
-            backgroundColor: colors.primary,
-            color: colors.onPrimary,
-            height: '100vh',
-            minHeight: '100vh',
-            boxSizing: 'border-box',
-            overflowY: 'auto',
-            transition: 'width 0.3s ease',
-            borderRight: 'none',
-          },
-        }}
-      >
-        <DrawerHeader
-          className="drawer-header"
-          sx={{
-            backgroundColor: colors.primaryDark,
-            color: colors.onPrimary,
-            minHeight: '64px'
-          }}
-        >
+      {/* Left Navigation Drawer */}
+      <Drawer className="drawer-container" variant="permanent" open={open}>
+        <DrawerHeader className="drawer-header">
           {open ? (
-            <Typography
-              color="inherit"
-              align="left"
-              variant="h6"
-              component="div"
-              sx={{ fontWeight: 600 }}
-            >
-              {pageConstants.companyTitleExpandedFH} <br /> {pageConstants.companyTitleExpandedSH}
+            <Typography color='black' align="left" variant="h6" wrap component="div">
+              {pageConstants.companyTitleExpandedFH} < br /> {pageConstants.companyTitleExpandedSH}
             </Typography>
           ) : (
             <Typography
-              color="inherit"
+              color='black'
               align="left"
               variant="h4"
               noWrap
@@ -410,70 +385,36 @@ export default function MiniDrawer() {
           )}
         </DrawerHeader>
 
-        <List
-          sx={{
-            backgroundColor: colors.primary,
-            '& .MuiListItemText-primary': {
-              color: colors.onPrimary
-            },
-            px: 1
-          }}
-        >
-          {userAccessiblePages?.map((componentObj) => {
-            const Icon = componentObj.iconPath;
-            return (
-              <ListItem
-                key={componentObj.href}
-                disablePadding
-                sx={{ display: 'block', my: 0.5 }}
+        <List sx={{ backgroundImage: 'inherit' }}>
+          {userAccessiblePages?.map((componentObj) => (
+            <ListItem key={componentObj.href} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                className="hover-effect"
+                component={Link}
+                to={componentObj.href}
+                sx={{
+                  minHeight: 60,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5
+                }}
               >
-                <ListItemButton
-                  className="hover-effect"
-                  component={Link}
-                  to={componentObj.href}
+                <img src={[componentObj.iconPath]} alt="Description" className="navigation-menu-item-icon" />
+                <ListItemText
+                  primary={componentObj.label}
                   sx={{
-                    minHeight: 52,
-                    borderRadius: '8px',
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                    color: colors.onPrimary,
-                    '&:hover': {
-                      backgroundColor: colors.primaryDark,
-                    },
+                    opacity: open ? 1 : 0,
+                    wordWrap: open ? 'break-word' : 'none',
+                    whiteSpace: open ? 'normal' : 'none'
                   }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 40,
-                      color: colors.onPrimary,
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <Icon sx={{ fontSize: 24 }} />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={componentObj.label}
-                    sx={{
-                      opacity: open ? 1 : 0,
-                      wordWrap: open ? 'break-word' : 'none',
-                      whiteSpace: open ? 'normal' : 'none',
-                      ml: open ? 2 : 0,
-                      '& .MuiTypography-root': {
-                        fontSize: '0.9rem',
-                        fontWeight: 500,
-                        color: colors.onPrimary
-                      }
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
         </List>
       </Drawer>
 
       {/* Main Content Area */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1 }}>
         <DrawerHeader />
 
         <Routes>
@@ -498,7 +439,7 @@ export default function MiniDrawer() {
           <Route path="/marketFactorInfoInput" element={<MarketFactorInfoInput />} />
           <Route path="/operationalPlanInfo" element={<OperationalPlanInfo />} />
           <Route path="/incomeStatementInfo" element={<IncomeStatementInfo />} />
-          {/* <Route path="/balanceSheet" element={<BalanceSheetInfo />} /> */}
+          <Route path="/balanceSheet" element={<BalanceSheetInfo />} />
           <Route path="/fgStockInfo" element={<FgStockInfo />} />
           <Route path="/rmStockInfo" element={<RmStockInfo />} />
           <Route path="/salesRecord" element={<SalesRecordInfo />} />
@@ -513,6 +454,7 @@ export default function MiniDrawer() {
           <Route path="/ReferenceInfo" element={<ReferenceInfo />} />
           <Route path="/ScreenInfo" element={<ScreenInfo />} />
           <Route path="/StdNormInfo" element={<StdNormInfo />} />
+
           <Route path="/TeamProgressInfo" element={<TeamProgressInfo />} />
           <Route path="/CapitalAssetStockInfo" element={<CapitalAssetStockInfo />} />
           <Route path="/CashBookInfo" element={<CashBookInfo />} />
@@ -559,13 +501,12 @@ export default function MiniDrawer() {
           <Route path='/batchAssessment' element={<BatchAssessment />} />
           <Route path='/teamAssessment' element={<TeamAssessment />} />
           <Route path='/teamDebrief' element={<TeamDebrief />} />
-          <Route path='/SimulationCentre' element={<SimulationCentre />} />
+          <Route path='/SimulationCentre' element ={<SimulationCentre /> } />
           <Route path='/CoProfile' element={<CoProfile />} />
           <Route path='/MfgProcess' element={<MfgProcess />} />
           <Route path='/PlantCapacity' element={<PlantCapacity />} />
           <Route path='/MarketIntel' element={<MarketIntel />} />
-          <Route path= '/FinBS' element={<FinBS />}  />  
-
+          {/* <Route path='/formTemplate' element={<FormTemplate />} /> */}
         </Routes>
       </Box>
 
