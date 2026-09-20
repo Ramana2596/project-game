@@ -65,12 +65,12 @@ const BreadCrumb = ({ currentRoute }) => {
                         href={crumb.href}
                         onClick={(event) => handleClick(event, crumb.href)}
                     >
-                        <Typography align='left' className="header-title" variant='h5' component="div">
+                        <Typography align='left' className="header-title" variant='h6' component="div">
                             {crumb.label}
                         </Typography>
                     </Link>
                 ) : (
-                    <Typography key={index} align='left' className="header-title" variant='h5' component="div">
+                    <Typography key={index} align='left' className="header-title" variant='h6' component="div">
                         {crumb.label}
                     </Typography>
                 )
