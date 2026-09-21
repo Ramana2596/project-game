@@ -42,7 +42,7 @@ const SAMPLE_LINES = [
   [32, "Current Asset", 33333.03],
   [33, "Advances Made", 0.0],
   [34, "Accrued Income & Loss", 0.0],
-  [35, "Suspence Account", 153.0],
+  [35, "Suspense Account", 153.0],
   [36, "Total Assets", 163006.03],
 ];
 
