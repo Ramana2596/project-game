@@ -1,39 +1,10 @@
-// ============================================================
-// OpsMgt UXLab V3
-// File    : tableStyle.js
-// Purpose : SaaS Enterprise Table / Report Standards
-//
-// Design Principle
-// ------------------------------------------------------------
-// 1. Standard tokens are the ONLY distinct table styles.
-// 2. Purple = brand / hero / primary interaction.
-// 3. Enterprise Blue = information / table identity.
-// 4. Column headers use white text for contrast.
-// 5. Numeric data is right-aligned.
-// 6. Compact is a density modifier, not a separate theme.
-// 7. Alternate table headers use approved accent colors only.
-// ============================================================
+// OpsMgt UXLab V3: tableStyle.js
 
-import {
-  colors,
-  accent,
-  text,
-  surface,
-  border,
-} from "./colorPalette";
-
+import { colors, accent, text, surface, border } from "./colorPalette";
 import { masterTypo } from "./masterTypo";
 
-
-// ============================================================
-// STANDARD TOKENS
-// ============================================================
-
 export const tableStyle = {
-
-  // ----------------------------------------------------------
-  // 01. CONTAINER
-  // ----------------------------------------------------------
+  // Table container wrapper styles
   container: {
     borderRadius: 3,
     overflow: "hidden",
@@ -43,10 +14,7 @@ export const tableStyle = {
     boxShadow: `0 4px 16px ${accent.blue}14`,
   },
 
-
-  // ----------------------------------------------------------
-  // 02. TITLE
-  // ----------------------------------------------------------
+  // Table header title typography and spacing styles
   title: {
     ...masterTypo.tableTitle,
     color: text.title,
@@ -55,10 +23,7 @@ export const tableStyle = {
     pb: 0.75,
   },
 
-
-  // ----------------------------------------------------------
-  // 03. PARAMETERS
-  // ----------------------------------------------------------
+  // Table parameter description typography and spacing styles
   parameters: {
     ...masterTypo.tableParameter,
     color: text.subtitle,
@@ -66,10 +31,7 @@ export const tableStyle = {
     pb: 1.5,
   },
 
-
-  // ----------------------------------------------------------
-  // 04. TOOLBAR
-  // ----------------------------------------------------------
+  // Table action toolbar layout styles
   toolbar: {
     display: "flex",
     flexWrap: "wrap",
@@ -79,14 +41,10 @@ export const tableStyle = {
     mb: 2,
   },
 
-
-  // ----------------------------------------------------------
-  // 05. COLUMN HEADER
-  // ----------------------------------------------------------
+  // Standard table column header styles
   columnHeader: {
     backgroundColor: accent.blue,
     color: colors.white,
-
     "& .MuiTableCell-root": {
       ...masterTypo.columnHeader,
       backgroundColor: accent.blue,
@@ -94,21 +52,16 @@ export const tableStyle = {
       borderBottom: "none",
       py: 1.5,
     },
-
     "& .MuiTableCell-head": {
       backgroundColor: accent.blue,
       color: colors.white,
     },
   },
 
-
-  // ----------------------------------------------------------
-  // 06. ALTERNATE COLUMN HEADER
-  // ----------------------------------------------------------
+  // Alternate table column header custom accent styles
   columnHeaderAccent: (accentColor = accent.blue) => ({
     backgroundColor: accentColor,
     color: colors.white,
-
     "& .MuiTableCell-root": {
       ...masterTypo.columnHeader,
       backgroundColor: accentColor,
@@ -116,33 +69,24 @@ export const tableStyle = {
       borderBottom: "none",
       py: 1.5,
     },
-
     "& .MuiTableCell-head": {
       backgroundColor: accentColor,
       color: colors.white,
     },
   }),
 
-
-  // ----------------------------------------------------------
-  // 07. ROW
-  // ----------------------------------------------------------
+  // Table row striping and hover styles
   row: {
     "&:nth-of-type(even)": {
       backgroundColor: surface.panel,
     },
-
     "&:hover": {
       backgroundColor: `${accent.blue}0A`,
     },
-
     transition: "background-color .25s ease",
   },
 
-
-  // ----------------------------------------------------------
-  // 08. CELL
-  // ----------------------------------------------------------
+  // Standard table data cell typography and border styles
   cell: {
     ...masterTypo.body1,
     color: text.body,
@@ -150,19 +94,13 @@ export const tableStyle = {
     py: 1.5,
   },
 
-
-  // ----------------------------------------------------------
-  // 09. NUMERIC
-  // ----------------------------------------------------------
+  // Right-aligned tabular numeric cell styles
   numeric: {
     textAlign: "right",
     fontVariantNumeric: "tabular-nums",
   },
 
-
-  // ----------------------------------------------------------
-  // 10. FOOTER
-  // ----------------------------------------------------------
+  // Table footer summary layout styles
   footer: {
     display: "flex",
     justifyContent: "space-between",
@@ -173,10 +111,7 @@ export const tableStyle = {
     background: surface.panel,
   },
 
-
-  // ----------------------------------------------------------
-  // 11. COMPACT
-  // ----------------------------------------------------------
+  // Compact table density modifier styles
   compact: {
     "& .MuiTableCell-root": {
       py: 0.75,
@@ -184,6 +119,5 @@ export const tableStyle = {
     },
   },
 };
-
 
 export default tableStyle;
