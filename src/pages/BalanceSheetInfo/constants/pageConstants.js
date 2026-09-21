@@ -44,7 +44,7 @@ export const pageConstants = {
     "Current Asset",
     "Advances Made",
     "Accrued Income & Loss",
-    "Suspence Account",
+    "Suspense Account",
     "Total Assets"
   ],
   // Rows (must be a subset of conciseBS) rendered in bold
