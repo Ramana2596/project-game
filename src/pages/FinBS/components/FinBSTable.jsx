@@ -75,7 +75,7 @@ export default function FinBSTable({ rows, totalCount, periods, hiddenPeriodCoun
         >
           {isTree ? (
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-              {/* Drill-down arrow (clicking anywhere on the row also toggles) */}
+              {/* Drill-down arrow */}
               {row.hasChildren ? (
                 <IconButton
                   size="small"
@@ -129,7 +129,12 @@ export default function FinBSTable({ rows, totalCount, periods, hiddenPeriodCoun
             <TableRow>
               <TableCell
                 colSpan={columnCount}
-                sx={{ ...tableStyle.cell, ...masterTypo.h6, background: state.selected.background, color: brand.primaryDark, py: 1 }}
+                sx={{ 
+                  ...tableStyle.cell, 
+                  ...masterTypo.h6, 
+                  background: state.selected.background, 
+                  color: brand.primaryDark 
+                }}
               >
                 <Box sx={{ position: "sticky", left: 16, display: "inline-block" }}>{section.title}</Box>
               </TableCell>
@@ -157,7 +162,8 @@ export default function FinBSTable({ rows, totalCount, periods, hiddenPeriodCoun
       </Box>
 
       <TableContainer sx={{ maxHeight: "70vh" }}>
-        <Table stickyHeader size="small" aria-label="Balance sheet" sx={{ borderCollapse: "separate" }}>
+        {/* Table rows smaller and tighter */}
+        <Table stickyHeader size="small" aria-label="Balance sheet" sx={{ borderCollapse: "separate", ...tableStyle.compact }}>
           <TableHead sx={tableStyle.columnHeader}>
             <TableRow>
               <TableCell sx={{ position: "sticky", left: 0, zIndex: 3, minWidth: DETAILS_WIDTH, textAlign: "left" }}>Details</TableCell>
