@@ -131,6 +131,7 @@ import MfgProcess from "../MfgProcess/MfgProcess.jsx";
 import PlantCapacity from "../PlantCapacity/PlantCapacity.jsx";
 import MarketIntel from "../MarketIntel/MarketIntel.jsx";
 import FinBS from '../FinBS/FinBS.jsx';
+import FinIS from '../FinIS/FinIS.jsx';
 import { colors } from '../../ux/styles';
 
 export default function MiniDrawer() {
@@ -565,6 +566,7 @@ export default function MiniDrawer() {
           <Route path='/PlantCapacity' element={<PlantCapacity />} />
           <Route path='/MarketIntel' element={<MarketIntel />} />
           <Route path= '/FinBS' element={<FinBS />}  />  
+          <Route path= '/FinIS' element={<FinIS />}  />  
 
         </Routes>
       </Box>
