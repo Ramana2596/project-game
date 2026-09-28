@@ -6,50 +6,117 @@
 
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import PercentIcon from "@mui/icons-material/Percent";
-import { cardStyle, masterTypo, colors } from "../../../ux/styles";
+import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
+import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
+import PercentRoundedIcon from "@mui/icons-material/PercentRounded";
+import { cardStyle, masterTypo } from "../../../ux/styles";
+import { accent, text } from "../../../ux/styles/colorPalette";
 import { formatLineValue } from "../utils/finISFormatters";
 
-// Constants: icon per KPI key
-const STAT_ICONS = {
-    revenue: <ReceiptLongIcon />,
-    grossMargin: <TrendingUpIcon />,
-    operatingProfit: <TrendingUpIcon />,
-    profitAfterTax: <TrendingUpIcon />,
-    profitPct: <PercentIcon />,
+// Constants: icon and accent per KPI key.
+const STAT_CARDS = {
+    revenue: {
+        Icon: ReceiptLongRoundedIcon,
+        color: accent.blue,
+    },
+    grossMargin: {
+        Icon: TrendingUpRoundedIcon,
+        color: accent.teal,
+    },
+    operatingProfit: {
+        Icon: TrendingUpRoundedIcon,
+        color: accent.orange,
+    },
+    profitAfterTax: {
+        Icon: TrendingUpRoundedIcon,
+        color: accent.purple,
+    },
+    profitPct: {
+        Icon: PercentRoundedIcon,
+        color: accent.orange,
+    },
 };
 
-// Component: presentational KPI card grid, driven entirely by the `kpis` prop from useFinIS
+// Component: presentational KPI card grid, driven entirely by the `kpis` prop.
 const FinISKpis = ({ kpis }) => {
+    if (!kpis?.length) return null;
+
     return (
         <Box
             sx={{
                 display: "grid",
-                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: `repeat(${kpis.length}, 1fr)` },
-                gap: 2,
-                mb: 3,
+                gap: 1,
+                gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
             }}
         >
-            {kpis.map((kpi) => (
-                <Box key={kpi.key} sx={cardStyle.statCard}>
-                    <Box sx={cardStyle.statIconCircle(colors[kpi.accent] || colors.primary)}>
-                        {STAT_ICONS[kpi.icon]}
+            {kpis.map((kpi) => {
+                const card = STAT_CARDS[kpi.key] || {};
+                const Icon = card.Icon;
+
+                return (
+                    <Box
+                        key={kpi.key}
+                        sx={{
+                            ...cardStyle.statCard,
+                            p: 1,
+                            gap: 1,
+                            borderRadius: 2.5,
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                ...cardStyle.statIconCircle(
+                                    card.color || accent.purple
+                                ),
+                                width: 32,
+                                height: 32,
+                                minWidth: 32,
+                                "& svg": {
+                                    fontSize: 18,
+                                    color: text.white,
+                                },
+                            }}
+                        >
+                            {Icon && <Icon />}
+                        </Box>
+
+                        <Box sx={{ minWidth: 0 }}>
+                            <Typography
+                                sx={{
+                                    ...masterTypo.caption,
+                                    color: text.subtitle,
+                                    lineHeight: 1.15,
+                                }}
+                            >
+                                {kpi.label}
+                            </Typography>
+
+                            <Typography
+                                sx={{
+                                    ...masterTypo.h6,
+                                    color: text.title,
+                                    lineHeight: 1.2,
+                                    fontVariantNumeric: "tabular-nums",
+                                }}
+                            >
+                                {formatLineValue(kpi.value, kpi.isRatio)}
+                            </Typography>
+
+                            <Typography
+                                sx={{
+                                    ...masterTypo.caption,
+                                    color: text.subtitle,
+                                    lineHeight: 1.15,
+                                }}
+                            >
+                                {kpi.period
+                                    ? `As at ${kpi.period}`
+                                    : ""}
+                            </Typography>
+                        </Box>
                     </Box>
-                    <Box>
-                        <Typography sx={{ ...masterTypo.caption, color: colors.subtitle }}>
-                            {kpi.label}
-                        </Typography>
-                        <Typography sx={{ ...masterTypo.h4, color: colors.title }}>
-                            {formatLineValue(kpi.value, kpi.isRatio)}
-                        </Typography>
-                        <Typography sx={{ ...masterTypo.caption, color: colors.muted }}>
-                            {kpi.period ? `As at ${kpi.period}` : ""}
-                        </Typography>
-                    </Box>
-                </Box>
-            ))}
+                );
+            })}
         </Box>
     );
 };

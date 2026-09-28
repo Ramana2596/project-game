@@ -1,6 +1,6 @@
-// Component Name : formatters
+// Component Name : finISFormatters
 // Module         : FinIS (Income Statement)
-// Purpose        : Presentation-only number formatting helpers
+// Purpose        : Presentation-only number and month formatting helpers
 // Author/Version : UXLab V1.0
 // AI Tags        : income-statement, utils, formatting
 
@@ -16,7 +16,24 @@ export const formatRatio = (value) => {
     return `${Number(value).toFixed(2)}%`;
 };
 
-// Function: pick the right formatter for a given line based on ratio membership
-export const formatLineValue = (value, isRatio) => (isRatio ? formatRatio(value) : formatAmount(value));
+// Function: format a YYYY-MM period as "Feb 2026"
+export const formatMonthLabel = (month) => {
+    if (!month) return "All periods";
 
-export default { formatAmount, formatRatio, formatLineValue };
+    const [year, monthNumber] = String(month).split("-");
+
+    if (!year || !monthNumber) return month;
+
+    return new Date(
+        Number(year),
+        Number(monthNumber) - 1,
+        1
+    ).toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+    });
+};
+
+// Function: pick the right formatter for a given line based on ratio membership
+export const formatLineValue = (value, isRatio) =>
+    isRatio ? formatRatio(value) : formatAmount(value);

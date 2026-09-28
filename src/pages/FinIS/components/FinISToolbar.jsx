@@ -5,73 +5,171 @@
 // AI Tags        : income-statement, toolbar, search, filter, export
 
 import React from "react";
-import { Box, TextField, InputAdornment, Button, Chip } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import {
+    Box,
+    Button,
+    InputAdornment,
+    TextField,
+    ToggleButton,
+    ToggleButtonGroup,
+} from "@mui/material";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import FileDownloadRoundedIcon from "@mui/icons-material/FileDownloadRounded";
 import { buttonStyle, layoutStyle } from "../../../ux/styles";
+import { brand, surface, text } from "../../../ux/styles/colorPalette";
 
-// Component: presentational toolbar - all state lives in useFinIS, handlers passed down as props
+// Pill-shaped search field
+const pillSx = {
+    "& .MuiOutlinedInput-root": {
+        borderRadius: "999px",
+        background: surface.paper,
+    },
+    "& .MuiOutlinedInput-root.Mui-focused fieldset": {
+        borderColor: brand.primary,
+    },
+    "& .MuiInputLabel-root.Mui-focused": {
+        color: brand.primary,
+    },
+};
+
+// Segmented Compact / Detailed switch
+const toggleSx = {
+    textTransform: "none",
+    fontWeight: 600,
+    px: 2,
+    borderColor: brand.primary,
+    color: brand.primary,
+    "&:first-of-type": {
+        borderTopLeftRadius: 999,
+        borderBottomLeftRadius: 999,
+    },
+    "&:last-of-type": {
+        borderTopRightRadius: 999,
+        borderBottomRightRadius: 999,
+    },
+    "&.Mui-selected, &.Mui-selected:hover": {
+        background: brand.primary,
+        color: text.white,
+    },
+};
+
+// Component: presentational toolbar - all state lives in useFinIS
 const FinISToolbar = ({
-    search, onSearchChange,
-    density, onDensityChange,
-    groups, activeGroup, onGroupChange,
+    search,
+    onSearchChange,
+    density,
+    onDensityChange,
+    groups,
+    activeGroup,
+    onGroupChange,
     onExportCsv,
 }) => {
     return (
-        <Box sx={layoutStyle.toolbar}>
+        <Box
+            sx={{
+                ...layoutStyle.toolbar,
+                mb: 0,
+                flexWrap: "nowrap",
+            }}
+        >
             {/* Search line items */}
             <TextField
                 size="small"
-                placeholder="Search line item..."
+                placeholder="Search line item…"
                 value={search}
-                onChange={(e) => onSearchChange(e.target.value)}
-                sx={{ minWidth: 260 }}
+                onChange={(event) => onSearchChange(event.target.value)}
+                inputProps={{ "aria-label": "Search line item" }}
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                            <SearchIcon fontSize="small" />
+                            <SearchRoundedIcon sx={{ color: text.muted }} />
                         </InputAdornment>
                     ),
                 }}
+                sx={{
+                    ...pillSx,
+                    flex: "1 1 220px",
+                    maxWidth: 220,
+                }}
             />
 
-            {/* Table density toggle */}
-            <Box sx={layoutStyle.flexRow}>
-                <Button
-                    sx={density === "compact" ? buttonStyle.primary : buttonStyle.secondary}
-                    onClick={() => onDensityChange("compact")}
-                >
+            {/* Table density */}
+            <ToggleButtonGroup
+                exclusive
+                size="small"
+                value={density}
+                onChange={(event, next) => next && onDensityChange(next)}
+                aria-label="Table density"
+            >
+                <ToggleButton value="compact" sx={toggleSx}>
                     Compact
-                </Button>
-                <Button
-                    sx={density === "detailed" ? buttonStyle.primary : buttonStyle.secondary}
-                    onClick={() => onDensityChange("detailed")}
-                >
+                </ToggleButton>
+                <ToggleButton value="detailed" sx={toggleSx}>
                     Detailed
-                </Button>
-            </Box>
+                </ToggleButton>
+            </ToggleButtonGroup>
 
-            {/* Group filter chips */}
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                <Chip
-                    label="All lines"
+            {/* Income statement group filters */}
+            <Box
+                sx={{
+                    display: "flex",
+                    flexWrap: "nowrap",
+                    gap: 1,
+                    flexShrink: 0,
+                }}
+                role="group"
+                aria-label="Income statement group"
+            >
+                <Button
+                    sx={{
+                        ...(activeGroup === "all"
+                            ? buttonStyle.primary
+                            : buttonStyle.secondary),
+                        ...buttonStyle.compact,
+                    }}
+                    aria-pressed={activeGroup === "all"}
                     onClick={() => onGroupChange("all")}
-                    sx={activeGroup === "all" ? buttonStyle.tabActive : buttonStyle.tab}
-                />
-                {groups.map((g) => (
-                    <Chip
-                        key={g.key}
-                        label={g.label}
-                        onClick={() => onGroupChange(g.key)}
-                        sx={activeGroup === g.key ? buttonStyle.tabActive : buttonStyle.tab}
-                    />
+                >
+                    All
+                </Button>
+
+                {groups.map((group) => (
+                    <Button
+                        key={group.key}
+                        sx={{
+                            ...(activeGroup === group.key
+                                ? buttonStyle.primary
+                                : buttonStyle.secondary),
+                            ...buttonStyle.compact,
+                        }}
+                        aria-pressed={activeGroup === group.key}
+                        onClick={() => onGroupChange(group.key)}
+                    >
+                        {group.label}
+                    </Button>
                 ))}
             </Box>
 
             {/* Export */}
-            <Button startIcon={<FileDownloadIcon />} sx={buttonStyle.secondary} onClick={onExportCsv}>
-                Export CSV
-            </Button>
+            <Box
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    ml: "auto",
+                    flexShrink: 0,
+                }}
+            >
+                <Button
+                    startIcon={<FileDownloadRoundedIcon />}
+                    sx={{
+                        ...buttonStyle.secondary,
+                        ...buttonStyle.compact,
+                    }}
+                    onClick={onExportCsv}
+                >
+                    Export CSV
+                </Button>
+            </Box>
         </Box>
     );
 };
