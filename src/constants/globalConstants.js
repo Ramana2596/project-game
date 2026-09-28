@@ -12,9 +12,10 @@ import Strategy from "../pages/Strategy/Strategy.jsx";
 import MarketFactorInfo from "../pages/MarketFactorInfo/MarketFactorInfo";
 import MarketFactorInfoInput from "../pages/MarketFactorInfoInput/MarketFactorInfoInput";
 import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInfo";
-import IncomeStatementInfo from "../pages/IncomeStatementInfo/IncomeStatementInfo";
+//import IncomeStatementInfo from "../pages/IncomeStatementInfo/IncomeStatementInfo";
 //import BalanceSheetInfo from "../pages/BalanceSheetInfo/BalanceSheetInfo";
 import FinBS from "../pages/FinBS/FinBS.jsx";
+import FinIS from "../pages/FinIS/FinIS.jsx";
 import FgStockInfo from "../pages/FgStockInfo/FgStockInfo";
 import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
 import SalesRecordInfo from "../pages/SalesRecordInfo/SalesRecordInfo";
@@ -230,6 +231,14 @@ export const componentList = [
         href: "/operationGame/FinBS",
         routeElement: <FinBS />
       },
+      {
+        icon: <ReceiptLongTwoToneIcon />,
+        id: "UI 21 120 UX",
+        label: "Income Statement Analytics",
+        path: "/finIS",
+        href: "/operationGame/FinIS",
+        routeElement: <FinIS />
+      },
     /*
       {
         icon: <AccountBalanceTwoToneIcon />,
@@ -239,7 +248,6 @@ export const componentList = [
         href: "/operationGame/balanceSheet",
         routeElement: <BalanceSheetInfo />
       },
-      */
       {
         icon: <ReceiptLongTwoToneIcon />,
         id: "UI 21 120",
@@ -248,6 +256,7 @@ export const componentList = [
         href: "/operationGame/incomeStatementInfo",
         routeElement: <IncomeStatementInfo />
       },
+    */
       {
         icon: <CurrencyExchangeTwoToneIcon />,
         id: "UI 21 130",
