@@ -1,9 +1,8 @@
-
 /**
  * Component Name: useFinBS
  * Module: Finance / FinBS
  * Purpose: Load the Balance Sheet and derive compact tree, filters, periods and KPIs.
- * Author/Version: UXLab / v1.0
+ * Author/Version: UXLab / v1.1
  * AI Tags: hook, finBS, balance sheet, business logic, compact view, drill-down, search, filters, KPI
  */
 
@@ -28,6 +27,12 @@ const INITIAL = {
   message: "",
   code: null,
 };
+
+// Safe division: null when either side is missing or the divisor is zero
+const divide = (numerator, denominator) =>
+  numerator !== null && denominator !== null && denominator !== 0
+    ? numerator / denominator
+    : null;
 
 export default function useFinBS({
   gameId,
@@ -225,31 +230,61 @@ export default function useFinBS({
       result.rows.map((row) => [row.lineNo, row.values[latestPeriod]])
     );
 
-    const valueOf = (lineNo) => valuesByLine.get(lineNo) ?? null;
+    // One line's value; anything missing or non-numeric counts as missing (null)
+    const valueOf = (lineNo) => {
+      const value = valuesByLine.get(lineNo);
+      return Number.isFinite(value) ? value : null;
+    };
 
+    // Plain sum of lines; null only when none of them has a value
+    const sumOf = (lines = []) => {
+      const values = lines.map(valueOf);
+      return values.every((value) => value === null)
+        ? null
+        : values.reduce((sum, value) => sum + (value ?? 0), 0);
+    };
+
+    // Statement totals: "Equity and liabilities" (17) is the balance-check side
     const totalAssets = valueOf(KPI_LINES.totalAssets);
     const totalLiability = valueOf(KPI_LINES.totalLiability);
-    const currentAsset = valueOf(KPI_LINES.currentAsset);
-    const currentLiability = valueOf(KPI_LINES.currentLiability);
 
-    const canCheck =
-      totalAssets !== null && totalLiability !== null;
+    // Building blocks from the configured line groups
+    const totalEquity = sumOf(KPI_LINES.equityLines);
+    const totalLiabilities = sumOf(KPI_LINES.liabilityLines);
+    const currentLiabilities = sumOf(KPI_LINES.currentLiabilityLines);
+    const quickAssets = sumOf(KPI_LINES.quickAssetLines);
 
-    const difference = canCheck
-      ? totalAssets - totalLiability
-      : null;
+    const grossCurrentAssets = sumOf(KPI_LINES.currentAssetLines);
+    const currentAssets =
+      grossCurrentAssets === null
+        ? null
+        : grossCurrentAssets - (sumOf(KPI_LINES.currentAssetDeduct) ?? 0);
+
+    // Balance check
+    const canCheck = totalAssets !== null && totalLiability !== null;
+    const difference = canCheck ? totalAssets - totalLiability : null;
 
     return {
       period: latestPeriod,
       totalAssets,
       totalLiability,
+      totalLiabilities,
+      totalEquity,
       cash: valueOf(KPI_LINES.cash),
-      currentRatio:
-        currentAsset !== null &&
-        currentLiability !== null &&
-        currentLiability !== 0
-          ? currentAsset / currentLiability
+
+      // Liquidity
+      currentRatio: divide(currentAssets, currentLiabilities),
+      quickRatio: divide(quickAssets, currentLiabilities),
+      workingCapital:
+        currentAssets !== null && currentLiabilities !== null
+          ? currentAssets - currentLiabilities
           : null,
+
+      // Leverage and solvency (debtRatio is a 0-1 fraction)
+      debtToEquity: divide(totalLiabilities, totalEquity),
+      debtRatio: divide(totalLiabilities, totalAssets),
+
+      // Balance check
       difference,
       isBalanced: canCheck
         ? Math.abs(difference) <= BALANCE_TOLERANCE

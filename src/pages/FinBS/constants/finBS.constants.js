@@ -2,7 +2,7 @@
  * Component Name: finBS.constants
  * Module: Finance / FinBS
  * Purpose: Central configuration for the FinBS (Balance Sheet) drawer: API, statement layout map, filters, formats.
- * Author/Version: UXLab / v1.0
+ * Author/Version: UXLab / v1.3
  * AI Tags: finBS, balance sheet, constants, statement layout, line map, finance, OpsMgt
  */
 
@@ -57,7 +57,7 @@ export const ROW_TYPE = { LINE: "line", SUBTOTAL: "subtotal", TOTAL: "total" };
 
 // Subtotal and grand-total lines, keyed by Line_No (adjust here if the statement layout changes)
 export const LINE_TYPES = {
-  1: ROW_TYPE.SUBTOTAL, // Equity
+  3: ROW_TYPE.SUBTOTAL, // Share Capital (Equity + Pref.Share)
   6: ROW_TYPE.SUBTOTAL, // Reserve & Surplus
   9: ROW_TYPE.SUBTOTAL, // Secured Loan
   12: ROW_TYPE.SUBTOTAL, // Unsecured Loan
@@ -66,7 +66,7 @@ export const LINE_TYPES = {
   20: ROW_TYPE.SUBTOTAL, // Fixed Assets
   25: ROW_TYPE.SUBTOTAL, // Total Inventory
   28: ROW_TYPE.SUBTOTAL, // Ac Receivable
-  32: ROW_TYPE.SUBTOTAL, // Current Asset
+  34: ROW_TYPE.SUBTOTAL, // Current Asset
   36: ROW_TYPE.TOTAL, // Total Assets
 };
 
@@ -76,13 +76,20 @@ export const STATEMENT_SECTIONS = [
   { key: "assets", title: "Assets", fromLine: 18, toLine: 36 },
 ];
 
-// Line numbers that feed the KPI cards and balance check
+// Line numbers that feed the KPI cards and balance check (existing SP line numbers).
+// Single numbers are one statement line; the *Lines arrays are plain sums of lines.
+// Line 35 (Suspense Account) is in Total Assets; the balance check ignores it by design
+// until the suspense balance is cleared to zero.
 export const KPI_LINES = {
-  totalLiability: 17,
+  totalLiability: 17, // Total Equity and Liabilities (balance-check side)
   totalAssets: 36,
-  currentLiability: 16,
-  currentAsset: 32,
   cash: 21,
+  equityLines: [3, 6], // Share Capital + Reserve & Surplus
+  liabilityLines: [9, 16], // Secured Loan + Current Liability (Unsecured Loan 12 sits inside 16)
+  currentAssetLines: [34], // SP line 34 now holds the full current assets
+  currentAssetDeduct: [],
+  quickAssetLines: [21, 28, 33], // Cash + Ac Receivable + Accrued Income (no inventory, prepaid, advances)
+  currentLiabilityLines: [16], // SP line 16 = Unsecured Loan + Ac_Payable + Credit Purchase + Provision - Adv Receipt
 };
 
 // Maximum difference (Assets - Liabilities) still treated as balanced
@@ -100,15 +107,15 @@ export const DEMO_CONTEXT = {
 // Line hierarchy for the Compact view and drill-down: parent line -> child lines, in display order.
 // Each parent is the sum of its children (a "Less:" child is deducted); adjust here if the statement layout changes.
 export const LINE_CHILDREN = {
-  1: [2, 3], // Equity = Pref.Share + Share Capital
+  3: [1, 2], // Share Capital = Equity + Pref.Share
   6: [4, 5], // Reserve & Surplus = Retained Earning + Profit After Tax
   9: [7, 8], // Secured Loan = Long Term Loan + Short Term Loan
   12: [10, 11], // Unsecured Loan = Bank Credit + Deposit
-  16: [13, 14, 15], // Current Liability = Ac_Payable + Credit Purchase + Provision - Adv Receipt
-  20: [18, 19], // Fixed Assets
+  16: [12, 13, 14, 15], // Current Liability = Unsecured Loan + Ac_Payable + Credit Purchase + Provision - Adv Receipt
+  20: [18, 19], // Fixed Assets = Gross Block - Acc Depreciation
   25: [22, 23, 24], // Total Inventory
-  28: [26, 27], // Ac Receivable
-  32: [21, 25, 28, 29, 30, 31], // Current Asset
+  28: [26, 27], // Ac Receivable = Credit Sales - Bad Debt Provision
+  34: [21, 25, 28, 29, 32, 33, 31], // Current Asset = Cash + Inventory + Receivable + Prepaid + Advances Made + Accrued Income - Provision
 };
 
 // Statement views: Compact (totals and subtotals with drill-down) or Detailed (every line)

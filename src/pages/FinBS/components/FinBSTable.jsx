@@ -162,7 +162,7 @@ export default function FinBSTable({ rows, totalCount, periods, hiddenPeriodCoun
       </Box>
 
       <TableContainer sx={{ maxHeight: "70vh" }}>
-        {/* Table rows smaller and tighter */}
+        {/* Makes the table rows smaller and tighter */}
         <Table stickyHeader size="small" aria-label="Balance sheet" sx={{ borderCollapse: "separate", ...tableStyle.compact }}>
           <TableHead sx={tableStyle.columnHeader}>
             <TableRow>

@@ -1,9 +1,9 @@
 /**
  * Component Name: formatters
  * Module: Finance / FinBS
- * Purpose: Pure display helpers for amounts, period labels, ratios and dates.
- * Author/Version: UXLab / v1.0
- * AI Tags: formatting, currency, period label, ratio, date helpers
+ * Purpose: Pure display helpers for amounts, period labels, ratios, percentages and dates.
+ * Author/Version: UXLab / v1.1
+ * AI Tags: formatting, currency, period label, ratio, percent, date helpers
  */
 
 import { NUMBER_LOCALE, DECIMALS, EMPTY_CELL } from "../constants/finBS.constants";
@@ -30,6 +30,12 @@ export const formatRatio = (value) =>
   value === null || value === undefined || !Number.isFinite(value)
     ? EMPTY_CELL
     : `${value.toFixed(2)}x`;
+
+// Format a 0-1 fraction as a percentage such as 13.7%
+export const formatPercent = (fraction) =>
+  fraction === null || fraction === undefined || !Number.isFinite(fraction)
+    ? EMPTY_CELL
+    : `${(fraction * 100).toFixed(1)}%`;
 
 // Convert a "YYYY-MM" month input to the last day of that month ("YYYY-MM-DD")
 export const toMonthEndIso = (yearMonth) => {

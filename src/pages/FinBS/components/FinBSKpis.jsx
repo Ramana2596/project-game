@@ -1,46 +1,113 @@
-
 /**
  * Component Name: FinBSKpis
  * Module: Finance / FinBS
- * Purpose: Row of compact KPI cards: total assets, equity and liabilities, cash, current ratio and balance check.
- * Author/Version: UXLab / v1.0
- * AI Tags: kpi, stat cards, balance check, current ratio, summary
+ * Purpose: Row of compact KPI cards: current ratio, quick ratio, working capital, debt-to-equity,
+ *          debt ratio and cash balance (for info). Also exports FinBSBalanceChip for the page header.
+ * Author/Version: UXLab / v1.1
+ * AI Tags: kpi, stat cards, current ratio, quick ratio, working capital, debt to equity, debt ratio, cash
  */
 
 import React from "react";
-import { Box, Typography } from "@mui/material";
-import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded";
-import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
-import PaymentsRoundedIcon from "@mui/icons-material/PaymentsRounded";
+import { Box, Chip, Typography } from "@mui/material";
 import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
+import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
+import PaymentsRoundedIcon from "@mui/icons-material/PaymentsRounded";
+import BalanceRoundedIcon from "@mui/icons-material/BalanceRounded";
+import DonutLargeRoundedIcon from "@mui/icons-material/DonutLargeRounded";
+import AccountBalanceWalletRoundedIcon from "@mui/icons-material/AccountBalanceWalletRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 import { cardStyle, masterTypo } from "../../../ux/styles";
 import { accent, status, text } from "../../../ux/styles/colorPalette";
-import { formatAmount, formatPeriodLabel, formatRatio } from "../utils/formatters";
+import { EMPTY_CELL } from "../constants/finBS.constants";
+import { formatAmount, formatPercent, formatRatio } from "../utils/formatters";
 
 // Card definitions: label, value, caption and icon per figure
 const buildCards = (summary) => {
-  const period = formatPeriodLabel(summary.period);
-  const balanceColor = summary.isBalanced === false ? status.error : status.success;
-  const balanceValue =
-    summary.isBalanced === null ? "–" : summary.isBalanced ? "Balanced" : `Off by ${formatAmount(Math.abs(summary.difference))}`;
+  // Debt-to-equity is misleading when equity is zero or negative
+  const negativeEquity =
+    Number.isFinite(summary.totalEquity) && summary.totalEquity <= 0;
 
   return [
-    { key: "assets", label: "Total assets", value: formatAmount(summary.totalAssets), caption: `As at ${period}`, Icon: AccountBalanceRoundedIcon, color: accent.purple },
-    { key: "liability", label: "Equity and liabilities", value: formatAmount(summary.totalLiability), caption: `As at ${period}`, Icon: ReceiptLongRoundedIcon, color: accent.blue },
-    { key: "cash", label: "Cash balance", value: formatAmount(summary.cash), caption: "Funds in hand", Icon: PaymentsRoundedIcon, color: accent.teal },
-    { key: "ratio", label: "Current ratio", value: formatRatio(summary.currentRatio), caption: "Current asset ÷ liability", Icon: SpeedRoundedIcon, color: accent.orange },
     {
-      key: "check",
-      label: "Balance check",
-      value: balanceValue,
-      caption: "Assets vs equity and liabilities",
-      Icon: summary.isBalanced === false ? ErrorRoundedIcon : CheckCircleRoundedIcon,
-      color: balanceColor,
+      key: "currentRatio",
+      label: "Current ratio",
+      value: formatRatio(summary.currentRatio),
+      caption: "Current assets ÷ current liabilities",
+      Icon: SpeedRoundedIcon,
+      color: accent.purple,
+    },
+    {
+      key: "quickRatio",
+      label: "Quick ratio",
+      value: formatRatio(summary.quickRatio),
+      caption: "Liquidity excl. inventory",
+      Icon: BoltRoundedIcon,
+      color: accent.blue,
+    },
+    {
+      key: "workingCapital",
+      label: "Working capital",
+      value: formatAmount(summary.workingCapital),
+      caption: "Operating cushion",
+      Icon: PaymentsRoundedIcon,
+      color: accent.teal,
+    },
+    {
+      key: "debtToEquity",
+      label: "Debt-to-equity",
+      value: negativeEquity ? EMPTY_CELL : formatRatio(summary.debtToEquity),
+      caption: negativeEquity ? "Negative equity" : "Leverage vs owners' funds",
+      Icon: BalanceRoundedIcon,
+      color: accent.orange,
+    },
+    {
+      key: "debtRatio",
+      label: "Debt ratio",
+      value: formatPercent(summary.debtRatio),
+      caption: "Share of assets funded by debt",
+      Icon: DonutLargeRoundedIcon,
+      color: accent.purple,
+    },
+    {
+      key: "cash",
+      label: "Cash balance",
+      value: formatAmount(summary.cash),
+      caption: "Funds in hand (for info)",
+      Icon: AccountBalanceWalletRoundedIcon,
+      color: accent.blue,
     },
   ];
 };
+
+/**
+ * Balance check chip for the page header.
+ * Green "Balanced" or red "Off by X"; renders nothing when the check is unknown.
+ */
+export function FinBSBalanceChip({ summary }) {
+  if (!summary || summary.isBalanced === null || summary.isBalanced === undefined) return null;
+
+  const balanced = summary.isBalanced === true;
+  const color = balanced ? status.success : status.error;
+  const label = balanced
+    ? "Balanced"
+    : `Off by ${formatAmount(Math.abs(summary.difference))}`;
+
+  return (
+    <Chip
+      size="small"
+      label={label}
+      icon={balanced ? <CheckCircleRoundedIcon /> : <ErrorRoundedIcon />}
+      sx={{
+        fontWeight: 600,
+        color,
+        bgcolor: "transparent",
+        border: `1px solid ${color}`,
+        "& .MuiChip-icon": { color },
+      }}
+    />
+  );
+}
 
 export default function FinBSKpis({ summary, isRefreshing }) {
   // Nothing to show until a statement is loaded
