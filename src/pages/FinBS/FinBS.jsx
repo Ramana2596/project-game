@@ -1,9 +1,8 @@
-
 /**
  * Component Name: FinBS
  * Module: Finance / FinBS
  * Purpose: Finance screen showing the team's Balance Sheet: month control, KPI cards, search and filters, table.
- * Author/Version: UXLab / v1.0
+ * Author/Version: UXLab / v1.1
  * AI Tags: finBS, balance sheet, finance, statement, kpi, table, OpsMgt
  */
 
@@ -13,7 +12,7 @@ import { layoutStyle, masterTypo } from "../../ux/styles";
 import { border, brand, gradients, surface, text } from "../../ux/styles/colorPalette";
 import { useUser } from "../../core/access/userContext";
 import FinBSHeader from "./components/FinBSHeader";
-import FinBSKpis from "./components/FinBSKpis";
+import FinBSKpis, { FinBSBalanceChip } from "./components/FinBSKpis";
 import FinBSToolbar from "./components/FinBSToolbar";
 import FinBSTable from "./components/FinBSTable";
 import useFinBS from "./hooks/useFinBS";
@@ -114,6 +113,13 @@ export default function FinBS() {
             >
               Assets, equity and liabilities, period by period ({cutOff}).
             </Typography>
+
+            {/* Balance check: assets vs equity and liabilities */}
+            {showStatement && sheet.summary && (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 0.75 }}>
+                <FinBSBalanceChip summary={sheet.summary} />
+              </Box>
+            )}
           </Box>
 
           {sheet.isLoading && (
