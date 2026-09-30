@@ -4,8 +4,8 @@ export const pageConstants = {
   tableHeading: [
     "Period",
     "Product",
-    "Forecast",
     "UOM",
+    "Forecast",
     "Market Demand",
     "Addl Demand",
     "Total Demand",
