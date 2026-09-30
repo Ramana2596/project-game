@@ -1,3 +1,4 @@
+
 /**
  * Component Name: FinISHeader
  * Module: Finance / FinIS
@@ -7,7 +8,14 @@
  */
 
 import React, { useState } from "react";
-import { Box, IconButton, Popover, TextField, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    IconButton,
+    Popover,
+    TextField,
+    Typography,
+} from "@mui/material";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import { buttonStyle, masterTypo } from "../../../ux/styles";
 import { brand, surface, text } from "../../../ux/styles/colorPalette";
@@ -23,7 +31,6 @@ const iconControlSx = {
     height: 32,
 };
 
-// Render
 export default function FinISHeader({
     gameId,
     gameBatch,
@@ -103,7 +110,7 @@ export default function FinISHeader({
                     <CalendarMonthRoundedIcon sx={{ fontSize: 18 }} />
                 </IconButton>
 
-                {/* Month popover */}
+                {/* Month popover: pick a cut-off month or show every period */}
                 <Popover
                     open={Boolean(anchor)}
                     anchorEl={anchor}
@@ -141,6 +148,16 @@ export default function FinISHeader({
                                 },
                             }}
                         />
+
+                        <Button
+                            sx={buttonStyle.text}
+                            onClick={() => {
+                                onMonthChange(null);
+                                setAnchor(null);
+                            }}
+                        >
+                            Show all periods
+                        </Button>
                     </Box>
                 </Popover>
             </Box>
