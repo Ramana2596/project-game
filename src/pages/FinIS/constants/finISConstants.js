@@ -12,7 +12,7 @@ export const LINE_GROUPS = [
     { key: "revenue", label: "Revenue", start: 1, end: 3 },
     { key: "opEx", label: "Direct Expense", start: 4, end: 13 },
     { key: "adminEx", label: "Indirect Expense", start: 15, end: 23 },
-    { key: "capEx", label: "CapEx", start: 24, end: 24 },
+    { key: "otherEx", label: "Others", start: 24, end: 24 },
     { key: "belowLine", label: "Profit", start: 25, end: 30 },
 ];
 
@@ -28,7 +28,7 @@ export const COMPACT_LINES = {
     revenue: [1, 2, 3],
     opEx: [13],
     adminEx: [23],
-    capEx: [24],
+    otherEx: [24],
     belowLine: [25, 26, 27, 28, 29, 30],
 };
 
@@ -38,7 +38,7 @@ export const DETAILED_LINES = {
     revenue: [1, 2, 3],
     opEx: [13],
     adminEx: [23],
-    capEx: [24],
+    otherEx: [24],
     belowLine: [25, 26, 27, 28, 29, 30],
 };
 
