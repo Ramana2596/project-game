@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { getPlantCapacity } from "../services/plantCapacityService";
 import { useUser } from "../../../core/access/userContext";
@@ -21,30 +22,46 @@ export const usePlantCapacity = (props = {}) => {
         gameId: props.gameId || userInfo?.gameId,
         gameBatch: props.gameBatch || userInfo?.gameBatch,
         gameTeam: props.gameTeam || userInfo?.gameTeam,
-        productionMonth: props.productionMonth || userInfo?.productionMonth,
+        productionMonth:
+          props.productionMonth || userInfo?.productionMonth,
       };
 
       const response = await getPlantCapacity(payload);
       const data = response?.data || response;
-// 🔍 Debug: inspect raw JSON keys
-console.log("Raw getPlantCapacity response:", data);
-if (data?.Work_Centre?.length) {
-  console.log("Work Centre keys:", Object.keys(data.Work_Centre[0]));
-}
+
       const workCentres = (data?.Work_Centre || []).map((item) => ({
         ...item,
-        Capacity_Hours: item.Capacity_Hours != null ? Number(item.Capacity_Hours) : 0,
-        Load_Hours: item.Load_Hours != null ? Number(item.Load_Hours) : 0,
-        Mfg_Load_Percent: item.Mfg_Load_Percent != null ? Number(item.Mfg_Load_Percent) : 0,
+        Capacity_Hours:
+          item.Capacity_Hours != null
+            ? Number(item.Capacity_Hours)
+            : 0,
+        Load_Hours:
+          item.Load_Hours != null
+            ? Number(item.Load_Hours)
+            : 0,
+        Mfg_Load_Percent:
+          item.Mfg_Load_Percent != null
+            ? Number(item.Mfg_Load_Percent)
+            : 0,
         Cap_UOM: item.Cap_UOM || "Hrs",
       }));
 
       const plantInfo = data?.Plant?.[0] || {};
+
       const plantData = {
         ...plantInfo,
-        Plant_Capacity_Hours: plantInfo.Plant_Capacity_Hours != null ? Number(plantInfo.Plant_Capacity_Hours) : 0,
-        Plant_Load_Hours: plantInfo.Plant_Load_Hours != null ? Number(plantInfo.Plant_Load_Hours) : 0,
-        Plant_Utilisation_Percent: plantInfo.Plant_Utilisation_Percent != null ? Number(plantInfo.Plant_Utilisation_Percent) : 0,
+        Plant_Capacity_Hours:
+          plantInfo.Plant_Capacity_Hours != null
+            ? Number(plantInfo.Plant_Capacity_Hours)
+            : 0,
+        Plant_Load_Hours:
+          plantInfo.Plant_Load_Hours != null
+            ? Number(plantInfo.Plant_Load_Hours)
+            : 0,
+        Plant_Utilisation_Percent:
+          plantInfo.Plant_Utilisation_Percent != null
+            ? Number(plantInfo.Plant_Utilisation_Percent)
+            : 0,
         Cap_UOM: plantInfo.Cap_UOM || "Hrs",
       };
 
@@ -55,17 +72,30 @@ if (data?.Work_Centre?.length) {
     } finally {
       setLoading(false);
     }
-  }, [props, userInfo]);
+  }, [
+    props.gameId,
+    props.gameBatch,
+    props.gameTeam,
+    props.productionMonth,
+    userInfo?.gameId,
+    userInfo?.gameBatch,
+    userInfo?.gameTeam,
+    userInfo?.productionMonth,
+  ]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
 
-  const criticalCount = useMemo(() => {
-    return list.filter((item) => item.Critical_Mc === 1).length;
-  }, [list]);
+  const criticalCount = useMemo(
+    () =>
+      list.filter(
+        (item) => Number(item.Critical_Mc) === 1
+      ).length,
+    [list]
+  );
 
-  const workCentres = list; // SP already categorizes
+  const workCentres = list;
 
   return {
     plant,

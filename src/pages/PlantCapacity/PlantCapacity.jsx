@@ -1,3 +1,4 @@
+
 import React, { useMemo } from "react";
 import { Box, Alert } from "@mui/material";
 import { useUser } from "../../core/access/userContext.jsx";
@@ -8,11 +9,14 @@ import { PcQuickInsight } from "./components/PcQuickInsight";
 import { PcOverview } from "./components/PcOverview";
 import { PcWorkspace } from "./components/PcWorkspace";
 import { layoutStyle } from "../../ux/styles";
+
 export default function PlantCapacity({ productionMonth }) {
   const { userInfo } = useUser();
-  // Build API query parameters from current user and simulation period
+
+  // Build API query from current user and simulation period
   const queryParams = useMemo(() => {
     if (!userInfo?.gameId) return null;
+
     return {
       gameId: userInfo.gameId,
       gameBatch: userInfo.gameBatch,
@@ -20,7 +24,7 @@ export default function PlantCapacity({ productionMonth }) {
       productionMonth: productionMonth || null,
     };
   }, [userInfo, productionMonth]);
-  // Get Plant Capacity data and workspace state
+
   const {
     plant,
     workCentres,
@@ -33,44 +37,52 @@ export default function PlantCapacity({ productionMonth }) {
     setFilter,
     reload,
   } = usePlantCapacity(queryParams);
+
   return (
     <Box sx={layoutStyle.root}>
       <Box sx={layoutStyle.pageContainer}>
-
-        {/* Header */}
+        {/* Page header */}
         <PcHeader plant={plant} gameTeam={userInfo?.gameTeam} onRefresh={reload} />
 
-        {/* Navigation & Filters */}
+        {/* Tab navigation and work centre filter */}
         <PcNavigation
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           filter={filter}
           setFilter={setFilter}
         />
-        {/* Error Notice */}
+
+        {/* API error */}
         {error && (
-          <Alert severity="error" sx={{ mb: 3 }}>
+          <Alert severity="error" sx={{ mb: 1 }}>
             {error}
           </Alert>
         )}
 
-        {/* Quick AI Insight Banner */}
-        <PcQuickInsight plant={plant} criticalCount={criticalCount} />
+        {/* Overview-only insight */}
+        {activeTab === "overview" && (
+          <PcQuickInsight
+            plant={plant}
+            criticalCount={criticalCount}
+          />
+        )}
 
-        {/* Top KPI Cards */}
-        <PcOverview
-          plant={plant}
-          workCentres={workCentres}
-          criticalCount={criticalCount}
-          loading={loading}
-        />
-        
-        {/* Work Centre Cards & Table Workspace */}
+        {/* Overview-only plant summary */}
+        {activeTab === "overview" && (
+          <PcOverview
+            plant={plant}
+            workCentres={workCentres}
+            loading={loading}
+          />
+        )}
+
+        {/* Tab-specific workspace */}
         <PcWorkspace
           activeTab={activeTab}
           workCentres={workCentres}
           plant={plant}
           loading={loading}
+          filter={filter}
         />
       </Box>
     </Box>
