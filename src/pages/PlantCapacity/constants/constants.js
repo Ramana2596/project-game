@@ -6,7 +6,7 @@ export const PC_TABS = [
 
 export const PC_FILTERS = [
   { value: "ALL", label: "All Work Centres" },
-  { value: "CRITICAL", label: "Critical Bottlenecks" },
-  { value: "HIGH", label: "High Load (≥85%)" },
-  { value: "NORMAL", label: "Normal Load (<85%)" },
+  { value: "CRITICAL", label: "Critical — Top 1" },
+  { value: "HIGH", label: "Most-Used— Next 20%" },
+  { value: "REST", label: "Rest — Remaining" },
 ];
