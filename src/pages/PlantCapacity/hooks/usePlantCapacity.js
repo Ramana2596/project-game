@@ -8,6 +8,7 @@ export const usePlantCapacity = (props = {}) => {
 
   const [plant, setPlant] = useState(null);
   const [list, setList] = useState([]);
+  const [productionMonth, setProductionMonth] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [tab, setTab] = useState("overview");
@@ -23,7 +24,7 @@ export const usePlantCapacity = (props = {}) => {
         gameBatch: props.gameBatch || userInfo?.gameBatch,
         gameTeam: props.gameTeam || userInfo?.gameTeam,
         productionMonth:
-          props.productionMonth || userInfo?.productionMonth,
+          props.productionMonth || userInfo?.productionMonth || null,
       };
 
       const response = await getPlantCapacity(payload);
@@ -45,6 +46,9 @@ export const usePlantCapacity = (props = {}) => {
             : 0,
         Cap_UOM: item.Cap_UOM || "Hrs",
       }));
+
+      // Use Production_Month returned by the SP
+      setProductionMonth(workCentres[0]?.Production_Month || "");
 
       const plantInfo = data?.Plant?.[0] || {};
 
@@ -100,6 +104,7 @@ export const usePlantCapacity = (props = {}) => {
   return {
     plant,
     workCentres,
+    productionMonth,
     criticalCount,
     loading,
     error,
