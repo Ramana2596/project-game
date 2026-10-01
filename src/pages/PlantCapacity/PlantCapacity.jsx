@@ -1,5 +1,5 @@
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Box, Alert } from "@mui/material";
 import { useUser } from "../../core/access/userContext.jsx";
 import { usePlantCapacity } from "./hooks/usePlantCapacity";
@@ -13,7 +13,11 @@ import { layoutStyle } from "../../ux/styles";
 export default function PlantCapacity({ productionMonth }) {
   const { userInfo } = useUser();
 
-  // Build API query from current user and simulation period
+  const [selectedMonth, setSelectedMonth] = useState(
+    productionMonth || userInfo?.productionMonth || ""
+  );
+
+  // Build API query from current user and selected simulation period
   const queryParams = useMemo(() => {
     if (!userInfo?.gameId) return null;
 
@@ -21,13 +25,14 @@ export default function PlantCapacity({ productionMonth }) {
       gameId: userInfo.gameId,
       gameBatch: userInfo.gameBatch,
       gameTeam: userInfo.gameTeam,
-      productionMonth: productionMonth || null,
+      productionMonth: selectedMonth || null,
     };
-  }, [userInfo, productionMonth]);
+  }, [userInfo, selectedMonth]);
 
   const {
     plant,
     workCentres,
+    productionMonth: returnedMonth,
     criticalCount,
     loading,
     error,
@@ -35,14 +40,16 @@ export default function PlantCapacity({ productionMonth }) {
     setActiveTab,
     filter,
     setFilter,
-    reload,
   } = usePlantCapacity(queryParams);
 
   return (
     <Box sx={layoutStyle.root}>
       <Box sx={layoutStyle.pageContainer}>
-        {/* Page header */}
-        <PcHeader plant={plant} gameTeam={userInfo?.gameTeam} onRefresh={reload} />
+        {/* Page header and simulation period */}
+        <PcHeader
+          productionMonth={returnedMonth}
+          onMonthChange={setSelectedMonth}
+        />
 
         {/* Tab navigation and work centre filter */}
         <PcNavigation
@@ -88,3 +95,4 @@ export default function PlantCapacity({ productionMonth }) {
     </Box>
   );
 }
+
