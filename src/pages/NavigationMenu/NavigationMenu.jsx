@@ -3,6 +3,7 @@ import CasFlowStatement from '../CasFlowStatement/CasFlowStatement.jsx';
 import InfoDesk from '../InfoDesk/InfoDesk.jsx';
 import Simulation from '../Simulation/Simulation.jsx';
 import BatchMgt from '../BatchMgt/BatchMgt.jsx';
+import MfgRecord from '../MfgRecord/MfgRecord.jsx';
 import ProductionRecordInfo from '../ProductionRecordInfo/ProductionRecordInfo.jsx';
 import SalesRecordInfo from '../SalesRecordInfo/SalesRecordInfo.jsx';
 import {
@@ -502,6 +503,7 @@ export default function MiniDrawer() {
           {/* <Route path="/balanceSheet" element={<BalanceSheetInfo />} /> */}
           <Route path="/fgStockInfo" element={<FgStockInfo />} />
           <Route path="/rmStockInfo" element={<RmStockInfo />} />
+          <Route path="/mfgRecord" element={<MfgRecord />} />
           <Route path="/salesRecord" element={<SalesRecordInfo />} />
           <Route path="/productionRecordInfo" element={<ProductionRecordInfo />} />
           <Route path="/cashFlowStatement" element={<CasFlowStatement />} />

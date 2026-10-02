@@ -18,6 +18,7 @@ import FinBS from "../pages/FinBS/FinBS.jsx";
 import FinIS from "../pages/FinIS/FinIS.jsx";
 import FgStockInfo from "../pages/FgStockInfo/FgStockInfo";
 import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
+import MfgRecord from "../pages/MfgRecord/MfgRecord.jsx";
 import SalesRecordInfo from "../pages/SalesRecordInfo/SalesRecordInfo";
 import ProductionRecordInfo from "../pages/ProductionRecordInfo/ProductionRecordInfo";
 import CasFlowStatement from "../pages/CasFlowStatement/CasFlowStatement";
@@ -405,6 +406,14 @@ export const componentList = [
         path: "/operationalPlanInfo",
         href: "/operationGame/operationalPlanInfo",
         routeElement: <OperationalPlanInfo />
+      },
+      {
+        iconPath: productionIcon,
+        id: "UI 21 180 UX",
+        label: "Mfg Record",
+        path: "/mfgRecord",
+        href: "/operationGame/mfgRecord",
+        routeElement: <MfgRecord />
       },
       {
         iconPath: productionIcon,
