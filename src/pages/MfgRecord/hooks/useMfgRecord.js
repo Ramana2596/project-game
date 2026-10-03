@@ -2,17 +2,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { getProductionInfo, getSalesInfo } from "../services/mrService";
 import { toPeriod } from "../utils/mrFormat";
-import { MR_TOL_PCT } from "../constants/mrConstants";
 import { MR_PROD_MAP, MR_SALES_MAP, mrMapRow } from "../constants/mrMap";
 
-// Generic rule: actual vs reference -> { level: BELOW | ON | ABOVE, pct }, or nulls when not judgeable
-const judge = (actual, ref) => {
-  if (actual == null || !ref) return { level: null, pct: null };
-  const pct = (actual / ref) * 100;
-  return { level: pct < 100 - MR_TOL_PCT ? "BELOW" : pct > 100 + MR_TOL_PCT ? "ABOVE" : "ON", pct: Math.round(pct) };
-};
-
-const TEXT = ["period", "product", "uom", "currency"];
+// Text columns stay as text; everything else is converted to a number
+const TEXT = ["period", "product", "uom", "currency", "prodLevel", "salesLevel"];
 const toRow = (r, map) => {
   const o = mrMapRow(r, map);
   Object.keys(o).forEach((k) => { if (!TEXT.includes(k) && o[k] != null) o[k] = Number(o[k]); });
@@ -54,22 +47,17 @@ export function useMfgRecord(query, selectedMonth) {
     return () => { live = false; };
   }, [query, period]);
 
-  // One card per product: production + sales joined, plus derived values
+  // One card per product: production + sales joined. Levels, %, value gap and share come from the SPs.
   const cards = useMemo(() => {
     const names = [...new Set([...data.prod, ...data.sales].map((r) => r.product))];
     return names.map((product) => {
       const prod = data.prod.find((r) => r.product === product) || {};
       const sale = data.sales.find((r) => r.product === product) || {};
+      // DERIVED – needs both datasets, so it stays here
       const { stockQty = null } = prod;
-      const { soldQty = null, salesTarget = null, unitPrice = null, salesValue = null } = sale;
-      // DERIVED – move to SP/API later; only this block changes
+      const { soldQty = null } = sale;
       const unsoldQty = stockQty != null && soldQty != null ? stockQty - soldQty : null;
-            const { planQty = null } = prod;
-      const { level: prodLevel, pct: prodPct } = judge(stockQty, planQty);
-      const { level: salesLevel, pct: salesPct } = judge(soldQty, salesTarget);
-      const valueGap = unitPrice != null && soldQty != null && salesValue != null
-        ? Math.round(soldQty * unitPrice - salesValue) : 0;
-      return { ...prod, ...sale, product, period, unsoldQty, prodLevel, prodPct, salesLevel, salesPct, valueGap };
+      return { ...prod, ...sale, product, period, unsoldQty };
     });
   }, [data, period]);
 
