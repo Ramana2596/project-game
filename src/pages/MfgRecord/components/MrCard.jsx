@@ -5,15 +5,18 @@ import { MR_LEVELS } from "../constants/mrConstants";
 import { fmtMoney, fmtQty } from "../utils/mrFormat";
 import { MrBar } from "./MrBar";
 
-// Group heading: tinted strip with a coloured edge, group name and its own status badge
+const badgeSx = { height: 20, "& .MuiChip-label": { px: 1, fontSize: 11 } };
+
+// Group heading: slim tinted strip with a coloured edge, group name and its own status badge
 const Group = ({ title, color, status, children }) => (
   <Box sx={{ borderTop: `1px solid ${colors.divider}` }}>
-    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", px: 2.5, py: 0.75,
-      background: `${color}0D`, borderLeft: `4px solid ${color}` }}>
-      <Typography sx={{ ...masterTypo.caption, fontWeight: 700, color }}>{title}</Typography>
-      {status && <Chip size="small" label={status.label} sx={cardStyle.badge(colors[status.color])} />}
+    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", px: 2, py: 0.25,
+      minHeight: 26, background: `${color}0D`, borderLeft: `3px solid ${color}` }}>
+      <Typography sx={{ ...masterTypo.caption, fontWeight: 700, color, lineHeight: 1.2 }}>{title}</Typography>
+      {status && <Chip size="small" label={status.label}
+        sx={{ ...cardStyle.badge(colors[status.color]), ...badgeSx }} />}
     </Box>
-    <Box sx={{ px: 2.5, py: 1 }}>{children}</Box>
+    <Box sx={{ px: 2, py: 0.5 }}>{children}</Box>
   </Box>
 );
 
@@ -24,13 +27,23 @@ export function MrCard({ card: c }) {
   const max = Math.max(c.planQty || 0, c.orderQty || 0, c.stockQty || 0,
     c.totalDemand || 0, c.salesTarget || 0, c.actualDemand || 0, c.soldQty || 0, 1);
   const P = colors.accentBlue, S = colors.accentOrange;
+  const hasShare = c.sharePct !== null && c.sharePct !== undefined && Number.isFinite(Number(c.sharePct));
   return (
     <Box sx={cardStyle.primary}>
-      <Box sx={{ px: 2.5, py: 1.5, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 1 }}>
-        <Box>
-          <Typography sx={{ ...masterTypo.h6, color: colors.title }}>{c.product}</Typography>
-          <Typography sx={{ ...masterTypo.caption, color: colors.subtitle }}>{c.period} · {c.uom}</Typography>
+      {/* Heading: product and its share of the month's sales value on the left, month and unit on the right */}
+      <Box sx={{ px: 2, py: 0.75, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 0 }}>
+          <Typography noWrap sx={{ ...masterTypo.h6, color: colors.title, minWidth: 0 }}>
+            {c.product}
+          </Typography>
+          {hasShare && (
+            <Chip size="small" label={`${Math.round(c.sharePct)}% share`}
+              sx={{ ...cardStyle.badge(colors.primary), ...badgeSx, flexShrink: 0 }} />
+          )}
         </Box>
+        <Typography noWrap sx={{ ...masterTypo.caption, color: colors.subtitle, flexShrink: 0 }}>
+          {c.period} · {c.uom}
+        </Typography>
       </Box>
 
       <Group title="Production" color={P} status={pst}>
@@ -46,11 +59,13 @@ export function MrCard({ card: c }) {
         <MrBar label="Sold"          value={c.soldQty}      max={max} color={S} strong />
       </Group>
 
-      <Box sx={{ ...cardStyle.footer, display: "flex", justifyContent: "space-between", alignItems: "center", py: 1, px: 2.5 }}>
+      <Box sx={{ ...cardStyle.footer, display: "flex", justifyContent: "space-between", alignItems: "center", py: 0.5, px: 2 }}>
         <Typography sx={{ ...masterTypo.caption, color: c.unsoldQty > 0 ? colors.warning : colors.subtitle }}>
           Unsold stock {fmtQty(c.unsoldQty)}
         </Typography>
-        <Typography sx={{ ...masterTypo.h6, color: colors.title }}>{fmtMoney(c.salesValue, c.currency)}</Typography>
+        <Typography sx={{ ...masterTypo.h6, color: colors.title }}>
+          {fmtMoney(c.salesValue, c.currency)}
+        </Typography>
       </Box>
     </Box>
   );
