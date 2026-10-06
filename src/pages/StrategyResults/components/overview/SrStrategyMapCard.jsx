@@ -1,405 +1,569 @@
- // Component: SrStrategyMapCard
-// Module: StrategyResults
-// Purpose: compact visual map for one selected strategy
-// Author/Version: OpsMgt UX Lab / v2.3
-// AI Tags: strategy, map, visual, benefit, outcome, timeline
+/**
+ * Component Name: SrStrategyMapCard
+ * Module: StrategyResults
+ * Purpose: Compact strategy map card with benefit, outcome and effect timeline.
+ * Author/Version: UXLab / v1.0
+ * AI Tags: strategy-map, strategy, benefit, outcome, timeline
+ */
 
 import React from "react";
-import { Box, Chip, Stack, Typography } from "@mui/material";
-import AutoGraphOutlinedIcon from "@mui/icons-material/AutoGraphOutlined";
-import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
+import PropTypes from "prop-types";
+import { Box, Chip, Divider, Typography } from "@mui/material";
+import {
+  CheckCircleOutline,
+  FlagOutlined,
+  GroupsOutlined,
+  HandshakeOutlined,
+  LayersOutlined,
+  SettingsOutlined,
+} from "@mui/icons-material";
 import { cardStyle, colors, masterTypo } from "../../../../ux/styles";
-import { fmtDate, fmtNum, fmtPct, NIL } from "../../utils/srFormat";
+import { fmtCost, fmtDate, fmtPct } from "../../utils/srFormat";
+
+const ENABLER_CONFIG = {
+  Leadership: {
+    color: colors.primary,
+    icon: <FlagOutlined />,
+  },
+  People: {
+    color: colors.accentIndigo,
+    icon: <GroupsOutlined />,
+  },
+  Processes: {
+    color: colors.accentBlue,
+    icon: <SettingsOutlined />,
+  },
+  Partnerships: {
+    color: colors.accentTeal,
+    icon: <HandshakeOutlined />,
+  },
+  Products: {
+    color: colors.accentOrange,
+    icon: <LayersOutlined />,
+  },
+};
+
+const DEFAULT_ENABLER = {
+  color: colors.primary,
+  icon: <FlagOutlined />,
+};
+
+const isSelectedDecision = (plan) => {
+  const value = String(
+    plan?.decision ??
+      plan?.choice ??
+      plan?.selected ??
+      ""
+  )
+    .trim()
+    .toLowerCase();
+
+  return [
+    "y",
+    "yes",
+    "1",
+    "true",
+    "selected",
+    "implement",
+    "implemented",
+    "accept",
+    "accepted",
+  ].includes(value);
+};
+
+const formatBudget = (budget) => {
+  if (!budget || typeof budget !== "object") return "—";
+
+  const entries = Object.entries(budget);
+
+  if (!entries.length) return "—";
+
+  return entries
+    .map(([currency, amount]) => {
+      const value = Number(amount);
+
+      if (!Number.isFinite(value)) {
+        return `${currency} —`;
+      }
+
+      return `${currency} ${fmtCost(value)}`;
+    })
+    .join(" / ");
+};
+
+const InfoItem = ({ label, value }) => (
+  <Box sx={{ minWidth: 0 }}>
+    <Typography
+      sx={{
+        ...masterTypo.caption,
+        color: colors.subtitle,
+        fontWeight: 600,
+        lineHeight: 1.2,
+      }}
+    >
+      {label}
+    </Typography>
+
+    <Typography
+      sx={{
+        ...masterTypo.bodyB1,
+        color: colors.title,
+        fontWeight: 700,
+        mt: 0.25,
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {value || "—"}
+    </Typography>
+  </Box>
+);
+
+InfoItem.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+};
 
 export default function SrStrategyMapCard({ card }) {
   const plan = card?.plan || {};
+  const selected = isSelectedDecision(plan);
 
-  const gain = plan.gain !== null && plan.gain !== undefined;
-  const loss = plan.loss !== null && plan.loss !== undefined;
+  const enabler =
+    plan?.mutualXGroup ||
+    plan?.mutual_X_Group ||
+    plan?.enabler ||
+    plan?.businessEnabler ||
+    "Leadership";
 
-  const effectValue = gain
-    ? Number(plan.gain)
-    : loss
-      ? Number(plan.loss)
-      : null;
+  const enablerConfig =
+    ENABLER_CONFIG[enabler] || DEFAULT_ENABLER;
 
-  const effectText = gain
-    ? `+${fmtNum(plan.gain)}%`
-    : loss
-      ? `-${fmtNum(plan.loss)}%`
-      : NIL;
+  const accent = enablerConfig.color;
 
-  const effectColor = gain
-    ? colors.success
-    : loss
-      ? colors.error
-      : colors.subtitle;
+  const strategyId =
+    plan?.stratId ||
+    plan?.strategyId ||
+    plan?.Strategy_Id ||
+    card?.id ||
+    "—";
 
-  const startMonth = plan.implDate
-    ? fmtDate(plan.implDate)
-    : plan.fromMon !== null &&
-      plan.fromMon !== undefined
-      ? `Month ${plan.fromMon}`
-      : NIL;
+  const strategy =
+    plan?.strategy ||
+    plan?.Strategy ||
+    card?.strategy ||
+    "—";
 
-  const duration =
-    plan.dur !== null &&
-    plan.dur !== undefined
-      ? `${fmtNum(plan.dur)} mos`
-      : NIL;
+  const benefit =
+    plan?.benefit ||
+    plan?.Benefit ||
+    "—";
 
-  const benefit = plan.benefit || NIL;
-  const outcome = plan.outcome || NIL;
-  const enabler = plan.enabler || plan.choice || NIL;
+  const outcome =
+    plan?.resultant ||
+    plan?.resultantOutcome ||
+    plan?.outcome ||
+    plan?.Resultant ||
+    "—";
 
-  const progress =
-    effectValue === null
-      ? 35
-      : Math.min(
-          100,
-          Math.max(
-            18,
-            Math.abs(effectValue) * 12
-          )
-        );
+  const budget = formatBudget(card?.budget);
+
+  const investDate =
+    plan?.implDate ||
+    plan?.implementDate ||
+    plan?.Implement_Date;
+
+  const investPeriod = investDate
+    ? fmtDate(investDate)
+    : "—";
+
+  const capital =
+    plan?.isCapital ??
+    plan?.is_Capital ??
+    plan?.Is_Capital;
+
+  const capitalText =
+    capital === true ||
+    capital === 1 ||
+    String(capital).toLowerCase() === "true"
+      ? "Yes"
+      : capital === false ||
+        capital === 0 ||
+        String(capital).toLowerCase() === "false"
+        ? "No"
+        : "—";
+
+  const costType =
+    plan?.costType ||
+    plan?.cost_type ||
+    plan?.Cost_Type ||
+    "—";
+
+  const gainValue =
+    plan?.gainNorm ??
+    plan?.gain_norm ??
+    plan?.Gain_norm ??
+    plan?.gain ??
+    plan?.gainPct;
+
+  const lossValue =
+    plan?.lossNorm ??
+    plan?.loss_norm ??
+    plan?.Loss_norm ??
+    plan?.loss ??
+    plan?.lossPct;
+
+  const effectValue = selected
+    ? gainValue
+    : lossValue;
+
+  const effectText =
+    effectValue !== undefined &&
+    effectValue !== null &&
+    effectValue !== ""
+      ? `${selected ? "+" : "-"}${fmtPct(
+          Math.abs(Number(effectValue))
+        )}`
+      : "—";
+
+  const fromMonthNo = Number(
+    plan?.fromMon ??
+      plan?.fromMonthNo ??
+      plan?.From_Month_No ??
+      0
+  );
+
+  const duration = Number(
+    plan?.dur ??
+      plan?.duration ??
+      plan?.Duration_Month ??
+      0
+  );
+
+  // Simulation period is 12 months; effect timeline is fixed at 24 months.
+  const scaleMonths = 24;
+
+  const safeFromMonth = Number.isFinite(fromMonthNo)
+    ? Math.max(fromMonthNo, 0)
+    : 0;
+
+  const safeDuration = Number.isFinite(duration)
+    ? Math.max(duration, 0)
+    : 0;
+
+  const endMonth =
+    safeFromMonth + safeDuration;
+
+  const startPct = Math.min(
+    (safeFromMonth / scaleMonths) * 100,
+    100
+  );
+
+  const widthPct = Math.min(
+    (safeDuration / scaleMonths) * 100,
+    100 - startPct
+  );
+
+  const hasEffectWindow =
+    safeFromMonth > 0 || safeDuration > 0;
 
   return (
     <Box
       sx={{
         ...cardStyle.primary,
-        p: 1.75,
         minWidth: 0,
-        height: "100%",
-        borderTop: `3px solid ${colors.primary}`,
-        display: "flex",
-        flexDirection: "column",
+        overflow: "hidden",
+        borderLeft: `4px solid ${accent}`,
+        background: colors.card,
+        p: 1.75,
       }}
     >
-      <Stack
-        direction="row"
-        spacing={1}
-        alignItems="center"
-      >
-        <Box
-          sx={{
-            width: 30,
-            height: 30,
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: colors.primarySoft,
-            color: colors.primary,
-            flexShrink: 0,
-          }}
-        >
-          <AutoGraphOutlinedIcon sx={{ fontSize: 17 }} />
-        </Box>
-
-        <Box
-          sx={{
-            flex: 1,
-            minWidth: 0,
-          }}
-        >
-          <Typography
-            sx={{
-              ...masterTypo.caption,
-              color: colors.subtitle,
-              fontWeight: 700,
-            }}
-          >
-            {card.id || NIL}
-          </Typography>
-
-          <Typography
-            sx={{
-              ...masterTypo.body1,
-              color: colors.title,
-              fontWeight: 700,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {card.strategy || NIL}
-          </Typography>
-        </Box>
-
-        <Typography
-          sx={{
-            ...masterTypo.body2,
-            color: effectColor,
-            fontWeight: 800,
-            flexShrink: 0,
-          }}
-        >
-          {effectText}
-        </Typography>
-      </Stack>
-
-      <Stack
-        direction="row"
-        spacing={0.5}
+      <Box
         sx={{
-          mt: 1.25,
-          flexWrap: "wrap",
-          rowGap: 0.5,
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            md: "minmax(220px, 1.15fr) minmax(0, 1.55fr) minmax(360px, 2fr)",
+          },
+          gap: {
+            xs: 1.5,
+            md: 2,
+          },
+          alignItems: "center",
         }}
       >
-        <Chip
-          label={benefit}
-          size="small"
+        {/* Strategy */}
+        <Box sx={{ minWidth: 0 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 1,
+            }}
+          >
+            <Chip
+              label={strategyId}
+              size="small"
+              sx={{
+                height: 25,
+                borderRadius: 1.5,
+                backgroundColor: `${accent}18`,
+                color: accent,
+                fontWeight: 800,
+                "& .MuiChip-label": {
+                  px: 1,
+                },
+              }}
+            />
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.4,
+                color: selected
+                  ? colors.success
+                  : colors.subtitle,
+                flexShrink: 0,
+              }}
+            >
+              <CheckCircleOutline sx={{ fontSize: 17 }} />
+
+              <Typography
+                sx={{
+                  ...masterTypo.caption,
+                  fontWeight: 700,
+                }}
+              >
+                Implement
+              </Typography>
+            </Box>
+          </Box>
+
+          <Typography
+            sx={{
+              ...masterTypo.cardH5,
+              color: colors.title,
+              fontWeight: 700,
+              mt: 0.9,
+              lineHeight: 1.25,
+            }}
+          >
+            {strategy}
+          </Typography>
+
+          <Chip
+            icon={React.cloneElement(
+              enablerConfig.icon,
+              { sx: { fontSize: 16 } }
+            )}
+            label={enabler}
+            size="small"
+            sx={{
+              mt: 1,
+              height: 26,
+              borderRadius: 1.5,
+              backgroundColor: `${accent}12`,
+              color: accent,
+              fontWeight: 700,
+              "& .MuiChip-icon": {
+                color: accent,
+                ml: 0.75,
+              },
+              "& .MuiChip-label": {
+                px: 1,
+              },
+            }}
+          />
+        </Box>
+
+        {/* Benefit → Outcome */}
+        <Box
           sx={{
-            height: 24,
-            maxWidth: "100%",
-            background: colors.primarySoft,
-            color: colors.primaryDark,
-            "& .MuiChip-label": {
-              overflow: "hidden",
-              textOverflow: "ellipsis",
+            minWidth: 0,
+            px: {
+              xs: 0,
+              md: 1,
+            },
+            py: {
+              xs: 0,
+              md: 0.25,
             },
           }}
-        />
-
-        <Chip
-          label={plan.costType || NIL}
-          size="small"
-          sx={{
-            height: 24,
-            background: colors.panel,
-            color: colors.title,
-          }}
-        />
-
-        <Chip
-          label={
-            plan.isCapital === true ||
-            String(plan.isCapital).toLowerCase() ===
-              "yes"
-              ? "Capital"
-              : "Operating"
-          }
-          size="small"
-          sx={{
-            height: 24,
-            background: colors.panel,
-            color: colors.subtitle,
-          }}
-        />
-      </Stack>
-
-      <Box
-        sx={{
-          mt: 1.5,
-          p: 1.1,
-          borderRadius: 1.5,
-          background: colors.panel,
-        }}
-      >
-        <Typography
-          sx={{
-            ...masterTypo.caption,
-            color: colors.subtitle,
-            fontWeight: 600,
-          }}
         >
-          Enabler
-        </Typography>
+          <Typography
+            sx={{
+              ...masterTypo.caption,
+              color: colors.subtitle,
+              fontWeight: 700,
+              mb: 0.5,
+            }}
+          >
+            Benefit → Outcome
+          </Typography>
 
-        <Typography
-          sx={{
-            ...masterTypo.body2,
-            color: colors.title,
-            fontWeight: 600,
-            mt: 0.25,
-          }}
-        >
-          {enabler}
-        </Typography>
-      </Box>
+          <Box sx={{ minWidth: 0 }}>
+            <Typography
+              sx={{
+                ...masterTypo.bodyB1,
+                color: colors.title,
+                fontWeight: 700,
+                lineHeight: 1.4,
+              }}
+            >
+              {benefit}
+            </Typography>
 
-      <Box
-        sx={{
-          mt: 1.5,
-          display: "flex",
-          alignItems: "stretch",
-          gap: 0.75,
-        }}
-      >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                mt: 0.25,
+                minWidth: 0,
+              }}
+            >
+              <Typography
+                sx={{
+                  ...masterTypo.bodyB1,
+                  color: colors.title,
+                  fontWeight: 700,
+                  lineHeight: 1.4,
+                  minWidth: 0,
+                }}
+              >
+                → {outcome}
+              </Typography>
+
+              <Typography
+                sx={{
+                  ...masterTypo.bodyB1,
+                  color: selected
+                    ? colors.success
+                    : colors.warning,
+                  fontWeight: 800,
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
+                }}
+              >
+                {effectText}
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        {/* Investment */}
         <Box
           sx={{
-            flex: 1,
             minWidth: 0,
+            borderLeft: {
+              xs: "none",
+              md: `1px solid ${colors.border}`,
+            },
+            borderTop: {
+              xs: `1px solid ${colors.border}`,
+              md: "none",
+            },
+            pt: {
+              xs: 1.25,
+              md: 0,
+            },
+            pl: {
+              xs: 0,
+              md: 2,
+            },
           }}
         >
-          <Typography
+          <Box
             sx={{
-              ...masterTypo.caption,
-              color: colors.subtitle,
-              fontWeight: 600,
+              display: "grid",
+              gridTemplateColumns:
+                "repeat(4, minmax(0, 1fr))",
+              gap: 1.25,
             }}
           >
-            Benefit
-          </Typography>
+            <InfoItem
+              label="Budget"
+              value={budget}
+            />
 
-          <Typography
-            sx={{
-              ...masterTypo.body2,
-              color: colors.title,
-              fontWeight: 600,
-              mt: 0.25,
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-            }}
-          >
-            {benefit}
-          </Typography>
-        </Box>
+            <InfoItem
+              label="Invest Period"
+              value={investPeriod}
+            />
 
-        <ArrowForwardOutlinedIcon
-          sx={{
-            fontSize: 18,
-            color: colors.primary,
-            alignSelf: "center",
-            flexShrink: 0,
-          }}
-        />
+            <InfoItem
+              label="Capital"
+              value={capitalText}
+            />
 
-        <Box
-          sx={{
-            flex: 1,
-            minWidth: 0,
-            textAlign: "right",
-          }}
-        >
-          <Typography
-            sx={{
-              ...masterTypo.caption,
-              color: colors.subtitle,
-              fontWeight: 600,
-            }}
-          >
-            Outcome
-          </Typography>
-
-          <Typography
-            sx={{
-              ...masterTypo.body2,
-              color: colors.title,
-              fontWeight: 600,
-              mt: 0.25,
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-            }}
-          >
-            {outcome}
-          </Typography>
+            <InfoItem
+              label="Cost Type"
+              value={costType}
+            />
+          </Box>
         </Box>
       </Box>
 
-      <Box
-        sx={{
-          mt: "auto",
-          pt: 1.5,
-        }}
-      >
-        <Box
-          sx={{
-            position: "relative",
-            height: 18,
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <Box
+      {hasEffectWindow && (
+        <>
+          <Divider
             sx={{
-              position: "absolute",
-              left: 4,
-              right: 4,
-              height: 2,
-              background: colors.border,
+              mt: 1.5,
+              borderColor: colors.border,
             }}
           />
 
-          <Box
-            sx={{
-              position: "absolute",
-              left: 4,
-              width: `${progress}%`,
-              height: 2,
-              background: colors.primary,
-            }}
-          />
+          <Box sx={{ mt: 1.5 }}>
+            <Box
+              sx={{
+                position: "relative",
+                height: 8,
+                borderRadius: 4,
+                background: colors.divider,
+              }}
+            >
+              <Box
+                sx={{
+                  position: "absolute",
+                  left: `${startPct}%`,
+                  width: `${widthPct}%`,
+                  height: "100%",
+                  borderRadius: 4,
+                  background: accent,
+                }}
+              />
+            </Box>
 
-          <Box
-            sx={{
-              position: "absolute",
-              left: `calc(${progress}% - 5px)`,
-              width: 10,
-              height: 10,
-              borderRadius: "50%",
-              background: colors.primary,
-              border: `2px solid ${colors.card}`,
-              boxSizing: "border-box",
-            }}
-          />
-        </Box>
-
-        <Stack
-          direction="row"
-          alignItems="center"
-          spacing={0.5}
-          sx={{ mt: 0.25 }}
-        >
-          <CalendarMonthOutlinedIcon
-            sx={{
-              fontSize: 15,
-              color: colors.subtitle,
-            }}
-          />
-
-          <Typography
-            sx={{
-              ...masterTypo.caption,
-              color: colors.subtitle,
-            }}
-          >
-            {startMonth}
-          </Typography>
-
-          <Typography
-            sx={{
-              ...masterTypo.caption,
-              color: colors.border,
-            }}
-          >
-            •
-          </Typography>
-
-          <TrendingUpOutlinedIcon
-            sx={{
-              fontSize: 15,
-              color: colors.primary,
-            }}
-          />
-
-          <Typography
-            sx={{
-              ...masterTypo.caption,
-              color: colors.subtitle,
-            }}
-          >
-            {duration}
-          </Typography>
-        </Stack>
-      </Box>
+            <Typography
+              sx={{
+                ...masterTypo.caption,
+                color: colors.subtitle,
+                mt: 0.5,
+              }}
+            >
+              Effect window: Month {safeFromMonth} →{" "}
+              {endMonth} ({safeDuration} mo)
+            </Typography>
+          </Box>
+        </>
+      )}
     </Box>
   );
 }
+
+SrStrategyMapCard.propTypes = {
+  card: PropTypes.shape({
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+    strategy: PropTypes.string,
+    budget: PropTypes.object,
+    plan: PropTypes.object,
+  }),
+};

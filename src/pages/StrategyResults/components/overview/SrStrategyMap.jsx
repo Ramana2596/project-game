@@ -1,86 +1,85 @@
- // Component: SrStrategyMap
+// Component: SrStrategyMap
 // Module: StrategyResults
-// Purpose: render selected strategies as a compact visual strategy map
-// Author/Version: OpsMgt UX Lab / v2.3
-// AI Tags: strategy, map, visual, cards, timeline
+// Purpose: render selected strategy map cards as full-width horizontal cards.
+// Author/Version: OpsMgt UX Lab / v3.2
+// AI Tags: strategy-results, strategy-map, responsive, horizontal-cards
 
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import AccountTreeOutlinedIcon from "@mui/icons-material/AccountTreeOutlined";
-import { colors, masterTypo } from "../../../../ux/styles";
+import { AccountTreeOutlined } from "@mui/icons-material";
+import { cardStyle, colors, masterTypo } from "../../../../ux/styles";
 import SrStrategyMapCard from "./SrStrategyMapCard";
 
 export default function SrStrategyMap({
-  setNo,
   srCards = [],
 }) {
   return (
-    <Box sx={{ mt: 2.5 }}>
+    <Box
+      sx={{
+        ...cardStyle.base,
+        overflow: "hidden",
+        borderTop: `4px solid ${colors.primary}`,
+      }}
+    >
       <Box
         sx={{
+          px: 2,
+          py: 1.25,
           display: "flex",
           alignItems: "center",
-          gap: 1,
-          mb: 1.5,
+          justifyContent: "space-between",
+          gap: 1.5,
+          borderBottom: `1px solid ${colors.border}`,
+          backgroundColor: colors.card,
         }}
       >
-        <AccountTreeOutlinedIcon
+        <Box
           sx={{
-            fontSize: 21,
-            color: colors.primary,
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            minWidth: 0,
           }}
-        />
+        >
+          <AccountTreeOutlined
+            sx={{
+              color: colors.primary,
+              fontSize: 24,
+              flexShrink: 0,
+            }}
+          />
 
-        <Box>
           <Typography
+            component="h2"
             sx={{
               ...masterTypo.h5,
               color: colors.title,
+              fontWeight: 700,
             }}
           >
             Strategy Map
           </Typography>
-
-          <Typography
-            sx={{
-              ...masterTypo.caption,
-              color: colors.subtitle,
-            }}
-          >
-            Selected strategies for Set {setNo ?? "—"}
-          </Typography>
         </Box>
-      </Box>
 
-      {srCards.length === 0 ? (
-        <Box
+        <Typography
           sx={{
-            p: 2,
-            border: `1px solid ${colors.border}`,
-            borderRadius: 2,
-            background: colors.card,
+            ...masterTypo.bodyB1,
+            color: colors.primary,
+            fontWeight: 700,
+            whiteSpace: "nowrap",
           }}
         >
-          <Typography
-            sx={{
-              ...masterTypo.body2,
-              color: colors.subtitle,
-            }}
-          >
-            No selected strategies to map.
-          </Typography>
-        </Box>
-      ) : (
+          {srCards.length} strateg{srCards.length === 1 ? "y" : "ies"}
+        </Typography>
+      </Box>
+
+      {srCards.length > 0 ? (
         <Box
           sx={{
-            display: "grid",
+            p: 1.5,
+            display: "flex",
+            flexDirection: "column",
             gap: 1.5,
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "repeat(2, 1fr)",
-              md: "repeat(3, 1fr)",
-              lg: "repeat(4, 1fr)",
-            },
           }}
         >
           {srCards.map((card) => (
@@ -89,6 +88,17 @@ export default function SrStrategyMap({
               card={card}
             />
           ))}
+        </Box>
+      ) : (
+        <Box sx={{ p: 2 }}>
+          <Typography
+            sx={{
+              ...masterTypo.bodyB1,
+              color: colors.subtitle,
+            }}
+          >
+            No selected strategies are available.
+          </Typography>
         </Box>
       )}
     </Box>

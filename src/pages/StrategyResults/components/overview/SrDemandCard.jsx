@@ -1,8 +1,8 @@
 // Component: SrDemandCard
 // Module: StrategyResults
 // Purpose: compact summary of acquired demand
-// Author/Version: OpsMgt UX Lab / v2.2
-// AI Tags: demand, product, impact, card
+// Author/Version: OpsMgt UX Lab / v3.0
+// AI Tags: demand, product, impact, overview, card
 
 import React, { useMemo } from "react";
 import { Box, Stack, Typography } from "@mui/material";
@@ -13,15 +13,19 @@ import { fmtNum, fmtPct, NIL } from "../../utils/srFormat";
 
 export default function SrDemandCard({ demRows }) {
   const summary = useMemo(() => {
+    const rows = Array.isArray(demRows)
+      ? demRows
+      : [];
+
     const products = new Set(
-      demRows
+      rows
         .map((row) => row.product)
         .filter(Boolean)
     );
 
     const grouped = new Map();
 
-    demRows.forEach((row) => {
+    rows.forEach((row) => {
       const key = `${row.stratId || ""}|${row.product || ""}`;
 
       if (!grouped.has(key)) {
@@ -32,7 +36,8 @@ export default function SrDemandCard({ demRows }) {
     const values = [...grouped.values()].filter(
       (value) =>
         value !== null &&
-        value !== undefined
+        value !== undefined &&
+        !Number.isNaN(Number(value))
     );
 
     const avgPct = values.length
@@ -42,10 +47,11 @@ export default function SrDemandCard({ demRows }) {
         ) / values.length
       : null;
 
-    const additionalDemand = demRows.reduce(
+    const additionalDemand = rows.reduce(
       (sum, row) =>
         row.addlDem === null ||
-        row.addlDem === undefined
+        row.addlDem === undefined ||
+        Number.isNaN(Number(row.addlDem))
           ? sum
           : sum + Number(row.addlDem),
       0
@@ -62,12 +68,16 @@ export default function SrDemandCard({ demRows }) {
     <Box
       sx={{
         ...cardStyle.primary,
-        p: 2,
+        p: 1.75,
         borderLeft: `4px solid ${colors.accentBlue}`,
         minWidth: 0,
       }}
     >
-      <Stack direction="row" spacing={1} alignItems="center">
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+      >
         <Box
           sx={{
             width: 32,
@@ -96,8 +106,8 @@ export default function SrDemandCard({ demRows }) {
 
       <Box
         sx={{
-          mt: 1.5,
-          pt: 1.25,
+          mt: 1.25,
+          pt: 1.1,
           borderTop: `1px solid ${colors.border}`,
         }}
       >
@@ -138,7 +148,7 @@ export default function SrDemandCard({ demRows }) {
           direction="row"
           alignItems="center"
           spacing={0.75}
-          sx={{ mt: 1 }}
+          sx={{ mt: 0.9 }}
         >
           <TrendingUpOutlinedIcon
             sx={{
@@ -174,7 +184,7 @@ export default function SrDemandCard({ demRows }) {
           sx={{
             ...masterTypo.caption,
             color: colors.subtitle,
-            mt: 1,
+            mt: 0.9,
           }}
         >
           +{fmtNum(summary.additionalDemand)} units

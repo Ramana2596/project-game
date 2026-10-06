@@ -1,15 +1,21 @@
 // Component: SrProductFilter
 // Module: StrategyResults
-// Purpose: compact product filter for result analysis
-// Author/Version: OpsMgt UX Lab / v2.0
-// AI Tags: strategy, results, product, filter
+// Purpose: render the compact product filter beside result navigation.
+// Author/Version: OpsMgt UX Lab / v1.0
+// AI Tags: strategy-results, product-filter, toolbar, navigation
 
 import React from "react";
-import { Box, Button, MenuItem, TextField } from "@mui/material";
-import { buttonStyle, colors } from "../../../ux/styles";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import { colors } from "../../../ux/styles";
+import { SR_PRODUCT_ALL } from "../constants/srConfig";
 
 export default function SrProductFilter({
-  setNo,
   product,
   products,
   onProductChange,
@@ -19,51 +25,52 @@ export default function SrProductFilter({
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
-        gap: 1.5,
-        mb: 2,
-        flexWrap: "wrap",
+        justifyContent: "flex-end",
+        flexShrink: 0,
       }}
     >
-      <Button
-        disableRipple
-        sx={{
-          ...buttonStyle.secondary,
-          color: colors.primary,
-          borderColor: colors.border,
-          minHeight: 36,
-          px: 1.75,
-          cursor: "default",
-          "&:hover": {
-            background: colors.card,
-            borderColor: colors.border,
-          },
-        }}
-      >
-        Strategy Set {setNo ?? "—"}
-      </Button>
-
-      <TextField
-        select
+      <FormControl
         size="small"
-        label="Product"
-        value={product}
-        onChange={(event) => onProductChange(event.target.value)}
         sx={{
-          minWidth: 190,
-          "& .MuiOutlinedInput-root": {
-            background: colors.card,
-          },
+          minWidth: 180,
         }}
       >
-        <MenuItem value="ALL">All Products</MenuItem>
+        <InputLabel id="sr-product-filter-label">
+          Product
+        </InputLabel>
 
-        {products.map((item) => (
-          <MenuItem key={item} value={item}>
-            {item}
+        <Select
+          labelId="sr-product-filter-label"
+          value={product || SR_PRODUCT_ALL}
+          label="Product"
+          onChange={(event) =>
+            onProductChange(event.target.value)
+          }
+          sx={{
+            backgroundColor: colors.card,
+            borderRadius: 1.5,
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: colors.border,
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: colors.primary,
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: colors.primary,
+            },
+          }}
+        >
+          <MenuItem value={SR_PRODUCT_ALL}>
+            All Products
           </MenuItem>
-        ))}
-      </TextField>
+
+          {products.map((item) => (
+            <MenuItem key={item} value={item}>
+              {item}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Box>
   );
 }

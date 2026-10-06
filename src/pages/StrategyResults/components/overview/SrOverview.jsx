@@ -1,8 +1,8 @@
 // Component: SrOverview
 // Module: StrategyResults
-// Purpose: render compact strategy result overview cards
-// Author/Version: OpsMgt UX Lab / v2.2
-// AI Tags: strategy, results, overview, cards
+// Purpose: render compact overview insight cards for strategy results.
+// Author/Version: OpsMgt UX Lab / v3.0
+// AI Tags: strategy-results, overview, insight, summary-cards
 
 import React from "react";
 import { Box } from "@mui/material";
@@ -18,36 +18,42 @@ export default function SrOverview({
   demRows,
   discRows,
   savRows,
-  onStrategyClick,
 }) {
   return (
     <Box
       sx={{
         display: "grid",
-        gap: 1.5,
         gridTemplateColumns: {
           xs: "1fr",
-          sm: "1fr",
-          md: "repeat(2, 1fr)",
-          lg: "repeat(4, 1fr)",
+          sm: "repeat(2, minmax(0, 1fr))",
+          lg: "repeat(4, minmax(0, 1fr))",
         },
+        gap: 1.5,
       }}
     >
       <SrStrategyCard
         setNo={setNo}
         srTotals={srTotals}
         srCards={srCards}
-        onClick={onStrategyClick}
       />
 
       <SrCommitmentCard
+        setNo={setNo}
         srTotals={srTotals}
         discRows={discRows}
       />
 
-      <SrDemandCard demRows={demRows} />
+      <SrDemandCard
+        setNo={setNo}
+        srTotals={srTotals}
+        demRows={demRows}
+      />
 
-      <SrSavingsCard savRows={savRows} />
+      <SrSavingsCard
+        setNo={setNo}
+        srTotals={srTotals}
+        savRows={savRows}
+      />
     </Box>
   );
 }

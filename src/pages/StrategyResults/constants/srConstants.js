@@ -1,33 +1,70 @@
+// Constants: StrategyResults
+// Module: StrategyResults
+// Purpose: define page labels, result views and user messages.
+// Author/Version: OpsMgt UX Lab / v3.0
+// AI Tags: strategy-results, constants, navigation, business-results
+
 import { colors } from "../../../ux/styles";
+import { SR_VIEW } from "./srConfig";
 
 export const SR_TITLE = "Strategy Results";
 
 export const SR_SUBTITLE =
   "Review the outcomes and commitments from the strategies your team selected.";
 
-export const SR_TAB = {
-  overview: "overview",
-  plan: "plan",
-  budget: "budget",
-  demand: "demand",
-  discount: "discount",
-  savings: "savings",
-};
+export const SR_TAB = SR_VIEW;
 
 export const SR_TABS = [
-  { id: SR_TAB.overview, label: "Overview" },
-  { id: SR_TAB.plan, label: "Strategy Plan" },
-  { id: SR_TAB.budget, label: "Budget Plan" },
-  { id: SR_TAB.demand, label: "Acquired Demand" },
-  { id: SR_TAB.discount, label: "Price Discount" },
-  { id: SR_TAB.savings, label: "Savings" },
+  {
+    id: SR_VIEW.strategy,
+    label: "Strategy",
+  },
+  {
+    id: SR_VIEW.commitment,
+    label: "Commitment",
+  },
+  {
+    id: SR_VIEW.demand,
+    label: "Demand",
+  },
+  {
+    id: SR_VIEW.savings,
+    label: "Savings",
+  },
 ];
 
+export const BUSINESS_ENABLER = {
+  Leadership: {
+    colorToken: "primary",
+    icon: "FlagOutlined",
+  },
+  People: {
+    colorToken: "success",
+    icon: "GroupsOutlined",
+  },
+  Processes: {
+    colorToken: "info",
+    icon: "SettingsOutlined",
+  },
+  Partnerships: {
+    colorToken: "warning",
+    icon: "HandshakeOutlined",
+  },
+  Products: {
+    colorToken: "secondary",
+    icon: "LayersOutlined",
+  },
+};
+
+export const BUSINESS_ENABLER_DEFAULT = {
+  colorToken: "primary",
+  icon: "FlagOutlined",
+};
+
 export const SR_ACCENT = {
-  plan: colors.primary,
-  budget: colors.accentIndigo,
+  strategy: colors.primary,
+  commitment: colors.accentIndigo,
   demand: colors.accentBlue,
-  discount: colors.accentOrange,
   savings: colors.accentTeal,
 };
 

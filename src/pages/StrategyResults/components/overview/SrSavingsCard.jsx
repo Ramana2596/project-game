@@ -1,8 +1,8 @@
 // Component: SrSavingsCard
 // Module: StrategyResults
 // Purpose: compact summary of savings outcomes
-// Author/Version: OpsMgt UX Lab / v2.2
-// AI Tags: savings, product, impact, card
+// Author/Version: OpsMgt UX Lab / v3.0
+// AI Tags: savings, product, impact, overview, card
 
 import React, { useMemo } from "react";
 import { Box, Stack, Typography } from "@mui/material";
@@ -14,18 +14,23 @@ import { fmtNum, fmtPct, NIL } from "../../utils/srFormat";
 
 export default function SrSavingsCard({ savRows }) {
   const summary = useMemo(() => {
+    const rows = Array.isArray(savRows)
+      ? savRows
+      : [];
+
     const products = new Set(
-      savRows
+      rows
         .map((row) => row.product)
         .filter(Boolean)
     );
 
-    const values = savRows
+    const values = rows
       .map((row) => row.savPct)
       .filter(
         (value) =>
           value !== null &&
-          value !== undefined
+          value !== undefined &&
+          !Number.isNaN(Number(value))
       );
 
     const avgPct = values.length
@@ -38,7 +43,7 @@ export default function SrSavingsCard({ savRows }) {
     return {
       productCount: products.size,
       avgPct,
-      hasSavings: savRows.length > 0,
+      hasSavings: rows.length > 0,
     };
   }, [savRows]);
 
@@ -46,12 +51,16 @@ export default function SrSavingsCard({ savRows }) {
     <Box
       sx={{
         ...cardStyle.primary,
-        p: 2,
+        p: 1.75,
         borderLeft: `4px solid ${colors.accentTeal}`,
         minWidth: 0,
       }}
     >
-      <Stack direction="row" spacing={1} alignItems="center">
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+      >
         <Box
           sx={{
             width: 32,
@@ -83,7 +92,7 @@ export default function SrSavingsCard({ savRows }) {
           sx={{
             ...masterTypo.body2,
             color: colors.subtitle,
-            mt: 2,
+            mt: 1.75,
           }}
         >
           No savings result available.
@@ -91,8 +100,8 @@ export default function SrSavingsCard({ savRows }) {
       ) : (
         <Box
           sx={{
-            mt: 1.5,
-            pt: 1.25,
+            mt: 1.25,
+            pt: 1.1,
             borderTop: `1px solid ${colors.border}`,
           }}
         >
@@ -133,7 +142,7 @@ export default function SrSavingsCard({ savRows }) {
             direction="row"
             alignItems="center"
             spacing={0.75}
-            sx={{ mt: 1 }}
+            sx={{ mt: 0.9 }}
           >
             <TrendingUpOutlinedIcon
               sx={{

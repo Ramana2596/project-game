@@ -1,8 +1,8 @@
 // Component: SrCommitmentCard
 // Module: StrategyResults
 // Purpose: compact summary of financial commitments
-// Author/Version: OpsMgt UX Lab / v2.2
-// AI Tags: commitment, budget, discount, card
+// Author/Version: OpsMgt UX Lab / v3.0
+// AI Tags: commitment, budget, discount, overview, card
 
 import React, { useMemo } from "react";
 import { Box, Stack, Typography } from "@mui/material";
@@ -21,7 +21,8 @@ export default function SrCommitmentCard({
       .filter(
         (value) =>
           value !== null &&
-          value !== undefined
+          value !== undefined &&
+          !Number.isNaN(Number(value))
       );
 
     if (!values.length) return null;
@@ -38,12 +39,16 @@ export default function SrCommitmentCard({
     <Box
       sx={{
         ...cardStyle.primary,
-        p: 2,
+        p: 1.75,
         borderLeft: `4px solid ${colors.accentIndigo}`,
         minWidth: 0,
       }}
     >
-      <Stack direction="row" spacing={1} alignItems="center">
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+      >
         <Box
           sx={{
             width: 32,
@@ -72,8 +77,8 @@ export default function SrCommitmentCard({
 
       <Box
         sx={{
-          mt: 1.5,
-          pt: 1.25,
+          mt: 1.25,
+          pt: 1.1,
           borderTop: `1px solid ${colors.border}`,
         }}
       >
@@ -107,7 +112,7 @@ export default function SrCommitmentCard({
               textAlign: "right",
             }}
           >
-            {fmtCurMap(srTotals.budget)}
+            {fmtCurMap(srTotals?.budget)}
           </Typography>
         </Stack>
 
@@ -115,7 +120,7 @@ export default function SrCommitmentCard({
           direction="row"
           alignItems="center"
           spacing={0.75}
-          sx={{ mt: 1 }}
+          sx={{ mt: 0.9 }}
         >
           <LocalOfferOutlinedIcon
             sx={{
