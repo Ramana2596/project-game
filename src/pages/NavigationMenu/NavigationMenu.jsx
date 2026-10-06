@@ -73,6 +73,7 @@ import StdNormInfo from '../StdNormInfo/StdNormInfo.jsx';
 import StrategyBenefit from '../StrategyBenefit/StrategyBenefit.jsx';
 import StrategyBank from '../StrategyBank/StrategyBank.jsx';
 import StrategySetCollection from '../StrategySetCollection/StrategySetCollection.jsx';
+import StrategyResults from '../StrategyResults/StrategyResults.jsx';
 import StrategyBudgetInfo from '../StrategyBudgetInfo/StrategyBudgetInfo.jsx';
 import StrategyPlanTeam from '../StrategyPlanTeam/StrategyPlanTeam.jsx';
 import StrategyLaunchGist from '../StrategyLaunchGist/StrategyLaunchGist.jsx';
@@ -492,6 +493,7 @@ export default function MiniDrawer() {
           <Route path='/StrategySetCollection' element={<StrategySetCollection />} />
           <Route path="/strategyLaunched" element={<StrategyLaunched />} />
           <Route path="/strategyPlanApproval" element={<StrategyPlanApproval />} />
+          <Route path="/StrategyResults" element={<StrategyResults />} />
           <Route path="/StrategyBudgetInfo" element={<StrategyBudgetInfo />} />
           <Route path="/StrategyPlanTeam" element={<StrategyPlanTeam />} />
           <Route path="/StrategyLaunchGist" element={<StrategyLaunchGist />} />
