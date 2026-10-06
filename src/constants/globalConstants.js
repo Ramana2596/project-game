@@ -6,6 +6,7 @@ import StrategySetCollection from '../pages/StrategySetCollection/StrategySetCol
 import StrategyLaunched from "../pages/LaunchStrategy/StrategyLaunched";
 import StrategyPlan from "../pages/StrategyPlanApproval/StrategyPlanApproval";
 import StrategyPlanTeam from '../pages/StrategyPlanTeam/StrategyPlanTeam.jsx';
+import StrategyResults from "../pages/StrategyResults/StrategyResults.jsx";
 import StrategyBudgetInfo from "../pages/StrategyBudgetInfo/StrategyBudgetInfo.jsx";
 import StrategyLaunchGist from "../pages/StrategyLaunchGist/StrategyLaunchGist.jsx";
 import Strategy from "../pages/Strategy/Strategy.jsx";
@@ -344,6 +345,14 @@ export const componentList = [
       },
       */
       {
+        iconPath: strategySetsIcon,
+        id: "UI 21 011",
+        label: "Strategy Sets Collection",
+        path: "/StrategySetCollection",
+        href: "/operationGame/StrategySetCollection",
+        routeElement: <StrategySetCollection />
+      },
+     {
         iconPath: approvalIcon,
         id: "UI 11 030 UX",
         label: "Strategy Direction",
@@ -352,20 +361,20 @@ export const componentList = [
         routeElement: <Strategy />
       },
       {
-        iconPath: strategySetsIcon,
-        id: "UI 21 011",
-        label: "Strategy Sets Collection",
-        path: "/StrategySetCollection",
-        href: "/operationGame/StrategySetCollection",
-        routeElement: <StrategySetCollection />
-      },
-      {
         iconPath: businessStrategyIcon,
         id: "UI 21 020",
         label: "Strategies for You",
         path: "/StrategyPlanInfo",
         href: "/operationGame/StrategyPlanTeam",
         routeElement: <StrategyPlanTeam />
+      },
+      {
+        iconPath: budgetIcon,
+        id: "UI 21 040 UX",
+        label: "Strategy & Results",
+        path: "/StrategyResults",
+        href: "/operationGame/StrategyResults",
+        routeElement: <StrategyResults />
       },
       {
         iconPath: budgetIcon,
@@ -882,7 +891,7 @@ export const componentList = [
       {
         iconPath: resultIcon,
         id: "UI 22 190",
-        label: "Strategy Outcome / Resultant",
+        label: "Strategy Resultant Info",
         path: "/ResultantInfo",
         href: "/operationGame/ResultantInfo",
         routeElement: <ResultantInfo />
