@@ -10,7 +10,7 @@ import { SR_VIEW } from "./srConfig";
 export const SR_TITLE = "Strategy Results";
 
 export const SR_SUBTITLE =
-  "Review the outcomes and commitments from the strategies your team selected.";
+  "Review commitments and outcome from the strategies your team selected.";
 
 export const SR_TAB = SR_VIEW;
 

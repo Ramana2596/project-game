@@ -213,7 +213,7 @@ export default function StrategyResults() {
             {srTab === SR_VIEW.savings && (
               <SrResultTable
                 title="Savings"
-                note="Savings outcomes from selected strategies."
+                note="Savings outcome from selected strategies."
                 cols={SR_SAV_COLS}
                 rows={filteredSavRows}
               />
