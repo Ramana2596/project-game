@@ -188,6 +188,7 @@ import CoProfile from "../pages/CoProfile/CoProfile";
 import MfgProcess from "../pages/MfgProcess/MfgProcess";
 import PlantCapacity from "../pages/PlantCapacity/PlantCapacity";
 import MarketIntel from "../pages/MarketIntel/MarketIntel.jsx";
+import FinAnalysis from "../pages/FinAnalysis/FinAnalysis.jsx";
 
 // import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 
@@ -203,7 +204,7 @@ export const componentList = [
     children: [
       {
         iconPath: appSettings,
-        id: "UI 21 270",
+        id: "UI 21 270 UX",
         label: "Business Plan Execution",
         path: "/SimulationCentre",
         href: "/operationGame/SimulationCentre",
@@ -211,7 +212,7 @@ export const componentList = [
       },
       {
         icon: <LeaderboardTwoToneIcon />,
-        id: "UI 24 100",
+        id: "UI 24 100 UX",
         label: "Batch Assessment",
         path: "/batchAssessment",
         href: "/operationGame/BatchAssessment",
@@ -219,7 +220,7 @@ export const componentList = [
       },
       {
         icon: <AnalyticsTwoToneIcon />,
-        id: "UI 24 110",
+        id: "UI 24 110 UX",
         label: "Team Performance",
         path: "/teamAssessment",
         href: "/operationGame/TeamAssessment",
@@ -268,8 +269,16 @@ export const componentList = [
         routeElement: <CasFlowStatement />
       },
       {
+        iconPath: perfCoIcon,
+        id: "UI 21 280 UX",
+        label: "Financial Analysis",
+        path: "/finAnalysis",
+        href: "/operationGame/FinAnalysis",
+        routeElement: <FinAnalysis />
+      },
+      {
         icon: <AnalyticsTwoToneIcon />,
-        id: "UI 24 120",
+        id: "UI 24 120 UX",
         label: "Team Debrief",
         path: "/teamDebrief",
         href: "/operationGame/TeamDebrief",
@@ -311,6 +320,58 @@ export const componentList = [
         routeElement: <PlantCapacity />
       },
       {
+        iconPath: approvalIcon,
+        id: "UI 21 010 UX",
+        label: "Strategy Bank",
+        path: "/strategyBank",
+        href: "/operationGame/StrategyBank",
+        routeElement: <StrategyBank />
+      },
+     {
+        iconPath: approvalIcon,
+        id: "UI 11 030 UX",
+        label: "Strategy Direction",
+        path: "/strategy",
+        href: "/operationGame/Strategy",
+        routeElement: <Strategy />
+      },
+      {
+        iconPath: budgetIcon,
+        id: "UI 21 040 UX",
+        label: "Strategy & Results",
+        path: "/StrategyResults",
+        href: "/operationGame/StrategyResults",
+        routeElement: <StrategyResults />
+      },
+      {
+        iconPath: marketfactorInfoIcon,
+        id: "UI 21 090 UX",
+        label: "Market Intelligence",
+        path: "/marketIntel",
+        href: "/operationGame/marketIntel",
+        routeElement: <MarketIntel />
+      },
+      {
+        iconPath: productionIcon,
+        id: "UI 21 180 UX",
+        label: "Mfg Record",
+        path: "/mfgRecord",
+        href: "/operationGame/mfgRecord",
+        routeElement: <MfgRecord />
+      },
+
+
+      /*
+      {
+        iconPath: approvalIcon,
+        id: "UI 21 010",
+        label: "Strategy Formulation",
+        path: "/strategyBenefit",
+        href: "/operationGame/StrategyBenefit",
+        routeElement: <StrategyBenefit />
+      },
+      */
+      {
         iconPath: rawIcon,
         id: "UI 21 140",
         label: "Raw Material Stock Info",
@@ -327,38 +388,12 @@ export const componentList = [
         routeElement: <FgStockInfo />
       },
       {
-        iconPath: approvalIcon,
-        id: "UI 21 010 UX",
-        label: "Strategy Bank",
-        path: "/strategyBank",
-        href: "/operationGame/StrategyBank",
-        routeElement: <StrategyBank />
-      },
-      /*
-      {
-        iconPath: approvalIcon,
-        id: "UI 21 010",
-        label: "Strategy Formulation",
-        path: "/strategyBenefit",
-        href: "/operationGame/StrategyBenefit",
-        routeElement: <StrategyBenefit />
-      },
-      */
-      {
         iconPath: strategySetsIcon,
         id: "UI 21 011",
         label: "Strategy Sets Collection",
         path: "/StrategySetCollection",
         href: "/operationGame/StrategySetCollection",
         routeElement: <StrategySetCollection />
-      },
-     {
-        iconPath: approvalIcon,
-        id: "UI 11 030 UX",
-        label: "Strategy Direction",
-        path: "/strategy",
-        href: "/operationGame/Strategy",
-        routeElement: <Strategy />
       },
       {
         iconPath: businessStrategyIcon,
@@ -367,14 +402,6 @@ export const componentList = [
         path: "/StrategyPlanInfo",
         href: "/operationGame/StrategyPlanTeam",
         routeElement: <StrategyPlanTeam />
-      },
-      {
-        iconPath: budgetIcon,
-        id: "UI 21 040 UX",
-        label: "Strategy & Results",
-        path: "/StrategyResults",
-        href: "/operationGame/StrategyResults",
-        routeElement: <StrategyResults />
       },
       {
         iconPath: budgetIcon,
@@ -401,28 +428,12 @@ export const componentList = [
         routeElement: <MarketInfoTeam />
       },   
       {
-        iconPath: marketfactorInfoIcon,
-        id: "UI 21 090 UX",
-        label: "Market Intelligence",
-        path: "/marketIntel",
-        href: "/operationGame/marketIntel",
-        routeElement: <MarketIntel />
-      },
-      {
         iconPath: operationalDecisionIcon,
         id: "UI 21 100",
         label: "Operations Decision Info",
         path: "/operationalPlanInfo",
         href: "/operationGame/operationalPlanInfo",
         routeElement: <OperationalPlanInfo />
-      },
-      {
-        iconPath: productionIcon,
-        id: "UI 21 180 UX",
-        label: "Mfg Record",
-        path: "/mfgRecord",
-        href: "/operationGame/mfgRecord",
-        routeElement: <MfgRecord />
       },
       {
         iconPath: productionIcon,

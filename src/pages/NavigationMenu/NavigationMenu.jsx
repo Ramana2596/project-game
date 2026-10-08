@@ -1,4 +1,5 @@
 import BreadCrumb from '../../components/BreadCrumb.jsx';
+import { colors } from '../../ux/styles';
 import CasFlowStatement from '../CasFlowStatement/CasFlowStatement.jsx';
 import InfoDesk from '../InfoDesk/InfoDesk.jsx';
 import Simulation from '../Simulation/Simulation.jsx';
@@ -134,7 +135,7 @@ import PlantCapacity from "../PlantCapacity/PlantCapacity.jsx";
 import MarketIntel from "../MarketIntel/MarketIntel.jsx";
 import FinBS from '../FinBS/FinBS.jsx';
 import FinIS from '../FinIS/FinIS.jsx';
-import { colors } from '../../ux/styles';
+import FinAnalysis from '../FinAnalysis/FinAnalysis.jsx';
 
 export default function MiniDrawer() {
   const { setIsLoading } = useLoading();
@@ -571,6 +572,7 @@ export default function MiniDrawer() {
           <Route path='/MarketIntel' element={<MarketIntel />} />
           <Route path= '/FinBS' element={<FinBS />}  />  
           <Route path= '/FinIS' element={<FinIS />}  />  
+          <Route path= '/FinAnalysis' element={<FinAnalysis />}  />
 
         </Routes>
       </Box>
