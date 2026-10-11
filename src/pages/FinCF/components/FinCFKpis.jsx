@@ -1,154 +1,201 @@
-
-// File: FinCFKpis.jsx
-// Module: FinCF
-// Purpose: Display compact cash-flow KPI cards in a single horizontal row.
+// Component Name : FinCFKpis
+// Module         : FinCF (Cash Flow Statement)
+// Purpose        : Render five key cash-flow KPI measures in the same card style as FinISKpis
+// Author/Version : UXLab V2.0 (aligned with FinISKpis)
+// AI Tags        : cash-flow, kpi, operating, investing, financing, closing-cash
 
 import React from "react";
-import {
-    Box,
-    Card,
-    CardContent,
-    Stack,
-    Typography,
-    Skeleton,
-} from "@mui/material";
-import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
-import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
-import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
-import SwapVertOutlinedIcon from "@mui/icons-material/SwapVertOutlined";
-import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
+import { Box, Skeleton, Typography } from "@mui/material";
+import AccountBalanceWalletRoundedIcon from "@mui/icons-material/AccountBalanceWalletRounded";
+import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
+import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded";
+import SwapVertRoundedIcon from "@mui/icons-material/SwapVertRounded";
+import PaymentsRoundedIcon from "@mui/icons-material/PaymentsRounded";
 import { cardStyle, masterTypo } from "../../../ux/styles";
 import { accent, brand, status, text } from "../../../ux/styles/colorPalette";
 import { formatAmount } from "../utils/finCFFormatters";
 
-// Map each cash-flow measure to its matching icon.
-const KPI_ICONS = {
-    operating: AccountBalanceWalletOutlinedIcon,
-    investing: TrendingUpOutlinedIcon,
-    financing: AccountBalanceOutlinedIcon,
-    net: SwapVertOutlinedIcon,
-    closing: PaymentsOutlinedIcon,
+// Icon, short label and accent for each cash-flow measure
+const STAT_CARDS = {
+    operating: { label: "Operations", Icon: AccountBalanceWalletRoundedIcon, color: accent.teal },
+    investing: { label: "Investing", Icon: TrendingUpRoundedIcon, color: accent.blue },
+    financing: { label: "Financing", Icon: AccountBalanceRoundedIcon, color: accent.purple },
+    net: { label: "Net Cash Flow", Icon: SwapVertRoundedIcon, color: accent.indigo },
+    closing: { label: "Closing Cash", Icon: PaymentsRoundedIcon, color: accent.orange },
 };
 
-// Select a semantic accent for each KPI and flag negative balances.
-const getKpiAccent = (id, value) => {
-    if (id === "closing" && value !== null && value < 0) return status.error;
-    if (id === "operating" && value !== null && value < 0) return status.warning;
-
-    const accents = {
-        operating: accent.teal,
-        investing: accent.blue,
-        financing: accent.purple,
-        net: accent.indigo,
-        closing: accent.orange,
-    };
-
-    return accents[id] || brand.primary;
+// Convert a raw value to a finite number, or null
+const toNumber = (value) => {
+    if (value === null || value === undefined || value === "") return null;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
 };
 
-// Render compact KPI cards with left-aligned icons and no repeated period labels.
-const FinCFKpis = ({ kpis = [], loading = false }) => (
-    <Box
-        sx={{
-            display: "grid",
-            gridTemplateColumns: {
-                xs: "1fr",
-                sm: "repeat(2, minmax(0, 1fr))",
-                md: "repeat(3, minmax(0, 1fr))",
-                lg: "repeat(5, minmax(0, 1fr))",
-                xl: "repeat(6, minmax(0, 1fr))",
-            },
-            gap: 1.5,
-            mb: 2.5,
-        }}
-    >
-        {kpis.map((kpi) => {
-            const Icon = KPI_ICONS[kpi.id] || AccountBalanceWalletOutlinedIcon;
-            const value = kpi.value;
-            const hasValue = value !== null && value !== undefined;
-            const isNegative = hasValue && value < 0;
-            const iconColor = getKpiAccent(kpi.id, value);
+// Optional change versus previous period, shown as a percentage
+const formatChange = (value) => {
+    const n = toNumber(value);
+    if (n === null) return "";
+    return `${n >= 0 ? "+" : ""}${n.toFixed(1)}%`;
+};
 
-            return (
-                <Card
-                    key={kpi.id}
-                    sx={{
-                        ...cardStyle.primary,
-                        minWidth: 0,
-                        height: "100%",
-                        borderTop: 3,
-                        borderTopColor: iconColor,
-                    }}
-                >
-                    <CardContent
-                        sx={{
-                            ...cardStyle.content,
-                            p: 1.5,
-                            "&:last-child": { pb: 1.5 },
-                        }}
-                    >
-                        <Stack
-                            direction="row"
-                            alignItems="flex-start"
-                            spacing={1}
+const FinCFKpis = ({ kpis = [], loading = false }) => {
+    if (!loading && !kpis.length) return null;
+
+    // Bars are scaled to the largest absolute flow so cards compare at a glance
+    const maxAbs = Math.max(
+        1,
+        ...kpis.map((k) => Math.abs(toNumber(k.value) ?? 0))
+    );
+
+    return (
+        <Box>
+            {/* KPI section header */}
+            <Box
+                sx={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "space-between",
+                    mb: 0.75,
+                }}
+            >
+                <Typography sx={{ ...masterTypo.cardH5, color: text.title }}>
+                    Cash Flow Summary
+                </Typography>
+                <Typography sx={{ ...masterTypo.caption, color: text.subtitle }}>
+                    Bars scaled to largest flow
+                </Typography>
+            </Box>
+
+            {/* KPI cards */}
+            <Box
+                sx={{
+                    display: "grid",
+                    gridTemplateColumns: {
+                        xs: "repeat(2, minmax(0, 1fr))",
+                        md: "repeat(3, minmax(0, 1fr))",
+                        lg: "repeat(5, minmax(0, 1fr))",
+                    },
+                    gap: 1,
+                    width: "100%",
+                    mb: 2,
+                }}
+            >
+                {kpis.map((kpi) => {
+                    const card = STAT_CARDS[kpi.id] || {};
+                    const Icon = card.Icon || AccountBalanceWalletRoundedIcon;
+                    const value = toNumber(kpi.value);
+                    const hasValue = value !== null;
+                    const isNegative = hasValue && value < 0;
+
+                    // Share of the largest flow, drawn as the reference bar
+                    const shareWidth = hasValue ? Math.min((Math.abs(value) / maxAbs) * 100, 100) : 0;
+                    const barColor = isNegative ? status.error : card.color || brand.primary;
+
+                    const change = toNumber(kpi.change);
+                    const changeColor =
+                        change === null ? text.subtitle : change >= 0 ? accent.teal : accent.orange;
+
+                    return (
+                        <Box
+                            key={kpi.id}
+                            sx={{
+                                ...cardStyle.statCard,
+                                p: 1.1,
+                                borderRadius: 2.5,
+                                minWidth: 0,
+                            }}
                         >
-                            <Box
-                                sx={{
-                                    ...cardStyle.statIconCircle(iconColor),
-                                    flexShrink: 0,
-                                    mt: 0.25,
-                                }}
-                            >
-                                <Icon fontSize="small" />
-                            </Box>
-
-                            <Box sx={{ minWidth: 0, flex: 1 }}>
-                                <Typography
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 0 }}>
+                                {/* KPI icon */}
+                                <Box
                                     sx={{
-                                        ...masterTypo.body2,
-                                        color: text.subtitle,
-                                        fontWeight: 600,
-                                        minHeight: "2.8em",
-                                        lineHeight: 1.4,
+                                        ...cardStyle.statIconCircle(card.color || accent.purple),
+                                        width: 34,
+                                        height: 34,
+                                        minWidth: 34,
+                                        "& svg": { fontSize: 18, color: text.white },
                                     }}
                                 >
-                                    {kpi.label}
-                                </Typography>
+                                    <Icon />
+                                </Box>
 
-                                {loading ? (
-                                    <Skeleton
-                                        variant="text"
-                                        width="90%"
-                                        height={36}
-                                        sx={{ mt: 0.75 }}
-                                    />
-                                ) : (
+                                {/* KPI label + value */}
+                                <Box sx={{ minWidth: 0, flex: 1 }}>
                                     <Typography
+                                        title={kpi.label}
                                         sx={{
-                                            ...masterTypo.h5,
-                                            color: isNegative
-                                                ? status.error
-                                                : text.title,
-                                            fontWeight: 800,
-                                            fontSize: {
-                                                xs: "1.05rem",
-                                                xl: "1.15rem",
-                                            },
-                                            mt: 0.75,
-                                            overflowWrap: "anywhere",
-                                            fontVariantNumeric: "tabular-nums",
+                                            ...masterTypo.caption,
+                                            color: text.subtitle,
+                                            fontWeight: 600,
+                                            lineHeight: 1.2,
+                                            whiteSpace: "nowrap",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
                                         }}
                                     >
-                                        {hasValue ? formatAmount(value) : "—"}
+                                        {card.label || kpi.label}
                                     </Typography>
-                                )}
+
+                                    {loading ? (
+                                        <Skeleton variant="text" width="80%" height={28} />
+                                    ) : (
+                                        <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.75, mt: 0.35 }}>
+                                            <Typography
+                                                sx={{
+                                                    ...masterTypo.h6,
+                                                    color: isNegative ? status.error : text.title,
+                                                    lineHeight: 1.15,
+                                                    fontVariantNumeric: "tabular-nums",
+                                                    whiteSpace: "nowrap",
+                                                }}
+                                            >
+                                                {hasValue ? formatAmount(value) : "—"}
+                                            </Typography>
+
+                                            {change !== null && (
+                                                <Typography
+                                                    sx={{
+                                                        ...masterTypo.caption,
+                                                        color: changeColor,
+                                                        fontWeight: 700,
+                                                        lineHeight: 1.15,
+                                                        fontVariantNumeric: "tabular-nums",
+                                                    }}
+                                                >
+                                                    {formatChange(change)}
+                                                </Typography>
+                                            )}
+                                        </Box>
+                                    )}
+                                </Box>
                             </Box>
-                        </Stack>
-                    </CardContent>
-                </Card>
-            );
-        })}
-    </Box>
-);
+
+                            {/* Reference bar: share of the largest flow */}
+                            <Box
+                                sx={{
+                                    mt: 1,
+                                    height: 5,
+                                    borderRadius: 999,
+                                    backgroundColor: accent.primarySoft,
+                                    overflow: "hidden",
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        width: loading ? "0%" : `${shareWidth}%`,
+                                        height: "100%",
+                                        borderRadius: 999,
+                                        background: barColor,
+                                        transition: "width 0.3s ease",
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                    );
+                })}
+            </Box>
+        </Box>
+    );
+};
 
 export default FinCFKpis;
