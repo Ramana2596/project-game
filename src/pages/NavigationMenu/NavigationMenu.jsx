@@ -135,6 +135,7 @@ import PlantCapacity from "../PlantCapacity/PlantCapacity.jsx";
 import MarketIntel from "../MarketIntel/MarketIntel.jsx";
 import FinBS from '../FinBS/FinBS.jsx';
 import FinIS from '../FinIS/FinIS.jsx';
+import FinCF from '../FinCF/FinCF.jsx';
 import FinAnalysis from '../FinAnalysis/FinAnalysis.jsx';
 
 export default function MiniDrawer() {
@@ -571,7 +572,8 @@ export default function MiniDrawer() {
           <Route path='/PlantCapacity' element={<PlantCapacity />} />
           <Route path='/MarketIntel' element={<MarketIntel />} />
           <Route path= '/FinBS' element={<FinBS />}  />  
-          <Route path= '/FinIS' element={<FinIS />}  />  
+          <Route path= '/FinIS' element={<FinIS />}  />
+          <Route path= '/FinCF' element={<FinCF />}  />
           <Route path= '/FinAnalysis' element={<FinAnalysis />}  />
 
         </Routes>
