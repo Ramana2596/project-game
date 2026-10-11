@@ -17,6 +17,7 @@ import OperationalPlanInfo from "../pages/OperationalPlanInfo/OperationalPlanInf
 //import BalanceSheetInfo from "../pages/BalanceSheetInfo/BalanceSheetInfo";
 import FinBS from "../pages/FinBS/FinBS.jsx";
 import FinIS from "../pages/FinIS/FinIS.jsx";
+import FinCF from "../pages/FinCF/FinCF.jsx";
 import FgStockInfo from "../pages/FgStockInfo/FgStockInfo";
 import RmStockInfo from "../pages/RmStockInfo/RmStockInfo";
 import MfgRecord from "../pages/MfgRecord/MfgRecord.jsx";
@@ -229,7 +230,7 @@ export const componentList = [
       {
         icon: <AccountBalanceTwoToneIcon />,
         id: "UI 21 110 UX",
-        label: "Balance Sheet Analytics",
+        label: "Balance Sheet",
         path: "/finBS",
         href: "/operationGame/FinBS",
         routeElement: <FinBS />
@@ -237,36 +238,18 @@ export const componentList = [
       {
         icon: <ReceiptLongTwoToneIcon />,
         id: "UI 21 120 UX",
-        label: "Income Statement Analytics",
+        label: "Income Statement",
         path: "/finIS",
         href: "/operationGame/FinIS",
         routeElement: <FinIS />
       },
-    /*
-      {
-        icon: <AccountBalanceTwoToneIcon />,
-        id: "UI 21 110",
-        label: "Balance Sheet",
-        path: "/balanceSheet",
-        href: "/operationGame/balanceSheet",
-        routeElement: <BalanceSheetInfo />
-      },
-      {
-        icon: <ReceiptLongTwoToneIcon />,
-        id: "UI 21 120",
-        label: "Income Statement",
-        path: "/incomeStatementInfo",
-        href: "/operationGame/incomeStatementInfo",
-        routeElement: <IncomeStatementInfo />
-      },
-    */
       {
         icon: <CurrencyExchangeTwoToneIcon />,
-        id: "UI 21 130",
+        id: "UI 21 130 UX",
         label: "Cash Flow Statement",
-        path: "/cashFlowStatement",
-        href: "/operationGame/cashFlowStatement",
-        routeElement: <CasFlowStatement />
+        path: "/finCF",
+        href: "/operationGame/FinCF",
+        routeElement: <FinCF />
       },
       {
         iconPath: perfCoIcon,
@@ -284,6 +267,33 @@ export const componentList = [
         href: "/operationGame/TeamDebrief",
         routeElement: <TeamDebrief />
       },
+  /*
+      {
+        icon: <AccountBalanceTwoToneIcon />,
+        id: "UI 21 110",
+        label: "Balance Sheet",
+        path: "/balanceSheet",
+        href: "/operationGame/balanceSheet",
+        routeElement: <BalanceSheetInfo />
+      },
+      {
+        icon: <ReceiptLongTwoToneIcon />,
+        id: "UI 21 120",
+        label: "Income Statement",
+        path: "/incomeStatementInfo",
+        href: "/operationGame/incomeStatementInfo",
+        routeElement: <IncomeStatementInfo />
+      },
+      {
+        icon: <CurrencyExchangeTwoToneIcon />,
+        id: "UI 21 130",
+        label: "Cash Flow Statement",
+        path: "/cashFlowStatement",
+        href: "/operationGame/cashFlowStatement",
+        routeElement: <CasFlowStatement />
+      },
+  */
+ 
     ],
   },
   {
