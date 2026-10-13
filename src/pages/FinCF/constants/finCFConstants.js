@@ -44,6 +44,8 @@ export const CASH_FLOW_SECTIONS = [
 ];
 
 // Define parent-to-child relationships for level-by-level expansion.
+// Lines 49 and 51 have no children here: they are shown as siblings of
+// 33, 37, 48 and 50, so no line is ever rendered more than once.
 export const CASH_FLOW_LINE_CHILDREN = {
     4: [2, 3],
     9: [5, 6, 7, 8],
@@ -57,14 +59,15 @@ export const CASH_FLOW_LINE_CHILDREN = {
     41: [38, 39, 40],
     47: [42, 43, 44, 45, 46],
     48: [41, 47],
-    49: [33, 37, 48],
-    51: [50, 49],
 };
 
 // Define the default top-level rows for the exploded view.
-export const CASH_FLOW_ROOT_LINES = [33, 37, 48, 49, 51];
+// Flat sequence of the statement's main totals, in statement order.
+export const CASH_FLOW_ROOT_LINES = [33, 37, 48, 49, 50, 51];
 
-export const CASH_FLOW_DEFAULT_EXPANDED_LINES = [49, 51];
+// Nothing expanded on open; the user drills into 33, 37 or 48 as needed.
+// Use [33, 37, 48] to open the three activity totals by default.
+export const CASH_FLOW_DEFAULT_EXPANDED_LINES = [];
 
 // Document verified calculation relationships; displayed values remain SP-driven.
 export const CASH_FLOW_FORMULAS = {

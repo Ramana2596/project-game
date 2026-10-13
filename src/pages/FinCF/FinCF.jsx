@@ -37,6 +37,7 @@ export default function FinCF() {
         setSearch,
         density,
         setDensity,
+        isTreeView,
         activeSection,
         setActiveSection,
         productionMonth,
@@ -105,8 +106,9 @@ export default function FinCF() {
                 ) : (
                     <FinCFTable
                         rows={displayRows}
+                        totalCount={rows.length}
                         periods={periods}
-                        density={density}
+                        isTree={isTreeView}
                         loading={false}
                     />
                 )}
