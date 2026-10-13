@@ -2,12 +2,22 @@
  * Component Name: FinBSTable
  * Module: Finance / FinBS
  * Purpose: Display the Balance Sheet as a period-by-period table with section bands, subtotals and totals.
- * Author/Version: UXLab / v1.0
- * AI Tags: table, finBS, balance sheet, statement, sticky columns, subtotal, section bands
+ * Author/Version: UXLab / v1.1
+ * AI Tags: table, finBS, balance sheet, statement, UOM, sticky columns, subtotal, section bands
  */
 
 import React from "react";
-import { Box, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
 import { masterTypo, tableStyle } from "../../../ux/styles";
@@ -15,8 +25,9 @@ import { accent, border, brand, state, surface, text } from "../../../ux/styles/
 import { LINE_TYPES, ROW_TYPE, STATEMENT_SECTIONS } from "../constants/finBS.constants";
 import { formatAmount, formatPeriodLabel } from "../utils/formatters";
 
-// Width of the sticky "Details" column
+// Widths of the fixed Details and UOM columns
 const DETAILS_WIDTH = 280;
+const UOM_WIDTH = 90;
 
 // Hover tint drawn as an image so sticky cells keep their solid background
 const HOVER_TINT = `linear-gradient(${accent.blue}0A, ${accent.blue}0A)`;
@@ -32,8 +43,8 @@ const ROW_LOOK = {
 const sectionOf = (lineNo) => STATEMENT_SECTIONS.find((s) => lineNo >= s.fromLine && lineNo <= s.toLine);
 
 export default function FinBSTable({ rows, totalCount, periods, hiddenPeriodCount, isRefreshing, isTree, onToggle }) {
-  // Derived values
-  const columnCount = periods.length + 1;
+  // Count Details, UOM and period columns
+  const columnCount = periods.length + 2;
 
   // Render one statement row
   const renderRow = (row) => {
@@ -64,7 +75,7 @@ export default function FinBSTable({ rows, totalCount, periods, hiddenPeriodCoun
             left: 0,
             zIndex: 1,
             minWidth: DETAILS_WIDTH,
-            backgroundColor: "inherit",
+            backgroundColor: look.bg,
             boxShadow: `inset -1px 0 0 ${border.divider}`,
             borderTop: look.borderTop,
             color: look.color,
@@ -94,6 +105,24 @@ export default function FinBSTable({ rows, totalCount, periods, hiddenPeriodCoun
             row.details
           )}
         </TableCell>
+
+        {/* Display the normalized unit of measure */}
+        <TableCell
+          sx={{
+            ...tableStyle.cell,
+            minWidth: UOM_WIDTH,
+            whiteSpace: "nowrap",
+            textAlign: "center",
+            backgroundColor: look.bg,
+            borderTop: look.borderTop,
+            color: look.color,
+            fontWeight: look.weight,
+          }}
+        >
+          {row.uom || "—"}
+        </TableCell>
+
+        {/* Render the monthly values */}
         {periods.map((period) => {
           const value = row.values[period];
           return (
@@ -116,27 +145,30 @@ export default function FinBSTable({ rows, totalCount, periods, hiddenPeriodCoun
     );
   };
 
-  // Render the body: a section band before the first visible line of each section
+  // Render a section band before the first visible line of each section
   const renderBody = () => {
     let lastSection = null;
     return rows.map((row) => {
       const section = sectionOf(row.lineNo);
       const showBand = section && section.key !== lastSection;
       lastSection = section ? section.key : lastSection;
+
       return (
         <React.Fragment key={row.lineNo}>
           {showBand && (
             <TableRow>
               <TableCell
                 colSpan={columnCount}
-                sx={{ 
-                  ...tableStyle.cell, 
-                  ...masterTypo.h6, 
-                  background: state.selected.background, 
-                  color: brand.primaryDark 
+                sx={{
+                  ...tableStyle.cell,
+                  ...masterTypo.h6,
+                  background: state.selected.background,
+                  color: brand.primaryDark,
                 }}
               >
-                <Box sx={{ position: "sticky", left: 16, display: "inline-block" }}>{section.title}</Box>
+                <Box sx={{ position: "sticky", left: 16, display: "inline-block" }}>
+                  {section.title}
+                </Box>
               </TableCell>
             </TableRow>
           )}
@@ -146,7 +178,7 @@ export default function FinBSTable({ rows, totalCount, periods, hiddenPeriodCoun
     });
   };
 
-  // Render
+  // Render the table
   return (
     <Box sx={{ ...tableStyle.container, opacity: isRefreshing ? 0.6 : 1, transition: "opacity .2s ease" }}>
       {/* Line count and hidden periods */}
@@ -162,11 +194,24 @@ export default function FinBSTable({ rows, totalCount, periods, hiddenPeriodCoun
       </Box>
 
       <TableContainer sx={{ maxHeight: "70vh" }}>
-        {/* Makes the table rows smaller and tighter */}
+        {/* Compact rows with a sticky header */}
         <Table stickyHeader size="small" aria-label="Balance sheet" sx={{ borderCollapse: "separate", ...tableStyle.compact }}>
           <TableHead sx={tableStyle.columnHeader}>
             <TableRow>
-              <TableCell sx={{ position: "sticky", left: 0, zIndex: 3, minWidth: DETAILS_WIDTH, textAlign: "left" }}>Details</TableCell>
+              <TableCell
+                sx={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 3,
+                  minWidth: DETAILS_WIDTH,
+                  textAlign: "left",
+                }}
+              >
+                Details
+              </TableCell>
+              <TableCell sx={{ textAlign: "center", whiteSpace: "nowrap", minWidth: UOM_WIDTH }}>
+                UOM
+              </TableCell>
               {periods.map((period) => (
                 <TableCell key={period} sx={{ textAlign: "right", whiteSpace: "nowrap", minWidth: 140 }}>
                   {formatPeriodLabel(period)}

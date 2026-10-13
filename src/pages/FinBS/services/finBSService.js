@@ -32,6 +32,7 @@ export const normalizeRows = (rawRows = []) => {
     .map((raw) => ({
       lineNo: Number(pick(raw, "line_no")),
       details: String(pick(raw, "details") ?? "").trim(),
+      uom: String(pick(raw, "uom") ?? "").trim(),
       values: Object.fromEntries(
         periods.map((period) => [
           period,

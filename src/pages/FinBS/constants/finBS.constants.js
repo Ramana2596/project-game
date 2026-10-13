@@ -50,7 +50,14 @@ export const DECIMALS = 2;
 export const EMPTY_CELL = "–";
 
 // Columns returned by the SP that are keys, not period values (compared in lower case)
-export const KEY_COLUMNS = ["game_id", "game_batch", "game_team", "line_no", "details"];
+export const KEY_COLUMNS = [
+  "game_id", 
+  "game_batch", 
+  "game_team", 
+  "line_no", 
+  "details",
+  "uom"
+];
 
 // Row types used for styling
 export const ROW_TYPE = { LINE: "line", SUBTOTAL: "subtotal", TOTAL: "total" };
