@@ -2,8 +2,8 @@
  * Component Name: FinCFTable
  * Module: Finance / FinCF
  * Purpose: Display the Cash Flow Statement as a period-by-period table with section bands, subtotals and totals.
- * Author/Version: UXLab / v4.0 (layout mirrors FinBSTable)
- * AI Tags: table, finCF, cash flow, statement, sticky columns, subtotal, section bands
+ * Author/Version: UXLab / v4.3 (mirrors FinBSTable: the hook sets isTree; Compact = drill-down, Detailed/search = every line)
+ * AI Tags: table, finCF, cash flow, statement, sticky columns, subtotal, section bands, density
  */
 
 import React, { useMemo, useState } from "react";
@@ -65,9 +65,12 @@ export default function FinCFTable({
   hiddenPeriodCount = 0,
   loading = false,
   isRefreshing = false,
-  isTree = true, // true: expandable hierarchy; false: flat list in line order
+  isTree = true, // true: drill-down tree (Compact); false: every line flat in statement order (Detailed or search)
 }) {
-  // State: lines currently expanded
+  // The hook decides the mode (as in FinBS); the table only draws what it is told
+  const treeMode = isTree;
+
+  // State: lines currently expanded (Compact view)
   const [expanded, setExpanded] = useState(() => new Set(CASH_FLOW_DEFAULT_EXPANDED_LINES));
 
   // Derived values
@@ -80,7 +83,7 @@ export default function FinCFTable({
 
   // Visible rows in display order, with depth and expansion info
   const visibleRows = useMemo(() => {
-    if (!isTree) {
+    if (!treeMode) {
       return rows.map((row, i) => ({
         key: `${row?.Line_No}-${i}`,
         lineNo: Number(row?.Line_No),
@@ -102,7 +105,7 @@ export default function FinCFTable({
     };
     CASH_FLOW_ROOT_LINES.forEach((l) => walk(l, 0, "r"));
     return out;
-  }, [isTree, rows, rowByLine, expanded]);
+  }, [treeMode, rows, rowByLine, expanded]);
 
   // Toggle one parent line
   const toggle = (lineNo) =>
@@ -118,8 +121,8 @@ export default function FinCFTable({
     const look = ROW_LOOK[rowTypeOf(lineNo)];
     const details = row?.Details ?? "—";
     const isContra = /^less\s*:/i.test(String(details));
-    const canToggle = isTree && hasChildren;
-    const indent = isTree ? 2 + depth * 3 : look.indent;
+    const canToggle = treeMode && hasChildren;
+    const indent = treeMode ? 2 + depth * 3 : look.indent;
 
     return (
       <TableRow
@@ -154,7 +157,7 @@ export default function FinCFTable({
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
             {/* Drill-down arrow */}
-            {isTree &&
+            {treeMode &&
               (hasChildren ? (
                 <IconButton
                   size="small"

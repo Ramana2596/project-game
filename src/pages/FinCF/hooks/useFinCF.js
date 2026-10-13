@@ -103,25 +103,31 @@ export const useFinCF = () => {
     // Identify period columns and prepare searchable rows.
     const periods = useMemo(() => getPeriodColumns(rows), [rows]);
 
+    // Compact is the drill-down tree; Detailed or any search text shows every matching line flat (as FinBS).
+    const isTreeView = density === "compact" && !search.trim();
+
     const filteredRows = useMemo(() => {
         const query = search.trim().toLowerCase();
 
-        return rows.filter((row) => {
-            const lineNo = Number(row?.Line_No);
-            const section = CASH_FLOW_SECTIONS.find(
-                (item) => lineNo >= item.startLine && lineNo <= item.endLine
-            );
+        return rows
+            .filter((row) => {
+                const lineNo = Number(row?.Line_No);
+                const section = CASH_FLOW_SECTIONS.find(
+                    (item) => lineNo >= item.startLine && lineNo <= item.endLine
+                );
 
-            const sectionMatch =
-                activeSection === "all" || section?.id === activeSection;
+                const sectionMatch =
+                    activeSection === "all" || section?.id === activeSection;
 
-            const searchMatch =
-                !query ||
-                String(row?.Details ?? "").toLowerCase().includes(query) ||
-                String(row?.Line_No ?? "").toLowerCase().includes(query);
+                const searchMatch =
+                    !query ||
+                    String(row?.Details ?? "").toLowerCase().includes(query) ||
+                    String(row?.Line_No ?? "").toLowerCase().includes(query);
 
-            return sectionMatch && searchMatch;
-        });
+                return sectionMatch && searchMatch;
+            })
+            // Statement order, so the flat view always reads 1 to 51
+            .sort((a, b) => Number(a?.Line_No) - Number(b?.Line_No));
     }, [rows, search, activeSection]);
 
     // Resolve the KPI period using the selected month or the latest returned period.
@@ -176,6 +182,7 @@ export const useFinCF = () => {
         setSearch,
         density,
         setDensity,
+        isTreeView,
         activeSection,
         setActiveSection,
         productionMonth,
