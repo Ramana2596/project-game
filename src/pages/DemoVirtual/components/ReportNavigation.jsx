@@ -75,7 +75,7 @@ export default function ReportNavigation({
         variant="scrollable"
         scrollButtons={false}
         sx={{
-          minHeight: 50,
+          minHeight: 40,
           width: "100%",
 
           // --------------------------------------------------
@@ -89,7 +89,7 @@ export default function ReportNavigation({
           // Tab base
           // --------------------------------------------------
           "& .MuiTab-root": {
-            minHeight: 50,
+            minHeight: 40,
             minWidth: 135,
 
             px: 2.25,

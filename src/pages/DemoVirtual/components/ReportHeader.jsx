@@ -57,7 +57,7 @@ export default function ReportHeader({
 
       <Typography
         sx={{
-          ...masterTypo.h2,
+          ...masterTypo.h4,
           color: colors.title,
         }}
       >
