@@ -13,14 +13,14 @@ export default function SimContent({ leftContent, rightContent }) {
       spacing={2.5}
       alignItems="flex-start"
     >
-      <Grid item xs={12} lg={8}>
+      <Grid item xs={12} lg={9}>
         {leftContent}
       </Grid>
 
       <Grid
         item
         xs={12}
-        lg={4}
+        lg={3}
         sx={{
           position: {lg: "sticky",},
 
