@@ -10,7 +10,7 @@ export const REPORT_REGISTRY = {
   4: ["UI 21 090 UX"],
   5: ["UI 21 100"],
   6: ["UI 21 180 UX"],
-  7: ["UI 21 110 UX", "UI 21 120 UX", "UI 21 130"],
+  7: ["UI 21 110 UX", "UI 21 120 UX", "UI 21 130 UX"],
 //  8: ["UI 21 281", "UI 21 282"],
   8: ["UI 21 280 UX"],
 };
