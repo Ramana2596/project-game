@@ -30,6 +30,8 @@ import ReportWriter from "./ReportWriter";
 import ReportHeader from "../components/ReportHeader";
 import ReportNavigation from "../components/ReportNavigation";
 
+import { ScreenHostProvider } from "../../../components/ScreenAdapter";
+
 import { colors, masterTypo, buttonStyle, tableStyle } from "../../../ux/styles";
 
 // Height of the app-level purple bar that sits above the drawer.
@@ -82,7 +84,7 @@ export default function ReportDrawer({
       ];
     }
 
-  
+
     // Normal Reports
     const stageReports =
       (REPORT_REGISTRY[stageNo] || []).filter(
@@ -110,7 +112,7 @@ export default function ReportDrawer({
 
   // Report Navigation
   // Convert stage report list into generic navigation, consumed by ReportNavigation.
- 
+
   const navigation = useMemo(
     () =>
       reportsForStage.map((report) => ({
@@ -271,10 +273,13 @@ export default function ReportDrawer({
 
           {activeReport?.uiId ? (
 
-            <ReportWriter
-              uiId={activeReport.uiId}
-              reportContext={reportContext}
-            />
+            // Screens rendered here know they are hosted by the drawer
+            <ScreenHostProvider>
+              <ReportWriter
+                uiId={activeReport.uiId}
+                reportContext={reportContext}
+              />
+            </ScreenHostProvider>
 
           ) : (
 
