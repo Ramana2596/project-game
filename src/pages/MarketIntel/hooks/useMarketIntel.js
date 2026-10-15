@@ -2,8 +2,8 @@
 /**
  * Component Name: UseMarketIntel
  * Module: Market Intelligence
- * Purpose: Manages state, session context parameters, and API orchestration for market intelligence data.
- * AI Tags: hook, state-management, market-intel, user-context
+ * Purpose: Manages session parameters, month input, category filter, and market data retrieval.
+ * AI Tags: hook, market-intelligence, user-context, api, filter
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -15,26 +15,21 @@ export function useMarketIntel(productionMonth) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
-    // Dynamic query parameters initialized from UserContext
     const [queryParams, setQueryParams] = useState({
         Game_Id: userInfo?.gameId || 'OpsMgt',
         Game_Batch: userInfo?.gameBatch,
         Game_Team: userInfo?.gameTeam,
-        Production_Month: productionMonth,
         Category: ''
     });
 
-    // Synchronize query parameters when session context changes
+    // Synchronize session context
     useEffect(() => {
-        if (userInfo?.gameId && userInfo?.gameBatch && userInfo?.gameTeam) {
-            setQueryParams(prev => ({
-                ...prev,
-                Game_Id: userInfo.gameId,
-                Game_Batch: userInfo.gameBatch,
-                Game_Team: userInfo.gameTeam
-            }));
-        }
+        setQueryParams(prev => ({
+            ...prev,
+            Game_Id: userInfo?.gameId || 'OpsMgt',
+            Game_Batch: userInfo?.gameBatch,
+            Game_Team: userInfo?.gameTeam
+        }));
     }, [userInfo]);
 
     // Fetch market intelligence data
@@ -45,11 +40,15 @@ export function useMarketIntel(productionMonth) {
         setError(null);
 
         try {
+            const month = productionMonth
+                ? new Date(productionMonth).toISOString().split('T')[0]
+                : null;
+
             const response = await getMarketInfoTeam({
                 gameId: queryParams.Game_Id,
                 gameBatch: queryParams.Game_Batch,
                 gameTeam: queryParams.Game_Team,
-                productionMonth: queryParams.Production_Month
+                productionMonth: month
             });
 
             setData(Array.isArray(response.data?.data) ? response.data.data : []);
@@ -58,13 +57,13 @@ export function useMarketIntel(productionMonth) {
         } finally {
             setLoading(false);
         }
-    }, [queryParams]);
+    }, [queryParams.Game_Id, queryParams.Game_Batch, queryParams.Game_Team, productionMonth]);
 
     useEffect(() => {
         fetchMarketData();
     }, [fetchMarketData]);
 
-    // Update local filters
+    // Update UI filters
     const updateFilters = (newParams) => {
         setQueryParams(prev => ({
             ...prev,

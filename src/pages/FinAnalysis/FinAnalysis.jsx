@@ -1,9 +1,11 @@
 
-// Component: FinAnalysis
-// Module: FinAnalysis
-// Purpose: Orchestrate the macro-level Annual Report analytics experience
-// Author/Version: OpsMgt UXLab V1.3
-// AI Tags: annual-report, analytics, financial-ratios, management-dashboard, uxlab
+/**
+ * Component: FinAnalysis
+ * Module: FinAnalysis
+ * Purpose: Orchestrate Annual Report analytics for standalone and ReportDrawer deployment.
+ * Author/Version: OpsMgt UXLab V1.4
+ * AI Tags: annual-report, analytics, financial-ratios, management-dashboard, uxlab
+ */
 
 import React, { useMemo, useState } from "react";
 import { Alert, Box, Typography } from "@mui/material";
@@ -29,7 +31,7 @@ const getRevenueValue = (item) => {
     : null;
 };
 
-// Build the page heading and description for the active section.
+// Build the heading and description for the active analytical section.
 const getSectionContent = (activeTab) => {
   if (activeTab === "profitability") {
     return {
@@ -74,12 +76,13 @@ const getSectionContent = (activeTab) => {
   };
 };
 
-const FinAnalysis = () => {
-  // Maintain only page navigation and macro analytical filters.
+// Render financial analytics in standalone and ReportDrawer modes.
+const FinAnalysis = ({ hideHeader = false }) => {
+  // Maintain page navigation and macro analytical filters.
   const [activeTab, setActiveTab] = useState("overview");
   const [filters, setFilters] = useState(FA_DEFAULT_FILTERS);
 
-  // Load the complete dataset once and apply the selected period locally.
+  // Load the dataset and apply the selected period locally.
   const {
     annualData = [],
     ratioSeries = [],
@@ -104,7 +107,7 @@ const FinAnalysis = () => {
     [previousRatios]
   );
 
-  // Resolve the revenue values aligned with the same analytical periods.
+  // Align revenue values with the analytical periods.
   const revenueSeries = useMemo(
     () =>
       annualData.map((item) => ({
@@ -114,29 +117,32 @@ const FinAnalysis = () => {
     [annualData]
   );
 
-  // Resolve the analytical content for the active tab.
+  // Resolve the content for the active analytical section.
   const section = useMemo(
     () => getSectionContent(activeTab),
     [activeTab]
   );
 
-  // Update toolbar filters without introducing team or product selection.
+  // Update toolbar filters without adding team or product selection.
   const handleFilterChange = (nextFilters) => {
     setFilters(nextFilters);
   };
 
-  // Render the macro-level Annual Report page.
   return (
     <Box sx={layoutStyle.root}>
       <Box sx={layoutStyle.pageContainer}>
-        <FaHeader
-          productionMonth={
-            filters.period === "ALL"
-              ? latestPeriod
-              : filters.period
-          }
-        />
+        {/* Show the module header only in standalone mode. */}
+        {!hideHeader && (
+          <FaHeader
+            productionMonth={
+              filters.period === "ALL"
+                ? latestPeriod
+                : filters.period
+            }
+          />
+        )}
 
+        {/* Keep analytical navigation and period filtering in both modes. */}
         <FaNavigation
           activeTab={activeTab}
           onChange={setActiveTab}
@@ -145,6 +151,7 @@ const FinAnalysis = () => {
           periods={periods}
         />
 
+        {/* Display data retrieval errors. */}
         {error && (
           <Alert
             severity="error"
@@ -158,17 +165,14 @@ const FinAnalysis = () => {
           </Alert>
         )}
 
+        {/* Present the latest financial KPIs. */}
         <FaKpis
           ratios={latest}
           loading={loading}
         />
 
-        <Box
-          sx={{
-            px: 2,
-            mb: 1.5,
-          }}
-        >
+        {/* Explain the focus of the selected analytical section. */}
+        <Box sx={{ px: 2, mb: 1.5 }}>
           <Typography
             sx={{
               ...masterTypo.h5,
@@ -189,6 +193,7 @@ const FinAnalysis = () => {
           </Typography>
         </Box>
 
+        {/* Display the selected financial trend and revenue trend. */}
         <FaTrend
           series={ratioSeries}
           revenueSeries={revenueSeries}
@@ -198,6 +203,7 @@ const FinAnalysis = () => {
           loading={loading}
         />
 
+        {/* Display analytical charts for the selected section. */}
         <FaCharts
           annualData={annualData}
           ratioSeries={ratioSeries}
@@ -205,6 +211,7 @@ const FinAnalysis = () => {
           activeTab={activeTab}
         />
 
+        {/* Present management insights based on current and previous ratios. */}
         <FaInsights
           latestRatios={latest}
           previousRatios={previous}
@@ -212,13 +219,9 @@ const FinAnalysis = () => {
           activeTab={activeTab}
         />
 
+        {/* Explain when no data exists for the selected period. */}
         {!loading && !annualData.length && !error && (
-          <Box
-            sx={{
-              px: 2,
-              pb: 2,
-            }}
-          >
+          <Box sx={{ px: 2, pb: 2 }}>
             <Typography
               sx={{
                 ...masterTypo.caption,
@@ -231,15 +234,11 @@ const FinAnalysis = () => {
           </Box>
         )}
 
+        {/* Explain when data exists but reporting periods are unavailable. */}
         {periods.length === 0 &&
           !loading &&
           annualData.length > 0 && (
-            <Box
-              sx={{
-                px: 2,
-                pb: 2,
-              }}
-            >
+            <Box sx={{ px: 2, pb: 2 }}>
               <Typography
                 sx={{
                   ...masterTypo.caption,

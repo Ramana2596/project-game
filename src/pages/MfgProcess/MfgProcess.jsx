@@ -1,13 +1,12 @@
-// ============================================================
-// Component: MfgProcess
-// Module: Company Profile
-// Purpose: Manufacturing Process workspace
-// AI Tags: manufacturing-process, company-profile, uxlab
-// UXLab V1.0 — Standardized
-// ============================================================
+/**
+ * Component: MfgProcess
+ * Module: Company Profile
+ * Purpose: Manufacturing Process workspace for standalone and ReportDrawer deployment.
+ * Author/Version: UXLab V1.1
+ * AI Tags: manufacturing-process, company-profile, uxlab
+ */
 
 import React from "react";
-
 import {
   Box,
   CircularProgress,
@@ -21,21 +20,22 @@ import { useMfgProcess } from "./hooks/useMfgProcess";
 import MfgProcessCard from "./components/MfgProcessCard";
 import { MFG_PROCESS_LABELS } from "./constants/pageConstants";
 
-// ------------------------------------------------------------
-// Manufacturing Process Page
-// ------------------------------------------------------------
-export default function MfgProcess({ productionMonth }) {
+// Render the Manufacturing Process workspace in both deployment modes.
+export default function MfgProcess({
+  productionMonth,
+  hideHeader = false,
+}) {
+  // Load the authenticated user and current learning session.
   const { userInfo } = useUser();
 
+  // Load manufacturing process data for the active session and period.
   const {
     productProcesses,
     loading,
     error,
   } = useMfgProcess(userInfo, productionMonth);
 
-  // ----------------------------------------------------------
-  // Loading
-  // ----------------------------------------------------------
+  // Display loading feedback while the process data is retrieved.
   if (loading) {
     return (
       <Box
@@ -48,17 +48,13 @@ export default function MfgProcess({ productionMonth }) {
       >
         <CircularProgress
           size={30}
-          sx={{
-            color: colors.primary,
-          }}
+          sx={{ color: colors.primary }}
         />
       </Box>
     );
   }
 
-  // ----------------------------------------------------------
-  // Error
-  // ----------------------------------------------------------
+  // Display a concise error message if the process data cannot be loaded.
   if (error) {
     return (
       <Box sx={{ py: 3 }}>
@@ -74,49 +70,43 @@ export default function MfgProcess({ productionMonth }) {
     );
   }
 
-  // ----------------------------------------------------------
-  // Render
-  // ----------------------------------------------------------
   return (
     <Box sx={{ width: "100%" }}>
+      {/* Keep the module heading in standalone mode only. */}
+      {!hideHeader && (
+        <>
+          <Typography
+            component="h1"
+            sx={{
+              ...masterTypo.h3,
+              color: colors.title,
+              mb: 1.5,
+            }}
+          >
+            {MFG_PROCESS_LABELS.title}
+          </Typography>
 
-      {/* ================================================== */}
-      {/* Page Heading — single source of truth via MFG_PROCESS_LABELS */}
-      {/* ================================================== */}
-      <Typography
-        sx={{
-          ...masterTypo.h3,
-          color: colors.title,
-          mb: 1.5,
-        }}
-      >
-        {MFG_PROCESS_LABELS.title}
-      </Typography>
+          <Typography
+            sx={{
+              ...masterTypo.body1,
+              color: colors.subtitle,
+              mb: 2,
+            }}
+          >
+            {MFG_PROCESS_LABELS.subtitle}
+          </Typography>
+        </>
+      )}
 
-      {/* Page Subtitle */}
-      <Typography
-        sx={{
-          ...masterTypo.body1,
-          color: colors.subtitle,
-          mb: 2,
-        }}
-      >
-        {MFG_PROCESS_LABELS.subtitle}
-      </Typography>
-
-      {/* ================================================== */}
-      {/* Product Process Cards */}
-      {/* ================================================== */}
+      {/* Preserve the responsive manufacturing process card grid. */}
       <Box
         sx={{
           display: "grid",
-
           gridTemplateColumns: {
             xs: "1fr",
             md: "repeat(2, minmax(0, 1fr))",
             lg: "repeat(3, minmax(0, 1fr))",
           },
-
           gap: 2,
           alignItems: "stretch",
         }}
@@ -135,7 +125,6 @@ export default function MfgProcess({ productionMonth }) {
           />
         ))}
       </Box>
-
     </Box>
   );
 }

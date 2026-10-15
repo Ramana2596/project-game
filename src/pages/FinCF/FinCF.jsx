@@ -1,6 +1,10 @@
-// File: FinCF.jsx
-// Module: FinCF
-// Purpose: Assemble the Cash Flow Statement page using UXLab components and tokens.
+/**
+ * Component Name: FinCF
+ * Module: Finance / FinCF
+ * Purpose: Assemble the Cash Flow Statement for standalone and ReportDrawer deployment.
+ * Author/Version: UXLab V1.2
+ * AI Tags: cash-flow, page, orchestrator, deployment, opsmgt
+ */
 
 import React from "react";
 import {
@@ -20,10 +24,12 @@ import FinCFTable from "./components/FinCFTable";
 import { useFinCF } from "./hooks/useFinCF";
 import { useFinCFAi } from "./hooks/useFinCFAi";
 
-// Compose the page from focused components and dedicated data hooks.
-export default function FinCF() {
+// Compose the report for standalone and ReportDrawer deployment.
+export default function FinCF({ hideHeader = false }) {
+    // Load the authenticated user and current learning session.
     const { userInfo } = useUser();
 
+    // Load and manage cash-flow data, filters and reporting controls.
     const {
         rows,
         filteredRows,
@@ -46,6 +52,7 @@ export default function FinCF() {
         reload,
     } = useFinCF();
 
+    // Prepare cash-flow insights using the selected reporting period.
     const { narrative: insights } = useFinCFAi(
         rows,
         periods,
@@ -55,23 +62,35 @@ export default function FinCF() {
     return (
         <Box sx={{ ...layoutStyle.root, bgcolor: surface.page }}>
             <Box sx={layoutStyle.pageContainer}>
-                <FinCFHeader
-                    gameId={userInfo?.gameId}
-                    gameBatch={userInfo?.gameBatch}
-                    gameTeam={userInfo?.gameTeam}
-                    productionMonth={productionMonth}
-                    onMonthChange={setProductionMonth}
-                    onRefresh={reload}
-                />
+                {/* Show the module header only in standalone mode. */}
+                {!hideHeader && (
+                    <FinCFHeader
+                        gameId={userInfo?.gameId}
+                        gameBatch={userInfo?.gameBatch}
+                        gameTeam={userInfo?.gameTeam}
+                        productionMonth={productionMonth}
+                        onMonthChange={setProductionMonth}
+                        onRefresh={reload}
+                    />
+                )}
 
+                {/* Display report-generation errors in both deployment modes. */}
                 {error && (
-                    <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>
+                    <Alert
+                        severity="error"
+                        sx={{ mb: 2, borderRadius: 2 }}
+                    >
                         {error}
                     </Alert>
                 )}
 
-                <FinCFKpis kpis={kpis} loading={loading} />
+                {/* Keep the KPI summary available in both deployment modes. */}
+                <FinCFKpis
+                    kpis={kpis}
+                    loading={loading}
+                />
 
+                {/* Preserve search, density, section filtering and CSV export. */}
                 <FinCFToolbar
                     search={search}
                     onSearchChange={setSearch}
@@ -83,6 +102,7 @@ export default function FinCF() {
                     onExport={exportCsv}
                 />
 
+                {/* Show loading feedback while the cash-flow statement is loading. */}
                 {loading ? (
                     <Box
                         sx={{
@@ -113,6 +133,7 @@ export default function FinCF() {
                     />
                 )}
 
+                {/* Explain when the current filters return no cash-flow rows. */}
                 {!loading && filteredRows.length === 0 && !error && (
                     <Typography
                         sx={{
@@ -126,7 +147,7 @@ export default function FinCF() {
                     </Typography>
                 )}
 
-                {/* Footer: show cash-flow insights after the statement. */}
+                {/* Keep cash-flow insights after the statement in both modes. */}
                 <Box sx={{ mt: 3 }}>
                     <FinCFTakeaways
                         insights={insights}
