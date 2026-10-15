@@ -37,7 +37,7 @@ export default function SimFooter() {
           variant="body2"
           sx={{ color: colors.subtitle }}
         >
-          OMTP Simulation • UXLab • Site
+          OMTP Simulation • UXLab • SiTe
         </Typography>
       </Stack>
     </Box>

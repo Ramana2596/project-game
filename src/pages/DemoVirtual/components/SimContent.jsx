@@ -1,4 +1,7 @@
-// Component: SimContent | Module: OMTP Simulation | Purpose: Display the primary simulation workspace
+// Component: SimContent 
+//  Module: OMTP Simulation 
+// Purpose: Display the primary simulation workspace
+
 import React from "react";
 import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
@@ -19,9 +22,7 @@ export default function SimContent({ leftContent, rightContent }) {
         xs={12}
         lg={4}
         sx={{
-          position: {
-            lg: "sticky",
-          },
+          position: {lg: "sticky",},
 
           top: {
             lg: 16,

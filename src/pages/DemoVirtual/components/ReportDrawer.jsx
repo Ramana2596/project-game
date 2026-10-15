@@ -2,7 +2,6 @@
 // Component: ReportDrawer
 // Module: DemoVirtual / ReportWriter
 // Purpose: Display and navigate stage-specific report screens
-// Note: Handles one INPUT UI Screen ID per stage.
 // AI Tags: report-writer, report-drawer, rich-ux, navigation
 // UXLab V3 — ReportWriter Rich UX
 // ============================================================
@@ -31,10 +30,13 @@ import ReportWriter from "./ReportWriter";
 import ReportHeader from "../components/ReportHeader";
 import ReportNavigation from "../components/ReportNavigation";
 
+import { colors, masterTypo, buttonStyle, tableStyle } from "../../../ux/styles";
 
-// ------------------------------------------------------------
+// Height of the app-level purple bar that sits above the drawer.
+
+const APP_BAR_HEIGHT = "64px";
+
 // Report Drawer
-// ------------------------------------------------------------
 export default function ReportDrawer({
   open,
   onClose,
@@ -48,25 +50,20 @@ export default function ReportDrawer({
 
   const [tabIndex, setTabIndex] = useState(0);
 
-  // ----------------------------------------------------------
   // Reset active report when drawer or stage changes.
-  // ----------------------------------------------------------
   useEffect(() => {
     if (open) {
       setTabIndex(0);
     }
   }, [open, stageNo, mode]);
 
-  // ----------------------------------------------------------
+
   // Resolve registry for current drawer mode.
-  // ----------------------------------------------------------
   const reportsForStage = useMemo(() => {
 
     if (!stageNo) return [];
 
-    // --------------------------------------------------------
     // Decide Plan
-    // --------------------------------------------------------
     if (mode === "DECIDE_PLAN") {
 
       const uiId = DECIDE_PLAN_REGISTRY[stageNo];
@@ -85,9 +82,8 @@ export default function ReportDrawer({
       ];
     }
 
-    // --------------------------------------------------------
+  
     // Normal Reports
-    // --------------------------------------------------------
     const stageReports =
       (REPORT_REGISTRY[stageNo] || []).filter(
         (uiId) =>
@@ -111,12 +107,10 @@ export default function ReportDrawer({
   ]);
 
 
-  // ----------------------------------------------------------
+
   // Report Navigation
-  //
-  // Convert the stage report list into the generic navigation
-  // structure consumed by ReportNavigation.
-  // ----------------------------------------------------------
+  // Convert stage report list into generic navigation, consumed by ReportNavigation.
+ 
   const navigation = useMemo(
     () =>
       reportsForStage.map((report) => ({
@@ -127,12 +121,10 @@ export default function ReportDrawer({
     [reportsForStage]
   );
 
-  // ----------------------------------------------------------
-  // Shared Report Context
-  //
-  // This is the context supplied to both reusable Rich UX
-  // components and the selected ReportWriter component.
-  // ----------------------------------------------------------
+
+  // Shared reusable Report Context
+  // As standalone components and as the selected ReportWriter component.
+
   const reportContext = useMemo(
     () => ({
       stageNo,
@@ -151,13 +143,9 @@ export default function ReportDrawer({
     ]
   );
 
-
-  // ----------------------------------------------------------
   // Current report
-  // ----------------------------------------------------------
   const activeReport =
     reportsForStage[tabIndex];
-
 
   return (
     <Drawer
@@ -166,59 +154,74 @@ export default function ReportDrawer({
       onClose={onClose}
       PaperProps={{
         sx: {
-          width: "80%",
-          height: "100vh",
+          width: { xs: "100%", md: "85%" },
+          top: APP_BAR_HEIGHT,
+          height: `calc(100vh - ${APP_BAR_HEIGHT})`,
           display: "flex",
           flexDirection: "column",
-          bgcolor: "#ffffff",
+          bgcolor: colors.paper,
           overflow: "hidden",
         },
       }}
     >
 
-      {/* ==================================================== */}
-      {/* Rich UX Header                                       */}
-      {/* ==================================================== */}
-
+      {/* Header: Team | Stage heading + Date | Close  */}
       <Box
         sx={{
           px: 3,
-          pt: 10,
-          pb: 1,
+          pt: 1,
+          pb: 0,
         }}
       >
-
         <Box
           sx={{
             display: "flex",
-            alignItems: "flex-start",
+            alignItems: "center",
             gap: 2,
           }}
         >
 
-          {/* ------------------------------------------------ */}
-          {/* Reusable Report Header                           */}
-          {/* ------------------------------------------------ */}
+          {/* Team name (left)   */}
+          {gameTeam && (
+            <Typography
+              noWrap
+              sx={{
+                ...masterTypo.body2,
+                fontWeight: 600,
+                color: colors.subtitle,
+              }}
+            >
+              {gameTeam}
+            </Typography>
+          )}
 
-          <Box sx={{ flex: 1 }}>
+          {/* Reusable Report Header (heading + date pill)     */}
+          <Box
+            sx={{
+              flex: 1,
+              // remove the bottom margin added by ReportHeader
+              "& > *": { mb: "0 !important" },
+              // vertically centre the date pill with the heading
+              "& > * > :last-child": {
+                top: { md: "50%" },
+                transform: { md: "translateY(-50%)" },
+              },
+            }}
+          >
             <ReportHeader
               reportContext={reportContext}
             />
           </Box>
 
-          {/* ------------------------------------------------ */}
-          {/* Close                                            */}
-          {/* ------------------------------------------------ */}
-
+          {/* Close (right)    */}
           <IconButton
             onClick={onClose}
             size="small"
             sx={{
-              mt: 0.5,
-              bgcolor: "#f1f5f9",
-              "&:hover": {
-                bgcolor: "#e2e8f0",
-              },
+              ...buttonStyle.icon,
+              width: 32,
+              minWidth: 32,
+              height: 32,
             }}
           >
             <CloseIcon fontSize="small" />
@@ -226,36 +229,15 @@ export default function ReportDrawer({
 
         </Box>
 
-        {/* -------------------------------------------------- */}
-        {/* Team Context                                       */}
-        {/* -------------------------------------------------- */}
-
-        {gameTeam && (
-          <Typography
-            sx={{
-              mt: -1,
-              mb: 1,
-              fontSize: "0.9rem",
-              fontWeight: 600,
-              color: "text.secondary",
-            }}
-          >
-            {gameTeam}
-          </Typography>
-        )}
-
       </Box>
 
-
-      {/* ==================================================== */}
-      {/* Reusable Report Navigation                          */}
-      {/* ==================================================== */}
-
+      {/* Reusable Report Navigation     */}
       {navigation.length > 0 && (
         <Box
           sx={{
             px: 3,
-            pb: 1,
+            pb: 0,
+            "& > *": { mb: "8px !important" },
           }}
         >
           <ReportNavigation
@@ -266,25 +248,23 @@ export default function ReportDrawer({
         </Box>
       )}
 
-
-      {/* ==================================================== */}
-      {/* Report Content                                       */}
-      {/* ==================================================== */}
-
+      {/* Report Content    */}
       <Box
         sx={{
           flex: 1,
           overflow: "auto",
-          px: 1.5,
-          pt: 0.5,
-          bgcolor: "#f8fafc",
+          px: 0.5,
+          pt: 0,
+          bgcolor: colors.panel,
         }}
       >
 
         <Box
           sx={{
-            minWidth: "1200px",
-            bgcolor: "#fff",
+            ...tableStyle.compact,
+            minWidth: 0,
+            width: "100%",
+            bgcolor: colors.paper,
             p: 0.5,
           }}
         >
@@ -305,9 +285,11 @@ export default function ReportDrawer({
               }}
             >
               <Typography
-                variant="h6"
-                color="text.secondary"
-                fontWeight="700"
+                sx={{
+                  ...masterTypo.h6,
+                  fontWeight: 700,
+                  color: colors.subtitle,
+                }}
               >
                 No Data Available
               </Typography>
