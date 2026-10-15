@@ -298,7 +298,7 @@ export default function HubNew() {
 
         rightContent={
           <Stack spacing={2.5}>
-
+      {/*}      
             <TeamBadge
               batch={userInfo?.gameBatch}
               team={userInfo?.gameTeam}
@@ -308,7 +308,7 @@ export default function HubNew() {
                   : "In Progress"
               }
             />
-
+        */}
             <SimSidebar
               learningCenter={
                 <LeapCenter

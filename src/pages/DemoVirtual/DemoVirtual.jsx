@@ -293,12 +293,17 @@ export default function DemoVirtual() {
 
         rightContent={
           <Stack spacing={2.5}>
+    {/*}
             <TeamBadge
               batch={userInfo?.gameBatch}
               team={userInfo?.gameTeam}
-              status={progressData?.Is_Simulation_End ? "Finished" : "In Progress"}
+              status={
+                progressData?.Is_Simulation_End 
+               ? "Finished" 
+               : "In Progress"
+              }
             />
-
+      */}
             <SimSidebar
               learningCenter={
                 <LeapCenter
@@ -308,6 +313,7 @@ export default function DemoVirtual() {
                 />
               }
             />
+            
           </Stack>
         }
       />
