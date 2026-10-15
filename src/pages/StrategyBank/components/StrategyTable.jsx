@@ -1,4 +1,3 @@
-
 // ============================================================
 // Component: StrategyTable
 // Module: StrategyBank
@@ -45,6 +44,25 @@ function ChoiceBadge({ value }) {
     <Chip
       size="small"
       label={value}
+      sx={{
+        height: 24,
+        bgcolor: `${color}1A`,
+        color,
+        fontWeight: 700,
+      }}
+    />
+  );
+}
+
+function CapitalBadge({ value }) {
+  // Show the capital investment flag as a Yes / No badge.
+  const isCapital = value === "Yes";
+  const color = isCapital ? colors.success : colors.muted;
+
+  return (
+    <Chip
+      size="small"
+      label={value || "—"}
       sx={{
         height: 24,
         bgcolor: `${color}1A`,
@@ -210,6 +228,11 @@ export default function StrategyTable({
 
                     <TableCell sx={tableStyle.cell}>
                       <ChoiceBadge value={r.Mutual_X_Group} />
+                    </TableCell>
+
+                    {/* Show whether the strategy is a capital investment. */}
+                    <TableCell sx={tableStyle.cell}>
+                      <CapitalBadge value={r.Is_Capital} />
                     </TableCell>
 
                     <TableCell sx={tableStyle.cell}>

@@ -2,14 +2,14 @@
 /**
  * Component Name: MktIntelOverview
  * Module: Market Intelligence
- * Purpose: Renders compact uniform cards for categories used in current market data.
- * AI Tags: components, overview, cards, filter, market-intel, ux-lab, accessibility
+ * Purpose: Displays compact category cards for filtering market intelligence data.
+ * AI Tags: market-intelligence, overview, cards, filter, ux-lab
  */
 
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import { cardStyle, colors } from '../../../ux/styles';
+import { cardStyle, colors, masterTypo } from '../../../ux/styles';
 import { MARKET_CATEGORIES } from '../constants/mktIntelConstants';
 
 const CARD_ACCENTS = [
@@ -23,32 +23,32 @@ const CARD_ACCENTS = [
 
 export function MktIntelOverview({
   data = [],
-  selectedCategory,
+  selectedCategory = '',
   onSelectCategory = () => {}
 }) {
   const getCount = (code, description) => {
     if (!code) return data.length;
+
     return data.filter(item => {
-      const itemCat = item.Category?.trim() || '';
-      return itemCat.toLowerCase() === description?.toLowerCase() ||
-             itemCat.toUpperCase() === code?.toUpperCase();
+      const category = item.Category?.trim() || '';
+      return category.toLowerCase() === description.toLowerCase() ||
+        category.toUpperCase() === code.toUpperCase();
     }).length;
   };
 
-  const usedCategories = MARKET_CATEGORIES.filter(
+  const categories = MARKET_CATEGORIES.filter(
     category => getCount(category.code, category.description) > 0
   );
 
-  const cardsData = [
+  const cards = [
     {
       id: 'ALL',
-      code: '',
       description: 'All',
       icon: <DashboardIcon fontSize="small" />,
       count: data.length,
       accent: colors.primary
     },
-    ...usedCategories.map((category, index) => ({
+    ...categories.map((category, index) => ({
       ...category,
       count: getCount(category.code, category.description),
       accent: CARD_ACCENTS[index % CARD_ACCENTS.length]
@@ -56,16 +56,7 @@ export function MktIntelOverview({
   ];
 
   const selectCategory = category => {
-    onSelectCategory(
-      category.description === 'All' ? '' : category.description
-    );
-  };
-
-  const handleKeyDown = (event, category) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      selectCategory(category);
-    }
+    onSelectCategory(category.description === 'All' ? '' : category.description);
   };
 
   return (
@@ -75,13 +66,13 @@ export function MktIntelOverview({
         xs: '1fr',
         sm: 'repeat(2, 1fr)',
         md: 'repeat(3, 1fr)',
-        lg: `repeat(${Math.min(cardsData.length, 6)}, 1fr)`
+        lg: `repeat(${Math.min(cards.length, 6)}, 1fr)`
       },
-      gap: 1.5,
-      mb: 3
+      gap: 1,
+      mb: 1.5
     }}>
-      {cardsData.map(category => {
-        const isSelected =
+      {cards.map(category => {
+        const selected =
           selectedCategory === category.description ||
           (category.description === 'All' && !selectedCategory);
 
@@ -90,51 +81,51 @@ export function MktIntelOverview({
             key={category.id}
             role="button"
             tabIndex={0}
-            aria-pressed={isSelected}
+            aria-pressed={selected}
             aria-label={`${category.description}: ${category.count} records`}
             onClick={() => selectCategory(category)}
-            onKeyDown={event => handleKeyDown(event, category)}
+            onKeyDown={event => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                selectCategory(category);
+              }
+            }}
             sx={{
               ...cardStyle.statCard,
-              height: 72,
+              height: 56,
               boxSizing: 'border-box',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: 1.5,
-              px: 1.5,
-              py: 1,
-              borderRadius: 1.5,
-              border: `1px solid ${isSelected ? category.accent : colors.border}`,
-              bgcolor: isSelected ? colors.primarySelected : colors.card,
-              color: isSelected ? colors.onPrimarySoft : colors.title,
-              boxShadow: isSelected
-                ? `0 2px 8px ${colors.shadowColor}`
-                : 'none',
-              transition: 'all 0.2s ease-in-out',
+              gap: 1,
+              px: 1.25,
+              py: 0.75,
+              borderRadius: 1.25,
+              border: `1px solid ${selected ? category.accent : colors.border}`,
+              bgcolor: selected ? colors.primarySelected : colors.card,
+              boxShadow: selected ? `0 2px 6px ${colors.shadowColor}` : 'none',
+              transition: 'all 0.15s ease-in-out',
               '&:hover': {
                 borderColor: category.accent,
-                boxShadow: `0 2px 8px ${colors.shadowColor}`,
+                boxShadow: `0 2px 6px ${colors.shadowColor}`,
                 transform: 'translateY(-1px)'
               },
               '&:focus-visible': {
                 outline: `2px solid ${colors.primary}`,
-                outlineOffset: 2,
-                boxShadow: `0 0 0 4px ${colors.primarySoft}`
+                outlineOffset: 2
               }
             }}
           >
             <Box sx={{
-              width: 36,
-              height: 36,
-              minWidth: 36,
+              width: 30,
+              height: 30,
+              minWidth: 30,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: '50%',
-              background: isSelected ? colors.iconGradient : category.accent,
-              color: colors.onPrimary,
-              boxShadow: `0 2px 5px ${colors.shadowColor}`
+              background: selected ? colors.iconGradient : category.accent,
+              color: colors.onPrimary
             }}>
               {category.icon}
             </Box>
@@ -142,31 +133,28 @@ export function MktIntelOverview({
             <Box sx={{
               minWidth: 0,
               display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              overflow: 'hidden',
-              lineHeight: 1.2
+              alignItems: 'baseline',
+              gap: 0.75
             }}>
               <Typography
-                variant="caption"
                 sx={{
-                  color: isSelected ? colors.onPrimarySoft : colors.subtitle,
+                  ...masterTypo.bodyB2,
+                  color: selected ? colors.onPrimarySoft : colors.subtitle,
                   fontWeight: 600,
                   whiteSpace: 'nowrap',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
                 }}
               >
                 {category.description}
               </Typography>
 
               <Typography
-                variant="h6"
                 sx={{
-                  color: isSelected ? colors.onPrimarySoft : colors.title,
+                  ...masterTypo.bodyB1,
+                  color: selected ? colors.onPrimarySoft : colors.title,
                   fontWeight: 700,
-                  lineHeight: 1.2,
-                  mt: 0.2
+                  flexShrink: 0
                 }}
               >
                 {category.count}

@@ -1,8 +1,11 @@
-// Page: StrategyResults
-// Module: StrategyResults
-// Purpose: orchestrate strategy result data, overview and business result views.
-// Author/Version: OpsMgt UX Lab / v3.0
-// AI Tags: strategy, results, overview, navigation, strategy-map, product-filter
+
+/**
+ * Page: StrategyResults
+ * Module: StrategyResults
+ * Purpose: Orchestrate strategy results for standalone and ReportDrawer deployment.
+ * Author/Version: OpsMgt UX Lab / v3.1
+ * AI Tags: strategy, results, overview, navigation, strategy-map, product-filter
+ */
 
 import React, { useMemo, useState } from "react";
 import { Alert, Box, LinearProgress } from "@mui/material";
@@ -24,9 +27,12 @@ import {
 } from "./constants/srCols";
 import { SR_VIEW } from "./constants/srConfig";
 
-export default function StrategyResults() {
+// Render Strategy Results in standalone and ReportDrawer modes.
+export default function StrategyResults({ hideHeader = false }) {
+  // Read the authenticated simulation context.
   const { userInfo } = useUser();
 
+  // Build the query from the current simulation batch and team.
   const srParams = useMemo(() => {
     if (
       !userInfo?.gameId ||
@@ -47,6 +53,7 @@ export default function StrategyResults() {
     userInfo?.gameTeam,
   ]);
 
+  // Load strategy results, totals, selections, and tab state.
   const {
     setNoList,
     setNoSel,
@@ -63,46 +70,45 @@ export default function StrategyResults() {
     srError,
   } = useSrResult(srParams);
 
+  // Manage the product filter for demand, discount, and savings results.
   const [product, setProduct] = useState("ALL");
 
-  const products = useMemo(() => {
-    return [
-      ...new Set(
-        [...demRows, ...discRows, ...savRows]
-          .map((row) => row.product)
-          .filter(Boolean)
-      ),
-    ].sort();
-  }, [demRows, discRows, savRows]);
+  // Build the available product options from the returned result rows.
+  const products = useMemo(
+    () =>
+      [
+        ...new Set(
+          [...demRows, ...discRows, ...savRows]
+            .map((row) => row.product)
+            .filter(Boolean)
+        ),
+      ].sort(),
+    [demRows, discRows, savRows]
+  );
 
+  // Apply the selected product filter to demand rows.
   const filteredDemRows = useMemo(() => {
     if (product === "ALL") return demRows;
-
-    return demRows.filter(
-      (row) => row.product === product
-    );
+    return demRows.filter((row) => row.product === product);
   }, [demRows, product]);
 
+  // Apply the selected product filter to discount rows.
   const filteredDiscRows = useMemo(() => {
     if (product === "ALL") return discRows;
-
-    return discRows.filter(
-      (row) => row.product === product
-    );
+    return discRows.filter((row) => row.product === product);
   }, [discRows, product]);
 
+  // Apply the selected product filter to savings rows.
   const filteredSavRows = useMemo(() => {
     if (product === "ALL") return savRows;
-
-    return savRows.filter(
-      (row) => row.product === product
-    );
+    return savRows.filter((row) => row.product === product);
   }, [savRows, product]);
 
+  // Explain when the current user has no valid simulation team.
   if (!srParams) {
     return (
       <Box sx={layoutStyle.page}>
-        <SrHeader team={null} />
+        {!hideHeader && <SrHeader team={null} />}
 
         <Alert severity="info">
           Your batch and team are not set yet. Join a team
@@ -114,10 +120,14 @@ export default function StrategyResults() {
 
   return (
     <Box sx={layoutStyle.page}>
-      <SrHeader
-        team={`${userInfo.gameBatch} / ${userInfo.gameTeam}`}
-      />
+      {/* Show the module header only in standalone mode. */}
+      {!hideHeader && (
+        <SrHeader
+          team={`${userInfo.gameBatch} / ${userInfo.gameTeam}`}
+        />
+      )}
 
+      {/* Preserve loading and error feedback in both modes. */}
       {srLoading && <LinearProgress sx={{ mb: 2 }} />}
 
       {srError && (
@@ -132,6 +142,7 @@ export default function StrategyResults() {
         </Alert>
       ) : (
         <>
+          {/* Display the strategy overview using the filtered result rows. */}
           <SrOverview
             setNo={setNoSel}
             srTotals={srTotals}
@@ -141,6 +152,7 @@ export default function StrategyResults() {
             savRows={filteredSavRows}
           />
 
+          {/* Keep result navigation and product filtering available. */}
           <Box
             sx={{
               mt: 2.5,
@@ -162,6 +174,7 @@ export default function StrategyResults() {
             />
           </Box>
 
+          {/* Render the workspace for the selected results tab. */}
           <Box sx={{ mt: 2 }}>
             {srTab === SR_VIEW.strategy && (
               <>

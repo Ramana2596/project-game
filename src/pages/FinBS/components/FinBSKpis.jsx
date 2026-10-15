@@ -1,10 +1,9 @@
 /**
  * Component Name: FinBSKpis
  * Module: Finance / FinBS
- * Purpose: Row of compact KPI cards: current ratio, quick ratio, working capital, debt-to-equity,
- *          debt ratio and cash balance (for info). Also exports FinBSBalanceChip for the page header.
- * Author/Version: UXLab / v1.1
- * AI Tags: kpi, stat cards, current ratio, quick ratio, working capital, debt to equity, debt ratio, cash
+ * Purpose: Display six compact Balance Sheet KPI cards and the balance-check chip.
+ * Author/Version: UXLab / v1.2
+ * AI Tags: kpi, balance sheet, liquidity, leverage, cash
  */
 
 import React from "react";
@@ -22,9 +21,8 @@ import { accent, status, text } from "../../../ux/styles/colorPalette";
 import { EMPTY_CELL } from "../constants/finBS.constants";
 import { formatAmount, formatPercent, formatRatio } from "../utils/formatters";
 
-// Card definitions: label, value, caption and icon per figure
+// Define the six Balance Sheet KPIs using existing UXLab tokens.
 const buildCards = (summary) => {
-  // Debt-to-equity is misleading when equity is zero or negative
   const negativeEquity =
     Number.isFinite(summary.totalEquity) && summary.totalEquity <= 0;
 
@@ -80,12 +78,15 @@ const buildCards = (summary) => {
   ];
 };
 
-/**
- * Balance check chip for the page header.
- * Green "Balanced" or red "Off by X"; renders nothing when the check is unknown.
- */
+// Display the balance-check result when available.
 export function FinBSBalanceChip({ summary }) {
-  if (!summary || summary.isBalanced === null || summary.isBalanced === undefined) return null;
+  if (
+    !summary ||
+    summary.isBalanced === null ||
+    summary.isBalanced === undefined
+  ) {
+    return null;
+  }
 
   const balanced = summary.isBalanced === true;
   const color = balanced ? status.success : status.error;
@@ -109,20 +110,22 @@ export function FinBSBalanceChip({ summary }) {
   );
 }
 
+// Render the six KPI cards responsively without changing their visual design.
 export default function FinBSKpis({ summary, isRefreshing }) {
-  // Nothing to show until a statement is loaded
   if (!summary) return null;
 
-  // Derived values
   const cards = buildCards(summary);
 
-  // Render
   return (
     <Box
       sx={{
         display: "grid",
         gap: 1,
-        gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+        gridTemplateColumns: {
+          xs: "repeat(2, minmax(0, 1fr))",
+          sm: "repeat(3, minmax(0, 1fr))",
+          lg: "repeat(6, minmax(0, 1fr))",
+        },
         opacity: isRefreshing ? 0.6 : 1,
         transition: "opacity .2s ease",
       }}
@@ -132,6 +135,7 @@ export default function FinBSKpis({ summary, isRefreshing }) {
           key={key}
           sx={{
             ...cardStyle.statCard,
+            minWidth: 0,
             p: 1,
             gap: 1,
             borderRadius: 2.5,
@@ -158,6 +162,7 @@ export default function FinBSKpis({ summary, isRefreshing }) {
                 ...masterTypo.caption,
                 color: text.subtitle,
                 lineHeight: 1.15,
+                overflowWrap: "anywhere",
               }}
             >
               {label}
@@ -169,6 +174,7 @@ export default function FinBSKpis({ summary, isRefreshing }) {
                 color: text.title,
                 lineHeight: 1.2,
                 fontVariantNumeric: "tabular-nums",
+                overflowWrap: "anywhere",
               }}
             >
               {value}
@@ -179,6 +185,7 @@ export default function FinBSKpis({ summary, isRefreshing }) {
                 ...masterTypo.caption,
                 color: text.subtitle,
                 lineHeight: 1.15,
+                overflowWrap: "anywhere",
               }}
             >
               {caption}

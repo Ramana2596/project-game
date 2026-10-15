@@ -1,4 +1,12 @@
 
+/**
+ * Component: PlantCapacity
+ * Module: Plant Capacity
+ * Purpose: Plant capacity workspace for standalone and ReportDrawer deployment.
+ * Author/Version: UXLab V1.1
+ * AI Tags: plant-capacity, work-centres, simulation, uxlab
+ */
+
 import React, { useMemo, useState } from "react";
 import { Box, Alert } from "@mui/material";
 import { useUser } from "../../core/access/userContext.jsx";
@@ -10,14 +18,20 @@ import { PcOverview } from "./components/PcOverview";
 import { PcWorkspace } from "./components/PcWorkspace";
 import { layoutStyle } from "../../ux/styles";
 
-export default function PlantCapacity({ productionMonth }) {
+// Render plant capacity in standalone and ReportDrawer modes.
+export default function PlantCapacity({
+  productionMonth,
+  hideHeader = false,
+}) {
+  // Read the authenticated simulation context.
   const { userInfo } = useUser();
 
+  // Keep the selected simulation period synchronized with the initial context.
   const [selectedMonth, setSelectedMonth] = useState(
     productionMonth || userInfo?.productionMonth || ""
   );
 
-  // Build API query from current user and selected simulation period
+  // Build API query from the current user and selected simulation period.
   const queryParams = useMemo(() => {
     if (!userInfo?.gameId) return null;
 
@@ -29,6 +43,7 @@ export default function PlantCapacity({ productionMonth }) {
     };
   }, [userInfo, selectedMonth]);
 
+  // Load plant, work-centre, status, and filter data.
   const {
     plant,
     workCentres,
@@ -45,13 +60,15 @@ export default function PlantCapacity({ productionMonth }) {
   return (
     <Box sx={layoutStyle.root}>
       <Box sx={layoutStyle.pageContainer}>
-        {/* Page header and simulation period */}
-        <PcHeader
-          productionMonth={returnedMonth}
-          onMonthChange={setSelectedMonth}
-        />
+        {/* Show the module header only in standalone mode. */}
+        {!hideHeader && (
+          <PcHeader
+            productionMonth={returnedMonth}
+            onMonthChange={setSelectedMonth}
+          />
+        )}
 
-        {/* Tab navigation and work centre filter */}
+        {/* Keep navigation and work-centre filters available in both modes. */}
         <PcNavigation
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -59,31 +76,30 @@ export default function PlantCapacity({ productionMonth }) {
           setFilter={setFilter}
         />
 
-        {/* API error */}
+        {/* Display API errors without removing the rest of the workspace. */}
         {error && (
           <Alert severity="error" sx={{ mb: 1 }}>
             {error}
           </Alert>
         )}
 
-        {/* Overview-only insight */}
+        {/* Show the insight and plant summary on the Overview tab. */}
         {activeTab === "overview" && (
-          <PcQuickInsight
-            plant={plant}
-            criticalCount={criticalCount}
-          />
+          <>
+            <PcQuickInsight
+              plant={plant}
+              criticalCount={criticalCount}
+            />
+
+            <PcOverview
+              plant={plant}
+              workCentres={workCentres}
+              loading={loading}
+            />
+          </>
         )}
 
-        {/* Overview-only plant summary */}
-        {activeTab === "overview" && (
-          <PcOverview
-            plant={plant}
-            workCentres={workCentres}
-            loading={loading}
-          />
-        )}
-
-        {/* Tab-specific workspace */}
+        {/* Render the selected tab's workspace. */}
         <PcWorkspace
           activeTab={activeTab}
           workCentres={workCentres}
@@ -95,4 +111,3 @@ export default function PlantCapacity({ productionMonth }) {
     </Box>
   );
 }
-

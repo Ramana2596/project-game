@@ -13,6 +13,7 @@ export const TABLE_COLUMNS = [
   { key: "Category_Name", label: "Enabler" },
   { key: "Benefit", label: "Benefit" },
   { key: "Mutual_X_Group", label: "Choice" },
+  { key: "Is_Capital", label: "Capital Investment" },
   { key: "Cost_Type", label: "Cost Type" },
   { key: "UOM", label: "UOM" },
   { key: "Implied_Cost", label: "Budget", numeric: true },
@@ -35,7 +36,7 @@ export const OUTCOME_META = {
     color: colors.warning,
   },
   "Redn in RM Cost": {
-    color: colors.secondary,
+    color: colors.accentTeal,
   },
   "Higher Market Share": {
     color: colors.primary,
@@ -46,7 +47,7 @@ export const OUTCOME_META = {
 export const CHOICE_GROUP_COLORS = {
   A: colors.primary,
   B: colors.warning,
-  C: colors.secondary,
+  C: colors.accentTeal,
 };
 
 // Define available Strategy Bank sorting options.

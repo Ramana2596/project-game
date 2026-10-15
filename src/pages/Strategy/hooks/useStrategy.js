@@ -132,7 +132,6 @@ const useStrategy = () => {
       strategies.forEach((s) => {
         const decision = (decisions[s.strategyId] || "").toUpperCase();
         const costType = (s.costType || "").toUpperCase();
-
         if (decision === "YES") {
           selectedCount += 1;
 

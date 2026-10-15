@@ -1,6 +1,11 @@
-// Component: Strategy — top-level page for Strategy Plan
-// Purpose: orchestrates UI components, delegates logic to useStrategy
-// Author/Version: OpsMgt UX Lab / v1.8
+
+/**
+ * Component: Strategy
+ * Module: Strategy Plan
+ * Purpose: Orchestrate Strategy Plan for standalone and ReportDrawer deployment.
+ * Author/Version: OpsMgt UX Lab / v1.9
+ * AI Tags: strategy, strategy-plan, decisions, budget, uxlab
+ */
 
 import React from "react";
 import { Box, Grid, Skeleton } from "@mui/material";
@@ -11,7 +16,6 @@ import StSearchBox from "./components/StSearchBox";
 import StGroupList from "./components/StGroupList";
 import StBudgetCard from "./cards/StBudgetCard";
 import useStrategy from "./hooks/useStrategy";
-
 import { layoutStyle } from "../../ux/styles";
 
 const MESSAGE_SLOT_WIDTH = 420;
@@ -21,6 +25,7 @@ const PAGE_TITLE = "Strategies for You";
 const PAGE_SUBTITLE =
   "Review each strategy, weigh the investment against its gain, and decide what to implement.";
 
+// Map stored procedure status values to banner severity.
 const severityForSucValue = (val) => {
   switch (val) {
     case 0:
@@ -34,7 +39,9 @@ const severityForSucValue = (val) => {
   }
 };
 
-const Strategy = () => {
+// Render the Strategy Plan in standalone and ReportDrawer modes.
+const Strategy = ({ hideHeader = false }) => {
+  // Load strategy data, decisions, filters, budget, and save state.
   const {
     groupedStrategies,
     decisions,
@@ -57,15 +64,13 @@ const Strategy = () => {
   return (
     <Box sx={layoutStyle.root}>
       <Box sx={layoutStyle.pageContainer}>
-        <StHeader title={PAGE_TITLE} subtitle={PAGE_SUBTITLE} />
+        {/* Show the page title only in standalone mode. */}
+        {!hideHeader && (
+          <StHeader title={PAGE_TITLE} subtitle={PAGE_SUBTITLE} />
+        )}
 
-        {/* 
-          Grid layout aligned precisely with the content columns below:
-          - Left column (Banner + Filter chips) aligns with StGroupList.
-          - Right column expands StSearchBox to match StBudgetCard's full width edge-to-edge.
-        */}
+        {/* Align the banner and filters with the strategy and budget columns. */}
         <Grid container spacing={3} sx={{ mb: 2, alignItems: "center" }}>
-          {/* Left Side: Banner and Filter Chips */}
           <Grid item xs={12} md={8}>
             <Box
               sx={{
@@ -82,9 +87,16 @@ const Strategy = () => {
                   flexShrink: 0,
                 }}
               >
-                {error && <StBanner severity="error">Error loading strategies</StBanner>}
+                {error && (
+                  <StBanner severity="error">
+                    Error loading strategies
+                  </StBanner>
+                )}
+
                 {!error && outMessage && (
-                  <StBanner severity={severityForSucValue(sucValue)}>{outMessage}</StBanner>
+                  <StBanner severity={severityForSucValue(sucValue)}>
+                    {outMessage}
+                  </StBanner>
                 )}
               </Box>
 
@@ -96,19 +108,33 @@ const Strategy = () => {
             </Box>
           </Grid>
 
-          {/* Right Side: SearchBox sized edge-to-edge with StBudgetCard */}
           <Grid item xs={12} md={4}>
-            <Box sx={{ width: "100%", "& > *": { width: "100% !important" } }}>
-              <StSearchBox searchTerm={searchTerm} onSearchChange={handleSearchChange} />
+            <Box
+              sx={{
+                width: "100%",
+                "& > *": { width: "100% !important" },
+              }}
+            >
+              <StSearchBox
+                searchTerm={searchTerm}
+                onSearchChange={handleSearchChange}
+              />
             </Box>
           </Grid>
         </Grid>
 
-        {sucValue === 0 ? (
-          isLoading ? (
+        {/* Preserve existing status-driven loading and content rendering. */}
+        {sucValue === 0 &&
+          (isLoading ? (
             <Grid container spacing={3}>
               <Grid item xs={12} md={8}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                  }}
+                >
                   {[0, 1, 2].map((i) => (
                     <Skeleton
                       key={i}
@@ -119,6 +145,7 @@ const Strategy = () => {
                   ))}
                 </Box>
               </Grid>
+
               <Grid item xs={12} md={4}>
                 <Skeleton
                   variant="rounded"
@@ -151,8 +178,7 @@ const Strategy = () => {
                 </Box>
               </Grid>
             </Grid>
-          )
-        ) : null}
+          ))}
       </Box>
     </Box>
   );

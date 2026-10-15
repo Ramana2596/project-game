@@ -14,8 +14,7 @@ const STAGES = [              // in process order; NULL stages are skipped
 ];
 const YIELD_GOOD = 95;        // yield % at or above = green
 const YIELD_WARN = 90;        // yield % at or above = orange, else red
-const CARD_HEIGHT = 88;
-const RING = 44;
+const CARD_HEIGHT = 124;
 /* ---------------- */
 
 const TONE = {
@@ -135,13 +134,14 @@ function buildStats(cards) {
 }
 
 const cardSx = {
-  height: CARD_HEIGHT, px: 1, py: 0.5, border: "1px solid", borderColor: "divider", borderRadius: 2,
+  height: CARD_HEIGHT, p: 1.25, border: "1px solid", borderColor: "divider", borderRadius: 2,
   display: "flex", flexDirection: "column", minWidth: 0, overflow: "hidden",
 };
-const clamp = (n) => ({ display: "-webkit-box", WebkitLineClamp: n, WebkitBoxOrient: "vertical", overflow: "hidden" });
+const labelSx = { ...masterTypo.caption, fontWeight: 700, color: colors.muted, lineHeight: 1.2 };
+const clamp2 = { display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" };
 
 // Ring with the % written on the chart
-function Ring({ pct, tone, size = RING }) {
+function Ring({ pct, tone, size = 54 }) {
   const v = Math.max(0, Math.min(pct, 100));
   return (
     <Box sx={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
@@ -150,9 +150,7 @@ function Ring({ pct, tone, size = RING }) {
       <CircularProgress variant="determinate" value={v} size={size} thickness={5}
         sx={{ color: tone, position: "absolute", inset: 0 }} />
       <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Typography sx={{ ...masterTypo.caption, fontWeight: 700, lineHeight: 1, color: colors.title }}>
-          {Math.round(pct)}%
-        </Typography>
+        <Typography sx={{ fontSize: 13, fontWeight: 700, color: colors.title }}>{Math.round(pct)}%</Typography>
       </Box>
     </Box>
   );
@@ -161,16 +159,14 @@ function Ring({ pct, tone, size = RING }) {
 function StatCard({ stat }) {
   const body = (
     <Box sx={cardSx}>
-      <Typography noWrap sx={{ ...masterTypo.caption, fontWeight: 700, color: colors.muted }}>{stat.label}</Typography>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1, minHeight: 0 }}>
+      <Typography sx={labelSx}>{stat.label}</Typography>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, flex: 1, minHeight: 0 }}>
         <Ring pct={stat.pct} tone={stat.tone} />
         <Box sx={{ minWidth: 0 }}>
-          <Typography sx={{ ...masterTypo.body2, fontWeight: 700, lineHeight: 1.3, color: colors.title, ...clamp(1) }}>
+          <Typography sx={{ fontSize: 13, fontWeight: 700, color: colors.title, lineHeight: 1.25, ...clamp2 }}>
             {stat.head}
           </Typography>
-          <Typography sx={{ ...masterTypo.caption, fontWeight: 400, color: colors.muted, ...clamp(2) }}>
-            {stat.sub}
-          </Typography>
+          <Typography sx={{ fontSize: 11, color: colors.muted, lineHeight: 1.25, ...clamp2 }}>{stat.sub}</Typography>
         </Box>
       </Box>
     </Box>
@@ -184,15 +180,15 @@ export function MrInsight({ cards = [] }) {
   const stats = useMemo(() => buildStats(cards), [cards]);
 
   return (
-    <Box sx={{ ...layoutStyle.compactPanel, p: 1, mb: 1 }}>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 0.5 }}>
-        <TrackChangesIcon sx={{ color: colors.primary, fontSize: 18 }} />
-        <Typography sx={{ ...masterTypo.h6, lineHeight: 1.2, color: colors.title }}>Insight</Typography>
+    <Box sx={{ ...layoutStyle.compactPanel, mb: 3 }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+        <TrackChangesIcon sx={{ color: colors.primary, fontSize: 22 }} />
+        <Typography sx={{ ...masterTypo.h6, color: colors.title }}>Insight</Typography>
       </Box>
       {stats.length === 0 ? (
         <Typography sx={{ ...masterTypo.body2, color: colors.muted }}>No insight for this month yet.</Typography>
       ) : (
-        <Box sx={{ display: "grid", gap: 0.75,
+        <Box sx={{ display: "grid", gap: 1.25,
           gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))", md: "repeat(3, minmax(0, 1fr))", lg: "repeat(5, minmax(0, 1fr))" } }}>
           {stats.map((s) => <StatCard key={s.key} stat={s} />)}
         </Box>

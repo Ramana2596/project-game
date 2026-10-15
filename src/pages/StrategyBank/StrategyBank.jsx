@@ -1,9 +1,11 @@
-// ============================================================
-// Component: StrategyBank
-// Module: StrategyBank
-// Purpose: Orchestrate the Strategy Bank page and its UX components
-// AI Tags: strategy-bank, rich-ux, strategy-reference, filtering, sorting
-// ============================================================
+
+/**
+ * Component: StrategyBank
+ * Module: StrategyBank
+ * Purpose: Orchestrate Strategy Bank for standalone and ReportDrawer deployment.
+ * Author/Version: UXLab V1.1
+ * AI Tags: strategy-bank, rich-ux, strategy-reference, filtering, sorting
+ */
 
 import React from "react";
 import { Box } from "@mui/material";
@@ -16,7 +18,8 @@ import StrategyTable from "./components/StrategyTable";
 import LegendPanel from "./components/LegendPanel";
 import useStrategyBank from "./hooks/useStrategyBank";
 
-export default function StrategyBank() {
+// Render Strategy Bank in standalone and ReportDrawer modes.
+export default function StrategyBank({ hideHeader = false }) {
   // Load the current game context.
   const { userInfo } = useUser();
   const gameId = userInfo?.gameId;
@@ -51,7 +54,9 @@ export default function StrategyBank() {
   return (
     <Box sx={layoutStyle.root}>
       <Box sx={layoutStyle.pageContainer}>
-        <PageHeader />
+        {/* Show the module header only in standalone mode. */}
+        {!hideHeader && <PageHeader />}
+
         <KpiCards kpis={kpis} />
 
         {/* Provide search, group filtering and sorting controls. */}

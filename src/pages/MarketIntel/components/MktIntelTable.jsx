@@ -2,8 +2,8 @@
 /**
  * Component Name: MarketIntelTable
  * Module: Market Intelligence
- * Purpose: Renders enterprise table with selected-category filtering and record count.
- * AI Tags: components, table, data-grid, report, filter, market-intel
+ * Purpose: Renders market input details with category filtering.
+ * AI Tags: market-intelligence, table, filter, report
  */
 
 import React from 'react';
@@ -24,41 +24,36 @@ import { TABLE_COLUMNS } from '../constants/mktIntelConstants';
 export function MktIntelTable({
   data = [],
   loading = false,
-  selectedCategory = ''
+  selectedCategory = '',
+  productionMonth = null
 }) {
   const filteredData = selectedCategory
-    ? data.filter(row => {
-        const rowCategory = row.Category?.trim() || '';
-        return rowCategory.toLowerCase() === selectedCategory.trim().toLowerCase();
-      })
+    ? data.filter(row =>
+        (row.Category?.trim() || '').toLowerCase() === selectedCategory.trim().toLowerCase()
+      )
     : data;
 
   const recordCount = filteredData.length;
 
+  const monthLabel = productionMonth
+    ? new Date(productionMonth).toLocaleDateString('en-US', {
+        month: 'short',
+        year: 'numeric'
+      })
+    : '';
+
   return (
     <TableContainer component={Paper} sx={tableStyle.container}>
-      
-
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 0.75,
-        px: 1.5,
-        py: 0.5
-      }}>
-        <Typography sx={masterTypo.bodyB1}>
-          {selectedCategory || 'All Categories'}
+      <Box sx={{ px: 1.5, py: 1, borderBottom: `1px solid ${colors.divider}` }}>
+        <Typography sx={tableStyle.title}>
+          Market Input Details (Team: {data[0]?.Team || 'N/A'})
         </Typography>
-        <Typography sx={{
-          color: colors.primary,
-          fontWeight: 700
-        }}>
-          ({recordCount})
+        <Typography sx={{ ...masterTypo.bodyB2, color: colors.muted, mt: 0.25 }}>
+          {selectedCategory || 'All Categories'} ({recordCount}) ·{' '}
+          {productionMonth
+            ? `Showing market inputs and purchase factors for ${monthLabel}`
+            : 'Showing market inputs and purchase factors till current simulation period'}
         </Typography>
-      </Box>
-
-      <Box sx={tableStyle.parameters}>
-        Showing Info till current simulation period
       </Box>
 
       <Table>

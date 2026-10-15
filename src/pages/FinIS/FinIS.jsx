@@ -1,9 +1,10 @@
-// Component Name : FinIS
-// Module         : FinIS (Income Statement)
-// Purpose        : Page orchestrator for the Income Statement report - wires useFinIS /
-//                  useFinISAi to the FinISHeader, FinISKpis, FinISToolbar and FinISTable components.
-// Author/Version : UXLab V1.0
-// AI Tags        : income-statement, page, orchestrator, opsmgt
+/**
+ * Component Name: FinIS
+ * Module: Finance / FinIS (Income Statement)
+ * Purpose: Orchestrate the Income Statement for standalone and ReportDrawer deployment.
+ * Author/Version: UXLab V1.1
+ * AI Tags: income-statement, page, orchestrator, deployment, opsmgt
+ */
 
 import React from "react";
 import { Box, Alert } from "@mui/material";
@@ -17,12 +18,11 @@ import FinISTable from "./components/FinISTable";
 import { useFinIS } from "./hooks/useFinIS";
 import { useFinISAi } from "./hooks/useFinISAi";
 
-const FinIS = () => {
-
-    // Load authenticated user / Learning session
+const FinIS = ({ hideHeader = false }) => {
+    // Load the authenticated user and current learning session.
     const { userInfo } = useUser();
 
-    // Core business logic
+    // Load and manage the Income Statement data and table controls.
     const {
         rows,
         filteredRows,
@@ -47,26 +47,27 @@ const FinIS = () => {
         exportCsv,
     } = useFinIS();
 
-    // AI-Ready extension point
+    // Prepare the AI-ready narrative without changing the report data flow.
     const { narrative } = useFinISAi(rows, periods);
 
     return (
         <Box sx={layoutStyle.root}>
             <Box sx={layoutStyle.pageContainer}>
+                {/* Show the module header only when deployed as a standalone page. */}
+                {!hideHeader && (
+                    <FinISHeader
+                        gameId={userInfo?.gameId}
+                        gameBatch={userInfo?.gameBatch}
+                        gameTeam={userInfo?.gameTeam}
+                        productionMonth={productionMonth}
+                        onMonthChange={setProductionMonth}
+                    />
+                )}
 
-                {/* Page header */}
-                <FinISHeader
-                    gameId={userInfo?.gameId}
-                    gameBatch={userInfo?.gameBatch}
-                    gameTeam={userInfo?.gameTeam}
-                    productionMonth={productionMonth}
-                    onMonthChange={setProductionMonth}
-                />
-
-                {/* KPI stat cards */}
+                {/* Display KPIs in both standalone and ReportDrawer modes. */}
                 <FinISKpis kpis={kpis} />
 
-                {/* Toolbar */}
+                {/* Keep report filtering, density and export available in both modes. */}
                 <FinISToolbar
                     search={search}
                     onSearchChange={setSearch}
@@ -78,21 +79,21 @@ const FinIS = () => {
                     onExportCsv={exportCsv}
                 />
 
-                {/* Error state */}
+                {/* Display data-loading or report-generation errors. */}
                 {error && (
                     <Alert severity="error" sx={{ mb: 2 }}>
                         {error}
                     </Alert>
                 )}
 
-                {/* AI Extension Hooks */}
+                {/* Preserve the AI narrative extension point in both deployment modes. */}
                 {narrative && (
                     <Alert severity="info" sx={{ mb: 2 }}>
                         {narrative}
                     </Alert>
                 )}
 
-                {/* Report table */}
+                {/* Render the Income Statement table with the existing controls. */}
                 <FinISTable
                     rows={displayRows}
                     totalCount={filteredRows.length}

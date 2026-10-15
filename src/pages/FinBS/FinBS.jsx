@@ -1,9 +1,9 @@
 /**
  * Component Name: FinBS
  * Module: Finance / FinBS
- * Purpose: Finance screen showing the team's Balance Sheet: month control, KPI cards, search and filters, table.
- * Author/Version: UXLab / v1.1
- * AI Tags: finBS, balance sheet, finance, statement, kpi, table, OpsMgt
+ * Purpose: Display the team's Balance Sheet in standalone or drawer mode.
+ * Author/Version: UXLab / v1.2
+ * AI Tags: finBS, balance sheet, finance, statement, drawer, standalone
  */
 
 import React, { useEffect, useState } from "react";
@@ -21,7 +21,7 @@ import { buildCsv, downloadCsv } from "./utils/exportCsv";
 import { formatMonthLabel } from "./utils/formatters";
 import { STATUS } from "./constants/finBS.constants";
 
-export default function FinBS() {
+export default function FinBS({ hideHeader = false }) {
   // Load the current game context.
   const { userInfo } = useUser();
 
@@ -30,7 +30,7 @@ export default function FinBS() {
   const gameTeam = userInfo?.gameTeam;
   const teamName = gameTeam;
 
-  // State: cut-off month.
+  // State: selected cut-off month.
   const [month, setMonth] = useState("");
 
   // Load the statement and derive everything the screen shows.
@@ -42,17 +42,21 @@ export default function FinBS() {
     enabled: true,
   });
 
-  // Derived values.
+  // Derive statement visibility and period description.
   const hasRows = sheet.rows.length > 0;
-  const showStatement = hasRows && (sheet.status === STATUS.SUCCESS || sheet.isLoading);
-  const cutOff = month ? `up to ${formatMonthLabel(month)}` : "all periods";
+  const showStatement =
+    hasRows &&
+    (sheet.status === STATUS.SUCCESS || sheet.isLoading);
+  const cutOff = month
+    ? `up to ${formatMonthLabel(month)}`
+    : "all periods";
 
-  // Effects: initialize the month from the current screen state.
+  // Reset the cut-off month when the game context changes.
   useEffect(() => {
     setMonth("");
   }, [gameId, gameBatch, gameTeam]);
 
-  // Handle Export CSV: download exactly the rows and columns on screen.
+  // Export exactly the visible rows and periods.
   const handleExport = () => {
     downloadCsv(
       `BalanceSheet_${teamName}_batch${gameBatch}.csv`,
@@ -60,14 +64,13 @@ export default function FinBS() {
     );
   };
 
-  // AI extension hooks: placeholder for narration and analytics.
+  // Initialize the AI extension hook.
   const ai = useFinBSAi();
 
-  // Render.
+  // Render the financial statement in either deployment mode.
   return (
     <Box sx={layoutStyle.root}>
       <Box sx={layoutStyle.pageContainer}>
-        {/* Statement panel */}
         <Box
           sx={{
             position: "relative",
@@ -80,48 +83,56 @@ export default function FinBS() {
             gap: 1.25,
           }}
         >
-          {/* Cut-off month: top right of the panel */}
-          <Box
-            sx={{
-              position: { xs: "static", md: "absolute" },
-              top: "12px",
-              right: "12px",
-              alignSelf: "flex-end",
-            }}
-          >
-            <FinBSHeader month={month} onMonthChange={setMonth} />
-          </Box>
-
-          <Box sx={{ textAlign: "center", mb: 0.25 }}>
-            <Typography
-              component="h2"
-              sx={{
-                ...masterTypo.h3,
-                color: text.title,
-                lineHeight: 1.2,
-              }}
-            >
-              Balance sheet
-            </Typography>
-
-            <Typography
-              sx={{
-                ...masterTypo.body1,
-                color: text.subtitle,
-                lineHeight: 1.3,
-              }}
-            >
-              Assets, equity and liabilities, period by period ({cutOff}).
-            </Typography>
-
-            {/* Balance check: assets vs equity and liabilities */}
-            {showStatement && sheet.summary && (
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 0.75 }}>
-                <FinBSBalanceChip summary={sheet.summary} />
+          {/* Show the page-level header and calendar only in standalone mode. */}
+          {!hideHeader && (
+            <>
+              <Box
+                sx={{
+                  position: { xs: "static", md: "absolute" },
+                  top: "12px",
+                  right: "12px",
+                  alignSelf: "flex-end",
+                }}
+              >
+                <FinBSHeader
+                  month={month}
+                  onMonthChange={setMonth}
+                />
               </Box>
-            )}
-          </Box>
 
+              <Box sx={{ textAlign: "center", mb: 0.25 }}>
+                <Typography
+                  component="h2"
+                  sx={{
+                    ...masterTypo.h3,
+                    color: text.title,
+                    lineHeight: 1.2,
+                  }}
+                >
+                  Balance sheet
+                </Typography>
+
+                <Typography
+                  sx={{
+                    ...masterTypo.body1,
+                    color: text.subtitle,
+                    lineHeight: 1.3,
+                  }}
+                >
+                  Assets, equity and liabilities, period by period ({cutOff}).
+                </Typography>
+              </Box>
+            </>
+          )}
+
+          {/* Keep the balance check visible in both deployment modes. */}
+          {showStatement && sheet.summary && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 0.25 }}>
+              <FinBSBalanceChip summary={sheet.summary} />
+            </Box>
+          )}
+
+          {/* Loading progress. */}
           {sheet.isLoading && (
             <LinearProgress
               sx={{
@@ -135,7 +146,7 @@ export default function FinBS() {
             />
           )}
 
-          {/* No balance sheet exists for this team and month */}
+          {/* Handle an empty statement response. */}
           {sheet.status === STATUS.EMPTY && (
             <Alert
               severity="info"
@@ -152,7 +163,7 @@ export default function FinBS() {
             </Alert>
           )}
 
-          {/* The request failed */}
+          {/* Handle statement errors. */}
           {sheet.status === STATUS.ERROR && (
             <Alert
               severity="error"
@@ -176,7 +187,7 @@ export default function FinBS() {
             </Alert>
           )}
 
-          {/* The statement: KPI cards, toolbar, table */}
+          {/* Render KPIs, toolbar and statement table. */}
           {showStatement && (
             <>
               <FinBSKpis
@@ -207,7 +218,7 @@ export default function FinBS() {
             </>
           )}
 
-          {/* AI extension point */}
+          {/* AI extension point. */}
           {ai.isEnabled && (
             <Box data-ai-slot="executive-narration" />
           )}
