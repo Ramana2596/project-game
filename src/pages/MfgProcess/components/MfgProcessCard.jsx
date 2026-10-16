@@ -1,44 +1,28 @@
+
 // ============================================================
 // Component: MfgProcessCard
 // Module: MfgProcess
-// Purpose: Display one product's manufacturing process
-// AI Tags: manufacturing-process, product-card, process-flow, uxlab
+// Purpose: Display product details, FG stock and manufacturing process
+// AI Tags: manufacturing-process, product-card, fg-stock, process-flow, uxlab
 // UXLab V1.0 — Standardized
 // ============================================================
 
 import React from "react";
-
-import {
-  Box,
-  Typography,
-} from "@mui/material";
-
+import { Box, Typography } from "@mui/material";
 import {
   MFG_PROCESS_LABELS,
   PROCESS_VISUALS,
 } from "../constants/pageConstants";
-
-// Reused from CoProfile — single source of truth for
-// lifecycle color/label, same as ProductCard uses.
 import { PRODUCT_LIFECYCLE } from "../../CoProfile/constants/constants";
+import { colors, cardStyle, masterTypo } from "../../../ux/styles";
 
-import {
-  colors,
-  cardStyle,
-  masterTypo,
-} from "../../../ux/styles";
-
-// ------------------------------------------------------------
-// Normalize lifecycle code
-// ------------------------------------------------------------
+// Normalize lifecycle code for consistent lookup.
 const normalizeLifecycleCode = (value) => {
   if (!value) return "";
   return String(value).trim().replace(/\s+/g, "_");
 };
 
-// ------------------------------------------------------------
-// Resolve lifecycle visual treatment
-// ------------------------------------------------------------
+// Resolve lifecycle label and colors.
 const getLifecycle = (stage) => {
   const code = normalizeLifecycleCode(stage);
 
@@ -51,75 +35,54 @@ const getLifecycle = (stage) => {
   );
 };
 
-// ------------------------------------------------------------
-// Interim positional fallback
-// ------------------------------------------------------------
+// Interim positional fallback for unresolved lifecycle stages.
 const FALLBACK_ACCENTS = [
   colors.success,
   colors.info,
   colors.warning,
 ];
 
-// ------------------------------------------------------------
-// Manufacturing Process Product Card
-// ------------------------------------------------------------
+// Render one product card with FG stock and its manufacturing processes.
 export default function MfgProcessCard({
   product,
   processes = [],
   index = 0,
 }) {
-  // ----------------------------------------------------------
-  // Product
-  // ----------------------------------------------------------
-  const productName =
-    product?.Part_Description || "Product";
-
-  const lifecycleCode =
-    normalizeLifecycleCode(product?.PLM_Stage);
-
-  const isLifecycleResolved =
-    Boolean(PRODUCT_LIFECYCLE?.[lifecycleCode]);
-
-  const lifecycle =
-    getLifecycle(product?.PLM_Stage);
+  // Resolve product identity and lifecycle presentation.
+  const productName = product?.Part_Description || "Product";
+  const lifecycleCode = normalizeLifecycleCode(product?.PLM_Stage);
+  const isLifecycleResolved = Boolean(
+    PRODUCT_LIFECYCLE?.[lifecycleCode]
+  );
+  const lifecycle = getLifecycle(product?.PLM_Stage);
 
   const productColor = isLifecycleResolved
     ? lifecycle.color
-    : FALLBACK_ACCENTS[
-    index % FALLBACK_ACCENTS.length
-    ] || lifecycle.color;
+    : FALLBACK_ACCENTS[index % FALLBACK_ACCENTS.length] ||
+      lifecycle.color;
 
-  // ----------------------------------------------------------
-  // Process visual
-  // ----------------------------------------------------------
+  // Resolve the visual configuration for each process.
   const getProcessVisual = (processName) =>
-    PROCESS_VISUALS[processName] ||
-    PROCESS_VISUALS.default;
+    PROCESS_VISUALS[processName] || PROCESS_VISUALS.default;
 
-  // ----------------------------------------------------------
-  // Format time
-  // ----------------------------------------------------------
+  // Format process time consistently.
   const formatTime = (value) => {
     const time = Number(value);
 
     if (!Number.isFinite(time)) return "-";
 
-    return `${time % 1 === 0
-        ? time
-        : time.toFixed(2)
-      } min`;
+    return `${time % 1 === 0 ? time : time.toFixed(2)} min`;
   };
 
-  // ----------------------------------------------------------
-  // Material information
-  // ----------------------------------------------------------
+  // Resolve material details and finished-goods stock.
   const materials = Array.isArray(product?.materials)
     ? product.materials
     : [];
+  const fgStock = product?.fgStock;
+  const fgStockQuantity = fgStock?.CB_Qty;
+  const fgStockUom = fgStock?.UOM || "";
 
-  // ----------------------------------------------------------
-  // Render
-  // ----------------------------------------------------------
+  // Render the product card.
   return (
     <Box
       sx={{
@@ -129,35 +92,54 @@ export default function MfgProcessCard({
         flexDirection: "column",
       }}
     >
-
-      {/* ================================================== */}
-      {/* Product Header */}
-      {/* ================================================== */}
+      {/* Product title and right-aligned finished-goods stock. */}
       <Box
         sx={{
           px: 2,
           pt: 1.75,
           pb: 1.5,
-
           background: `linear-gradient(135deg, ${productColor}0B, ${productColor}03)`,
-
           borderBottom: "1px solid",
           borderColor: colors.divider,
         }}
       >
-
-        {/* Product Name */}
-        <Typography
+        <Box
           sx={{
-            ...masterTypo.h4,
-            color: productColor,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+            width: "100%",
+            minWidth: 0,
             mb: 0.65,
           }}
         >
-          {productName}
-        </Typography>
+          <Typography
+            sx={{
+              ...masterTypo.h4,
+              color: productColor,
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
+            {productName}
+          </Typography>
 
-        {/* ------ Material / Stock / Per Set ----------- */}
+          <Typography
+            sx={{
+              ...masterTypo.body1,
+              color: colors.body,
+              fontWeight: 700,
+              whiteSpace: "nowrap",
+              textAlign: "right",
+              flexShrink: 0,
+            }}
+          >
+            Stock: {fgStockQuantity ?? "—"} {fgStockUom}
+          </Typography>
+        </Box>
+
+        {/* Display raw-material stock and per-set consumption. */}
         <Box
           sx={{
             display: "flex",
@@ -166,8 +148,8 @@ export default function MfgProcessCard({
             gap: 0.75,
           }}
         >
-          {product?.materials?.length > 0 ? (
-            product.materials.map((material, materialIndex) => (
+          {materials.length > 0 ? (
+            materials.map((material, materialIndex) => (
               <React.Fragment
                 key={`${material?.material}-${materialIndex}`}
               >
@@ -184,17 +166,12 @@ export default function MfgProcessCard({
                       color: colors.body,
                     }}
                   >
-                    Material:
+                    Raw Material:
                   </Box>{" "}
                   {material?.material || "—"}
                 </Typography>
 
-                <Box
-                  component="span"
-                  sx={{
-                    color: colors.border,
-                  }}
-                >
+                <Box component="span" sx={{ color: colors.border }}>
                   |
                 </Box>
 
@@ -213,16 +190,10 @@ export default function MfgProcessCard({
                   >
                     Stock:
                   </Box>{" "}
-                  {material?.stock ?? "—"}{" "}
-                  {material?.uom || ""}
+                  {material?.stock ?? "—"} {material?.uom || ""}
                 </Typography>
 
-                <Box
-                  component="span"
-                  sx={{
-                    color: colors.border,
-                  }}
-                >
+                <Box component="span" sx={{ color: colors.border }}>
                   |
                 </Box>
 
@@ -241,11 +212,10 @@ export default function MfgProcessCard({
                   >
                     Per Set:
                   </Box>{" "}
-                  {material?.perSet ?? "—"}{" "}
-                  {material?.uom || ""}
+                  {material?.perSet ?? "—"} {material?.uom || ""}
                 </Typography>
 
-                {materialIndex < product.materials.length - 1 && (
+                {materialIndex < materials.length - 1 && (
                   <Box
                     component="span"
                     sx={{
@@ -265,25 +235,20 @@ export default function MfgProcessCard({
                 color: colors.subtitle,
               }}
             >
-              Material: — | Stock: — | Per Set: —
+              Raw Material: — | Stock: — | Per Set: —
             </Typography>
           )}
         </Box>
       </Box>
 
-      {/* ================================================== */}
-      {/* Process Column Header */}
-      {/* ================================================== */}
+      {/* Render the process table column headings. */}
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns:
-            "minmax(0, 1fr) 64px 76px 52px",
+          gridTemplateColumns: "minmax(0, 1fr) 64px 76px 52px",
           alignItems: "center",
-
           px: 2,
           py: 0.75,
-
           borderBottom: "1px solid",
           borderColor: colors.divider,
         }}
@@ -332,9 +297,7 @@ export default function MfgProcessCard({
         </Typography>
       </Box>
 
-      {/* ================================================== */}
-      {/* Process Rows */}
-      {/* ================================================== */}
+      {/* Render each manufacturing process row. */}
       <Box
         sx={{
           px: 1.25,
@@ -344,12 +307,8 @@ export default function MfgProcessCard({
       >
         {processes.map((process, rowIndex) => {
           const processName =
-            process?.Work_Centre_Description ||
-            "Process";
-
-          const visual =
-            getProcessVisual(processName);
-
+            process?.Work_Centre_Description || "Process";
+          const visual = getProcessVisual(processName);
           const ProcessIcon = visual.icon;
 
           return (
@@ -357,35 +316,23 @@ export default function MfgProcessCard({
               key={`${process?.Part_No}-${process?.Mfg_Seq_No}-${rowIndex}`}
               sx={{
                 display: "grid",
-                gridTemplateColumns:
-                  "minmax(0, 1fr) 64px 76px 52px",
+                gridTemplateColumns: "minmax(0, 1fr) 64px 76px 52px",
                 alignItems: "center",
-
                 minHeight: 58,
                 px: 0.5,
-
                 borderBottom:
                   rowIndex < processes.length - 1
                     ? "1px solid"
                     : "none",
-
                 borderColor: colors.divider,
-
                 borderRadius: 1.5,
-
-                transition:
-                  "background-color .2s ease",
-
+                transition: "background-color .2s ease",
                 "&:hover": {
-                  backgroundColor:
-                    `${productColor}0A`,
+                  backgroundColor: `${productColor}0A`,
                 },
               }}
             >
-
-              {/* ---------------------------------------- */}
-              {/* Process */}
-              {/* ---------------------------------------- */}
+              {/* Show sequence, process icon and operation details. */}
               <Box
                 sx={{
                   display: "flex",
@@ -393,8 +340,6 @@ export default function MfgProcessCard({
                   minWidth: 0,
                 }}
               >
-
-                {/* Sequence */}
                 <Typography
                   sx={{
                     width: 28,
@@ -405,41 +350,30 @@ export default function MfgProcessCard({
                   }}
                 >
                   {String(
-                    process?.Mfg_Seq_No ??
-                    rowIndex + 1
+                    process?.Mfg_Seq_No ?? rowIndex + 1
                   ).padStart(2, "0")}
                 </Typography>
 
-                {/* Process Icon */}
                 <Box
                   sx={{
                     ...cardStyle.iconBox,
                     ...cardStyle.iconBoxCircle,
-
                     width: 32,
                     height: 32,
                     minWidth: 32,
-
                     flexShrink: 0,
                     mr: 1,
-
-                    background:
-                      visual.softColor,
-
+                    background: visual.softColor,
                     color: visual.color,
-
                     "& svg": {
                       fontSize: 18,
                       color: visual.color,
                     },
                   }}
                 >
-                  <ProcessIcon
-                    sx={{ fontSize: 18 }}
-                  />
+                  <ProcessIcon sx={{ fontSize: 18 }} />
                 </Box>
 
-                {/* Process Name */}
                 <Box sx={{ minWidth: 0 }}>
                   <Typography
                     noWrap
@@ -462,15 +396,12 @@ export default function MfgProcessCard({
                       color: colors.subtitle,
                     }}
                   >
-                    {process?.Facility_Description ||
-                      ""}
+                    {process?.Facility_Description || ""}
                   </Typography>
                 </Box>
               </Box>
 
-              {/* ---------------------------------------- */}
-              {/* Setup */}
-              {/* ---------------------------------------- */}
+              {/* Display setup time. */}
               <Typography
                 align="right"
                 sx={{
@@ -479,14 +410,10 @@ export default function MfgProcessCard({
                   color: colors.body,
                 }}
               >
-                {formatTime(
-                  process?.SetUp_Time
-                )}
+                {formatTime(process?.SetUp_Time)}
               </Typography>
 
-              {/* ---------------------------------------- */}
-              {/* Standard Time */}
-              {/* ---------------------------------------- */}
+              {/* Display standard process time. */}
               <Typography
                 align="right"
                 sx={{
@@ -495,14 +422,10 @@ export default function MfgProcessCard({
                   color: colors.primary,
                 }}
               >
-                {formatTime(
-                  process?.Std_Time
-                )}
+                {formatTime(process?.Std_Time)}
               </Typography>
 
-              {/* ---------------------------------------- */}
-              {/* Batch */}
-              {/* ---------------------------------------- */}
+              {/* Display batch quantity. */}
               <Typography
                 align="right"
                 sx={{
@@ -513,7 +436,6 @@ export default function MfgProcessCard({
               >
                 {process?.Batch_Qty ?? "-"}
               </Typography>
-
             </Box>
           );
         })}
