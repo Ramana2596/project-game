@@ -14,7 +14,15 @@ export function getMfgProcess(queryParams) {
   });
 }
 
-// Get Product Master information
+// Get FG Stock information
+export function getFgStockInfo(queryParams) {
+    return api.post('/api/getFgStockInfo',
+        {
+            params: { ...queryParams }
+        });
+}
+
+// Get RM Stock information
 export function getRmStockInfo(queryParams) {
     return api.post('/api/getRmStockInfo',
         {
@@ -29,3 +37,4 @@ export function getBomInfo(queryParams) {
             params: { ...queryParams }
         });
 }
+
