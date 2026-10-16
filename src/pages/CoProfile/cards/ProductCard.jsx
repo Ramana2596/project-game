@@ -38,9 +38,7 @@ import {
 
 import { PRODUCT_LIFECYCLE } from "../constants/constants";
 
-// ------------------------------------------------------------
 // Format API date for business-user display
-// ------------------------------------------------------------
 const formatDate = (value) => {
   if (!value) return "-";
 
@@ -57,10 +55,7 @@ const formatDate = (value) => {
   });
 };
 
-// ------------------------------------------------------------
-// Normalize lifecycle code for constants lookup
-// Example: PL 02 -> PL_02
-// ------------------------------------------------------------
+// Normalize lifecycle code Example: PL 02 -> PL_02
 const normalizeLifecycleCode = (value) => {
   if (!value) return "";
 
@@ -69,9 +64,8 @@ const normalizeLifecycleCode = (value) => {
     .replace(/\s+/g, "_");
 };
 
-// ------------------------------------------------------------
-// Resolve lifecycle visual treatment
-// ------------------------------------------------------------
+
+// Lifecycle Code Mapping
 const getLifecycle = (stage) => {
   const code = normalizeLifecycleCode(stage);
 
@@ -84,10 +78,9 @@ const getLifecycle = (stage) => {
   );
 };
 
-// ------------------------------------------------------------
-// Resolve lifecycle-specific product icon — filled style,
+// Lifecycle Code-specific product icon — filled style,
 // matches reference (row icons below stay outline)
-// ------------------------------------------------------------
+
 const getLifecycleIcon = (stage) => {
   const code = normalizeLifecycleCode(stage);
 
@@ -106,11 +99,11 @@ const getLifecycleIcon = (stage) => {
   }
 };
 
-// ------------------------------------------------------------
+
 // Product Information Row
 // Icon always inherits the card's single lifecycle color —
 // matches reference (all row icons share one theme color per card).
-// ------------------------------------------------------------
+
 function ProductInfoRow({
   icon: Icon,
   themeColor,
@@ -159,9 +152,9 @@ function ProductInfoRow({
   );
 }
 
-// ------------------------------------------------------------
+
 // Product Card
-// ------------------------------------------------------------
+
 export default function ProductCard({
   product = {},
   index = 0,
@@ -251,9 +244,9 @@ export default function ProductCard({
           {/* Product Number */}
           <Box
             sx={{
-              width: 56,
-              height: 56,
-              borderRadius: 2,
+              width: 40,
+              height: 40,
+              borderRadius: 3,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -264,7 +257,7 @@ export default function ProductCard({
           >
             <Typography
               sx={{
-                ...masterTypo.h4,
+                ...masterTypo.h5,
                 color: colors.white,
                 fontWeight: 800,
               }}

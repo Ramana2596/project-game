@@ -66,7 +66,11 @@ export default function CoMetricCard({
       elevation={0}
       sx={{
         ...cardStyle.statCard,
-        height: "100%",
+        p: 0,
+        mt: 0,
+        mb: 0,
+        minWidth: 0,
+        gap: 1,
       }}
     >
       {/* ================================================= */}
@@ -102,7 +106,7 @@ export default function CoMetricCard({
         {/* ------------------------------------------------ */}
         <Typography
           sx={{
-            ...masterTypo.h3,
+            ...masterTypo.h6,
             color: metricColor,
             mt: 0.15,
 
