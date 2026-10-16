@@ -23,24 +23,17 @@ import CoOverview from "./components/CoOverview";
 import CoNavigation from "./components/CoNavigation";
 import CoWorkspace from "./components/CoWorkspace";
 
-
-// ------------------------------------------------------------
 // Company Profile Page
-// ------------------------------------------------------------
 export default function CoProfile({
   productionMonth = null,
   hideHeader = false,
   hideNavigation = false,
 }) {
 
-  // ----------------------------------------------------------
   // Load authenticated user information
-  // ----------------------------------------------------------
   const { userInfo } = useUser();
 
-  // ----------------------------------------------------------
   // Load Company Profile data and UI state
-  // ----------------------------------------------------------
   const {
     products,
     loading,
@@ -48,9 +41,9 @@ export default function CoProfile({
     setActiveTab,
   } = useCoProfile(userInfo);
 
-  // ----------------------------------------------------------
+  
   // Display loading state
-  // ----------------------------------------------------------
+  
   if (loading) {
     return (
       <Box
@@ -70,9 +63,7 @@ export default function CoProfile({
     );
   }
 
-  // ----------------------------------------------------------
   // Render Company Profile workspace
-  // ----------------------------------------------------------
   return (
     <Box sx={layoutStyle.root}>
       <Box sx={layoutStyle.pageContainer}>
@@ -82,22 +73,14 @@ export default function CoProfile({
             md: 2.5,
           }}
         >
-
-          {/* ================================================== */}
-          {/* Existing Company Profile Header                   */}
+          {/* Existing Company Profile Header & Navigation       */}
           {/* Hidden when rendered through ReportWriter          */}
-          {/* ================================================== */}
 
           {!hideHeader && (
             <CoHeader
               productionMonth={productionMonth}
             />
           )}
-
-          {/* ================================================== */}
-          {/* Existing Company Profile Navigation               */}
-          {/* Hidden when rendered through ReportWriter          */}
-          {/* ================================================== */}
 
           {!hideNavigation && (
             <CoNavigation
@@ -106,18 +89,13 @@ export default function CoProfile({
             />
           )}
 
-          {/* ================================================== */}
-          {/* Company Overview Metrics                           */}
-          {/* ================================================== */}
-
+          {/* Company Overview Metrics   */}
           <CoOverview
             products={products}
           />
 
-          {/* ================================================== */}
-          {/* Active Company Domain                              */}
-          {/* ================================================== */}
 
+          {/* Active Company Domain     */}
           <CoWorkspace
             activeTab={activeTab}
             products={products}
