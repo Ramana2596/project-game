@@ -1,4 +1,3 @@
-
 // ============================================================
 // Component: MfgProcessCard
 // Module: MfgProcess
@@ -166,7 +165,7 @@ export default function MfgProcessCard({
                       color: colors.body,
                     }}
                   >
-                    Raw Material:
+                    Material:
                   </Box>{" "}
                   {material?.material || "—"}
                 </Typography>
@@ -235,7 +234,7 @@ export default function MfgProcessCard({
                 color: colors.subtitle,
               }}
             >
-              Raw Material: — | Stock: — | Per Set: —
+              Material: — | Stock: — | Per Set: —
             </Typography>
           )}
         </Box>
