@@ -3,15 +3,13 @@
 
 //  Display the report UI Is in listed order.
 export const REPORT_REGISTRY = {
-  1: ["UI 22 020 UX",  "UI 22 040 UX","UI 22 060 UX", "UI 21 150"],
+  1: ["UI 22 020 UX",  "UI 22 040 UX","UI 22 060 UX"],
   2: ["UI 21 010 UX"],
   3: ["UI 21 040 UX"],
-//  3: ["UI 21 040", "UI 21 050", "UI 21 060", "UI 21 070"],
   4: ["UI 21 090 UX"],
   5: ["UI 21 100"],
   6: ["UI 21 180 UX"],
   7: ["UI 21 110 UX", "UI 21 120 UX", "UI 21 130 UX"],
-//  8: ["UI 21 281", "UI 21 282"],
   8: ["UI 21 280 UX"],
 };
 
