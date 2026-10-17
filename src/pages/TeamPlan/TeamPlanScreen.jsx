@@ -1,91 +1,20 @@
 // File: src/pages/TeamPlan/TeamPlanScreen.jsx
-// V4 — Built from src/ux/styles tokens: layoutStyle (root, pageContainer,
-//      pageHeader, pageHeaderDatePill, tabBar, panel), buttonStyle (tab, tabActive,
-//      primary, secondary, text, compact), tableStyle (container), masterTypo, colors.
-//      Heading lives in components/TeamPlanHeader.jsx (ReportHeader pattern).
-//      Buttons sit in the tab bar. Standalone shows everything; hideHeader=true
-//      (ReportDrawer) drops the heading, page chrome and browser-tab title.
+// V5 — Layout and wiring only. Parts live in components/: TeamPlanHeader (heading),
+//      TeamPlanTabs (tabs + Cancel/Save), TeamPlanItem (table), TeamPlanDialogs
+//      (confirmations). Rules and formatting live in utils/planRules.js.
+//      Standalone shows everything; hideHeader=true (ReportDrawer) drops the
+//      heading, page chrome and browser-tab title.
 
 import React, { useState, useEffect, useMemo } from "react";
-import {
-  alpha,
-  Box,
-  Typography,
-  Paper,
-  Button,
-  Tabs,
-  Tab,
-  Tooltip,
-  Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  LinearProgress,
-} from "@mui/material";
-import {
-  Save as SaveIcon,
-  Close as CancelIcon,
-  CheckCircle as CheckIcon,
-  Pending as PendingIcon,
-  RadioButtonUnchecked as UnseenIcon,
-  Inventory as InventoryIcon,
-  Layers as LayersIcon,
-  PrecisionManufacturing as ManufacturingIcon,
-} from "@mui/icons-material";
-import {
-  colors,
-  tableStyle,
-  buttonStyle,
-  layoutStyle,
-  masterTypo,
-} from "../../ux/styles";
+import { alpha, Alert, Box, LinearProgress, Paper } from "@mui/material";
+import { colors, tableStyle, layoutStyle, masterTypo } from "../../ux/styles";
 import TeamPlanHeader from "./components/TeamPlanHeader.jsx";
+import TeamPlanTabs from "./components/TeamPlanTabs.jsx";
 import TeamPlanItem from "./components/TeamPlanItem.jsx";
+import TeamPlanDialogs from "./components/TeamPlanDialogs.jsx";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import { useTeamPlan } from "./hooks/useTeamPlan.js";
 import { useUser } from "../../core/access/userContext.jsx";
-import { CATEGORY_ICON } from "./constants/categoryIcon.js";
-
-/* ---------------- Styles composed from ux/styles tokens ---------------- */
-
-// Destructive actions: primary button shape with the error colour.
-const DANGER_SX = {
-  ...buttonStyle.primary,
-  ...buttonStyle.compact,
-  background: colors.error,
-  boxShadow: "none",
-  "&:hover": { background: colors.error, filter: "brightness(0.9)", boxShadow: "none" },
-};
-const DANGER_TEXT_SX = {
-  ...buttonStyle.text,
-  color: colors.error,
-  "&:hover": { background: "transparent", color: colors.error },
-};
-
-// Tab status indicators driven by palette tokens.
-const STATUS_CONFIG = {
-  saved: {
-    icon: <CheckIcon sx={{ fontSize: 16, color: colors.success }} />,
-    tooltip: "Saved",
-  },
-  unsaved: {
-    icon: <PendingIcon sx={{ fontSize: 16, color: colors.warning }} />,
-    tooltip: "Pending save",
-  },
-  unseen: {
-    icon: <UnseenIcon sx={{ fontSize: 16, color: colors.subtitle }} />,
-    tooltip: "Not opened",
-  },
-};
-
-// Tab icons. Move into constants/categoryIcon.js when convenient.
-const TAB_ICON = {
-  "OI 001": InventoryIcon,
-  "OI 002": LayersIcon,
-  "OI 003": ManufacturingIcon,
-};
 
 // Embedded (ReportDrawer) wrapper: no page chrome, fills the drawer.
 const EMBEDDED_SX = { width: "100%", minWidth: 0 };
@@ -202,8 +131,6 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
     [columns, currentTab]
   );
 
-  const tabLabel = (key) => CATEGORY_ICON?.[key]?.label || key;
-
   return (
     <Box
       {...(hideHeader
@@ -249,105 +176,19 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
             </Box>
           )}
 
-          {/* Tab bar: category tabs with Cancel / Save right-justified */}
-          <Box sx={{ px: 2, pt: 2 }}>
-            <Box
-              component="nav"
-              aria-label="Operations Category Navigation"
-              sx={{
-                ...layoutStyle.tabBar,
-                mb: 0,
-                flexWrap: "nowrap",
-                alignItems: "center",
-                columnGap: 2,
-              }}
-            >
-              <Tabs
-                value={currentTab}
-                onChange={(e, v) => onTabClick(v)}
-                variant="scrollable"
-                scrollButtons="auto"
-                TabIndicatorProps={{ style: { display: "none" } }}
-                sx={{
-                  minHeight: 44,
-                  flex: 1,
-                  minWidth: 0,
-                  "& .MuiTabs-flexContainer": { gap: 0.5 },
-                }}
-              >
-                {Object.entries(CATEGORY_ICON).map(([key, cfg]) => {
-                  const status = tabStatusMap?.[key] || "unseen";
-                  const statusCfg = STATUS_CONFIG[status];
-                  const CategoryIconComponent = TAB_ICON[key] || InventoryIcon;
-                  const rowCount = (tabDataMap?.[key] || []).length;
-
-                  return (
-                    <Tab
-                      key={key}
-                      value={key}
-                      label={
-                        <Tooltip title={`${cfg.tooltip} (${rowCount} items) • ${statusCfg.tooltip}`} arrow>
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <CategoryIconComponent fontSize="small" sx={{ color: "inherit" }} />
-                            <span>{cfg.label}</span>
-                            {rowCount > 0 && (
-                              <Typography
-                                component="span"
-                                sx={{ ...masterTypo.caption, fontWeight: 700, color: "inherit" }}
-                              >
-                                ({rowCount})
-                              </Typography>
-                            )}
-                            {/* White disc keeps the status icon readable on the active tab */}
-                            <Box
-                              role="img"
-                              aria-label={statusCfg.tooltip}
-                              sx={{
-                                display: "inline-flex",
-                                p: 0.25,
-                                borderRadius: "50%",
-                                background: colors.paper,
-                              }}
-                            >
-                              {statusCfg.icon}
-                            </Box>
-                          </Box>
-                        </Tooltip>
-                      }
-                      sx={{
-                        ...buttonStyle.tab,
-                        "&.Mui-selected": { ...buttonStyle.tabActive },
-                        "&.Mui-selected:hover": { background: buttonStyle.tabActive.background },
-                      }}
-                    />
-                  );
-                })}
-              </Tabs>
-
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, ml: "auto", flexShrink: 0 }}>
-                <Button
-                  variant="outlined"
-                  color="inherit"
-                  disabled={!canCancel}
-                  onClick={() => setDialog({ type: "cancel" })}
-                  startIcon={<CancelIcon />}
-                  sx={{ ...buttonStyle.secondary, ...buttonStyle.compact }}
-                >
-                  Cancel
-                </Button>
-
-                <Button
-                  variant="contained"
-                  startIcon={<SaveIcon />}
-                  disabled={!canSave}
-                  onClick={onSaveClick}
-                  sx={{ ...buttonStyle.primary, ...buttonStyle.compact }}
-                >
-                  {saving ? "Saving…" : calculating ? "Calculating…" : "Save"}
-                </Button>
-              </Box>
-            </Box>
-          </Box>
+          {/* Tab bar with Cancel / Save */}
+          <TeamPlanTabs
+            currentTab={currentTab}
+            tabDataMap={tabDataMap}
+            tabStatusMap={tabStatusMap}
+            onTabClick={onTabClick}
+            canCancel={canCancel}
+            canSave={canSave}
+            saving={saving}
+            calculating={calculating}
+            onCancelClick={() => setDialog({ type: "cancel" })}
+            onSaveClick={onSaveClick}
+          />
 
           {/* Data table card */}
           <Box sx={{ p: 2 }}>
@@ -369,54 +210,17 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
         </Paper>
       </Box>
 
-      {/* Cancel confirmation */}
-      <Dialog open={dialog?.type === "cancel"} onClose={closeDialog} aria-labelledby="cancel-dialog-title">
-        <DialogTitle id="cancel-dialog-title" sx={{ ...masterTypo.h5, color: colors.title }}>
-          Discard unsaved changes?
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ ...masterTypo.body2, color: colors.body }}>
-            Your edits on {tabLabel(currentTab)} will be lost and the last saved values restored.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={closeDialog} sx={buttonStyle.text}>
-            Keep editing
-          </Button>
-          <Button onClick={onConfirmCancel} variant="contained" sx={DANGER_SX}>
-            Discard
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Tab change with unsaved changes: Save / Discard / Stay */}
-      <Dialog open={dialog?.type === "tab"} onClose={saving ? undefined : closeDialog} aria-labelledby="tab-dialog-title">
-        <DialogTitle id="tab-dialog-title" sx={{ ...masterTypo.h5, color: colors.title }}>
-          Unsaved changes
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ ...masterTypo.body2, color: colors.body }}>
-            {tabLabel(currentTab)} has unsaved changes. Save them before opening{" "}
-            {tabLabel(dialog?.tab)}?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={closeDialog} disabled={saving} sx={buttonStyle.text}>
-            Stay
-          </Button>
-          <Button onClick={onDiscardAndContinue} disabled={saving} sx={DANGER_TEXT_SX}>
-            Discard and continue
-          </Button>
-          <Button
-            onClick={onSaveAndContinue}
-            disabled={saving || calculating}
-            variant="contained"
-            sx={{ ...buttonStyle.primary, ...buttonStyle.compact }}
-          >
-            {saving ? "Saving…" : "Save and continue"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {/* Confirmations */}
+      <TeamPlanDialogs
+        dialog={dialog}
+        currentTab={currentTab}
+        saving={saving}
+        calculating={calculating}
+        onClose={closeDialog}
+        onConfirmCancel={onConfirmCancel}
+        onDiscardAndContinue={onDiscardAndContinue}
+        onSaveAndContinue={onSaveAndContinue}
+      />
 
       {/* Toast Notification Bar */}
       <ToastMessage {...toast} onClose={() => setToast((t) => ({ ...t, open: false }))} />

@@ -1,74 +1,22 @@
 // File: src/pages/TeamPlan/hooks/useTeamPlan.js
 // Purpose: Manage TeamPlan state, tab data, LOVs, edit and API integration
-// V4 — Save result read from SP return value (0 = success), row validation:
-//      Quantity is a whole number 0..99,999,999 (numeric 8,0), prices are 2
-//      decimals (numeric 8,2), never negative; system values are not blamed on
-//      the user. Required_Quantity 0 = not ordering now,
-//      "no price source" messages, calculating state, race-safe loads
+// V5 — Data, edit and save flow. Rules, validation and formatting live in
+//      utils/planRules.js. Save result is read from the SP return value
+//      (0 = success). Required_Quantity 0 = not ordering now, "no price
+//      source" messages, calculating state, race-safe loads
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { getOpsPlanQuery, updateOpsPlanBulk } from "../services/service.js";
 import { getResolvedColumns } from "../utils/getResolvedColumns.js";
 import { COLUMN_RULES } from "../constants/columnRules.js";
 import { useUser } from "../../../core/access/userContext.jsx";
-
-/* ---------------- Helpers ---------------- */
-
-// Largest values the database columns can hold.
-export const MAX_QUANTITY = 99999999; // Quantity: numeric(8,0), whole numbers
-export const MAX_AMOUNT = 999999.99; // Unit price: numeric(8,2)
-
-// Unique row key inside a tab: Part_No + Quantity_Id.
-export const getRowKey = (r) => `${r?.Part_No ?? ""}|${r?.Quantity_Id ?? ""}`;
-
-const isBlank = (v) => v === "" || v == null;
-
-// 0 (or "0", "0.") typed in Required_Quantity means: not ordering now.
-const isZero = (v) => !isBlank(v) && Number.isFinite(Number(v)) && Number(v) === 0;
-
-// Replace changed rows with the same key, then append the new ones.
-const mergeChanged = (list = [], rows) => {
-  const keys = new Set(rows.map(getRowKey));
-  return [...list.filter((r) => !keys.has(getRowKey(r))), ...rows];
-};
-
-// Typed Quantity (Product tab): whole number, 0 or more. Returns "" when valid.
-const checkQuantity = (value) => {
-  if (isBlank(value)) return "Quantity is required";
-  const text = String(value).trim();
-  if (!/^\d+$/.test(text)) return "Quantity must be a whole number, 0 or more";
-  if (Number(text) > MAX_QUANTITY) {
-    return `Quantity must be ${MAX_QUANTITY.toLocaleString("en-US")} or less`;
-  }
-  return "";
-};
-
-// System-generated value (price list, price): only guard against values the
-// database cannot hold. The user cannot edit these, so decimals are not blamed.
-const checkSystemValue = (label, value, max) => {
-  if (isBlank(value)) return `${label} is missing`;
-  const n = Number(value);
-  if (!Number.isFinite(n) || n < 0) return `${label} is not valid`;
-  if (n > max) return `${label} is too large (maximum ${max.toLocaleString("en-US")})`;
-  return "";
-};
-
-// Validate changed rows. Returns { rowKey: message } for rows with a problem.
-const validateRows = (rows, tab) => {
-  const errors = {};
-  rows.forEach((r) => {
-    const message =
-      (tab === "OI 001"
-        ? checkQuantity(r.Quantity)
-        : checkSystemValue("Order quantity", r.Quantity, MAX_QUANTITY)) ||
-      (isBlank(r.Unit_Price) ? "" : checkSystemValue("Unit price", r.Unit_Price, MAX_AMOUNT)) ||
-      (tab !== "OI 001" && isBlank(r.Price_Id) && Number(r.Quantity) !== 0
-        ? "Select a price"
-        : "");
-    if (message) errors[getRowKey(r)] = message;
-  });
-  return errors;
-};
+import {
+  getRowKey,
+  isBlank,
+  isZero,
+  mergeChanged,
+  validateRows,
+} from "../utils/planRules.js";
 
 export const useTeamPlan = (userInfo) => {
   const { user } = useUser();
