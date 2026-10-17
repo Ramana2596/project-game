@@ -1,11 +1,54 @@
 // File: src/pages/TeamPlan/components/TeamPlanItem.jsx
-// Render table with Tab-specific edit logic 
+// Render table with tab-specific edit logic
+// V3 — Built on tableStyle (columnHeader, row, cell, numeric, compact), decimal-safe
+//      inputs (typed text kept as text), stable row keys, changed-row marker,
+//      inline row error, aria labels
 
-import React from "react";
+import React, { useMemo } from "react";
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  TextField, Paper, CircularProgress, Select, MenuItem, Box, Typography,
+  alpha,
+  Box,
+  CircularProgress,
+  MenuItem,
+  Paper,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
 } from "@mui/material";
+import { EditOutlined as EditIcon } from "@mui/icons-material";
+import { visuallyHidden } from "@mui/utils";
+import { colors, masterTypo, tableStyle } from "../../../ux/styles";
+import { getRowKey } from "../hooks/useTeamPlan.js";
+
+// Typed text may only be digits with one optional decimal point.
+const NUMBER_PATTERN = /^\d*\.?\d*$/;
+
+// Columns shown right-aligned with equal-width digits.
+const NUMERIC_KEYS = ["Quantity", "Unit_Price", "Required_Quantity"];
+
+const TEXT_SX = { ...masterTypo.tableParameter, color: colors.body };
+const NUMBER_SX = {
+  ...masterTypo.tableParameter,
+  ...tableStyle.numeric,
+  color: colors.body,
+};
+
+// Format a number for display: 873852 -> "873,852", price -> 2 decimals.
+const formatNumber = (value, key) => {
+  if (value === "" || value == null) return "";
+  const n = Number(value);
+  if (!Number.isFinite(n)) return String(value);
+  return n.toLocaleString("en-US", {
+    minimumFractionDigits: key === "Unit_Price" ? 2 : 0,
+    maximumFractionDigits: 2,
+  });
+};
 
 const TeamPlanItem = ({
   rows,
@@ -13,137 +56,254 @@ const TeamPlanItem = ({
   columns,
   lovsMap,
   currentTab,
+  changedRows = [],
+  rowErrors = {},
   onEditStart,
   onCellChange,
   fetchBuyInfoLovForPart,
 }) => {
+  const isProductTab = currentTab === "OI 001";
 
-  // Display loading spinner while fetching data
+  // Keys of rows edited since the last save.
+  const changedKeys = useMemo(
+    () => new Set(changedRows.map(getRowKey)),
+    [changedRows]
+  );
+
+  // Display loading spinner while the first load is running.
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
+      <Box
+        role="status"
+        aria-label="Loading plan data"
+        sx={{ display: "flex", justifyContent: "center", p: 4 }}
+      >
         <CircularProgress size={28} />
       </Box>
     );
   }
 
+  // Render one cell according to its column and the active tab.
+  const renderCell = (col, row, rowIndex, hasError) => {
+    const label = `${col.label} for part ${row.Part_No}`;
+
+    // Required Quantity: input on Material and Machine tabs.
+    if (col.key === "Required_Quantity" && !isProductTab) {
+      return (
+        <TextField
+          size="small"
+          value={row.Required_Quantity ?? ""}
+          error={hasError}
+          onFocus={() => onEditStart?.()}
+          onChange={(e) => {
+            if (NUMBER_PATTERN.test(e.target.value)) {
+              onCellChange(rowIndex, "Required_Quantity", e.target.value);
+            }
+          }}
+          // Price list is fetched only after the user finishes typing.
+          onBlur={(e) =>
+            fetchBuyInfoLovForPart?.(currentTab, row.Part_No, e.target.value)
+          }
+          inputProps={{
+            inputMode: "decimal",
+            "aria-label": label,
+            style: { textAlign: "right" },
+          }}
+          sx={{ minWidth: 110, "& .MuiInputBase-input": NUMBER_SX }}
+          fullWidth
+        />
+      );
+    }
+
+    // Info Price: text on Product tab, price selector on Material / Machine.
+    if (col.key === "Info_Price") {
+      if (isProductTab) {
+        return (
+          <Typography sx={TEXT_SX}>
+            {row.Info_Price || row.Purchase_Preference || ""}
+          </Typography>
+        );
+      }
+
+      const priceLov = lovsMap?.[currentTab]?.[row.Part_No]?.Price_Lov || [];
+      const selectedPriceId = priceLov.some((p) => p.Price_Id === row.Price_Id)
+        ? row.Price_Id
+        : "";
+
+      return (
+        <Select
+          size="small"
+          value={selectedPriceId}
+          displayEmpty
+          error={hasError}
+          // Show the saved price text until the price list has loaded.
+          renderValue={(v) =>
+            priceLov.find((p) => p.Price_Id === v)?.Info_Price ??
+            row.Info_Price ??
+            ""
+          }
+          onFocus={() => {
+            onEditStart?.();
+            fetchBuyInfoLovForPart?.(
+              currentTab,
+              row.Part_No,
+              row.Required_Quantity
+            );
+          }}
+          onChange={(e) => {
+            const selected = priceLov.find((p) => p.Price_Id === e.target.value);
+            onCellChange(rowIndex, null, {
+              ...row,
+              Price_Id: e.target.value,
+              Info_Price: selected?.Info_Price ?? "",
+              Quantity: selected?.Quantity ?? 0,
+              Unit_Price: selected?.Unit_Price ?? 0,
+            });
+          }}
+          inputProps={{ "aria-label": `Price source for part ${row.Part_No}` }}
+          sx={{ minWidth: 160, ...TEXT_SX }}
+          fullWidth
+        >
+          {priceLov.map((p) => (
+            <MenuItem key={p.Price_Id} value={p.Price_Id} sx={TEXT_SX}>
+              {p.Info_Price}
+            </MenuItem>
+          ))}
+        </Select>
+      );
+    }
+
+    // Quantity: input on Product tab, calculated order quantity on the others.
+    if (col.key === "Quantity") {
+      if (isProductTab) {
+        return (
+          <TextField
+            size="small"
+            value={row.Quantity ?? ""}
+            error={hasError}
+            onFocus={() => onEditStart?.()}
+            onChange={(e) => {
+              if (NUMBER_PATTERN.test(e.target.value)) {
+                onCellChange(rowIndex, "Quantity", e.target.value);
+              }
+            }}
+            inputProps={{
+              inputMode: "decimal",
+              "aria-label": label,
+              style: { textAlign: "right" },
+            }}
+            sx={{ minWidth: 110, "& .MuiInputBase-input": NUMBER_SX }}
+            fullWidth
+          />
+        );
+      }
+      return (
+        <Typography
+          title="Calculated from the selected price"
+          sx={{ ...NUMBER_SX, fontWeight: 600, color: colors.heading }}
+        >
+          {formatNumber(row.Quantity ?? 0, "Quantity")}
+        </Typography>
+      );
+    }
+
+    // Everything else is display-only.
+    const value = row[col.key];
+    if (NUMERIC_KEYS.includes(col.key)) {
+      return <Typography sx={NUMBER_SX}>{formatNumber(value, col.key)}</Typography>;
+    }
+    return <Typography sx={TEXT_SX}>{value ?? ""}</Typography>;
+  };
+
   return (
-    <TableContainer component={Paper} sx={{ maxHeight: "65vh", overflow: "auto" }}>
-      <Table size="small" stickyHeader sx={{ minWidth: 900 }}>
-        <TableHead>
+    <TableContainer
+      component={Paper}
+      elevation={0}
+      square
+      sx={{ maxHeight: "65vh", overflow: "auto", background: "transparent" }}
+    >
+      <Table size="small" stickyHeader sx={{ minWidth: 900, ...tableStyle.compact }}>
+        <TableHead sx={tableStyle.columnHeader}>
           <TableRow>
-            {/* Header row with sticky positioning */}
             {columns.map((col) => (
               <TableCell
                 key={col.key}
-                sx={{
-                  fontWeight: 800,
-                  backgroundColor: "#F1F3F5",
-                  textTransform: "uppercase",
-                  fontSize: "0.85rem",
-                  position: "sticky",
-                  top: 0,
-                  zIndex: 2,
-                }}
+                title={col.editable ? "Editable" : undefined}
+                align={NUMERIC_KEYS.includes(col.key) ? "right" : "left"}
+                sx={{ whiteSpace: "nowrap" }}
               >
-                {col.label}
+                <Box
+                  component="span"
+                  sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}
+                >
+                  {col.label}
+                  {col.editable && (
+                    <>
+                      <EditIcon aria-hidden sx={{ fontSize: 14, opacity: 0.85 }} />
+                      <Box component="span" sx={visuallyHidden}>
+                        (editable)
+                      </Box>
+                    </>
+                  )}
+                </Box>
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
 
         <TableBody>
-          {(!rows || rows.length === 0) ? (
+          {!rows || rows.length === 0 ? (
             <TableRow>
               <TableCell colSpan={columns.length} align="center" sx={{ py: 6 }}>
-                <Typography sx={{ color: "#6c757d", fontWeight: 600 }}>No Records</Typography>
+                <Typography sx={{ ...masterTypo.body1, color: colors.subtitle, fontWeight: 600 }}>
+                  No plan items for this category.
+                </Typography>
               </TableCell>
             </TableRow>
           ) : (
             rows.map((row, rowIndex) => {
-              const priceLov = lovsMap?.[currentTab]?.[row.Part_No]?.Price_Lov || [];
-              const selectedPriceId = priceLov.some((p) => p.Price_Id === row.Price_Id) ? (row.Price_Id ?? "") : "";
+              const rowKey = getRowKey(row);
+              const errorMessage = rowErrors[rowKey];
+              const isChanged = changedKeys.has(rowKey);
+
+              // Tint sits on the cells so it shows over the striped row colour.
+              const tint = errorMessage
+                ? alpha(colors.error, 0.08)
+                : isChanged
+                ? alpha(colors.primary, 0.06)
+                : undefined;
 
               return (
-                <TableRow key={rowIndex} hover>
-                  {columns.map((col) => (
-                    <TableCell key={col.key} sx={{ verticalAlign: "middle" }}>
+                <TableRow key={rowKey === "|" ? rowIndex : rowKey} sx={tableStyle.row}>
+                  {columns.map((col, colIndex) => (
+                    <TableCell
+                      key={col.key}
+                      sx={{
+                        ...tableStyle.cell,
+                        verticalAlign: "middle",
+                        backgroundColor: tint,
+                        // Marker bar: a visible edge, not colour alone.
+                        ...(colIndex === 0 && {
+                          borderLeft: `3px solid ${
+                            errorMessage
+                              ? colors.error
+                              : isChanged
+                              ? colors.primary
+                              : "transparent"
+                          }`,
+                        }),
+                      }}
+                    >
+                      {renderCell(col, row, rowIndex, Boolean(errorMessage))}
 
-                      {/* Required Quantity: For Material/Machinery tabs */}
-                      {col.key === "Required_Quantity" && currentTab !== "OI 001" ? (
-                        <TextField
-                          size="small"
-                          value={row.Required_Quantity ?? ""}
-                          onFocus={() => onEditStart && onEditStart()}
-                          onChange={(e) => {
-                            const val = e.target.value === "" ? "" : Number(e.target.value);
-                            onCellChange(rowIndex, "Required_Quantity", val);
-                            fetchBuyInfoLovForPart(currentTab, row.Part_No, val);
-                          }}
-                          // Fetch only after user finishes editing
-                          onBlur={(e) => {
-                            const val = e.target.value === "" ? "" : Number(e.target.value);
-                            fetchBuyInfoLovForPart(currentTab, row.Part_No, val);
-                          }}
-
-                          fullWidth
-                        />
-                      ) :
-
-                        /* Info_Price: Read-only for Products & Interactive Select for Material/Machinery,  */
-                        col.key === "Info_Price" ? (
-                          currentTab === "OI 001" ? (
-                            <Typography sx={{ fontSize: "0.85rem" }}>{row.Info_Price || row.Purchase_Preference || ""}</Typography>
-                          ) : (
-                              <Select
-                                size="small"
-                                value={selectedPriceId}
-                                onFocus={() => {
-                                  onEditStart && onEditStart();
-                                  fetchBuyInfoLovForPart &&
-                                    fetchBuyInfoLovForPart(
-                                      currentTab,
-                                      row.Part_No,
-                                      row.Required_Quantity);
-                                }}
-                              onChange={(e) => {
-                                const selected = priceLov.find((p) => p.Price_Id === e.target.value);
-                                onCellChange(rowIndex, null, {
-                                  ...row,
-                                  Price_Id: e.target.value,
-                                  Info_Price: selected?.Info_Price ?? "",
-                                  Quantity: selected?.Quantity ?? 0,
-                                  Unit_Price: selected?.Unit_Price ?? 0,
-                                });
-                              }}
-                              fullWidth
-                            >
-                              {priceLov.map((p) => <MenuItem key={p.Price_Id} value={p.Price_Id}>{p.Info_Price}</MenuItem>)}
-                            </Select>
-                          )
-                        ) :
-
-                          /* Quantity: Editable for Products (OI 001), Calculated Display for others */
-                          col.key === "Quantity" ? (
-                            currentTab === "OI 001" ? (
-                              <TextField
-                                size="small"
-                                value={row.Quantity ?? ""}
-                                onFocus={() => onEditStart && onEditStart()}
-                                onChange={(e) => onCellChange(rowIndex, "Quantity", e.target.value === "" ? "" : Number(e.target.value))}
-                                fullWidth
-                              />
-                            ) : (
-                              <Typography sx={{ fontWeight: 700, color: "#1976D2", textAlign: "right" }}>
-                                {row.Quantity ?? 0}
-                              </Typography>
-                            )
-                          ) : (
-                            /* Handles the "not displayed" */
-                            <Typography sx={{ fontSize: "0.85rem" }}>
-                              {row[col.key] !== undefined && row[col.key] !== null ? row[col.key] : ""}
-                            </Typography>
-                          )}
+                      {colIndex === 0 && errorMessage && (
+                        <Typography
+                          role="alert"
+                          sx={{ ...masterTypo.caption, color: colors.error, mt: 0.5 }}
+                        >
+                          {errorMessage}
+                        </Typography>
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
