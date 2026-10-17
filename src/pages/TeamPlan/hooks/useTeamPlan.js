@@ -1,7 +1,10 @@
 // File: src/pages/TeamPlan/hooks/useTeamPlan.js
 // Purpose: Manage TeamPlan state, tab data, LOVs, edit and API integration
-// V2 — Save result read from SP return value (0 = success), row validation
-//      (numeric 8,2), calculating state, race-safe loads, pure state updates
+// V4 — Save result read from SP return value (0 = success), row validation:
+//      Quantity is a whole number 0..99,999,999 (numeric 8,0), prices are 2
+//      decimals (numeric 8,2), never negative; system values are not blamed on
+//      the user. Required_Quantity 0 = not ordering now,
+//      "no price source" messages, calculating state, race-safe loads
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { getOpsPlanQuery, updateOpsPlanBulk } from "../services/service.js";
@@ -11,13 +14,17 @@ import { useUser } from "../../../core/access/userContext.jsx";
 
 /* ---------------- Helpers ---------------- */
 
-// Largest value the database columns (numeric 8,2) can hold.
-export const MAX_AMOUNT = 999999.99;
+// Largest values the database columns can hold.
+export const MAX_QUANTITY = 99999999; // Quantity: numeric(8,0), whole numbers
+export const MAX_AMOUNT = 999999.99; // Unit price: numeric(8,2)
 
 // Unique row key inside a tab: Part_No + Quantity_Id.
 export const getRowKey = (r) => `${r?.Part_No ?? ""}|${r?.Quantity_Id ?? ""}`;
 
 const isBlank = (v) => v === "" || v == null;
+
+// 0 (or "0", "0.") typed in Required_Quantity means: not ordering now.
+const isZero = (v) => !isBlank(v) && Number.isFinite(Number(v)) && Number(v) === 0;
 
 // Replace changed rows with the same key, then append the new ones.
 const mergeChanged = (list = [], rows) => {
@@ -25,13 +32,24 @@ const mergeChanged = (list = [], rows) => {
   return [...list.filter((r) => !keys.has(getRowKey(r))), ...rows];
 };
 
-// Validate one money / quantity value. Returns "" when valid.
-const checkAmount = (label, value) => {
-  if (isBlank(value)) return `${label} is required`;
+// Typed Quantity (Product tab): whole number, 0 or more. Returns "" when valid.
+const checkQuantity = (value) => {
+  if (isBlank(value)) return "Quantity is required";
   const text = String(value).trim();
-  if (!/^\d+(\.\d+)?$/.test(text)) return `${label} must be a positive number`;
-  if (!/^\d+(\.\d{1,2})?$/.test(text)) return `${label} allows at most 2 decimals`;
-  if (Number(text) > MAX_AMOUNT) return `${label} must be 999,999.99 or less`;
+  if (!/^\d+$/.test(text)) return "Quantity must be a whole number, 0 or more";
+  if (Number(text) > MAX_QUANTITY) {
+    return `Quantity must be ${MAX_QUANTITY.toLocaleString("en-US")} or less`;
+  }
+  return "";
+};
+
+// System-generated value (price list, price): only guard against values the
+// database cannot hold. The user cannot edit these, so decimals are not blamed.
+const checkSystemValue = (label, value, max) => {
+  if (isBlank(value)) return `${label} is missing`;
+  const n = Number(value);
+  if (!Number.isFinite(n) || n < 0) return `${label} is not valid`;
+  if (n > max) return `${label} is too large (maximum ${max.toLocaleString("en-US")})`;
   return "";
 };
 
@@ -40,9 +58,13 @@ const validateRows = (rows, tab) => {
   const errors = {};
   rows.forEach((r) => {
     const message =
-      checkAmount("Quantity", r.Quantity) ||
-      (isBlank(r.Unit_Price) ? "" : checkAmount("Unit price", r.Unit_Price)) ||
-      (tab !== "OI 001" && isBlank(r.Price_Id) ? "Select a price" : "");
+      (tab === "OI 001"
+        ? checkQuantity(r.Quantity)
+        : checkSystemValue("Order quantity", r.Quantity, MAX_QUANTITY)) ||
+      (isBlank(r.Unit_Price) ? "" : checkSystemValue("Unit price", r.Unit_Price, MAX_AMOUNT)) ||
+      (tab !== "OI 001" && isBlank(r.Price_Id) && Number(r.Quantity) !== 0
+        ? "Select a price"
+        : "");
     if (message) errors[getRowKey(r)] = message;
   });
   return errors;
@@ -76,7 +98,8 @@ export const useTeamPlan = (userInfo) => {
   const inflightRef = useRef({}); // tabs currently loading
   const lovCounterRef = useRef(0);
   const lovReqRef = useRef({}); // latest LOV request id per tab|part
-  const lovQtyRef = useRef({}); // required quantity of the last LOV per tab|part
+  const lovCacheRef = useRef({}); // last price list per tab|part: { qty, priceLov }
+  const noPriceRef = useRef({}); // "no price source" messages per tab|rowKey
   const savingRef = useRef(false);
 
   tabDataRef.current = tabDataMap;
@@ -108,7 +131,8 @@ export const useTeamPlan = (userInfo) => {
     setProductionMonth("");
     inflightRef.current = {};
     lovReqRef.current = {};
-    lovQtyRef.current = {};
+    lovCacheRef.current = {};
+    noPriceRef.current = {};
 
     if (!ready) return;
 
@@ -180,19 +204,91 @@ export const useTeamPlan = (userInfo) => {
   }, [ready, productionMonth, currentTab]);
 
   /* ---------------- Fetch Buy_Info LOV per part ---------------- */
+
+  // Show or clear the "no price source" message on the rows of a part.
+  const setNoPrice = (tabKey, partNo, message) => {
+    const rows = (tabDataRef.current[tabKey] || []).filter((r) => r.Part_No === partNo);
+    const previous = {};
+    rows.forEach((r) => {
+      const rowKey = getRowKey(r);
+      const k = `${tabKey}|${rowKey}`;
+      previous[rowKey] = noPriceRef.current[k];
+      if (message) noPriceRef.current[k] = message;
+      else delete noPriceRef.current[k];
+    });
+    setRowErrorsMap((p) => {
+      const tabErrors = { ...(p[tabKey] || {}) };
+      rows.forEach((r) => {
+        const rowKey = getRowKey(r);
+        if (message) tabErrors[rowKey] = message;
+        else if (previous[rowKey] && tabErrors[rowKey] === previous[rowKey]) {
+          delete tabErrors[rowKey];
+        }
+      });
+      return { ...p, [tabKey]: tabErrors };
+    });
+  };
+
+  // Recalculate Quantity / Unit_Price of a part's rows from its price list.
+  const applyPriceList = (tabKey, partNo, priceLov) => {
+    const rows = tabDataRef.current[tabKey] || [];
+    const touched = [];
+    const updatedRows = rows.map((r) => {
+      if (r.Part_No !== partNo || !r.Price_Id) return r;
+      const match = priceLov.find((p) => p.Price_Id === r.Price_Id);
+      if (
+        match &&
+        (Number(match.Quantity) !== Number(r.Quantity) ||
+          Number(match.Unit_Price) !== Number(r.Unit_Price))
+      ) {
+        const updated = {
+          ...r,
+          Quantity: match.Quantity,
+          Unit_Price: match.Unit_Price,
+        };
+        touched.push(updated);
+        return updated;
+      }
+      return r;
+    });
+
+    if (touched.length === 0) return;
+
+    tabDataRef.current = { ...tabDataRef.current, [tabKey]: updatedRows };
+    changedRef.current = {
+      ...changedRef.current,
+      [tabKey]: mergeChanged(changedRef.current[tabKey], touched),
+    };
+    setTabDataMap(tabDataRef.current);
+    setChangedRowsMap(changedRef.current);
+    setTabStatusMap((p) => ({ ...p, [tabKey]: "unsaved" }));
+  };
+
   // Option A: when Required_Quantity is blank the price list is still loaded
-  // (for the dropdown) but the saved Quantity / Unit_Price are NOT recalculated.
+  // (for the dropdown) but Quantity / Unit_Price are NOT recalculated.
+  // Required_Quantity 0 = not ordering now: Quantity becomes 0 (set in
+  // handleCellChange) and no price list is needed.
   const fetchBuyInfoLovForPart = async (tabKey, partNo, requiredQuantity) => {
     if (!ready || !productionMonth || !partNo) return;
 
     const hasRequired =
       !isBlank(requiredQuantity) && Number.isFinite(Number(requiredQuantity));
-    const qtyKey = hasRequired ? String(Number(requiredQuantity)) : "";
+    const required = hasRequired ? Number(requiredQuantity) : null;
+    const qtyKey = hasRequired ? String(required) : "";
     const reqKey = `${tabKey}|${partNo}`;
 
-    // Same part and same required quantity already loaded: nothing to do.
-    if (lovQtyRef.current[reqKey] === qtyKey) return;
-    lovQtyRef.current[reqKey] = qtyKey;
+    if (required === 0) {
+      lovReqRef.current[reqKey] = ++lovCounterRef.current; // drop answers on the way
+      setNoPrice(tabKey, partNo, null);
+      return;
+    }
+
+    // Same part and quantity as the last price list: reuse it, no API call.
+    const cached = lovCacheRef.current[reqKey];
+    if (cached && cached.qty === qtyKey) {
+      if (hasRequired) applyPriceList(tabKey, partNo, cached.priceLov);
+      return;
+    }
 
     const reqId = ++lovCounterRef.current;
     lovReqRef.current[reqKey] = reqId;
@@ -208,7 +304,7 @@ export const useTeamPlan = (userInfo) => {
         productionMonth: productionMonth.split("T")[0],
         operationsInputId: tabKey,
         partNo,
-        requiredQuantity: hasRequired ? Number(requiredQuantity) : null,
+        requiredQuantity: required,
         cmdLine: tabKey === "OI 003" ? "Buy_Asset" : "Buy_Material",
       });
 
@@ -224,52 +320,32 @@ export const useTeamPlan = (userInfo) => {
         Unit_Price: item.Unit_Price,
       }));
 
+      lovCacheRef.current[reqKey] = { qty: qtyKey, priceLov };
       setLovsMap((p) => ({
         ...p,
         [tabKey]: { ...(p[tabKey] || {}), [partNo]: { Price_Lov: priceLov } },
       }));
 
-      if (!hasRequired) return; // Option A: no recalculation without an input
+      // A quantity with no price source cannot be saved: tell the user.
+      setNoPrice(
+        tabKey,
+        partNo,
+        hasRequired && priceLov.length === 0
+          ? `No price source available for quantity ${required}`
+          : null
+      );
 
-      // Sync Quantity and Unit_Price of rows that already have a price chosen.
-      const rows = tabDataRef.current[tabKey] || [];
-      const touched = [];
-      const updatedRows = rows.map((r) => {
-        if (r.Part_No !== partNo || !r.Price_Id) return r;
-        const match = priceLov.find((p) => p.Price_Id === r.Price_Id);
-        if (
-          match &&
-          (Number(match.Quantity) !== Number(r.Quantity) ||
-            Number(match.Unit_Price) !== Number(r.Unit_Price))
-        ) {
-          const updated = {
-            ...r,
-            Quantity: match.Quantity,
-            Unit_Price: match.Unit_Price,
-          };
-          touched.push(updated);
-          return updated;
-        }
-        return r;
-      });
-
-      if (touched.length === 0) return;
-
-      setTabDataMap((p) => ({ ...p, [tabKey]: updatedRows }));
-      setChangedRowsMap((p) => ({
-        ...p,
-        [tabKey]: mergeChanged(p[tabKey], touched),
-      }));
-      setTabStatusMap((p) => ({ ...p, [tabKey]: "unsaved" }));
+      if (hasRequired) applyPriceList(tabKey, partNo, priceLov);
     } catch (err) {
       if (session !== sessionRef.current) return;
       if (lovReqRef.current[reqKey] !== reqId) return;
       console.error(`[TeamPlan] ${tabKey} price list failed for ${partNo}:`, err);
-      delete lovQtyRef.current[reqKey]; // allow a retry
+      delete lovCacheRef.current[reqKey]; // allow a retry
       setLovsMap((p) => ({
         ...p,
         [tabKey]: { ...(p[tabKey] || {}), [partNo]: { Price_Lov: [] } },
       }));
+      setNoPrice(tabKey, partNo, "Could not load price sources. Try again.");
     } finally {
       if (session === sessionRef.current) {
         setPendingCalc((n) => Math.max(0, n - 1));
@@ -283,7 +359,13 @@ export const useTeamPlan = (userInfo) => {
     const current = rows[rowIndex];
     if (!current) return;
 
-    const row = key === null ? valueOrRow : { ...current, [key]: valueOrRow };
+    let row = key === null ? valueOrRow : { ...current, [key]: valueOrRow };
+
+    if (key === "Required_Quantity") {
+      // Not ordering now: Quantity 0. Any other value is recalculated on blur.
+      if (currentTab !== "OI 001" && isZero(valueOrRow)) row = { ...row, Quantity: 0 };
+      delete noPriceRef.current[`${currentTab}|${getRowKey(row)}`];
+    }
     const next = rows.map((r, i) => (i === rowIndex ? row : r));
 
     // Update the refs at once so back-to-back changes see the latest data.
@@ -327,6 +409,11 @@ export const useTeamPlan = (userInfo) => {
 
     // Check values before calling the API.
     const errors = validateRows(rows, tab);
+    rows.forEach((r) => {
+      const k = getRowKey(r);
+      const message = noPriceRef.current[`${tab}|${k}`];
+      if (message && !errors[k]) errors[k] = message;
+    });
     const firstKey = Object.keys(errors)[0];
     if (firstKey) {
       setRowErrorsMap((p) => ({ ...p, [tab]: errors }));
@@ -388,6 +475,9 @@ export const useTeamPlan = (userInfo) => {
     const restored = structuredClone(savedDataMap[currentTab] || []);
     tabDataRef.current = { ...tabDataRef.current, [currentTab]: restored };
     changedRef.current = { ...changedRef.current, [currentTab]: [] };
+    Object.keys(noPriceRef.current).forEach((k) => {
+      if (k.startsWith(`${currentTab}|`)) delete noPriceRef.current[k];
+    });
 
     setTabDataMap(tabDataRef.current);
     setChangedRowsMap(changedRef.current);

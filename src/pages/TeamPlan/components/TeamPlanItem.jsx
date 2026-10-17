@@ -1,10 +1,11 @@
 // File: src/pages/TeamPlan/components/TeamPlanItem.jsx
 // Render table with tab-specific edit logic
-// V3 — Built on tableStyle (columnHeader, row, cell, numeric, compact), decimal-safe
-//      inputs (typed text kept as text), stable row keys, changed-row marker,
-//      inline row error, aria labels
+// V5 — Built on tableStyle. Quantity is a whole number (0 or more), Unit Price shows
+//      2 decimals; inputs accept only whole numbers and say why a key was refused;
+//      Required Quantity 0 = "Not ordering now"; stable row keys,
+//      changed-row marker, inline row error, aria labels
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   alpha,
   Box,
@@ -24,10 +25,20 @@ import {
 import { EditOutlined as EditIcon } from "@mui/icons-material";
 import { visuallyHidden } from "@mui/utils";
 import { colors, masterTypo, tableStyle } from "../../../ux/styles";
-import { getRowKey } from "../hooks/useTeamPlan.js";
+import { getRowKey, MAX_QUANTITY } from "../hooks/useTeamPlan.js";
 
-// Typed text may only be digits with one optional decimal point.
-const NUMBER_PATTERN = /^\d*\.?\d*$/;
+// Typed quantities are whole numbers: digits only. A minus sign or a decimal
+// point is never accepted, so numbers cannot be negative or fractional.
+const NUMBER_PATTERN = /^\d*$/;
+const HINT_NUMBERS = "Whole numbers only, 0 or more";
+const HINT_MAX = `Maximum is ${MAX_QUANTITY.toLocaleString("en-US")}`;
+
+// Returns the reason a typed value is refused, or "" when it is accepted.
+const checkTyped = (value) => {
+  if (!NUMBER_PATTERN.test(value)) return HINT_NUMBERS;
+  if (Number(value) > MAX_QUANTITY) return HINT_MAX;
+  return "";
+};
 
 // Columns shown right-aligned with equal-width digits.
 const NUMERIC_KEYS = ["Quantity", "Unit_Price", "Required_Quantity"];
@@ -39,13 +50,24 @@ const NUMBER_SX = {
   color: colors.body,
 };
 
-// Format a number for display: 873852 -> "873,852", price -> 2 decimals.
-const formatNumber = (value, key) => {
+const isBlank = (v) => v === "" || v == null;
+
+// Quantity: whole numbers as "1,124". A system value with decimals still shows them.
+const formatQuantity = (value) => {
+  if (value === "" || value == null) return "";
+  const n = Number(value);
+  if (!Number.isFinite(n)) return String(value);
+  return n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+};
+
+// Price: two decimals, e.g. 28.4 -> "28.40"
+// Format a number with two decimals: 873852 -> "873,852.00", 28.4 -> "28.40".
+const formatFixed = (value) => {
   if (value === "" || value == null) return "";
   const n = Number(value);
   if (!Number.isFinite(n)) return String(value);
   return n.toLocaleString("en-US", {
-    minimumFractionDigits: key === "Unit_Price" ? 2 : 0,
+    minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 };
@@ -63,6 +85,9 @@ const TeamPlanItem = ({
   fetchBuyInfoLovForPart,
 }) => {
   const isProductTab = currentTab === "OI 001";
+
+  // The input being edited (shows its raw text) and the reason a key was refused.
+  const [active, setActive] = useState({ key: "", hint: "" });
 
   // Keys of rows edited since the last save.
   const changedKeys = useMemo(
@@ -83,35 +108,65 @@ const TeamPlanItem = ({
     );
   }
 
+  // Number input: raw text while editing, two decimals otherwise.
+  const renderNumberInput = (rowIndex, row, field, label, hasError, onBlurExtra) => {
+    const cellKey = `${getRowKey(row)}|${field}`;
+    const isActive = active.key === cellKey;
+    const hint = isActive ? active.hint : "";
+    const raw = row[field];
+    const notOrdering = field === "Required_Quantity" && !isBlank(raw) && Number(raw) === 0;
+
+    return (
+      <TextField
+        size="small"
+        value={isActive ? String(raw ?? "") : formatQuantity(raw)}
+        error={hasError}
+        onFocus={() => {
+          setActive({ key: cellKey, hint: "" });
+          onEditStart?.();
+        }}
+        onChange={(e) => {
+          const reason = checkTyped(e.target.value);
+          if (reason) {
+            setActive({ key: cellKey, hint: reason });
+            return;
+          }
+          setActive({ key: cellKey, hint: "" });
+          onCellChange(rowIndex, field, e.target.value);
+        }}
+        onBlur={(e) => {
+          setActive({ key: "", hint: "" });
+          onBlurExtra?.(e);
+        }}
+        helperText={hint || (notOrdering ? "Not ordering now" : undefined)}
+        FormHelperTextProps={{
+          sx: {
+            ...masterTypo.caption,
+            mx: 0,
+            textAlign: "right",
+            color: hint ? colors.error : colors.subtitle,
+          },
+        }}
+        inputProps={{
+          inputMode: "numeric",
+          "aria-label": label,
+          style: { textAlign: "right" },
+        }}
+        sx={{ minWidth: 110, "& .MuiInputBase-input": NUMBER_SX }}
+        fullWidth
+      />
+    );
+  };
+
   // Render one cell according to its column and the active tab.
   const renderCell = (col, row, rowIndex, hasError) => {
     const label = `${col.label} for part ${row.Part_No}`;
 
-    // Required Quantity: input on Material and Machine tabs.
+    // Required Quantity: input on Material and Machine tabs. 0 = not ordering.
     if (col.key === "Required_Quantity" && !isProductTab) {
-      return (
-        <TextField
-          size="small"
-          value={row.Required_Quantity ?? ""}
-          error={hasError}
-          onFocus={() => onEditStart?.()}
-          onChange={(e) => {
-            if (NUMBER_PATTERN.test(e.target.value)) {
-              onCellChange(rowIndex, "Required_Quantity", e.target.value);
-            }
-          }}
-          // Price list is fetched only after the user finishes typing.
-          onBlur={(e) =>
-            fetchBuyInfoLovForPart?.(currentTab, row.Part_No, e.target.value)
-          }
-          inputProps={{
-            inputMode: "decimal",
-            "aria-label": label,
-            style: { textAlign: "right" },
-          }}
-          sx={{ minWidth: 110, "& .MuiInputBase-input": NUMBER_SX }}
-          fullWidth
-        />
+      return renderNumberInput(rowIndex, row, "Required_Quantity", label, hasError, (e) =>
+        // Price list is fetched only after the user finishes typing.
+        fetchBuyInfoLovForPart?.(currentTab, row.Part_No, e.target.value)
       );
     }
 
@@ -176,33 +231,14 @@ const TeamPlanItem = ({
     // Quantity: input on Product tab, calculated order quantity on the others.
     if (col.key === "Quantity") {
       if (isProductTab) {
-        return (
-          <TextField
-            size="small"
-            value={row.Quantity ?? ""}
-            error={hasError}
-            onFocus={() => onEditStart?.()}
-            onChange={(e) => {
-              if (NUMBER_PATTERN.test(e.target.value)) {
-                onCellChange(rowIndex, "Quantity", e.target.value);
-              }
-            }}
-            inputProps={{
-              inputMode: "decimal",
-              "aria-label": label,
-              style: { textAlign: "right" },
-            }}
-            sx={{ minWidth: 110, "& .MuiInputBase-input": NUMBER_SX }}
-            fullWidth
-          />
-        );
+        return renderNumberInput(rowIndex, row, "Quantity", label, hasError);
       }
       return (
         <Typography
           title="Calculated from the selected price"
           sx={{ ...NUMBER_SX, fontWeight: 600, color: colors.heading }}
         >
-          {formatNumber(row.Quantity ?? 0, "Quantity")}
+          {formatQuantity(row.Quantity ?? 0)}
         </Typography>
       );
     }
@@ -210,7 +246,11 @@ const TeamPlanItem = ({
     // Everything else is display-only.
     const value = row[col.key];
     if (NUMERIC_KEYS.includes(col.key)) {
-      return <Typography sx={NUMBER_SX}>{formatNumber(value, col.key)}</Typography>;
+      return (
+        <Typography sx={NUMBER_SX}>
+          {col.key === "Unit_Price" ? formatFixed(value) : formatQuantity(value)}
+        </Typography>
+      );
     }
     return <Typography sx={TEXT_SX}>{value ?? ""}</Typography>;
   };
