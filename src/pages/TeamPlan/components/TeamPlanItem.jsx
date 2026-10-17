@@ -1,7 +1,7 @@
 // File: src/pages/TeamPlan/components/TeamPlanItem.jsx
 // Render table with tab-specific edit logic
-// V5 — Built on tableStyle. Quantity is a whole number (0 or more), Unit Price shows
-//      2 decimals; inputs accept only whole numbers and say why a key was refused;
+// V6 — Built on tableStyle. Rules and number formatting come from utils/planRules.js.
+//      Inputs accept only whole numbers and say why a key was refused;
 //      Required Quantity 0 = "Not ordering now"; stable row keys,
 //      changed-row marker, inline row error, aria labels
 
@@ -25,51 +25,20 @@ import {
 import { EditOutlined as EditIcon } from "@mui/icons-material";
 import { visuallyHidden } from "@mui/utils";
 import { colors, masterTypo, tableStyle } from "../../../ux/styles";
-import { getRowKey, MAX_QUANTITY } from "../hooks/useTeamPlan.js";
-
-// Typed quantities are whole numbers: digits only. A minus sign or a decimal
-// point is never accepted, so numbers cannot be negative or fractional.
-const NUMBER_PATTERN = /^\d*$/;
-const HINT_NUMBERS = "Whole numbers only, 0 or more";
-const HINT_MAX = `Maximum is ${MAX_QUANTITY.toLocaleString("en-US")}`;
-
-// Returns the reason a typed value is refused, or "" when it is accepted.
-const checkTyped = (value) => {
-  if (!NUMBER_PATTERN.test(value)) return HINT_NUMBERS;
-  if (Number(value) > MAX_QUANTITY) return HINT_MAX;
-  return "";
-};
-
-// Columns shown right-aligned with equal-width digits.
-const NUMERIC_KEYS = ["Quantity", "Unit_Price", "Required_Quantity"];
+import {
+  NUMERIC_KEYS,
+  checkTypedQuantity,
+  formatPrice,
+  formatQuantity,
+  getRowKey,
+  isBlank,
+} from "../utils/planRules.js";
 
 const TEXT_SX = { ...masterTypo.tableParameter, color: colors.body };
 const NUMBER_SX = {
   ...masterTypo.tableParameter,
   ...tableStyle.numeric,
   color: colors.body,
-};
-
-const isBlank = (v) => v === "" || v == null;
-
-// Quantity: whole numbers as "1,124". A system value with decimals still shows them.
-const formatQuantity = (value) => {
-  if (value === "" || value == null) return "";
-  const n = Number(value);
-  if (!Number.isFinite(n)) return String(value);
-  return n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-};
-
-// Price: two decimals, e.g. 28.4 -> "28.40"
-// Format a number with two decimals: 873852 -> "873,852.00", 28.4 -> "28.40".
-const formatFixed = (value) => {
-  if (value === "" || value == null) return "";
-  const n = Number(value);
-  if (!Number.isFinite(n)) return String(value);
-  return n.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
 };
 
 const TeamPlanItem = ({
@@ -126,7 +95,7 @@ const TeamPlanItem = ({
           onEditStart?.();
         }}
         onChange={(e) => {
-          const reason = checkTyped(e.target.value);
+          const reason = checkTypedQuantity(e.target.value);
           if (reason) {
             setActive({ key: cellKey, hint: reason });
             return;
@@ -248,7 +217,7 @@ const TeamPlanItem = ({
     if (NUMERIC_KEYS.includes(col.key)) {
       return (
         <Typography sx={NUMBER_SX}>
-          {col.key === "Unit_Price" ? formatFixed(value) : formatQuantity(value)}
+          {col.key === "Unit_Price" ? formatPrice(value) : formatQuantity(value)}
         </Typography>
       );
     }
