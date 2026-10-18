@@ -1,9 +1,14 @@
 // File: src/pages/TeamPlan/TeamPlanScreen.jsx
-// V5 — Layout and wiring only. Parts live in components/: TeamPlanHeader (heading),
-//      TeamPlanTabs (tabs + Cancel/Save), TeamPlanItem (table), TeamPlanDialogs
-//      (confirmations). Rules and formatting live in utils/planRules.js.
+// V9 — Layout and wiring only. Parts live in components/: TeamPlanHeader (heading),
+//      TeamPlanInfoStrip (Guide and Review cards), TeamPlanTabs (tabs + Cancel/Save),
+//      TeamPlanItem (table), TeamPlanDialogs (confirmations). Rules and formatting
+//      live in utils/planRules.js.
 //      Standalone shows everything; hideHeader=true (ReportDrawer) drops the
 //      heading, page chrome and browser-tab title.
+//
+// V9 change: Guide and Review cards sit above the tabs and follow the active tab and
+//            line. The Operations plan / Review step bar and its Back / Next buttons are
+//            removed. Approval happens in the parent Control Centre, not here.
 
 import React, { useState, useEffect, useMemo } from "react";
 import { alpha, Alert, Box, LinearProgress, Paper } from "@mui/material";
@@ -12,6 +17,8 @@ import TeamPlanHeader from "./components/TeamPlanHeader.jsx";
 import TeamPlanTabs from "./components/TeamPlanTabs.jsx";
 import TeamPlanItem from "./components/TeamPlanItem.jsx";
 import TeamPlanDialogs from "./components/TeamPlanDialogs.jsx";
+import TeamPlanInfoStrip from "./components/TeamPlanInfoStrip.jsx";
+import { useTeamPlanGuide } from "./hooks/useTeamPlanGuide.js";
 import ToastMessage from "../../components/ToastMessage.jsx";
 import { useTeamPlan } from "./hooks/useTeamPlan.js";
 import { useUser } from "../../core/access/userContext.jsx";
@@ -53,8 +60,18 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
   const [toast, setToast] = useState({ open: false, message: "", severity: "info" });
   // dialog: null | { type: "cancel" } | { type: "tab", tab: "OI 002" }
   const [dialog, setDialog] = useState(null);
-
   const currentRows = tabDataMap?.[currentTab] ?? tableData ?? [];
+
+  // Active line for the Guide card: Part_No is unique across tabs. Starts on the first row of the tab.
+  const [activePart, setActivePart] = useState(null);
+  const firstPart = currentRows[0]?.Part_No ?? null;
+  useEffect(() => {
+    setActivePart(firstPart != null ? String(firstPart) : null);
+  }, [currentTab, firstPart]);
+
+  const { info: guideInfo, loading: guideLoading, error: guideError, isStub: guideIsStub } =
+    useTeamPlanGuide(userInfo, productionMonth, activePart);
+  const activeRow = currentRows.find((r) => String(r.Part_No) === activePart);
   const currentStatus = tabStatusMap?.[currentTab] || "unseen";
   const isUnsaved = currentStatus === "unsaved";
   const hasAnyUnsaved = Object.values(tabStatusMap || {}).includes("unsaved");
@@ -176,37 +193,55 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
             </Box>
           )}
 
-          {/* Tab bar with Cancel / Save */}
-          <TeamPlanTabs
-            currentTab={currentTab}
-            tabDataMap={tabDataMap}
-            tabStatusMap={tabStatusMap}
-            onTabClick={onTabClick}
-            canCancel={canCancel}
-            canSave={canSave}
-            saving={saving}
-            calculating={calculating}
-            onCancelClick={() => setDialog({ type: "cancel" })}
-            onSaveClick={onSaveClick}
-          />
-
-          {/* Data table card */}
-          <Box sx={{ p: 2 }}>
-            <Box sx={tableStyle.container}>
-              <TeamPlanItem
+          <>
+              {/* Info strip: Guide (fixed) and Review (live), synced to the active tab and line */}
+              <TeamPlanInfoStrip
+                tab={currentTab}
+                partNo={activePart}
+                row={activeRow}
                 rows={currentRows}
-                loading={loading}
-                columns={enhancedColumns}
-                lovsMap={lovsMap}
-                currentTab={currentTab}
-                changedRows={changedRows}
-                rowErrors={rowErrors}
-                onEditStart={() => setEditMode(true)}
-                onCellChange={handleCellChange}
-                fetchBuyInfoLovForPart={fetchBuyInfoLovForPart}
+                info={guideInfo}
+                guideLoading={guideLoading}
+                guideError={guideError}
+                isStub={guideIsStub}
+                unsaved={isUnsaved}
+                calculating={calculating}
               />
-            </Box>
-          </Box>
+
+              {/* Tab bar with Cancel / Save */}
+              <TeamPlanTabs
+                currentTab={currentTab}
+                tabDataMap={tabDataMap}
+                tabStatusMap={tabStatusMap}
+                onTabClick={onTabClick}
+                canCancel={canCancel}
+                canSave={canSave}
+                saving={saving}
+                calculating={calculating}
+                onCancelClick={() => setDialog({ type: "cancel" })}
+                onSaveClick={onSaveClick}
+              />
+
+              {/* Data table card */}
+              <Box sx={{ p: 2 }}>
+                <Box sx={tableStyle.container}>
+                  <TeamPlanItem
+                    rows={currentRows}
+                    loading={loading}
+                    columns={enhancedColumns}
+                    lovsMap={lovsMap}
+                    currentTab={currentTab}
+                    changedRows={changedRows}
+                    rowErrors={rowErrors}
+                    activePart={activePart}
+                    onActiveRowChange={(row) => setActivePart(String(row.Part_No))}
+                    onEditStart={() => setEditMode(true)}
+                    onCellChange={handleCellChange}
+                    fetchBuyInfoLovForPart={fetchBuyInfoLovForPart}
+                  />
+                </Box>
+              </Box>
+          </>
         </Paper>
       </Box>
 

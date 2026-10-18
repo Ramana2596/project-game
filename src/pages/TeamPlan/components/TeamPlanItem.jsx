@@ -1,9 +1,11 @@
 // File: src/pages/TeamPlan/components/TeamPlanItem.jsx
 // Render table with tab-specific edit logic
-// V6 — Built on tableStyle. Rules and number formatting come from utils/planRules.js.
+// V7 — Built on tableStyle. Rules and number formatting come from utils/planRules.js.
 //      Inputs accept only whole numbers and say why a key was refused;
 //      Required Quantity 0 = "Not ordering now"; stable row keys,
-//      changed-row marker, inline row error, aria labels
+//      changed-row marker, inline row error, aria labels.
+//      V7 change: reports the active row (click or focus) so the Guide card can follow it
+//      (onActiveRowChange) and softly highlights that row (activePart).
 
 import React, { useMemo, useState } from "react";
 import {
@@ -49,6 +51,8 @@ const TeamPlanItem = ({
   currentTab,
   changedRows = [],
   rowErrors = {},
+  activePart = null,
+  onActiveRowChange,
   onEditStart,
   onCellChange,
   fetchBuyInfoLovForPart,
@@ -274,16 +278,28 @@ const TeamPlanItem = ({
               const rowKey = getRowKey(row);
               const errorMessage = rowErrors[rowKey];
               const isChanged = changedKeys.has(rowKey);
+              // The line the Guide card is showing.
+              const isActiveRow =
+                activePart != null && String(row.Part_No) === String(activePart);
 
               // Tint sits on the cells so it shows over the striped row colour.
+              // Errors and edited rows take priority over the active-row shade.
               const tint = errorMessage
                 ? alpha(colors.error, 0.08)
                 : isChanged
                 ? alpha(colors.primary, 0.06)
+                : isActiveRow
+                ? alpha(colors.primary, 0.04)
                 : undefined;
 
               return (
-                <TableRow key={rowKey === "|" ? rowIndex : rowKey} sx={tableStyle.row}>
+                <TableRow
+                  key={rowKey === "|" ? rowIndex : rowKey}
+                  sx={tableStyle.row}
+                  aria-selected={isActiveRow}
+                  onClick={() => onActiveRowChange?.(row)}
+                  onFocus={() => onActiveRowChange?.(row)}
+                >
                   {columns.map((col, colIndex) => (
                     <TableCell
                       key={col.key}
