@@ -1,8 +1,22 @@
 // File: src/pages/AuthHubPage/services/oauthService.js
 // Std JavaScript for directing the browser to OAuth sites and receiving login information.
 
+/*
 // Backend API base URL
 const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:4000";
+*/
+
+// Same switch as api-interceptor.js
+// npm start -> local backend. For net, Vercel build -> ngrok address.
+// To test production from your computer: set REACT_APP_USE_PROD_API=true in .env, then restart.
+const USE_LOCAL =
+  process.env.NODE_ENV === "development" &&
+  process.env.REACT_APP_USE_PROD_API !== "true";
+
+const API_BASE = USE_LOCAL
+  ? process.env.REACT_APP_DEV_API_BASE_URL   // http://localhost:4000
+  : process.env.REACT_APP_API_BASE_URL;      // For internet users, ngrok address
+
 
 // Redirect browsers:
 
