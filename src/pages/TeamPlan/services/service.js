@@ -15,3 +15,8 @@ export function updateOpsPlanBulk(rows, userId) {
     userId,
   });
 }
+
+// GET guide data for the active game, team and production month.
+export function getOpsPlanGuide(params) {
+  return api.get("/api/getOpsPlanGuide", { params });
+}

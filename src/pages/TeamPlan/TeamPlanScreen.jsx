@@ -26,6 +26,12 @@ import { useUser } from "../../core/access/userContext.jsx";
 // Embedded (ReportDrawer) wrapper: no page chrome, fills the drawer.
 const EMBEDDED_SX = { width: "100%", minWidth: 0 };
 
+// Saving / calculating progress bar, styled from the brand tokens.
+const PROGRESS_SX = {
+  backgroundColor: colors.primarySelected,
+  "& .MuiLinearProgress-bar": { background: colors.heroGradient },
+};
+
 const TeamPlanScreen = ({ hideHeader = false }) => {
   const { userInfo } = useUser();
 
@@ -162,7 +168,7 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
 
         <Paper component="article" elevation={0} sx={{ ...layoutStyle.panel, p: 0, overflow: "hidden" }}>
           {/* Progress while saving or calculating prices */}
-          {(saving || calculating) && <LinearProgress aria-label="Working" />}
+          {(saving || calculating) && <LinearProgress aria-label="Working" sx={PROGRESS_SX} />}
 
           {/* Load error */}
           {error && (
@@ -193,55 +199,53 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
             </Box>
           )}
 
-          <>
-              {/* Info strip: Guide (fixed) and Review (live), synced to the active tab and line */}
-              <TeamPlanInfoStrip
-                tab={currentTab}
-                partNo={activePart}
-                row={activeRow}
+          {/* Info strip: Guide (fixed) and Review (live), synced to the active tab and line */}
+          <TeamPlanInfoStrip
+            tab={currentTab}
+            partNo={activePart}
+            row={activeRow}
+            rows={currentRows}
+            info={guideInfo}
+            guideLoading={guideLoading}
+            guideError={guideError}
+            isStub={guideIsStub}
+            unsaved={isUnsaved}
+            calculating={calculating}
+          />
+
+          {/* Tab bar with Cancel / Save */}
+          <TeamPlanTabs
+            currentTab={currentTab}
+            tabDataMap={tabDataMap}
+            tabStatusMap={tabStatusMap}
+            onTabClick={onTabClick}
+            canCancel={canCancel}
+            canSave={canSave}
+            saving={saving}
+            calculating={calculating}
+            onCancelClick={() => setDialog({ type: "cancel" })}
+            onSaveClick={onSaveClick}
+          />
+
+          {/* Data table card */}
+          <Box sx={{ p: 2 }}>
+            <Box sx={tableStyle.container}>
+              <TeamPlanItem
                 rows={currentRows}
-                info={guideInfo}
-                guideLoading={guideLoading}
-                guideError={guideError}
-                isStub={guideIsStub}
-                unsaved={isUnsaved}
-                calculating={calculating}
-              />
-
-              {/* Tab bar with Cancel / Save */}
-              <TeamPlanTabs
+                loading={loading}
+                columns={enhancedColumns}
+                lovsMap={lovsMap}
                 currentTab={currentTab}
-                tabDataMap={tabDataMap}
-                tabStatusMap={tabStatusMap}
-                onTabClick={onTabClick}
-                canCancel={canCancel}
-                canSave={canSave}
-                saving={saving}
-                calculating={calculating}
-                onCancelClick={() => setDialog({ type: "cancel" })}
-                onSaveClick={onSaveClick}
+                changedRows={changedRows}
+                rowErrors={rowErrors}
+                activePart={activePart}
+                onActiveRowChange={(row) => setActivePart(String(row.Part_No))}
+                onEditStart={() => setEditMode(true)}
+                onCellChange={handleCellChange}
+                fetchBuyInfoLovForPart={fetchBuyInfoLovForPart}
               />
-
-              {/* Data table card */}
-              <Box sx={{ p: 2 }}>
-                <Box sx={tableStyle.container}>
-                  <TeamPlanItem
-                    rows={currentRows}
-                    loading={loading}
-                    columns={enhancedColumns}
-                    lovsMap={lovsMap}
-                    currentTab={currentTab}
-                    changedRows={changedRows}
-                    rowErrors={rowErrors}
-                    activePart={activePart}
-                    onActiveRowChange={(row) => setActivePart(String(row.Part_No))}
-                    onEditStart={() => setEditMode(true)}
-                    onCellChange={handleCellChange}
-                    fetchBuyInfoLovForPart={fetchBuyInfoLovForPart}
-                  />
-                </Box>
-              </Box>
-          </>
+            </Box>
+          </Box>
         </Paper>
       </Box>
 

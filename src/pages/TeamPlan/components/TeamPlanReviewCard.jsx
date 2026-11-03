@@ -1,48 +1,72 @@
+
 // File: src/pages/TeamPlan/components/TeamPlanReviewCard.jsx
-// Review half of the info panel: ONE card for the active tab and line. Live: it moves as the user types.
-//   Line 1  description only (Part_No is the database key, not shown)
-//   Line 2  the result figures for that tab (see utils/reviewCalc.js)
-//   Line 3  lines in plan: X out of Y
-// Results only, no advice. The Guide card beside it holds the fixed reference figures.
+// Component: TeamPlanReviewCard
+// Module: TeamPlan
+// Purpose: Display live plan results and plan-line progress in one compact card.
+// AI Tags: team-plan, review-card, live-review, uxlab
 
 import React from "react";
-import { alpha, useTheme, Box, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import FactCheckRoundedIcon from "@mui/icons-material/FactCheckRounded";
+import { cardStyle, masterTypo } from "../../../ux/styles";
+import { accent, text, border } from "../../../ux/styles/colorPalette";
 import { reviewFigures } from "../utils/reviewCalc.js";
 
 const TAB_NAME = { "OI 001": "Product", "OI 002": "Material", "OI 003": "Machine" };
 
 const TeamPlanReviewCard = ({ tab, row, rows, info, unsaved = false, calculating = false }) => {
-  const theme = useTheme();
-  const accent = theme.palette.secondary?.main || theme.palette.primary.main;
   const r = reviewFigures(tab, row, rows, info);
+  const status = calculating ? "Calculating prices" : unsaved ? "Unsaved changes" : "";
 
   return (
     <Box
       role="region"
       aria-label="Review of your plan"
       aria-live="polite"
-      sx={{ p: 1.5, borderLeft: `4px solid ${accent}`, borderRadius: 1, bgcolor: alpha(accent, 0.06) }}
+      sx={{
+        ...cardStyle.primary,
+        height: "auto",
+        p: 1.5,
+        borderLeft: `3px solid ${accent.purple}`,
+        "&:hover": { transform: "none" },
+      }}
     >
-      <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.25 }}>
-        Review{TAB_NAME[tab] ? `: ${TAB_NAME[tab]}` : ""}
-        {calculating ? " (calculating prices)" : unsaved ? " (unsaved changes)" : ""}
-      </Typography>
+      {/* Show the review identity and current calculation status. */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1, minWidth: 0 }}>
+        <Box sx={{ ...cardStyle.statIconCircle(accent.purple), width: 32, height: 32, minWidth: 32, "& svg": { fontSize: 18 } }}>
+          <FactCheckRoundedIcon />
+        </Box>
+        <Typography sx={{ ...masterTypo.h6, color: text.title, minWidth: 0, overflowWrap: "anywhere" }}>
+          {r?.name ? `Review on ${r.name}` : `Review${TAB_NAME[tab] ? `: ${TAB_NAME[tab]}` : ""}`}
+        </Typography>
+        {status && (
+          <Typography sx={{ ...masterTypo.caption, color: text.subtitle, ml: "auto", flexShrink: 0 }}>
+            {status}
+          </Typography>
+        )}
+      </Box>
 
+      {/* Render the existing calculated figures without changing business logic. */}
       {!r ? (
-        <Typography variant="body2" color="text.secondary">Select a line to see the result of your plan.</Typography>
+        <Typography sx={{ ...masterTypo.body2, color: text.subtitle }}>
+          Select a line to see the result of your plan.
+        </Typography>
       ) : (
         <>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>{r.name}</Typography>
-          <Box sx={{ display: "flex", flexWrap: "wrap", columnGap: 3, rowGap: 0.5, mt: 0.5 }}>
+          <Box sx={{ display: "flex", flexWrap: "wrap", columnGap: 2, rowGap: 0.5 }}>
             {r.fields.filter((f) => !(f.optional && f.text == null)).map((f) => (
-              <Typography key={f.label} variant="body2" sx={{ fontVariantNumeric: "tabular-nums" }}>
-                <Box component="span" sx={{ color: "text.secondary" }}>{f.label} </Box>
-                <Box component="span" sx={{ fontWeight: 600 }}>{f.text == null || f.text === "" ? "-" : f.text}</Box>
+              <Typography key={f.label} sx={{ ...masterTypo.body2, color: text.body, fontVariantNumeric: "tabular-nums" }}>
+                <Box component="span" sx={{ color: text.subtitle }}>{f.label}: </Box>
+                <Box component="span" sx={{ fontWeight: 600, color: text.title }}>
+                  {f.text == null || f.text === "" ? "-" : f.text}
+                </Box>
               </Typography>
             ))}
           </Box>
-          <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.75 }}>
-            Lines in plan {r.lines.done} out of {r.lines.total}
+
+          {/* Keep plan progress visually separate from the result figures. */}
+          <Typography sx={{ ...masterTypo.caption, color: text.subtitle, mt: 1, pt: 0.75, borderTop: `1px solid ${border.divider}`, fontVariantNumeric: "tabular-nums" }}>
+            Lines in plan: <Box component="span" sx={{ fontWeight: 600, color: text.title }}>{r.lines.done} out of {r.lines.total}</Box>
           </Typography>
         </>
       )}

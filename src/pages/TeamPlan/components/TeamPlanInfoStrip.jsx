@@ -1,23 +1,15 @@
 // File: src/pages/TeamPlan/components/TeamPlanInfoStrip.jsx
-// Info panel above the tabs: two small cards side by side, each with an icon + title and 2-3 short lines.
-//   Guide  (fixed)  what the situation is before you decide
-//   Review (live)   what your entries do
-// Both follow the active tab and line. Description, Part_No and UOM are not repeated: the highlighted
-// table row already shows them.
-//
-// ASSUMPTIONS (change here if your data differs):
-//   Ex-Stock        = the line's selected price source matches EX_STOCK (row.Info_Price). Only Ex-Stock
-//                     quantity counts as available this month, on top of existing stock / machines.
-//   Sales plan qty  = system driven, a field in SALES_KEYS; lean mode (none) = Production plan qty.
-//   Lines           = lines with a quantity above 0 (Quantity on OI 001, Required_Quantity elsewhere).
-//   Capacity after  = (available + Ex-Stock machines) x capacity per machine (Guide capacity / machines).
 
 import React from "react";
 import { alpha, useTheme, Box, Typography } from "@mui/material";
 import { LightbulbOutlined as GuideIcon, FactCheckOutlined as ReviewIcon } from "@mui/icons-material";
 
 const EX_STOCK = /ex[\s_-]?stock/i;
-const SALES_KEYS = ["Sales_Quantity", "Sales_Plan_Qty", "Sales_Plan"];
+
+// OI 001: one row per product and Quantity_Id, each with its own user-entered Quantity and Unit_Price.
+// QP 01 = forecast (not used in Review), QP 02 = production plan, QP 03 = sales plan.
+const QTY_ID = { production: "QP 02", sales: "QP 03" };
+const isId = (r, id) => String(r?.Quantity_Id ?? "").trim().toUpperCase() === id;
 
 const isBlank = (v) => v === null || v === undefined || String(v).trim() === "";
 const num = (v) => {
@@ -47,15 +39,49 @@ export const guideItems = (tab, i) => {
 // Returns { items, count }: count ("3 of 5") is shown on the card's title row.
 export const reviewItems = (tab, row, rows, i) => {
   const qtyKey = tab === "OI 001" ? "Quantity" : "Required_Quantity";
-  const count = `${rows.filter((r) => num(r[qtyKey]) > 0).length} of ${rows.length}`;
+  // OI 001: count products (distinct Part_No), planned = has a Production (QP 02) Quantity > 0.
+  // Other tabs: one row per line.
+  let count;
+  if (tab === "OI 001") {
+    const all = new Set(rows.map((r) => String(r.Part_No)));
+    const planned = new Set(
+      rows.filter((r) => isId(r, QTY_ID.production) && num(r.Quantity) > 0).map((r) => String(r.Part_No))
+    );
+    count = `${planned.size} of ${all.size}`;
+  } else {
+    count = `${rows.filter((r) => num(r[qtyKey]) > 0).length} of ${rows.length}`;
+  }
+  // OI 002 / 003: Required_Quantity is the user's intent; 
+  // The selected Price_Id sets Order Quantity, Unit_Price, Delivery & Quality.
   const qty = num(row.Quantity);
   const price = num(row.Unit_Price);
   const ex = isExStock(row) ? qty : 0;
 
   if (tab === "OI 001") {
-    const salesRaw = SALES_KEYS.map((k) => row[k]).find((v) => !isBlank(v));
-    const sales = salesRaw === undefined ? qty : num(salesRaw); // lean mode: sales plan = production plan
-    return { count, items: [["Production", fmt(qty)], ["Sales", fmt(sales)], ["Sales value", money(sales * price)]] };
+    // This product's rows (one per Quantity_Id), read live from the table.
+    const partRows = rows.filter((r) => String(r.Part_No) === String(row.Part_No));
+    const pick = (id) => partRows.find((r) => isId(r, id));
+
+    const prodRow = pick(QTY_ID.production); // QP 02
+    const saleRow = pick(QTY_ID.sales);      // QP 03
+
+    const production = prodRow && !isBlank(prodRow.Quantity) ? num(prodRow.Quantity) : null;
+    const sales = saleRow && !isBlank(saleRow.Quantity) ? num(saleRow.Quantity) : null;
+
+    // Sales value = Sales Plan Quantity * Unit_Price.
+    const salesValue =
+      sales !== null && saleRow && !isBlank(saleRow.Unit_Price)
+        ? sales * num(saleRow.Unit_Price)
+        : null;
+
+    return {
+      count,
+      items: [
+        ["Production", production === null ? null : fmt(production)],
+        ["Sales", sales === null ? null : fmt(sales)],
+        ["Sales value", salesValue === null ? null : money(salesValue)],
+      ],
+    };
   }
   if (tab === "OI 002") {
     const stock = i?.Stock_Qty ?? null;

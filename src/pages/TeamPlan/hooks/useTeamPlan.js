@@ -6,7 +6,9 @@
 //      source" messages, calculating state, race-safe loads
 
 import { useState, useEffect, useMemo, useRef } from "react";
-import { getOpsPlanQuery, updateOpsPlanBulk } from "../services/service.js";
+import { 
+  getOpsPlanQuery, 
+  updateOpsPlanBulk } from "../services/service.js";
 import { getResolvedColumns } from "../utils/getResolvedColumns.js";
 import { COLUMN_RULES } from "../constants/columnRules.js";
 import { useUser } from "../../../core/access/userContext.jsx";
