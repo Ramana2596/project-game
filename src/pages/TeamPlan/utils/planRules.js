@@ -1,13 +1,10 @@
 // File: src/pages/TeamPlan/utils/planRules.js
-// Purpose: Business rules, validation and number formatting for the Operations
-//          Business Plan. Typing (TeamPlanItem) and saving (useTeamPlan) use the
-//          same rules from here.
-//
-// Rules
+// Purpose: Validation and number formatting 
+
+// Rules: Numbers are never negative.
 //   Quantity          numeric(8,0): whole number, 0 or more, up to 99,999,999
-//   Required_Quantity typed like Quantity; 0 means "not ordering now"
-//   Unit_Price        numeric(8,2): system-generated, shown with 2 decimals
-//   Numbers are never negative.
+//   Unit_Price        numeric(8,2): system-generated
+//   Required_Quantity keyed-in Value; 0 means "not ordering now"
 
 /* ---------------- Limits ---------------- */
 
