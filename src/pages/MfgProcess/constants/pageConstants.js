@@ -40,7 +40,7 @@ export const MFG_PROCESS_FIELDS = [
     label: "Work Centre",
   },
   {
-    key: "Facility_Description",
+    key: "Facility",
     label: "Facility",
   },
   {
