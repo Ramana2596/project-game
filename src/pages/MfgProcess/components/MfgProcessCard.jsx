@@ -395,7 +395,7 @@ export default function MfgProcessCard({
                       color: colors.subtitle,
                     }}
                   >
-                    {process?.Facility_Description || ""}
+                    {process?.Facility || ""}
                   </Typography>
                 </Box>
               </Box>
