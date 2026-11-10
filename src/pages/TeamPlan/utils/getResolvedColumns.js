@@ -1,26 +1,25 @@
-// src/pages/TeamPlan/utils/getResolvedColumns.js
-// Tab (Product or Others) Vs Respective Columns
+// File: src/pages/TeamPlan/utils/getResolvedColumns.js
+// Purpose: the table columns for a tab, each marked editable or read-only from COLUMN_RULES.
 
+// Column lists: Product tab and the other tabs.
 import { PRODUCT_COLUMNS, OTHER_COLUMNS } from "../constants/tableColumns.js";
+
+// Editable rules per column and tab.
 import { COLUMN_RULES } from "../constants/columnRules.js";
 
-/* ---------------- Helper: Identify Product tab ---------------- */
-// Product: Parameter - 'OI 001'
+// True for the Product tab (OI 001); Material and Machinery use the other column list.
 const isProductTab = (operationsInputId) => operationsInputId === "OI 001";
 
-/* ---------------- Resolve Columns based on tab ---------------- */
+// Return the columns of a tab with an `editable` flag on each.
 export function getResolvedColumns(operationsInputId) {
-
-  // Selection of base columns
+  // Pick the base column list for the tab.
   const baseColumns = isProductTab(operationsInputId)
     ? PRODUCT_COLUMNS
     : OTHER_COLUMNS;
 
-  /* ---------------- Merge editable rules from COLUMN_RULES ---------------- */
+  // Add the editable flag from COLUMN_RULES; a column with no rule is read-only.
   return baseColumns.map((col) => ({
     ...col,
-
-    // Lookup tabs/columns (latest columns list)
     editable: COLUMN_RULES?.[col.key]?.[operationsInputId] ?? false,
   }));
 }

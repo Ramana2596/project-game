@@ -1,12 +1,7 @@
 // File: src/pages/TeamPlan/components/TeamPlanItem.jsx
-// Render table with tab-specific edit logic
-// V7 — Built on tableStyle. Rules and number formatting come from utils/planRules.js.
-//      Inputs accept only whole numbers and say why a key was refused;
-//      Required Quantity 0 = "Not ordering now"; stable row keys,
-//      changed-row marker, inline row error, aria labels.
-//      V7 change: reports the active row (click or focus) so the Guide card can follow it
-//      (onActiveRowChange) and softly highlights that row (activePart).
+// Purpose: plan table for the active tab, with tab-specific edit rules.
 
+// React and MUI building blocks.
 import React, { useMemo, useState } from "react";
 import {
   alpha,
@@ -26,7 +21,11 @@ import {
 } from "@mui/material";
 import { EditOutlined as EditIcon } from "@mui/icons-material";
 import { visuallyHidden } from "@mui/utils";
+
+// UXLab V3 style tokens.
 import { colors, masterTypo, tableStyle } from "../../../ux/styles";
+
+// Shared plan rules and number formatting.
 import {
   NUMERIC_KEYS,
   checkTypedQuantity,
@@ -36,11 +35,22 @@ import {
   isBlank,
 } from "../utils/planRules.js";
 
+// Cell text style (left aligned).
 const TEXT_SX = { ...masterTypo.tableParameter, color: colors.body };
+
+// Cell number style (right aligned, tabular digits).
 const NUMBER_SX = {
   ...masterTypo.tableParameter,
   ...tableStyle.numeric,
   color: colors.body,
+};
+
+// Result values (Quantity, Unit_Price): size & Bold 
+const KEY_VALUE_SX = {
+  ...masterTypo.body1,
+  ...tableStyle.numeric,
+  fontWeight: 700,
+  color: colors.title,
 };
 
 const TeamPlanItem = ({
@@ -53,10 +63,10 @@ const TeamPlanItem = ({
   rowErrors = {},
   activePart = null,
   onActiveRowChange,
-  onEditStart,
   onCellChange,
   fetchBuyInfoLovForPart,
 }) => {
+  // OI 001 is the product tab
   const isProductTab = currentTab === "OI 001";
 
   // The input being edited (shows its raw text) and the reason a key was refused.
@@ -68,7 +78,7 @@ const TeamPlanItem = ({
     [changedRows]
   );
 
-  // Display loading spinner while the first load is running.
+  // Show a spinner while the first load is running.
   if (loading) {
     return (
       <Box
@@ -81,8 +91,16 @@ const TeamPlanItem = ({
     );
   }
 
-  // Number input: raw text while editing, two decimals otherwise.
-  const renderNumberInput = (rowIndex, row, field, label, hasError, onBlurExtra) => {
+  // Number input: raw text while editing, formatted otherwise.
+  // options: onBlurExtra runs after blur; valueSx styles the typed number.
+  const renderNumberInput = (
+    rowIndex,
+    row,
+    field,
+    label,
+    hasError,
+    { onBlurExtra, valueSx = NUMBER_SX } = {}
+  ) => {
     const cellKey = `${getRowKey(row)}|${field}`;
     const isActive = active.key === cellKey;
     const hint = isActive ? active.hint : "";
@@ -94,10 +112,9 @@ const TeamPlanItem = ({
         size="small"
         value={isActive ? String(raw ?? "") : formatQuantity(raw)}
         error={hasError}
-        onFocus={() => {
-          setActive({ key: cellKey, hint: "" });
-          onEditStart?.();
-        }}
+        // Focus: show the raw text and clear any hint.
+        onFocus={() => setActive({ key: cellKey, hint: "" })}
+        // Typing: refuse invalid keys with a reason, accept valid ones.
         onChange={(e) => {
           const reason = checkTypedQuantity(e.target.value);
           if (reason) {
@@ -107,6 +124,7 @@ const TeamPlanItem = ({
           setActive({ key: cellKey, hint: "" });
           onCellChange(rowIndex, field, e.target.value);
         }}
+        // Blur: back to formatted text, then run the extra action (price list fetch).
         onBlur={(e) => {
           setActive({ key: "", hint: "" });
           onBlurExtra?.(e);
@@ -125,7 +143,7 @@ const TeamPlanItem = ({
           "aria-label": label,
           style: { textAlign: "right" },
         }}
-        sx={{ minWidth: 110, "& .MuiInputBase-input": NUMBER_SX }}
+        sx={{ minWidth: 110, "& .MuiInputBase-input": valueSx }}
         fullWidth
       />
     );
@@ -137,10 +155,11 @@ const TeamPlanItem = ({
 
     // Required Quantity: input on Material and Machine tabs. 0 = not ordering.
     if (col.key === "Required_Quantity" && !isProductTab) {
-      return renderNumberInput(rowIndex, row, "Required_Quantity", label, hasError, (e) =>
+      return renderNumberInput(rowIndex, row, "Required_Quantity", label, hasError, {
         // Price list is fetched only after the user finishes typing.
-        fetchBuyInfoLovForPart?.(currentTab, row.Part_No, e.target.value)
-      );
+        onBlurExtra: (e) =>
+          fetchBuyInfoLovForPart?.(currentTab, row.Part_No, e.target.value),
+      });
     }
 
     // Info Price: text on Product tab, price selector on Material / Machine.
@@ -153,6 +172,7 @@ const TeamPlanItem = ({
         );
       }
 
+      // Price options for this part, and the one currently selected.
       const priceLov = lovsMap?.[currentTab]?.[row.Part_No]?.Price_Lov || [];
       const selectedPriceId = priceLov.some((p) => p.Price_Id === row.Price_Id)
         ? row.Price_Id
@@ -170,14 +190,11 @@ const TeamPlanItem = ({
             row.Info_Price ??
             ""
           }
-          onFocus={() => {
-            onEditStart?.();
-            fetchBuyInfoLovForPart?.(
-              currentTab,
-              row.Part_No,
-              row.Required_Quantity
-            );
-          }}
+          // Focus: make sure the price list is loaded for the dropdown.
+          onFocus={() =>
+            fetchBuyInfoLovForPart?.(currentTab, row.Part_No, row.Required_Quantity)
+          }
+          // Choice: the selected price sets Info_Price, Quantity and Unit_Price.
           onChange={(e) => {
             const selected = priceLov.find((p) => p.Price_Id === e.target.value);
             onCellChange(rowIndex, null, {
@@ -201,34 +218,43 @@ const TeamPlanItem = ({
       );
     }
 
-    // Quantity: input on Product tab, calculated order quantity on the others.
+    // Quantity: typed on the Product tab, calculated from the selected price on the others.
     if (col.key === "Quantity") {
       if (isProductTab) {
-        return renderNumberInput(rowIndex, row, "Quantity", label, hasError);
+        return renderNumberInput(rowIndex, row, "Quantity", label, hasError, {
+          valueSx: KEY_VALUE_SX,
+        });
       }
       return (
-        <Typography
-          title="Calculated from the selected price"
-          sx={{ ...NUMBER_SX, fontWeight: 600, color: colors.heading }}
-        >
+        <Typography title="Calculated from the selected price" sx={KEY_VALUE_SX}>
           {formatQuantity(row.Quantity ?? 0)}
         </Typography>
       );
     }
 
-    // Everything else is display-only.
-    const value = row[col.key];
-    if (NUMERIC_KEYS.includes(col.key)) {
+    // Unit Price: system value from the price source; "-" when there is none yet.
+    if (col.key === "Unit_Price") {
+      const price = formatPrice(row.Unit_Price);
       return (
-        <Typography sx={NUMBER_SX}>
-          {col.key === "Unit_Price" ? formatPrice(value) : formatQuantity(value)}
+        <Typography
+          title="From the selected price"
+          sx={{ ...KEY_VALUE_SX, ...(price === "" && { color: colors.muted }) }}
+        >
+          {price === "" ? "-" : price}
         </Typography>
       );
+    }
+
+    // Everything else is display-only: numbers right aligned, text left aligned.
+    const value = row[col.key];
+    if (NUMERIC_KEYS.includes(col.key)) {
+      return <Typography sx={NUMBER_SX}>{formatQuantity(value)}</Typography>;
     }
     return <Typography sx={TEXT_SX}>{value ?? ""}</Typography>;
   };
 
   return (
+    // Scrollable table area.
     <TableContainer
       component={Paper}
       elevation={0}
@@ -236,6 +262,7 @@ const TeamPlanItem = ({
       sx={{ maxHeight: "65vh", overflow: "auto", background: "transparent" }}
     >
       <Table size="small" stickyHeader sx={{ minWidth: 900, ...tableStyle.compact }}>
+        {/* Column headers; editable columns carry a pencil icon and a hidden "(editable)" label */}
         <TableHead sx={tableStyle.columnHeader}>
           <TableRow>
             {columns.map((col) => (
@@ -265,6 +292,7 @@ const TeamPlanItem = ({
         </TableHead>
 
         <TableBody>
+          {/* Empty state */}
           {!rows || rows.length === 0 ? (
             <TableRow>
               <TableCell colSpan={columns.length} align="center" sx={{ py: 6 }}>
@@ -274,10 +302,12 @@ const TeamPlanItem = ({
               </TableCell>
             </TableRow>
           ) : (
+            // Data rows
             rows.map((row, rowIndex) => {
               const rowKey = getRowKey(row);
               const errorMessage = rowErrors[rowKey];
               const isChanged = changedKeys.has(rowKey);
+
               // The line the Guide card is showing.
               const isActiveRow =
                 activePart != null && String(row.Part_No) === String(activePart);
@@ -293,6 +323,7 @@ const TeamPlanItem = ({
                 : undefined;
 
               return (
+                // Click or focus makes this the active line for the Guide and Review cards.
                 <TableRow
                   key={rowKey === "|" ? rowIndex : rowKey}
                   sx={tableStyle.row}
@@ -307,7 +338,7 @@ const TeamPlanItem = ({
                         ...tableStyle.cell,
                         verticalAlign: "middle",
                         backgroundColor: tint,
-                        // Marker bar: a visible edge, not colour alone.
+                        // Marker bar on the first cell: a visible edge, not colour alone.
                         ...(colIndex === 0 && {
                           borderLeft: `3px solid ${
                             errorMessage
@@ -321,6 +352,7 @@ const TeamPlanItem = ({
                     >
                       {renderCell(col, row, rowIndex, Boolean(errorMessage))}
 
+                      {/* Inline row error under the first cell */}
                       {colIndex === 0 && errorMessage && (
                         <Typography
                           role="alert"

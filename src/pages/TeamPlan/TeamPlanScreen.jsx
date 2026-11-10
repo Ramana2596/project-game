@@ -1,50 +1,59 @@
 // File: src/pages/TeamPlan/TeamPlanScreen.jsx
-// V9 — Layout and wiring only. Parts live in components/: TeamPlanHeader (heading),
-//      TeamPlanInfoStrip (Guide and Review cards), TeamPlanTabs (tabs + Cancel/Save),
-//      TeamPlanItem (table), TeamPlanDialogs (confirmations). Rules and formatting
-//      live in utils/planRules.js.
-//      Standalone shows everything; hideHeader=true (ReportDrawer) drops the
-//      heading, page chrome and browser-tab title.
-//
-// V9 change: Guide and Review cards sit above the tabs and follow the active tab and
-//            line. The Operations plan / Review step bar and its Back / Next buttons are
-//            removed. Approval happens in the parent Control Centre, not here.
+// Purpose: Operations Business Plan screen. Layout and wiring only; parts live in components/.
+// hideHeader=true (ReportDrawer) drops the heading, page chrome and browser-tab title.
+// Approval happens in the parent Control Centre, not here.
 
+// React and MUI building blocks.
 import React, { useState, useEffect, useMemo } from "react";
 import { alpha, Alert, Box, LinearProgress, Paper } from "@mui/material";
+
+// UXLab V3 style tokens.
 import { colors, tableStyle, layoutStyle, masterTypo } from "../../ux/styles";
+
+// Screen parts.
 import TeamPlanHeader from "./components/TeamPlanHeader.jsx";
 import TeamPlanTabs from "./components/TeamPlanTabs.jsx";
 import TeamPlanItem from "./components/TeamPlanItem.jsx";
 import TeamPlanDialogs from "./components/TeamPlanDialogs.jsx";
 import TeamPlanInfoStrip from "./components/TeamPlanInfoStrip.jsx";
+
+// Data hooks and shared pieces.
 import { useTeamPlanGuide } from "./hooks/useTeamPlanGuide.js";
-import ToastMessage from "../../components/ToastMessage.jsx";
 import { useTeamPlan } from "./hooks/useTeamPlan.js";
+import ToastMessage from "../../components/ToastMessage.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 
-// Embedded (ReportDrawer) wrapper: no page chrome, fills the drawer.
+// Wrapper style when embedded in ReportDrawer: no page chrome, fills the drawer.
 const EMBEDDED_SX = { width: "100%", minWidth: 0 };
 
-// Saving / calculating progress bar, styled from the brand tokens.
+// Progress bar style shown while saving or calculating prices.
 const PROGRESS_SX = {
   backgroundColor: colors.primarySelected,
   "& .MuiLinearProgress-bar": { background: colors.heroGradient },
 };
 
+// Unsaved-changes banner style.
+const UNSAVED_SX = {
+  backgroundColor: alpha(colors.warning, 0.08),
+  borderColor: colors.warning,
+  borderRadius: 2,
+  "& .MuiAlert-message": { ...masterTypo.body2, color: colors.title },
+};
+
 const TeamPlanScreen = ({ hideHeader = false }) => {
+  // Signed-in user and game context (game, batch, team).
   const { userInfo } = useUser();
 
+  // Plan data, edit state and actions for the active tab.
   const {
     tabDataMap,
-    tableData,
+    tableData: currentRows, // rows of the active tab
     loading,
     saving,
     calculating,
     error,
     currentTab,
     columns,
-    setEditMode,
     handleTabChange,
     handleCellChange,
     saveTableData,
@@ -57,32 +66,38 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
     lovsMap,
   } = useTeamPlan(userInfo);
 
-  // Browser-tab title only when the page is standalone.
+  // Toast message state.
+  const [toast, setToast] = useState({ open: false, message: "", severity: "info" });
+
+  // Open confirmation: null | { type: "cancel" } | { type: "tab", tab: "OI 002" }.
+  const [dialog, setDialog] = useState(null);
+
+  // Set the browser-tab title (standalone page only).
   useEffect(() => {
     if (hideHeader) return;
     document.title = `Operations Business Plan | Batch ${userInfo?.gameBatch ?? ""} - Team ${userInfo?.gameTeam ?? ""}`;
   }, [hideHeader, userInfo?.gameBatch, userInfo?.gameTeam]);
 
-  const [toast, setToast] = useState({ open: false, message: "", severity: "info" });
-  // dialog: null | { type: "cancel" } | { type: "tab", tab: "OI 002" }
-  const [dialog, setDialog] = useState(null);
-  const currentRows = tabDataMap?.[currentTab] ?? tableData ?? [];
-
-  // Active line for the Guide card: Part_No is unique across tabs. Starts on the first row of the tab.
+  // Active line for the Guide and Review cards (Part_No is unique across tabs).
   const [activePart, setActivePart] = useState(null);
   const firstPart = currentRows[0]?.Part_No ?? null;
+
+  // Start on the first row whenever the tab or its first row changes.
   useEffect(() => {
     setActivePart(firstPart != null ? String(firstPart) : null);
   }, [currentTab, firstPart]);
 
-  const { info: guideInfo, loading: guideLoading, error: guideError, isStub: guideIsStub } =
+  // Guide figures (last month) for the active line.
+  const { info: guideInfo, loading: guideLoading, error: guideError } =
     useTeamPlanGuide(userInfo, productionMonth, activePart);
+
+  // Row behind the active line, used by the Review card.
   const activeRow = currentRows.find((r) => String(r.Part_No) === activePart);
-  const currentStatus = tabStatusMap?.[currentTab] || "unseen";
-  const isUnsaved = currentStatus === "unsaved";
+
+  // Save / unsaved status flags.
+  const isUnsaved = (tabStatusMap?.[currentTab] || "unseen") === "unsaved";
   const hasAnyUnsaved = Object.values(tabStatusMap || {}).includes("unsaved");
   const busy = saving || loading;
-
   const canSave = isUnsaved && !busy && !calculating;
   const canCancel = isUnsaved && !busy;
 
@@ -97,7 +112,7 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
     return () => window.removeEventListener("beforeunload", warn);
   }, [hasAnyUnsaved]);
 
-  // Save the current tab, show the result, and report back.
+  // Save the current tab, show the result in a toast, and report back.
   const onSaveClick = async () => {
     const res = await saveTableData();
     setToast({
@@ -118,8 +133,10 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
     handleTabChange(tab);
   };
 
+  // Close any open confirmation.
   const closeDialog = () => setDialog(null);
 
+  // Confirmation "Discard": drop edits, then move to the chosen tab.
   const onDiscardAndContinue = () => {
     const target = dialog?.tab;
     cancelEdit();
@@ -127,6 +144,7 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
     if (target) handleTabChange(target);
   };
 
+  // Confirmation "Save": save first, then move to the chosen tab on success.
   const onSaveAndContinue = async () => {
     const target = dialog?.tab;
     const res = await onSaveClick();
@@ -134,12 +152,13 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
     if (res?.success && target) handleTabChange(target);
   };
 
+  // Confirmation "Cancel": drop edits on the current tab.
   const onConfirmCancel = () => {
     cancelEdit();
     closeDialog();
   };
 
-  // Mark editable columns; editable rules are kept in one place here.
+  // Mark which columns the user can edit on each tab.
   const enhancedColumns = useMemo(
     () =>
       columns.map((col) => {
@@ -155,6 +174,7 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
   );
 
   return (
+    // Page wrapper: <section> when embedded, <main> when standalone.
     <Box
       {...(hideHeader
         ? { component: "section", "aria-label": "Operations Business Plan", sx: EMBEDDED_SX }
@@ -167,10 +187,10 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
         )}
 
         <Paper component="article" elevation={0} sx={{ ...layoutStyle.panel, p: 0, overflow: "hidden" }}>
-          {/* Progress while saving or calculating prices */}
+          {/* Progress bar while saving or calculating prices */}
           {(saving || calculating) && <LinearProgress aria-label="Working" sx={PROGRESS_SX} />}
 
-          {/* Load error */}
+          {/* Load error message */}
           {error && (
             <Box sx={{ p: 2, pb: 0 }}>
               <Alert severity="error" variant="outlined" role="alert" sx={{ borderRadius: 2 }}>
@@ -187,19 +207,14 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
                 variant="outlined"
                 role="status"
                 aria-live="polite"
-                sx={{
-                  backgroundColor: alpha(colors.warning, 0.08),
-                  borderColor: colors.warning,
-                  borderRadius: 2,
-                  "& .MuiAlert-message": { ...masterTypo.body2, color: colors.title },
-                }}
+                sx={UNSAVED_SX}
               >
                 You have unsaved changes. Save the plan or cancel to discard them.
               </Alert>
             </Box>
           )}
 
-          {/* Info strip: Guide (fixed) and Review (live), synced to the active tab and line */}
+          {/* Guide (last month, fixed) and Review (effect of the plan, live) cards */}
           <TeamPlanInfoStrip
             tab={currentTab}
             partNo={activePart}
@@ -208,12 +223,11 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
             info={guideInfo}
             guideLoading={guideLoading}
             guideError={guideError}
-            isStub={guideIsStub}
             unsaved={isUnsaved}
             calculating={calculating}
           />
 
-          {/* Tab bar with Cancel / Save */}
+          {/* Tab bar with Cancel and Save buttons */}
           <TeamPlanTabs
             currentTab={currentTab}
             tabDataMap={tabDataMap}
@@ -227,7 +241,7 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
             onSaveClick={onSaveClick}
           />
 
-          {/* Data table card */}
+          {/* Plan table for the active tab */}
           <Box sx={{ p: 2 }}>
             <Box sx={tableStyle.container}>
               <TeamPlanItem
@@ -240,7 +254,6 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
                 rowErrors={rowErrors}
                 activePart={activePart}
                 onActiveRowChange={(row) => setActivePart(String(row.Part_No))}
-                onEditStart={() => setEditMode(true)}
                 onCellChange={handleCellChange}
                 fetchBuyInfoLovForPart={fetchBuyInfoLovForPart}
               />
@@ -249,7 +262,7 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
         </Paper>
       </Box>
 
-      {/* Confirmations */}
+      {/* Confirmation dialogs (cancel, tab switch with unsaved data) */}
       <TeamPlanDialogs
         dialog={dialog}
         currentTab={currentTab}
@@ -261,7 +274,7 @@ const TeamPlanScreen = ({ hideHeader = false }) => {
         onSaveAndContinue={onSaveAndContinue}
       />
 
-      {/* Toast Notification Bar */}
+      {/* Toast notification bar */}
       <ToastMessage {...toast} onClose={() => setToast((t) => ({ ...t, open: false }))} />
     </Box>
   );

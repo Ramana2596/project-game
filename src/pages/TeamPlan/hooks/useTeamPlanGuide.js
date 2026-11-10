@@ -1,12 +1,13 @@
 // File: src/pages/TeamPlan/hooks/useTeamPlanGuide.js
-// Purpose: Fetch TeamPlan guide figures from the API and resolve them for the active part.
-//          The user's own Production / Sales entries are read in TeamPlanInfoStrip (Review card).
+// Purpose: fetch the Guide figures once per game, team and month, and resolve them for the active part.
+// The user's own Production / Sales entries are read in TeamPlanInfoStrip (Review card).
 
 import { useState, useEffect, useMemo } from "react";
 import { getOpsPlanGuide } from "../services/service.js";
 import { toSets, buildModel, partInfo } from "../utils/guideModel.js";
 
 export const useTeamPlanGuide = (userInfo, productionMonth, partNo) => {
+  // Game context, the month as YYYY-MM-DD, and a numeric batch.
   const { gameId, gameBatch, gameTeam } = userInfo || {};
   const month = productionMonth ? String(productionMonth).split("T")[0] : "";
   const batch = Number(gameBatch);
@@ -14,17 +15,19 @@ export const useTeamPlanGuide = (userInfo, productionMonth, partNo) => {
   // Fetch only when game, team, month and a numeric batch are all known.
   const ready = Boolean(gameId && gameTeam && month) && Number.isInteger(batch);
 
-  // undefined = not loaded yet; object = whole-game lookup built from the API response.
+  // Whole-game lookup built from the API response (undefined = not loaded yet), and a load error.
   const [model, setModel] = useState(undefined);
   const [error, setError] = useState("");
 
-  // Refetch only when game, team or period changes;
+  // Load the guide; refetch only when game, team or period changes.
   useEffect(() => {
     let active = true; // set false on cleanup so a late response is ignored
 
+    // Start clean for the new game, team or period.
     setModel(undefined);
     setError("");
 
+    // Nothing to fetch yet.
     if (!ready) {
       return () => {
         active = false;
