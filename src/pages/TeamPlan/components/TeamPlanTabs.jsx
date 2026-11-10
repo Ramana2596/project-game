@@ -2,6 +2,8 @@
 // Component: TeamPlanTabs
 // Module: TeamPlan
 // Purpose: Category tabs (counts, save status) with Cancel / Save right-justified
+// AI Tags: team-plan, tabs, tab-bar, save-status, uxlab
+// UXLab V3 — layoutStyle.tabBar, buttonStyle.tab / tabActive, primary / secondary
 // ============================================================
 
 // React and MUI building blocks.

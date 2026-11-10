@@ -7,7 +7,7 @@ import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 
 import { colors, layoutStyle, masterTypo } from "../../../ux/styles";
 
-// Quantity identifiers for product planning.
+// Quantity identifiers for product planning (row field: Quantity_Id).
 const QTY_ID = {
   production: "QP 02",
   sales: "QP 03",
@@ -47,6 +47,23 @@ const getValue = (items = []) =>
     0
   );
 
+// Ordered quantity on Material / Machine lines.
+// Required_Quantity 0 = "Not ordering now"; otherwise Quantity from the selected price.
+const orderQty = (row) => {
+  const required = row?.Required_Quantity;
+  const entered =
+    required !== null && required !== undefined && String(required).trim() !== "";
+  return entered && num(required) === 0 ? 0 : num(row?.Quantity);
+};
+
+// Stock after this line: opening balance, plus the ordered quantity for Ex-Stock (CP 04).
+const getStock = (row, info) => {
+  const openingBalance = num(info?.Stock_Qty);
+  return isId(row.Price_Id, "CP 04")
+    ? openingBalance + orderQty(row)
+    : openingBalance;
+};
+
 // Calculate review figures for the selected item.
 const reviewItems = (tab, row, rows = [], info) => {
   if (!row) return [];
@@ -61,11 +78,11 @@ const reviewItems = (tab, row, rows = [], info) => {
   switch (tab) {
     case "OI 001": {
       const productionRows = partRows.filter((item) =>
-        isId(item.Qty_Id, QTY_ID.production)
+        isId(item.Quantity_Id, QTY_ID.production)
       );
 
       const salesRows = partRows.filter((item) =>
-        isId(item.Qty_Id, QTY_ID.sales)
+        isId(item.Quantity_Id, QTY_ID.sales)
       );
 
       return [
@@ -81,21 +98,12 @@ const reviewItems = (tab, row, rows = [], info) => {
     }
 
     case "OI 002": {
-      const quantity = num(row.Quantity);
-      const openingBalance = num(info?.Stock_Qty);
-
-      const stockQuantity =
-        String(row.Price_Id ?? "").trim().toUpperCase() === "CP 04"
-          ? openingBalance + quantity
-          : openingBalance;
-
-      const commitment = quantity * num(row.Unit_Price);
+      const commitment = orderQty(row) * num(row.Unit_Price);
 
       return [
-
         {
           label: "Stock Qty",
-          value: `${fmt(stockQuantity)} ${uom}`.trim(),
+          value: `${fmt(getStock(row, info))} ${uom}`.trim(),
         },
         {
           label: "Commitment",
@@ -105,18 +113,11 @@ const reviewItems = (tab, row, rows = [], info) => {
     }
 
     case "OI 003": {
-      const plant = info?.plant ?? {};
-      const quantity = num(row.Quantity);
-      const openingBalance = num(info?.Stock_Qty);
-
-      const stockQuantity =
-        String(row.Price_Id ?? "").trim().toUpperCase() === "CP 04"
-          ? openingBalance + quantity
-          : openingBalance;
-
+      const plant = info?.plant ?? {}; // capacity, load, utilisation (kept for use)
+      const quantity = orderQty(row);
       const commitment = quantity * num(row.Unit_Price);
-      const capacityPerMc = num(row.capacityPerMc);
-      const capUom = row.capUOM ?? "";
+      const capacityPerMc = num(info?.capacityPerMc);
+      const capUom = plant.uom ?? "";
 
       return [
         {
@@ -125,7 +126,7 @@ const reviewItems = (tab, row, rows = [], info) => {
         },
         {
           label: "Stock",
-          value: fmt(stockQuantity),
+          value: fmt(getStock(row, info)),
         },
         {
           label: "Added Capacity",
@@ -147,34 +148,18 @@ const ReviewItems = ({ items }) => {
 
   return (
     <Box sx={{ minWidth: 0 }}>
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: columns,
-          columnGap: 1,
-        }}
-      >
+      <Box sx={{ display: "grid", gridTemplateColumns: columns, columnGap: 1 }}>
         {items.map((item) => (
           <Typography
             key={item.label}
-            sx={{
-              ...masterTypo.caption,
-              color: colors.subtitle,
-              minWidth: 0,
-            }}
+            sx={{ ...masterTypo.caption, color: colors.subtitle, minWidth: 0 }}
           >
             {item.label}
           </Typography>
         ))}
       </Box>
 
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: columns,
-          columnGap: 1,
-        }}
-      >
+      <Box sx={{ display: "grid", gridTemplateColumns: columns, columnGap: 1 }}>
         {items.map((item) => (
           <Typography
             key={item.label}
@@ -203,20 +188,13 @@ const TeamPlanReview = ({
   unsaved = false,
   calculating = false,
 }) => {
-
-  console.log("row keys:", row && Object.keys(row));
-  console.log("info.workCentre:", info?.workCentre);
-
   const items = reviewItems(tab, row, rows, info);
 
   return (
     <Box
       component="section"
       aria-label="Plan Review"
-      sx={{
-        ...layoutStyle.compactPanel,
-        minWidth: 0,
-      }}
+      sx={{ ...layoutStyle.compactPanel, minWidth: 0 }}
     >
       {/* Review heading: same nested layout as Guide Card. */}
       <Box sx={layoutStyle.flexRow}>
