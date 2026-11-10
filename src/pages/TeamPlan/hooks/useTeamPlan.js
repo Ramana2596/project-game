@@ -1,16 +1,12 @@
 // File: src/pages/TeamPlan/hooks/useTeamPlan.js
-// Purpose: Manage TeamPlan state, tab data, LOVs, edit and API integration
-// V5 — Data, edit and save flow. Rules, validation and formatting live in
-//      utils/planRules.js. Save result is read from the SP return value
-//      (0 = success). Required_Quantity 0 = not ordering now, "no price
-//      source" messages, calculating state, race-safe loads
+// Purpose: TeamPlan state, tab data, price lists (LOVs), cell edits, save and cancel.
+// Rules, validation and formatting live in utils/planRules.js.
+// Save result is read from the API response ({ success, message }).
+// Required_Quantity 0 = not ordering now. Loads are race-safe (stale answers are ignored).
 
 import { useState, useEffect, useMemo, useRef } from "react";
-import { 
-  getOpsPlanQuery, 
-  updateOpsPlanBulk } from "../services/service.js";
+import { getOpsPlanQuery, updateOpsPlanBulk } from "../services/service.js";
 import { getResolvedColumns } from "../utils/getResolvedColumns.js";
-import { COLUMN_RULES } from "../constants/columnRules.js";
 import { useUser } from "../../../core/access/userContext.jsx";
 import {
   getRowKey,
@@ -21,24 +17,34 @@ import {
 } from "../utils/planRules.js";
 
 export const useTeamPlan = (userInfo) => {
+  // Signed-in user, used as the fallback source of userId.
   const { user } = useUser();
 
+  // Game context; nothing loads until game, team and batch are known.
   const { gameId, gameBatch, gameTeam } = userInfo || {};
   const ready = Boolean(gameId && gameTeam) && gameBatch != null;
   const userId = userInfo?.userId ?? user?.userId ?? null;
 
+  // Per-tab data: current rows, last saved rows, changed rows and row errors.
   const [tabDataMap, setTabDataMap] = useState({});
   const [savedDataMap, setSavedDataMap] = useState({});
   const [changedRowsMap, setChangedRowsMap] = useState({});
   const [rowErrorsMap, setRowErrorsMap] = useState({});
+
+  // Price lists per tab and part.
   const [lovsMap, setLovsMap] = useState({});
+
+  // Period, active tab and per-tab status ("saved" | "unsaved").
   const [productionMonth, setProductionMonth] = useState("");
   const [currentTab, setCurrentTab] = useState("OI 001");
+  const [tabStatusMap, setTabStatusMap] = useState({});
+
+  // Busy flags: tab loading, saving, and price calculations in progress.
   const [loadingMap, setLoadingMap] = useState({});
   const [saving, setSaving] = useState(false);
   const [pendingCalc, setPendingCalc] = useState(0);
-  const [editMode, setEditMode] = useState(false);
-  const [tabStatusMap, setTabStatusMap] = useState({});
+
+  // Load error message.
   const [error, setError] = useState("");
 
   // Refs: latest data for async code, plus request bookkeeping.
@@ -52,22 +58,20 @@ export const useTeamPlan = (userInfo) => {
   const noPriceRef = useRef({}); // "no price source" messages per tab|rowKey
   const savingRef = useRef(false);
 
+  // Keep the refs in step with state on every render.
   tabDataRef.current = tabDataMap;
   changedRef.current = changedRowsMap;
 
+  // Columns for the active tab, plus simple derived flags.
   const columns = useMemo(() => getResolvedColumns(currentTab), [currentTab]);
   const loading = Boolean(loadingMap[currentTab]);
   const calculating = pendingCalc > 0;
 
-  const isEditable = (key) => {
-    const rules = COLUMN_RULES[key];
-    return rules ? rules[currentTab] : true;
-  };
-
-  /* ---------------- Fetch Production Month (resets all data per team) ---------------- */
+  // Get the production period; also resets all data when the team changes.
   useEffect(() => {
     const session = ++sessionRef.current;
 
+    // Reset everything for the new session.
     setTabDataMap({});
     setSavedDataMap({});
     setChangedRowsMap({});
@@ -76,7 +80,6 @@ export const useTeamPlan = (userInfo) => {
     setTabStatusMap({});
     setLoadingMap({});
     setPendingCalc(0);
-    setEditMode(false);
     setError("");
     setProductionMonth("");
     inflightRef.current = {};
@@ -110,7 +113,7 @@ export const useTeamPlan = (userInfo) => {
     fetchMonth();
   }, [ready, gameId, gameBatch, gameTeam]);
 
-  /* ---------------- Fetch table data per tab (Get_Info) ---------------- */
+  // Load the rows of the active tab once (Get_Info).
   useEffect(() => {
     if (!ready || !productionMonth) return;
     if (tabDataRef.current[currentTab]) return; // already loaded
@@ -133,6 +136,7 @@ export const useTeamPlan = (userInfo) => {
         });
         if (session !== sessionRef.current) return;
 
+        // Keep the loaded rows, a saved copy for Cancel, and an empty change list.
         const rows = Array.isArray(resp.data) ? resp.data : [];
         setTabDataMap((p) => ({ ...p, [tab]: rows }));
         setSavedDataMap((p) => ({ ...p, [tab]: structuredClone(rows) }));
@@ -152,8 +156,6 @@ export const useTeamPlan = (userInfo) => {
 
     fetchTable();
   }, [ready, productionMonth, currentTab]);
-
-  /* ---------------- Fetch Buy_Info LOV per part ---------------- */
 
   // Show or clear the "no price source" message on the rows of a part.
   const setNoPrice = (tabKey, partNo, message) => {
@@ -202,8 +204,10 @@ export const useTeamPlan = (userInfo) => {
       return r;
     });
 
+    // Nothing changed: leave state alone.
     if (touched.length === 0) return;
 
+    // Store the updated rows and mark them as changed and unsaved.
     tabDataRef.current = { ...tabDataRef.current, [tabKey]: updatedRows };
     changedRef.current = {
       ...changedRef.current,
@@ -214,10 +218,9 @@ export const useTeamPlan = (userInfo) => {
     setTabStatusMap((p) => ({ ...p, [tabKey]: "unsaved" }));
   };
 
-  // Option A: when Required_Quantity is blank the price list is still loaded
-  // (for the dropdown) but Quantity / Unit_Price are NOT recalculated.
-  // Required_Quantity 0 = not ordering now: Quantity becomes 0 (set in
-  // handleCellChange) and no price list is needed.
+  // Load the price list of a part for the required quantity (OI 003: Buy_Asset, else Buy_Material).
+  // Required_Quantity blank: list is loaded for the dropdown, Quantity / Unit_Price are NOT recalculated.
+  // Required_Quantity 0: not ordering now, Quantity becomes 0 (set in handleCellChange), no list needed.
   const fetchBuyInfoLovForPart = async (tabKey, partNo, requiredQuantity) => {
     if (!ready || !productionMonth || !partNo) return;
 
@@ -227,8 +230,9 @@ export const useTeamPlan = (userInfo) => {
     const qtyKey = hasRequired ? String(required) : "";
     const reqKey = `${tabKey}|${partNo}`;
 
+    // Not ordering now: drop any answer on the way and clear the message.
     if (required === 0) {
-      lovReqRef.current[reqKey] = ++lovCounterRef.current; // drop answers on the way
+      lovReqRef.current[reqKey] = ++lovCounterRef.current;
       setNoPrice(tabKey, partNo, null);
       return;
     }
@@ -240,6 +244,7 @@ export const useTeamPlan = (userInfo) => {
       return;
     }
 
+    // Tag this request so a newer one can override it.
     const reqId = ++lovCounterRef.current;
     lovReqRef.current[reqKey] = reqId;
     const session = sessionRef.current;
@@ -262,6 +267,7 @@ export const useTeamPlan = (userInfo) => {
       if (session !== sessionRef.current) return;
       if (lovReqRef.current[reqKey] !== reqId) return;
 
+      // Keep only the fields the screen needs.
       const data = Array.isArray(resp.data) ? resp.data : [];
       const priceLov = data.map((item) => ({
         Price_Id: item.Price_Id,
@@ -270,6 +276,7 @@ export const useTeamPlan = (userInfo) => {
         Unit_Price: item.Unit_Price,
       }));
 
+      // Cache the list and hand it to the dropdown.
       lovCacheRef.current[reqKey] = { qty: qtyKey, priceLov };
       setLovsMap((p) => ({
         ...p,
@@ -303,7 +310,7 @@ export const useTeamPlan = (userInfo) => {
     }
   };
 
-  /* ---------------- Cell change handler ---------------- */
+  // Apply one cell edit (or a whole replaced row) to the active tab.
   const handleCellChange = (rowIndex, key, valueOrRow) => {
     const rows = tabDataRef.current[currentTab] || [];
     const current = rows[rowIndex];
@@ -325,6 +332,7 @@ export const useTeamPlan = (userInfo) => {
       [currentTab]: mergeChanged(changedRef.current[currentTab], [row]),
     };
 
+    // Publish to state and mark the tab unsaved.
     setTabDataMap(tabDataRef.current);
     setChangedRowsMap(changedRef.current);
     setTabStatusMap((p) => ({ ...p, [currentTab]: "unsaved" }));
@@ -338,9 +346,9 @@ export const useTeamPlan = (userInfo) => {
     });
   };
 
-  /* ---------------- Save ---------------- */
-  // Returns { success, message }. Success is the SP return value 0.
+  // Save the changed rows of the active tab. Returns { success, message }.
   const saveTableData = async () => {
+    // Guard: one save at a time, something to save, no price calculation running, user known.
     if (savingRef.current) return { success: false, message: "Save already in progress" };
 
     const tab = currentTab;
@@ -357,7 +365,7 @@ export const useTeamPlan = (userInfo) => {
       return { success: false, message: "User id is missing. Please sign in again." };
     }
 
-    // Check values before calling the API.
+    // Check values (and "no price source" messages) before calling the API.
     const errors = validateRows(rows, tab);
     rows.forEach((r) => {
       const k = getRowKey(r);
@@ -375,6 +383,7 @@ export const useTeamPlan = (userInfo) => {
     savingRef.current = true;
     setSaving(true);
     try {
+      // Build the API payload from the changed rows.
       const payload = rows.map((r) => ({
         Game_Id: gameId,
         Game_Batch: gameBatch,
@@ -397,6 +406,7 @@ export const useTeamPlan = (userInfo) => {
         return { success: false, message: message || "Save failed" };
       }
 
+      // Saved: the current rows become the saved copy and the change list is cleared.
       setSavedDataMap((p) => ({
         ...p,
         [tab]: structuredClone(tabDataRef.current[tab] || []),
@@ -404,7 +414,6 @@ export const useTeamPlan = (userInfo) => {
       setChangedRowsMap((p) => ({ ...p, [tab]: [] }));
       changedRef.current = { ...changedRef.current, [tab]: [] };
       setTabStatusMap((p) => ({ ...p, [tab]: "saved" }));
-      setEditMode(false);
 
       return { success: true, message };
     } catch (err) {
@@ -420,7 +429,7 @@ export const useTeamPlan = (userInfo) => {
     }
   };
 
-  /* ---------------- Cancel (restore last saved data) ---------------- */
+  // Cancel: restore the last saved rows of the active tab.
   const cancelEdit = () => {
     const restored = structuredClone(savedDataMap[currentTab] || []);
     tabDataRef.current = { ...tabDataRef.current, [currentTab]: restored };
@@ -433,13 +442,11 @@ export const useTeamPlan = (userInfo) => {
     setChangedRowsMap(changedRef.current);
     setRowErrorsMap((p) => ({ ...p, [currentTab]: {} }));
     setTabStatusMap((p) => ({ ...p, [currentTab]: "saved" }));
-    setEditMode(false);
   };
 
-  // The screen asks Save / Discard / Stay before calling this with unsaved data.
+  // Switch tab. The screen asks Save / Discard / Stay before calling this with unsaved data.
   const handleTabChange = (tabKey) => {
     if (tabKey === currentTab) return;
-    setEditMode(false);
     setCurrentTab(tabKey);
   };
 
@@ -451,14 +458,11 @@ export const useTeamPlan = (userInfo) => {
     calculating,
     error,
     columns,
-    editMode,
-    setEditMode,
     currentTab,
     handleTabChange,
     handleCellChange,
     saveTableData,
     cancelEdit,
-    isEditable,
     changedRows: changedRowsMap[currentTab] || [],
     rowErrors: rowErrorsMap[currentTab] || {},
     fetchBuyInfoLovForPart,

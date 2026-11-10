@@ -1,31 +1,35 @@
 // File: src/pages/TeamPlan/utils/planRules.js
-// Purpose: Validation and number formatting 
+// Purpose: validation rules and number formatting for the TeamPlan screen.
 
-// Rules: Numbers are never negative.
+// Rules: numbers are never negative.
 //   Quantity          numeric(8,0): whole number, 0 or more, up to 99,999,999
 //   Unit_Price        numeric(8,2): system-generated
-//   Required_Quantity keyed-in Value; 0 means "not ordering now"
+//   Required_Quantity keyed-in value; 0 means "not ordering now"
 
 /* ---------------- Limits ---------------- */
 
-export const MAX_QUANTITY = 99999999; // Quantity: numeric(8,0), whole numbers
-export const MAX_AMOUNT = 999999.99; // Unit price: numeric(8,2)
+// Largest Quantity the database can hold (numeric(8,0)).
+export const MAX_QUANTITY = 99999999;
+
+// Largest unit price the database can hold (numeric(8,2)).
+export const MAX_AMOUNT = 999999.99;
 
 // Columns shown right-aligned with equal-width digits.
 export const NUMERIC_KEYS = ["Quantity", "Unit_Price", "Required_Quantity"];
 
 /* ---------------- Small helpers ---------------- */
 
+// True for an empty string, null or undefined.
 export const isBlank = (v) => v === "" || v == null;
 
-// 0 (or "0", "0.") typed in Required_Quantity means: not ordering now.
+// True for 0, "0" or "0." (typed in Required_Quantity it means: not ordering now).
 export const isZero = (v) =>
   !isBlank(v) && Number.isFinite(Number(v)) && Number(v) === 0;
 
 // Unique row key inside a tab: Part_No + Quantity_Id.
 export const getRowKey = (r) => `${r?.Part_No ?? ""}|${r?.Quantity_Id ?? ""}`;
 
-// Replace changed rows with the same key, then append the new ones.
+// Replace changed rows that have the same key, then append the new ones.
 export const mergeChanged = (list = [], rows) => {
   const keys = new Set(rows.map(getRowKey));
   return [...list.filter((r) => !keys.has(getRowKey(r))), ...rows];
@@ -33,9 +37,10 @@ export const mergeChanged = (list = [], rows) => {
 
 /* ---------------- Typing rules (while the user types) ---------------- */
 
-// Typed quantities are whole numbers: digits only. A minus sign or a decimal
-// point is never accepted, so numbers cannot be negative or fractional.
+// Digits only: a minus sign or decimal point is refused, so numbers stay whole and non-negative.
 const NUMBER_PATTERN = /^\d*$/;
+
+// Messages shown under the input when a key is refused.
 const HINT_NUMBERS = "Whole numbers only, 0 or more";
 const HINT_MAX = `Maximum is ${MAX_QUANTITY.toLocaleString("en-US")}`;
 
@@ -59,8 +64,8 @@ const checkQuantity = (value) => {
   return "";
 };
 
-// System-generated value (price list, price): only guard against values the
-// database cannot hold. The user cannot edit these, so decimals are not blamed.
+// System-generated value (price list, price): only guard against values the database cannot hold.
+// The user cannot edit these, so decimals are not blamed.
 const checkSystemValue = (label, value, max) => {
   if (isBlank(value)) return `${label} is missing`;
   const n = Number(value);
@@ -74,13 +79,15 @@ export const validateRows = (rows, tab) => {
   const errors = {};
   rows.forEach((r) => {
     const message =
+      // Quantity: typed on the Product tab, calculated on the others.
       (tab === "OI 001"
         ? checkQuantity(r.Quantity)
         : checkSystemValue("Order quantity", r.Quantity, MAX_QUANTITY)) ||
+      // Unit price: only checked when present.
       (isBlank(r.Unit_Price)
         ? ""
         : checkSystemValue("Unit price", r.Unit_Price, MAX_AMOUNT)) ||
-      // Nothing ordered (Quantity 0) needs no price source.
+      // Material / Machine tabs: a price source is needed unless nothing is ordered (Quantity 0).
       (tab !== "OI 001" && isBlank(r.Price_Id) && Number(r.Quantity) !== 0
         ? "Select a price"
         : "");
@@ -91,7 +98,7 @@ export const validateRows = (rows, tab) => {
 
 /* ---------------- Display formatting ---------------- */
 
-// Quantity: whole numbers as "1,124". A system value with decimals still shows them.
+// Quantity: whole numbers as "1,124"; a system value with decimals still shows them (up to 2).
 export const formatQuantity = (value) => {
   if (isBlank(value)) return "";
   const n = Number(value);
