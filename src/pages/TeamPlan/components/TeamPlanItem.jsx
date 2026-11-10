@@ -1,10 +1,5 @@
 // File: src/pages/TeamPlan/components/TeamPlanItem.jsx
 // Purpose: plan table for the active tab, with tab-specific edit rules.
-// Built on tableStyle. Rules and number formatting come from utils/planRules.js.
-// Inputs accept only whole numbers and say why a key was refused.
-// Required Quantity 0 = "Not ordering now". Rows have stable keys, a changed-row marker and an inline error.
-// Quantity and Unit_Price are the result of the user's choices (Required Quantity, price source),
-// so they are shown larger and bold. Active row (click or focus) is reported so the Guide card can follow it.
 
 // React and MUI building blocks.
 import React, { useMemo, useState } from "react";
@@ -50,7 +45,7 @@ const NUMBER_SX = {
   color: colors.body,
 };
 
-// Result values (Quantity, Unit_Price): larger, bold and dark so they stand out from the other cells.
+// Result values (Quantity, Unit_Price)
 const KEY_VALUE_SX = {
   ...masterTypo.body1,
   ...tableStyle.numeric,
@@ -169,7 +164,7 @@ const TeamPlanItem = ({
   const renderCell = (col, row, rowIndex, hasError) => {
     const label = `${col.label} for part ${row.Part_No}`;
 
-    // Required Quantity: input on Material and Machine tabs. 0 = not ordering.
+    // Required Quantity: Material and Machine, 0 = not ordering.
     if (col.key === "Required_Quantity" && !isProductTab) {
       return renderNumberInput(rowIndex, row, "Required_Quantity", label, hasError, {
         // Price list is fetched after the user finishes typing (blur or Enter).
@@ -234,7 +229,7 @@ const TeamPlanItem = ({
       );
     }
 
-    // Quantity: typed on the Product tab, calculated from the selected price on the others.
+    // Quantity: Keyed-in on Product tab, calculated from the selected price_Id on the others.
     if (col.key === "Quantity") {
       if (isProductTab) {
         return renderNumberInput(rowIndex, row, "Quantity", label, hasError, {
@@ -242,7 +237,7 @@ const TeamPlanItem = ({
         });
       }
 
-      // Required Quantity 0 = "Not ordering now", so the ordered quantity is 0.
+      // Required Quantity 0 = "Not ordering now"
       const notOrdering =
         !isBlank(row.Required_Quantity) && Number(row.Required_Quantity) === 0;
 

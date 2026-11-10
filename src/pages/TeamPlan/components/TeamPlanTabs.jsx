@@ -2,8 +2,6 @@
 // Component: TeamPlanTabs
 // Module: TeamPlan
 // Purpose: Category tabs (counts, save status) with Cancel / Save right-justified
-// AI Tags: team-plan, tabs, tab-bar, save-status, uxlab
-// UXLab V3 — layoutStyle.tabBar, buttonStyle.tab / tabActive, primary / secondary
 // ============================================================
 
 // React and MUI building blocks.
@@ -22,7 +20,6 @@ import {
   PrecisionManufacturing as ManufacturingIcon,
 } from "@mui/icons-material";
 
-// UXLab V3 style tokens.
 import { colors, buttonStyle, layoutStyle, masterTypo } from "../../../ux/styles";
 
 // Tab labels and tooltips per category (OI 001, OI 002, OI 003).

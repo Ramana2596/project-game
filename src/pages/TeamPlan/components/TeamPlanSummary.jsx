@@ -26,8 +26,7 @@ const fmt = (value) =>
   num(value).toLocaleString("en-IN", { maximumFractionDigits: 2 });
 
 // Ordered quantity on Material / Machine lines.
-// Required_Quantity 0 = "Not ordering now"; otherwise Quantity from the selected price.
-// Same rule as TeamPlanReview.
+// Required_Quantity 0 = "Not ordering now".
 const orderQty = (row) => {
   const required = row?.Required_Quantity;
   const entered =

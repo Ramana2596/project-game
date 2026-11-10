@@ -48,7 +48,7 @@ const getValue = (items = []) =>
   );
 
 // Ordered quantity on Material / Machine lines.
-// Required_Quantity 0 = "Not ordering now"; otherwise Quantity from the selected price.
+// Required_Quantity 0 = "Not ordering now"
 const orderQty = (row) => {
   const required = row?.Required_Quantity;
   const entered =
@@ -56,7 +56,7 @@ const orderQty = (row) => {
   return entered && num(required) === 0 ? 0 : num(row?.Quantity);
 };
 
-// Stock after this line: opening balance, plus the ordered quantity for Ex-Stock (CP 04).
+// Stock : opening balance, plus the ordered quantity for Ex-Stock (CP 04).
 const getStock = (row, info) => {
   const openingBalance = num(info?.Stock_Qty);
   return isId(row.Price_Id, "CP 04")
@@ -113,7 +113,7 @@ const reviewItems = (tab, row, rows = [], info) => {
     }
 
     case "OI 003": {
-      const plant = info?.plant ?? {}; // capacity, load, utilisation (kept for use)
+      const plant = info?.plant ?? {}; // (kept for use)
       const quantity = orderQty(row);
       const commitment = quantity * num(row.Unit_Price);
       const capacityPerMc = num(info?.capacityPerMc);
