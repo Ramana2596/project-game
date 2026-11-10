@@ -1,10 +1,5 @@
 // File: src/pages/TeamPlan/components/TeamPlanItem.jsx
 // Purpose: plan table for the active tab, with tab-specific edit rules.
-// Built on tableStyle. Rules and number formatting come from utils/planRules.js.
-// Inputs accept only whole numbers and say why a key was refused.
-// Required Quantity 0 = "Not ordering now". Rows have stable keys, a changed-row marker and an inline error.
-// Quantity and Unit_Price are the result of the user's choices (Required Quantity, price source),
-// so they are shown larger and bold. Active row (click or focus) is reported so the Guide card can follow it.
 
 // React and MUI building blocks.
 import React, { useMemo, useState } from "react";
@@ -50,7 +45,7 @@ const NUMBER_SX = {
   color: colors.body,
 };
 
-// Result values (Quantity, Unit_Price): larger, bold and dark so they stand out from the other cells.
+// Result values (Quantity, Unit_Price): size & Bold 
 const KEY_VALUE_SX = {
   ...masterTypo.body1,
   ...tableStyle.numeric,
@@ -71,7 +66,7 @@ const TeamPlanItem = ({
   onCellChange,
   fetchBuyInfoLovForPart,
 }) => {
-  // OI 001 is the product tab; the other tabs order materials and machines.
+  // OI 001 is the product tab
   const isProductTab = currentTab === "OI 001";
 
   // The input being edited (shows its raw text) and the reason a key was refused.
