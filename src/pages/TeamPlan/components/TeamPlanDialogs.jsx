@@ -3,6 +3,8 @@
 // Component: TeamPlanDialogs
 // Module: TeamPlan
 // Purpose: Confirmations for Cancel and for changing tab with unsaved data
+// AI Tags: team-plan, dialogs, confirm, unsaved-changes, uxlab
+// UXLab V3 — buttonStyle, masterTypo, colors
 // ============================================================
 
 import React from "react";
@@ -43,7 +45,7 @@ const TEXT_SX = { ...masterTypo.body2, color: colors.body };
 
 const tabLabel = (key) => CATEGORY_ICON?.[key]?.label || key;
 
-// dialog: Cancel, edit, Discard, Save, Continue
+// dialog: null | { type: "cancel" } | { type: "tab", tab: "OI 002" }
 export default function TeamPlanDialogs({
   dialog,
   currentTab,

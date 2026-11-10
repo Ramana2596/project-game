@@ -45,7 +45,7 @@ const NUMBER_SX = {
   color: colors.body,
 };
 
-// Result values (Quantity, Unit_Price): size & Bold 
+// Result values (Quantity, Unit_Price)
 const KEY_VALUE_SX = {
   ...masterTypo.body1,
   ...tableStyle.numeric,
@@ -66,7 +66,7 @@ const TeamPlanItem = ({
   onCellChange,
   fetchBuyInfoLovForPart,
 }) => {
-  // OI 001 is the product tab
+  // OI 001 is the product tab; the other tabs order materials and machines.
   const isProductTab = currentTab === "OI 001";
 
   // The input being edited (shows its raw text) and the reason a key was refused.
@@ -124,12 +124,23 @@ const TeamPlanItem = ({
           setActive({ key: cellKey, hint: "" });
           onCellChange(rowIndex, field, e.target.value);
         }}
+        // Enter works like clicking outside: runs the blur logic below.
+        onKeyDown={(e) => {
+          if (e.key === "Enter") e.target.blur();
+        }}
         // Blur: back to formatted text, then run the extra action (price list fetch).
         onBlur={(e) => {
           setActive({ key: "", hint: "" });
           onBlurExtra?.(e);
         }}
-        helperText={hint || (notOrdering ? "Not ordering now" : undefined)}
+        helperText={
+          hint ||
+          (notOrdering
+            ? "Not ordering now"
+            : isActive && field === "Required_Quantity"
+            ? "Press Enter to update price"
+            : undefined)
+        }
         FormHelperTextProps={{
           sx: {
             ...masterTypo.caption,
@@ -153,10 +164,10 @@ const TeamPlanItem = ({
   const renderCell = (col, row, rowIndex, hasError) => {
     const label = `${col.label} for part ${row.Part_No}`;
 
-    // Required Quantity: input on Material and Machine tabs. 0 = not ordering.
+    // Required Quantity: Material and Machine, 0 = not ordering.
     if (col.key === "Required_Quantity" && !isProductTab) {
       return renderNumberInput(rowIndex, row, "Required_Quantity", label, hasError, {
-        // Price list is fetched only after the user finishes typing.
+        // Price list is fetched after the user finishes typing (blur or Enter).
         onBlurExtra: (e) =>
           fetchBuyInfoLovForPart?.(currentTab, row.Part_No, e.target.value),
       });
@@ -218,16 +229,21 @@ const TeamPlanItem = ({
       );
     }
 
-    // Quantity: typed on the Product tab, calculated from the selected price on the others.
+    // Quantity: Keyed-in on Product tab, calculated from the selected price_Id on the others.
     if (col.key === "Quantity") {
       if (isProductTab) {
         return renderNumberInput(rowIndex, row, "Quantity", label, hasError, {
           valueSx: KEY_VALUE_SX,
         });
       }
+
+      // Required Quantity 0 = "Not ordering now"
+      const notOrdering =
+        !isBlank(row.Required_Quantity) && Number(row.Required_Quantity) === 0;
+
       return (
         <Typography title="Calculated from the selected price" sx={KEY_VALUE_SX}>
-          {formatQuantity(row.Quantity ?? 0)}
+          {formatQuantity(notOrdering ? 0 : row.Quantity ?? 0)}
         </Typography>
       );
     }

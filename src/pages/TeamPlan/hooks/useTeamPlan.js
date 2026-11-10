@@ -1,8 +1,6 @@
 // File: src/pages/TeamPlan/hooks/useTeamPlan.js
 // Purpose: TeamPlan state, tab data, price lists (LOVs), cell edits, save and cancel.
-// Rules, validation and formatting live in utils/planRules.js.
-// Save result is read from the API response ({ success, message }).
-// Required_Quantity 0 = not ordering now. Loads are race-safe (stale answers are ignored).
+
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { getOpsPlanQuery, updateOpsPlanBulk } from "../services/service.js";
@@ -50,7 +48,7 @@ export const useTeamPlan = (userInfo) => {
   // Refs: latest data for async code, plus request bookkeeping.
   const tabDataRef = useRef({});
   const changedRef = useRef({});
-  const sessionRef = useRef(0); // changes when the user / batch / team changes
+  const sessionRef = useRef(0); 
   const inflightRef = useRef({}); // tabs currently loading
   const lovCounterRef = useRef(0);
   const lovReqRef = useRef({}); // latest LOV request id per tab|part
@@ -136,7 +134,6 @@ export const useTeamPlan = (userInfo) => {
         });
         if (session !== sessionRef.current) return;
 
-        // Keep the loaded rows, a saved copy for Cancel, and an empty change list.
         const rows = Array.isArray(resp.data) ? resp.data : [];
         setTabDataMap((p) => ({ ...p, [tab]: rows }));
         setSavedDataMap((p) => ({ ...p, [tab]: structuredClone(rows) }));
@@ -182,21 +179,25 @@ export const useTeamPlan = (userInfo) => {
   };
 
   // Recalculate Quantity / Unit_Price of a part's rows from its price list.
-  const applyPriceList = (tabKey, partNo, priceLov) => {
+  const applyPriceList = (tabKey, partNo, priceLov, requiredQuantity) => {
     const rows = tabDataRef.current[tabKey] || [];
     const touched = [];
     const updatedRows = rows.map((r) => {
-      if (r.Part_No !== partNo || !r.Price_Id) return r;
-      const match = priceLov.find((p) => p.Price_Id === r.Price_Id);
-      if (
-        match &&
-        (Number(match.Quantity) !== Number(r.Quantity) ||
-          Number(match.Unit_Price) !== Number(r.Unit_Price))
-      ) {
+      if (r.Part_No !== partNo) return r;
+      const targetPriceId = r.Price_Id || "CP 01";
+      const match = priceLov.find((p) => p.Price_Id === targetPriceId) || priceLov[0];
+      if (match) {
+        // For OI 003 (Machinery), if Quantity is asset-based, ensure Required_Quantity is retained
+        const computedQuantity = tabKey === "OI 003" && requiredQuantity != null 
+          ? Number(requiredQuantity) 
+          : match.Quantity;
+
         const updated = {
           ...r,
-          Quantity: match.Quantity,
+          Required_Quantity: requiredQuantity !== undefined ? requiredQuantity : r.Required_Quantity,
+          Quantity: computedQuantity,
           Unit_Price: match.Unit_Price,
+          Price_Id: r.Price_Id || match.Price_Id,
         };
         touched.push(updated);
         return updated;
@@ -204,10 +205,8 @@ export const useTeamPlan = (userInfo) => {
       return r;
     });
 
-    // Nothing changed: leave state alone.
     if (touched.length === 0) return;
 
-    // Store the updated rows and mark them as changed and unsaved.
     tabDataRef.current = { ...tabDataRef.current, [tabKey]: updatedRows };
     changedRef.current = {
       ...changedRef.current,
@@ -218,11 +217,9 @@ export const useTeamPlan = (userInfo) => {
     setTabStatusMap((p) => ({ ...p, [tabKey]: "unsaved" }));
   };
 
-  // Load the price list of a part for the required quantity (OI 003: Buy_Asset, else Buy_Material).
-  // Required_Quantity blank: list is loaded for the dropdown, Quantity / Unit_Price are NOT recalculated.
-  // Required_Quantity 0: not ordering now, Quantity becomes 0 (set in handleCellChange), no list needed.
+  // Load the price list of a part (OI 002 Material / OI 003: Machinery).
   const fetchBuyInfoLovForPart = async (tabKey, partNo, requiredQuantity) => {
-    if (!ready || !productionMonth || !partNo) return;
+    if (!ready || !productionMonth || !partNo) return [];
 
     const hasRequired =
       !isBlank(requiredQuantity) && Number.isFinite(Number(requiredQuantity));
@@ -230,21 +227,18 @@ export const useTeamPlan = (userInfo) => {
     const qtyKey = hasRequired ? String(required) : "";
     const reqKey = `${tabKey}|${partNo}`;
 
-    // Not ordering now: drop any answer on the way and clear the message.
     if (required === 0) {
       lovReqRef.current[reqKey] = ++lovCounterRef.current;
       setNoPrice(tabKey, partNo, null);
-      return;
+      return [];
     }
 
-    // Same part and quantity as the last price list: reuse it, no API call.
     const cached = lovCacheRef.current[reqKey];
     if (cached && cached.qty === qtyKey) {
-      if (hasRequired) applyPriceList(tabKey, partNo, cached.priceLov);
-      return;
+      if (hasRequired) applyPriceList(tabKey, partNo, cached.priceLov, required);
+      return cached.priceLov;
     }
 
-    // Tag this request so a newer one can override it.
     const reqId = ++lovCounterRef.current;
     lovReqRef.current[reqKey] = reqId;
     const session = sessionRef.current;
@@ -263,11 +257,9 @@ export const useTeamPlan = (userInfo) => {
         cmdLine: tabKey === "OI 003" ? "Buy_Asset" : "Buy_Material",
       });
 
-      // Ignore answers that are out of date.
-      if (session !== sessionRef.current) return;
-      if (lovReqRef.current[reqKey] !== reqId) return;
+      if (session !== sessionRef.current) return [];
+      if (lovReqRef.current[reqKey] !== reqId) return [];
 
-      // Keep only the fields the screen needs.
       const data = Array.isArray(resp.data) ? resp.data : [];
       const priceLov = data.map((item) => ({
         Price_Id: item.Price_Id,
@@ -276,14 +268,12 @@ export const useTeamPlan = (userInfo) => {
         Unit_Price: item.Unit_Price,
       }));
 
-      // Cache the list and hand it to the dropdown.
       lovCacheRef.current[reqKey] = { qty: qtyKey, priceLov };
       setLovsMap((p) => ({
         ...p,
         [tabKey]: { ...(p[tabKey] || {}), [partNo]: { Price_Lov: priceLov } },
       }));
 
-      // A quantity with no price source cannot be saved: tell the user.
       setNoPrice(
         tabKey,
         partNo,
@@ -292,17 +282,19 @@ export const useTeamPlan = (userInfo) => {
           : null
       );
 
-      if (hasRequired) applyPriceList(tabKey, partNo, priceLov);
+      if (hasRequired) applyPriceList(tabKey, partNo, priceLov, required);
+      return priceLov;
     } catch (err) {
-      if (session !== sessionRef.current) return;
-      if (lovReqRef.current[reqKey] !== reqId) return;
+      if (session !== sessionRef.current) return [];
+      if (lovReqRef.current[reqKey] !== reqId) return [];
       console.error(`[TeamPlan] ${tabKey} price list failed for ${partNo}:`, err);
-      delete lovCacheRef.current[reqKey]; // allow a retry
+      delete lovCacheRef.current[reqKey];
       setLovsMap((p) => ({
         ...p,
         [tabKey]: { ...(p[tabKey] || {}), [partNo]: { Price_Lov: [] } },
       }));
       setNoPrice(tabKey, partNo, "Could not load price sources. Try again.");
+      return [];
     } finally {
       if (session === sessionRef.current) {
         setPendingCalc((n) => Math.max(0, n - 1));
@@ -318,26 +310,49 @@ export const useTeamPlan = (userInfo) => {
 
     let row = key === null ? valueOrRow : { ...current, [key]: valueOrRow };
 
+    if (key === "Price_Id") {
+      const partNo = row.Part_No;
+      const reqKey = `${currentTab}|${partNo}`;
+      const cached = lovCacheRef.current[reqKey];
+      
+      if (cached && cached.priceLov) {
+        const match = cached.priceLov.find((p) => p.Price_Id === valueOrRow);
+        if (match) {
+          row = {
+            ...row,
+            Quantity: match.Quantity,
+            Unit_Price: match.Unit_Price,
+          };
+        }
+      }
+    }
+
     if (key === "Required_Quantity") {
-      // Not ordering now: Quantity 0. Any other value is recalculated on blur.
-      if (currentTab !== "OI 001" && isZero(valueOrRow)) row = { ...row, Quantity: 0 };
+      if (currentTab !== "OI 001" && isZero(valueOrRow)) {
+        row = { ...row, Quantity: 0 };
+      } else if (currentTab !== "OI 001" && !isBlank(valueOrRow)) {
+        // Immediately reflect Required_Quantity and scale Quantity if applicable
+        row = {
+          ...row,
+          Quantity: currentTab === "OI 003" ? Number(valueOrRow) : row.Quantity,
+        };
+        fetchBuyInfoLovForPart(currentTab, row.Part_No, valueOrRow);
+      }
       delete noPriceRef.current[`${currentTab}|${getRowKey(row)}`];
     }
+
     const next = rows.map((r, i) => (i === rowIndex ? row : r));
 
-    // Update the refs at once so back-to-back changes see the latest data.
     tabDataRef.current = { ...tabDataRef.current, [currentTab]: next };
     changedRef.current = {
       ...changedRef.current,
       [currentTab]: mergeChanged(changedRef.current[currentTab], [row]),
     };
 
-    // Publish to state and mark the tab unsaved.
     setTabDataMap(tabDataRef.current);
     setChangedRowsMap(changedRef.current);
     setTabStatusMap((p) => ({ ...p, [currentTab]: "unsaved" }));
 
-    // The edited row is no longer flagged.
     setRowErrorsMap((p) => {
       const tabErrors = p[currentTab];
       if (!tabErrors || !tabErrors[getRowKey(row)]) return p;
@@ -348,13 +363,42 @@ export const useTeamPlan = (userInfo) => {
 
   // Save the changed rows of the active tab. Returns { success, message }.
   const saveTableData = async () => {
-    // Guard: one save at a time, something to save, no price calculation running, user known.
     if (savingRef.current) return { success: false, message: "Save already in progress" };
 
     const tab = currentTab;
-    const rows = changedRef.current[tab] || [];
+    let rows = changedRef.current[tab] || [];
 
     if (rows.length === 0) return { success: true, message: "Nothing to save" };
+
+    for (let i = 0; i < rows.length; i++) {
+      const r = rows[i];
+      if (r.Required_Quantity != null && r.Required_Quantity !== "" && !isZero(r.Required_Quantity)) {
+        const priceLov = await fetchBuyInfoLovForPart(tab, r.Part_No, r.Required_Quantity);
+        if (priceLov && priceLov.length > 0) {
+          const targetPriceId = r.Price_Id || "CP 01";
+          const match = priceLov.find((p) => p.Price_Id === targetPriceId) || priceLov[0];
+          if (match) {
+            rows[i] = {
+              ...r,
+              Quantity: tab === "OI 003" ? Number(r.Required_Quantity) : match.Quantity,
+              Unit_Price: match.Unit_Price,
+              Price_Id: r.Price_Id || match.Price_Id,
+            };
+          }
+        }
+      }
+    }
+
+    changedRef.current = { ...changedRef.current, [tab]: rows };
+    setChangedRowsMap(changedRef.current);
+    
+    const fullTabRows = (tabDataRef.current[tab] || []).map((row) => {
+      const foundMatch = rows.find((changedRow) => getRowKey(changedRow) === getRowKey(row));
+      return foundMatch ? foundMatch : row;
+    });
+    tabDataRef.current = { ...tabDataRef.current, [tab]: fullTabRows };
+    setTabDataMap(tabDataRef.current);
+
     if (pendingCalc > 0) {
       return {
         success: false,
@@ -365,7 +409,6 @@ export const useTeamPlan = (userInfo) => {
       return { success: false, message: "User id is missing. Please sign in again." };
     }
 
-    // Check values (and "no price source" messages) before calling the API.
     const errors = validateRows(rows, tab);
     rows.forEach((r) => {
       const k = getRowKey(r);
@@ -383,7 +426,6 @@ export const useTeamPlan = (userInfo) => {
     savingRef.current = true;
     setSaving(true);
     try {
-      // Build the API payload from the changed rows.
       const payload = rows.map((r) => ({
         Game_Id: gameId,
         Game_Batch: gameBatch,
@@ -393,20 +435,17 @@ export const useTeamPlan = (userInfo) => {
         Part_No: r.Part_No,
         Quantity_Id: r.Quantity_Id,
         Quantity: Number(r.Quantity),
-        Price_Id: r.Price_Id,
+        Price_Id: r.Price_Id || "CP 01",
         Unit_Price: Number(r.Unit_Price || 0),
-        // Required_Quantity: r.Required_Quantity, // enable when the column exists (option B)
       }));
 
       const resp = await updateOpsPlanBulk(payload, userId);
       const { success, message } = resp.data || {};
 
       if (!success) {
-        // Blocked by a business rule or nothing updated: keep the edits.
         return { success: false, message: message || "Save failed" };
       }
 
-      // Saved: the current rows become the saved copy and the change list is cleared.
       setSavedDataMap((p) => ({
         ...p,
         [tab]: structuredClone(tabDataRef.current[tab] || []),
