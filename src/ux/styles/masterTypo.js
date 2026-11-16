@@ -1,5 +1,4 @@
 // OpsMgt UXLab V3: masterTypo.js
-
 export const masterTypo = {
   // Main level 1 heading typography styles
   h1: {

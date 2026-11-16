@@ -45,6 +45,22 @@ export const cardStyle = {
     },
   },
 
+  // Compact icon box (same look as iconBox, smaller) for dense card grids
+  iconBoxSmall: {
+    width: 44,
+    height: 44,
+    borderRadius: 3,
+    flexShrink: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: colors.iconGradient,
+    "& svg": {
+      fontSize: 24,
+      color: text.white,
+    },
+  },
+
   // Circular variant of icon box styles
   iconBoxCircle: {
     borderRadius: "50%",

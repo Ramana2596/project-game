@@ -1,5 +1,4 @@
 // OpsMgt UXLab V3: layoutStyle.js - Standard Layout Styles (Purple Theme)
-
 import { brand, gradients, surface, border, text, state } from "./colorPalette";
 
 export const layoutStyle = {

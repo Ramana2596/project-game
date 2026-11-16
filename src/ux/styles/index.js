@@ -1,5 +1,4 @@
 // OpsMgt UXLab V3: index.js - Central export gateway (Barrel File) for UX Styles
-
 import { buttonStyle } from "./buttonStyle";
 import { cardStyle } from "./cardStyle";
 import { colors } from "./colorPalette";
