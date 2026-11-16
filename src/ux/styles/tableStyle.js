@@ -1,5 +1,4 @@
 // OpsMgt UXLab V3: tableStyle.js
-
 import { colors, accent, text, surface, border } from "./colorPalette";
 import { masterTypo } from "./masterTypo";
 
