@@ -1,7 +1,6 @@
 // File: src/pages/TeamPlan/components/TeamPlanItem.jsx
 // Purpose: plan table for the active tab, with tab-specific edit rules.
 
-// React and MUI building blocks.
 import React, { useMemo, useState } from "react";
 import {
   alpha,
@@ -21,8 +20,6 @@ import {
 } from "@mui/material";
 import { EditOutlined as EditIcon } from "@mui/icons-material";
 import { visuallyHidden } from "@mui/utils";
-
-// UXLab V3 style tokens.
 import { colors, masterTypo, tableStyle } from "../../../ux/styles";
 
 // Shared plan rules and number formatting.
@@ -45,7 +42,7 @@ const NUMBER_SX = {
   color: colors.body,
 };
 
-// Result values (Quantity, Unit_Price)
+// Result values (Quantity, Unit_Price): larger, bold.
 const KEY_VALUE_SX = {
   ...masterTypo.body1,
   ...tableStyle.numeric,
@@ -69,7 +66,7 @@ const TeamPlanItem = ({
   // OI 001 is the product tab; the other tabs order materials and machines.
   const isProductTab = currentTab === "OI 001";
 
-  // The input being edited (shows its raw text) and the reason a key was refused.
+  // The input being edited
   const [active, setActive] = useState({ key: "", hint: "" });
 
   // Keys of rows edited since the last save.
@@ -92,7 +89,6 @@ const TeamPlanItem = ({
   }
 
   // Number input: raw text while editing, formatted otherwise.
-  // options: onBlurExtra runs after blur; valueSx styles the typed number.
   const renderNumberInput = (
     rowIndex,
     row,
@@ -128,7 +124,7 @@ const TeamPlanItem = ({
         onKeyDown={(e) => {
           if (e.key === "Enter") e.target.blur();
         }}
-        // Blur: back to formatted text, then run the extra action (price list fetch).
+        // Blur: back to formatted text, then run price list fetch.
         onBlur={(e) => {
           setActive({ key: "", hint: "" });
           onBlurExtra?.(e);
@@ -164,10 +160,10 @@ const TeamPlanItem = ({
   const renderCell = (col, row, rowIndex, hasError) => {
     const label = `${col.label} for part ${row.Part_No}`;
 
-    // Required Quantity: Material and Machine, 0 = not ordering.
+    // Required Quantity: (Material and Machine tabs. 0 = not ordering)
     if (col.key === "Required_Quantity" && !isProductTab) {
       return renderNumberInput(rowIndex, row, "Required_Quantity", label, hasError, {
-        // Price list is fetched after the user finishes typing (blur or Enter).
+        // Price list is fetched after the user finishes
         onBlurExtra: (e) =>
           fetchBuyInfoLovForPart?.(currentTab, row.Part_No, e.target.value),
       });
@@ -229,7 +225,7 @@ const TeamPlanItem = ({
       );
     }
 
-    // Quantity: Keyed-in on Product tab, calculated from the selected price_Id on the others.
+    // Quantity: typed on the Product tab, calculated from the selected price on the others.
     if (col.key === "Quantity") {
       if (isProductTab) {
         return renderNumberInput(rowIndex, row, "Quantity", label, hasError, {
@@ -237,7 +233,7 @@ const TeamPlanItem = ({
         });
       }
 
-      // Required Quantity 0 = "Not ordering now"
+      // Required Quantity 0 = "Not ordering now", so the ordered quantity is 0.
       const notOrdering =
         !isBlank(row.Required_Quantity) && Number(row.Required_Quantity) === 0;
 

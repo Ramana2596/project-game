@@ -153,7 +153,7 @@ const TeamPlanGuide = ({
         <Box sx={layoutStyle.flexRow}>
           <LightbulbOutlinedIcon sx={{ color: colors.brand }} />
           <Typography sx={{ ...masterTypo.h6, color: colors.title }}>
-            Guide to Plan
+            Guide: Plan
           </Typography>
           
           {tabLabel && (
