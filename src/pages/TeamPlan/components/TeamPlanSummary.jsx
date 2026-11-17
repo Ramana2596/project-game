@@ -26,7 +26,7 @@ const fmt = (value) =>
   num(value).toLocaleString("en-IN", { maximumFractionDigits: 2 });
 
 // Ordered quantity on Material / Machine lines.
-// Required_Quantity 0 = "Not ordering now".
+// Required_Quantity 0 = "Not ordering now"; otherwise Quantity from the selected price.
 const orderQty = (row) => {
   const required = row?.Required_Quantity;
   const entered =
@@ -171,7 +171,7 @@ const TeamPlanSummary = ({ tab, rows = [] }) => {
         <Box sx={layoutStyle.flexRow}>
           <AssessmentOutlinedIcon sx={{ color: accent }} />
           <Typography sx={{ ...masterTypo.h6, color: colors.title }}>
-            Plan Summary
+            Plan - Summary
           </Typography>
         </Box>
 

@@ -15,10 +15,6 @@ import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import { colors, layoutStyle, masterTypo } from "../../../ux/styles";
 
-// ------------------------------------------------------------
-// Styles composed from ux/styles tokens
-// ------------------------------------------------------------
-
 // Side values: absolute at the sides from md, stacked under the info line below.
 const CHIP_SX = {
   ...layoutStyle.pageHeaderDatePill,
@@ -52,9 +48,7 @@ const formatMonthLabel = (value) => {
   );
 };
 
-// ------------------------------------------------------------
 // Header
-// ------------------------------------------------------------
 export default function TeamPlanHeader({
   title = "Operations Business Plan",
   info = "Production quantities, material purchases and machinery",
