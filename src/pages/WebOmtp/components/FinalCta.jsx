@@ -71,7 +71,7 @@ const FinalCta = ({ onDemo, onStart }) => {
           </Typography>
         </Box>
         <Box sx={ACTIONS}>
-          <Button onClick={onStart} sx={ON_GRADIENT_FILLED}>Get Started Free</Button>
+          <Button onClick={onStart} sx={ON_GRADIENT_FILLED}>Get Started</Button>
           <Button onClick={onDemo} sx={ON_GRADIENT_OUTLINE}>Try the Demo</Button>
         </Box>
       </Box>

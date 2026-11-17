@@ -102,7 +102,7 @@ export const INDUSTRY = {
 
 // Purpose: Pricing plans; action = start | contact
 export const PLANS = [
-  { name: "Students", tag: "Best Reach", desc: "Perfect for university and early learning use.", price: "Free", unit: "to start", cta: "Start Free", action: "start", highlight: true,
+  { name: "Students", tag: "Best Reach", desc: "Perfect for university and early learning use.", price: "Free", unit: "to start", cta: "Get Started", action: "start", highlight: true,
     points: ["Full simulation experience", "Practical operations learning", "No prior experience required"] },
   { name: "Professionals", tag: "Best Value", desc: "Affordable practical skill development.", price: "$10", unit: "per Learn Capsule", cta: "Get Started", action: "start", highlight: false,
     points: ["Complete simulation journey", "Real-world business practice", "Career-oriented learning"] },

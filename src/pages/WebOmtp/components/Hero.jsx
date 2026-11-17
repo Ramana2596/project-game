@@ -43,7 +43,7 @@ const Hero = ({ onDemo, onStart }) => {
 
           <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap", mt: 3 }}>
             <Button onClick={onDemo} startIcon={<PlayCircleOutlineIcon />} sx={buttonStyle.primary}>Try the Demo</Button>
-            <Button onClick={onStart} endIcon={<ArrowForwardIcon />} sx={buttonStyle.secondary}>Get Started Free</Button>
+            <Button onClick={onStart} endIcon={<ArrowForwardIcon />} sx={buttonStyle.secondary}>Get Started</Button>
           </Box>
 
           <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0, mt: 3, display: "flex", gap: 2.5, flexWrap: "wrap" }}>

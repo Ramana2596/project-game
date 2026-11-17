@@ -18,13 +18,13 @@ export const AUDIENCES = [
     key: "students", icon: "school", verb: "Learn", label: "Students",
     text: "An interactive learning platform that brings Operations Management concepts through practical business situations and experiential simulation.",
     steps: ["Try the demo", "Run your company", "See your results"],
-    cta: "Start Free", action: "start",
+    cta: "Get Started", action: "start",
   },
   {
     key: "academia", icon: "groups", verb: "Teach", label: "Academia",
     text: "A teaching aid that enriches academic instruction through interactive learning, business scenarios & simulation and experiential exercises.",
     steps: ["Show the demo", "Teams run sessions", "Assess and evaluate"],
-    cta: "Try the Demo", action: "demo",
+    cta: "Get Started", action: "start",
   },
   {
     key: "professionals", icon: "work", verb: "Hone", label: "Professionals",
