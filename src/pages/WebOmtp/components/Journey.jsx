@@ -2,7 +2,7 @@
 // Component Name : Journey
 // Module         : WebOmtp (Landing)
 // Purpose        : Learn - Decide - See Results flow that explains OMTP in three moves
-// Author/Version : UXLab V1.3 / v1.1
+// Author/Version : UXLab V1.3 / v1.3
 // AI Tags        : landing, journey, learn, decide, results
 // ==========================================================
 
@@ -23,7 +23,7 @@ const ICONS = { learn: MenuBookIcon, decide: TuneIcon, results: BarChartIcon };
 const Journey = () => {
   // Render
   return (
-    <Box sx={{ py: { xs: 4, md: 5 }, background: colors.paper }}>
+    <Box id="journey" sx={{ py: { xs: 4, md: 6 }, background: colors.paper, scrollMarginTop: "88px" }}>
       <Box sx={{ ...layoutStyle.pageContainer, px: { xs: 2, md: 4 } }}>
         <SectionHead
           dense

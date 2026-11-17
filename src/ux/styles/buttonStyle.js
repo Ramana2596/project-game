@@ -150,6 +150,14 @@ export const buttonStyle = {
     fontSize: "0.85rem",
     minWidth: "auto",
   },
+
+  // Large CTA button size modifier
+  large: {
+    height: 48,
+    px: 4,
+    fontSize: "1rem",
+  },
+  
 };
 
 export default buttonStyle;

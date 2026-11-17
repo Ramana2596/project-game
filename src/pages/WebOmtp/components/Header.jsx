@@ -1,8 +1,8 @@
 // ==========================================================
-// Component Name : OmtpWelcome
+// Component Name : Header
 // Module         : WebOmtp (Landing)
 // Purpose        : Opening welcome section - first section of the WebOmtp page
-// Author/Version : UXLab V1.3 / v1.4
+// Author/Version : UXLab V1.3 / v1.12
 // AI Tags        : landing, welcome, hero, omtp, introduction
 // ==========================================================
 
@@ -21,7 +21,7 @@ const slideInRight = keyframes`from { opacity: 0; transform: translateX(40px); }
 const EASE = "cubic-bezier(.34,1.56,.64,1)";
 const MOTION_OK = "@media (prefers-reduced-motion: no-preference)";
 
-const OmtpWelcome = ({ id = "hero", onExplore, onStart }) => {
+const Header = ({ id = "hero", onExplore, onStart }) => {
   // Render
   return (
     <Box
@@ -66,7 +66,7 @@ const OmtpWelcome = ({ id = "hero", onExplore, onStart }) => {
             Welcome to  O M T P
           </Typography>
           <Typography component="p" sx={{ ...masterTypo.h5, color: colors.heading }}>
-            An integrated learning, training, simulation and business analytics platform
+            A holistic Learning Platform for Company Operations
           </Typography>
         </Box>
 
@@ -79,7 +79,7 @@ const OmtpWelcome = ({ id = "hero", onExplore, onStart }) => {
               id="welcome-heading"
               component="h2"
               sx={{
-                ...masterTypo.h2,
+                ...masterTypo.h3,
                 color: colors.primary, // fallback where gradient text is unsupported
                 mb: 2,
                 background: colors.heroGradient,
@@ -88,7 +88,7 @@ const OmtpWelcome = ({ id = "hero", onExplore, onStart }) => {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Master your Operations Management Skills!
+              Master Operations Management Skills!
             </Typography>
 
             <Typography component="p" sx={{ ...masterTypo.body1, color: colors.body, mb: 3, maxWidth: 540 }}>
@@ -129,9 +129,9 @@ const OmtpWelcome = ({ id = "hero", onExplore, onStart }) => {
               <RocketLaunchIcon sx={{ fontSize: 80, color: colors.white, opacity: 0.9 }} />
               <Typography
                 component="h3"
-                sx={{ ...masterTypo.h4, color: colors.white, textAlign: "center", px: 2,   whiteSpace: "pre-line", }}
+                sx={{ ...masterTypo.h4, color: colors.white, textAlign: "center", px: 2, whiteSpace: "pre-line" }}
               >
-                Real-time Interactive
+                Simulation-based Interactive
                 {"\n"}
                 Operations Management Training Platform
               </Typography>
@@ -143,4 +143,4 @@ const OmtpWelcome = ({ id = "hero", onExplore, onStart }) => {
   );
 };
 
-export default OmtpWelcome;
+export default Header;

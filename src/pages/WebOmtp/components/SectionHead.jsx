@@ -2,7 +2,7 @@
 // Component Name : SectionHead
 // Module         : WebOmtp (Landing)
 // Purpose        : Shared section title and one-line intro (default and dense variants)
-// Author/Version : UXLab V1.3 / v1.1
+// Author/Version : UXLab V1.3 / v1.2
 // AI Tags        : landing, section-heading, shared, typography
 // ==========================================================
 
@@ -11,15 +11,15 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import { colors, masterTypo } from "../../../ux/styles";
 
-const SectionHead = ({ title, text, align = "center", dense = false }) => {
+const SectionHead = ({ title, text, align = "center", dense = false, id }) => {
   // Dense steps one masterTypo level down; default keeps existing sections unchanged
   const titleTypo = dense ? masterTypo.h3 : masterTypo.h2;
   const textTypo = dense ? masterTypo.body2 : masterTypo.body1;
 
-  // Render: title and optional intro, aligned as requested
+  // Render: title and optional intro, aligned as requested; optional id lets a parent section reference the title (aria-labelledby)
   return (
     <Box sx={{ textAlign: align, mb: dense ? { xs: 3, md: 3.5 } : 4, maxWidth: 760, mx: align === "center" ? "auto" : 0 }}>
-      <Typography component="h2" sx={{ ...titleTypo, color: colors.primaryDark }}>
+      <Typography id={id} component="h2" sx={{ ...titleTypo, color: colors.primaryDark }}>
         {title}
       </Typography>
       {text && (

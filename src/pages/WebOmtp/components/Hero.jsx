@@ -2,7 +2,7 @@
 // Component Name : Hero
 // Module         : WebOmtp (Landing)
 // Purpose        : First impression - headline, calls to action and live Control Centre preview
-// Author/Version : UXLab V1.3 / v1.0
+// Author/Version : UXLab V1.3 / v1.1
 // AI Tags        : landing, hero, cta, screenshot, control-centre
 // ==========================================================
 
@@ -23,17 +23,14 @@ const Hero = ({ onDemo, onStart }) => {
 
   // Render
   return (
-    <Box id="overview" sx={{ background: colors.pageGradient, py: { xs: 5, md: 8 }, scrollMarginTop: "88px" }}>
+    <Box id="overview" sx={{ background: colors.pageGradient, py: { xs: 4, md: 6 }, scrollMarginTop: "88px" }}>
       <Box sx={{ ...layoutStyle.pageContainer, px: { xs: 2, md: 4 }, display: "grid", gap: 5, alignItems: "center", gridTemplateColumns: { xs: "1fr", md: "1fr 1.1fr" } }}>
         {/* Message */}
         <Box>
           <Typography sx={{ ...masterTypo.h6, color: colors.primary }}>{HERO.eyebrow}</Typography>
 
-          {/* Headline:*/}
-          <Typography
-            component="h1"
-            sx={{ ...masterTypo.h2, color: colors.title, my: 2 }}
-          >
+          {/* Headline: one line per entry, accent in primary colour */}
+          <Typography component="h1" sx={{ ...masterTypo.h2, color: colors.title, my: 2 }}>
             {HERO.titleLines.map((l) => (
               <Box component="span" key={l.text} sx={{ display: "block" }}>
                 {l.text}
@@ -46,7 +43,7 @@ const Hero = ({ onDemo, onStart }) => {
 
           <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap", mt: 3 }}>
             <Button onClick={onDemo} startIcon={<PlayCircleOutlineIcon />} sx={buttonStyle.primary}>Try the Demo</Button>
-            <Button onClick={onStart} endIcon={<ArrowForwardIcon />} sx={buttonStyle.secondary}>Get Started</Button>
+            <Button onClick={onStart} endIcon={<ArrowForwardIcon />} sx={buttonStyle.secondary}>Get Started Free</Button>
           </Box>
 
           <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0, mt: 3, display: "flex", gap: 2.5, flexWrap: "wrap" }}>

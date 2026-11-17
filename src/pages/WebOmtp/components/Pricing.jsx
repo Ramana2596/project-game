@@ -2,7 +2,7 @@
 // Component Name : Pricing
 // Module         : WebOmtp (Landing)
 // Purpose        : Plans for Students, Professionals, Academia and Industry
-// Author/Version : UXLab V1.3 / v1.0
+// Author/Version : UXLab V1.3 / v1.1
 // AI Tags        : landing, pricing, plans, cta
 // ==========================================================
 
@@ -17,9 +17,9 @@ import { PLANS } from "../constants/content.js";
 const Pricing = ({ onAction }) => {
   // Render
   return (
-    <Box id="pricing" sx={{ py: { xs: 5, md: 8 }, scrollMarginTop: "88px" }}>
+    <Box id="pricing" sx={{ py: { xs: 4, md: 6 }, scrollMarginTop: "88px" }}>
       <Box sx={{ ...layoutStyle.pageContainer, px: { xs: 2, md: 4 } }}>
-        <SectionHead title="Simple, affordable pricing" text="Choose the plan that fits how you will use OMTP." />
+        <SectionHead dense title="Simple, affordable pricing" text="Choose the plan that fits how you will use OMTP." />
         <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", lg: "repeat(4, 1fr)" } }}>
           {PLANS.map((p) => (
             <Box key={p.name} sx={{ ...layoutStyle.panel, display: "flex", flexDirection: "column", ...(p.highlight && { border: `2px solid ${colors.primary}` }) }}>
