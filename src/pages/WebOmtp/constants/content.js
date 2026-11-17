@@ -76,21 +76,22 @@ export const FEATURES = [
   { theme: FEATURE_THEMES[0], icon: "rank", title: "User Performance Evaluation", text: "See how each learner or team performed and compare results." },
   // Business cycle & scenarios: period after period, new situations
   { theme: FEATURE_THEMES[1], icon: "periods", title: "Multiple Periods, Varied Scenarios", text: "Simulate period after period, each with a different business situation." },
-  // Systemic flow: the end-to-end operations flow
-  { theme: FEATURE_THEMES[2], icon: "flow", title: "Hands-On System Flow", text: "Walk the full operations flow yourself, from company setup to financial results." },
+  // Getting Started: a short orienting aid
+  { theme: FEATURE_THEMES[2], icon: "demo", title: "Quick Demo", text: "A short System walkthrough to show you what you learn and decide before you begin." },
   // Learning ease: learn at your own pace
   { theme: FEATURE_THEMES[3], icon: "history", title: "Self-Paced Learning", text: "Start, pause to learn and continue where you left off across many sessions." },
   { theme: FEATURE_THEMES[3], icon: "history", title: "In-App Guidance and Feedback", text: "Objectives, hints and FAQs guide every step. Share feedback from any page." },
-  // Getting Started: a short orienting aid
-  { theme: FEATURE_THEMES[4], icon: "demo", title: "Quick Demo", text: "A short walkthrough to show you what you learn and decide before you begin." },
   // Ease of use: the screens themselves
-  { theme: FEATURE_THEMES[5], icon: "touch", title: "Easy Click-Through Screens", text: "Simple, guided screens for everyone, from beginners to professionals." },
+  { theme: FEATURE_THEMES[4], icon: "touch", title: "Easy Click-Through Screens", text: "Simple, guided screens for everyone, from beginners to professionals." },
+
+  // Systemic flow: the end-to-end operations flow (inactive)
+  // { theme: FEATURE_THEMES[5], icon: "flow", title: "Hands-On System Flow", text: "Walk the full operations flow yourself, from company setup to financial results." },
 ];
 
 // Purpose: Industry story - customer-built simulation
 export const INDUSTRY = {
   title: "Explore Your Business Through Custom Simulation",
-  text: "A customised business simulation and analytics environment to model operations, evaluate alternative scenarios and explore potential business outcomes.",
+  text: "A customised business simulation & analytics environment to model operations, evaluate alternative scenarios and explore potential business outcomes.",
   flow: [
     { title: "Share your business", text: "Products, processes, capacity and cost structure." },
     { title: "We build your simulation", text: "Your scenario on the OMTP engine and screens." },

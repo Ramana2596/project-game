@@ -1,7 +1,7 @@
 // ==========================================================
 // Component Name : Audiences
 // Module         : WebOmtp (Landing)
-// Purpose        : "One platform, four ways to use it" - Learn, Teach, Hone, Analyse cards with step flows
+// Purpose        : "One platform OMTP, four ways to use it" - Learn, Teach, Hone, Analyse cards with step flows
 // Author/Version : UXLab V1.3 / v1.3
 // AI Tags        : landing, audiences, students, academia, professionals, industry, step-flow
 // ==========================================================

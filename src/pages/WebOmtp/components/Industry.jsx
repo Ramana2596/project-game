@@ -2,7 +2,7 @@
 // Component Name : Industry
 // Module         : WebOmtp (Landing)
 // Purpose        : Industry story - customer-built simulation for business analytics
-// Author/Version : UXLab V1.3 / v1.0
+// Author/Version : UXLab V1.3 / v1.5
 // AI Tags        : landing, industry, analytics, custom-simulation, cta
 // ==========================================================
 
@@ -10,6 +10,7 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { colors, layoutStyle, cardStyle, buttonStyle, masterTypo } from "../../../ux/styles";
+import SectionHead from "./SectionHead.jsx";
 import ShotFrame from "./ShotFrame.jsx";
 import { INDUSTRY } from "../constants/content.js";
 import shotOperations from "../../../assets/web-omtp/OperationsPlan.png";
@@ -17,11 +18,12 @@ import shotOperations from "../../../assets/web-omtp/OperationsPlan.png";
 const Industry = ({ onAction }) => {
   // Render
   return (
-    <Box id="industry" sx={{ py: { xs: 5, md: 8 }, background: colors.panel, scrollMarginTop: "88px" }}>
-      <Box sx={{ ...layoutStyle.pageContainer, px: { xs: 2, md: 4 }, display: "grid", gap: 5, alignItems: "center", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" } }}>
+    <Box id="industry" sx={{ py: { xs: 4, md: 6 }, background: colors.panel, scrollMarginTop: "88px" }}>
+      {/* Same method as Steps: text column fixed narrow at lg, the screenshot takes all the rest */}
+      <Box sx={{ ...layoutStyle.pageContainer, px: { xs: 2, md: 4 }, display: "grid", gap: 5, alignItems: "center", gridTemplateColumns: { xs: "minmax(0, 1fr)", md: "minmax(0, 5fr) minmax(0, 7fr)", lg: "440px minmax(0, 1fr)" } }}>
         <Box>
-          <Typography component="h2" sx={{ ...masterTypo.h2, color: colors.primaryDark }}>{INDUSTRY.title}</Typography>
-          <Typography sx={{ ...masterTypo.body1, color: colors.body, my: 2 }}>{INDUSTRY.text}</Typography>
+          {/* Shared heading: dense and left-aligned to sit beside the screenshot */}
+          <SectionHead dense align="left" title={INDUSTRY.title} text={INDUSTRY.text} />
           {/* Numbered because it is a real sequence */}
           {INDUSTRY.flow.map((f, i) => (
             <Box key={f.title} sx={{ display: "flex", gap: 2, mb: 2 }}>

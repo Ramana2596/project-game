@@ -97,6 +97,13 @@ export const layoutStyle = {
     mx: "auto",
   },
 
+  // Narrow content container styles
+  contentNarrow: {
+    width: "100%",
+    maxWidth: "1080px",
+    mx: "auto",
+  },
+  
   // Page header container styles
   pageHeader: {
     display: "flex",

@@ -16,7 +16,7 @@ import useWebActions from "./hooks/useWebActions.js";
 import useScrollSpy from "./hooks/useScrollSpy.js";
 import { SECTION_IDS } from "./constants/nav.js";
 import Navbar from "./components/Navbar.jsx";
-import OmtpWelcome from "./components/OmtpWelcome.jsx"; // NEW: opening welcome section
+import Header from "./components/Header.jsx"; // NEW: opening welcome section
 import Hero from "./components/Hero.jsx"; // earlier hero, retained but inactive
 import WhyChoose from "./components/WhyChoose.jsx";
 import Audiences from "./components/Audiences.jsx";
@@ -31,7 +31,7 @@ import Footer from "./components/Footer.jsx";
 
 // Constants: switch sections on/off without touching the render tree (root Box applies border-box so width:100% + padding never overflows)
 const IsActive = {
-  Navbar: true, OmtpWelcome: true, Hero: true, WhyChoose: true, Audiences: true, Journey: true, Steps: true, Features: true,
+  Navbar: true, Header: true, Hero: true, WhyChoose: true, Audiences: true, Journey: true, Steps: true, Features: true,
   Industry: true, Pricing: true, About: true, FinalCta: true, Footer: true,
 };
 
@@ -55,7 +55,7 @@ const WebOmtp = () => {
     <Box sx={{ minHeight: "100vh", background: colors.page, "& *, & *::before, & *::after": { boxSizing: "border-box" } }}>
       {IsActive.Navbar && <Navbar activeId={activeId} onNav={handleNav} onDemo={openDemo} onStart={getStarted} />}
       <Box component="main">
-        {IsActive.OmtpWelcome && <OmtpWelcome onExplore={() => handleNav("overview")} onStart={getStarted} />}
+        {IsActive.Header && <Header onExplore={() => handleNav("overview")} onStart={getStarted} />}
         {IsActive.Hero && <Hero onDemo={openDemo} onStart={getStarted} />}
         {IsActive.WhyChoose && <WhyChoose />}
         {IsActive.Audiences && <Audiences onAction={runAction} />}
@@ -64,8 +64,9 @@ const WebOmtp = () => {
         {IsActive.Features && <Features />}
         {IsActive.Industry && <Industry onAction={runAction} />}
         {IsActive.Pricing && <Pricing onAction={runAction} />}
-        {IsActive.About && <About />}
         {IsActive.FinalCta && <FinalCta onDemo={openDemo} onStart={getStarted} />}
+        {IsActive.About && <About />}
+
       </Box>
       {IsActive.Footer && <Footer />}
       <ToastMessage open={alertData.open} message={alertData.message} severity={alertData.severity} onClose={closeAlert} />
