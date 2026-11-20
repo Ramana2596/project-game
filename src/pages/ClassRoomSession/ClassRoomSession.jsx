@@ -28,7 +28,7 @@ export default function ClassRoomSession() {
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
         ifNoData={null}
-        hiddenColumns={[]}
+        hiddenColumns={pageConstants.hiddenColumns}
       ></GenericTable>
       
     </Box>
