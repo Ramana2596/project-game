@@ -1,6 +1,6 @@
 export const pageConstants = {
 //  gameBatch: "Batch",
-//  gameTeam: "Team",
+  //  gameTeam: "Team",
   tableHeading: [
     "Team",
     "Loan Type",
@@ -11,6 +11,10 @@ export const pageConstants = {
     "Cum Repayment",
     "Repayment Date",
     "Account Status"
-
+  ],
+  hiddenColumns: [
+    "Game_Id",
+    "Game_Batch",
+    "Game_Team",
   ]
 };
