@@ -17,7 +17,7 @@ export default function OpsDemandCreationInfo() {
   useEffect(() => {
     getOpsDemandCreationInfo(payload).then((response) => {
       if (response) {
-        setTableData(response.data.data);
+        setTableData(response.data);
       }
     });
   }, []);
