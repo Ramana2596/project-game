@@ -14,7 +14,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import FacebookIcon from "@mui/icons-material/Facebook";
 //import { FaMicrosoft } from "react-icons/fa";
-import MicrosoftLogo from "../../assets/navigation-menu/microsoft.svg"; 
+import MicrosoftLogo from "../../assets/navigation-menu/microsoft.svg";
 import logo from "../../assets/GreenTree.png";
 import ColorModeSelect from "../SignIn/theme/ColorModeSelect";
 
@@ -39,7 +39,7 @@ import {
 import { getAuthStatusFromUrl } from "./services/oauthService";
 import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from "../SignIn/services/signInServices.js";
-import { loginUser , loginOAuthUser} from "./services/authApiService.js";
+import { loginUser, loginOAuthUser } from "./services/authApiService.js";
 import { useNavigate } from "react-router-dom";
 
 // Dynamic Visibility Settings for OAuth Providers
@@ -75,8 +75,7 @@ const AuthHubPage = () => {
     severity: "info",
   });
 
-
-  const { login, setUserInfo } = useUser();
+  const { login, setUserInfo, userInfo } = useUser();
   const navigate = useNavigate();
   const [newUserContext, setNewUserContext] = useState(null);
 
@@ -93,7 +92,13 @@ const AuthHubPage = () => {
 
   // Initialize user session after log-in both Direct and OAuth authentication
   const initializeUserSession = (userEmail) => {
-    return getUserDetails({ userEmail })
+
+    const queryParams = {
+      gameId: userInfo?.gameId || "OpsMgt",
+      userEmail
+    };
+
+    return getUserDetails(queryParams)
       .then((response) => {
         const apiData = response?.data?.data?.[0];
 
@@ -228,7 +233,7 @@ const AuthHubPage = () => {
 
   // Compute status if any provider is active
   const hasSocialLogins =
-    SOCIAL_CONFIG.GOOGLE_ENABLED || 
+    SOCIAL_CONFIG.GOOGLE_ENABLED ||
     SOCIAL_CONFIG.LINKEDIN_ENABLED ||
     SOCIAL_CONFIG.FACEBOOK_ENABLED ||
     SOCIAL_CONFIG.MICROSOFT_ENABLED;
