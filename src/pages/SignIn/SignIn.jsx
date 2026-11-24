@@ -62,7 +62,7 @@ export default function SignIn(props) {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const navigate = useNavigate();
-  const { login, setUserInfo } = useUser();
+  const { login, setUserInfo, userInfo } = useUser();
 
   // Handle sign in with email validation
   const handleSignIn = () => {
@@ -80,8 +80,11 @@ export default function SignIn(props) {
     setEmailErrorMessage("");
     setIsLoading(true);
 
+    // Read gameId from UserContext
+    const activeGameId = userInfo?.gameId || "OpsMgt";  
+
     // Fetch user details
-    getUserDetails({ userEmail: email })
+    getUserDetails({ gameId: activeGameId, userEmail: email })
       .then((response) => {
         const apiData = response?.data?.data?.[0];
         if (apiData) {
