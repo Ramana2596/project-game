@@ -18,7 +18,6 @@ import imgaboutUs from '../../assets/aboutUs.png';
 
 // UI Components
 import ToastMessage from '../../components/ToastMessage.jsx';
-import { API_STATUS, API_STATUS_MAP } from '../../utils/statusCodes.js';
 
 // Section Components
 import WelcomeHeader from './components/WelcomeHeader.jsx';
@@ -40,8 +39,8 @@ const IsActive = {
     ContentSections: true,
     CTASection: true,
     SimulationPhase: true,
-    TrustedBy:  true,
-    WelcomeFooter:  true,
+    TrustedBy: true,
+    WelcomeFooter: true,
 };
 
 
@@ -49,14 +48,14 @@ const Welcome = () => {
     const [activeSection, setActiveSection] = useState('aboutSimulation');
     const [displaySection, setDisplaySection] = useState(activeSection);
     const { setIsLoading } = useLoading();
-    const { login, setUserInfo } = useUser();
+    const { login, setUserInfo, userInfo } = useUser();
     const navigate = useNavigate();
 
     // Alert state for toast messages
     const [alertData, setAlertData] = useState({
         open: false,
         message: '',
-        severity: 'info' 
+        severity: 'info'
     });
 
     const handleCloseAlert = () => {
@@ -87,7 +86,7 @@ const Welcome = () => {
         if (activeSection === 'omtpIntro') {
             // Navigate to Intro page
             navigate("/operationGame/welcomeOmtp");
-            
+
             setActiveSection('aboutSimulation');
         }
     }, [activeSection, navigate]);
@@ -95,31 +94,43 @@ const Welcome = () => {
     // Direct Demo login
     const handleDemoLogin = () => {
         setIsLoading(true);
-        getUserDetails({ userEmail: 'guest@guest.com', gameId: 'OpsMgt' })
-            .then((response) => {
-                const { returnStatus, data } = response.data;
 
-                if (returnStatus === API_STATUS.SUCCESS && data?.length > 0) {
-                    const userData = data[0];
+        // Read gameId from UserContext
+        const activeGameId = userInfo?.gameId || "OpsMgt";
+
+        getUserDetails({ gameId: activeGameId, userEmail: "guest@guest.com" })
+            .then((response) => {
+                const userData = response?.data?.data?.[0];
+
+                if (response?.data?.success !== false && userData) {
+                    // Pass full identity info to login()
                     login({
                         User_Id: userData.User_Id,
                         User_Login: userData.User_Login,
                         RL_Id: userData.RL_Id,
-                        Role: userData.Role
+                        Role: userData.Role,
                     });
+                    // Set User Context to setUserInfo()
                     setUserInfo(userData);
                     navigate("/operationGame/demo");
                 } else {
-                    const statusConfig = API_STATUS_MAP[returnStatus] || {};
                     setAlertData({
                         open: true,
-                        message: response.data.message || statusConfig.defaultMsg || "Error",
-                        severity: statusConfig.severity || "error"
+                        message:
+                            response?.data?.message || "Demo login failed. User not found.",
+                        severity: "error",
                     });
-                } 
+                }
             })
-            .catch(() => {
-                setAlertData({ open: true, message: "Network Error", severity: "error" });
+            .catch((err) => {
+                setAlertData({
+                    open: true,
+                    message:
+                        typeof err?.response?.data === "string" && err.response.data
+                            ? err.response.data
+                            : "Network Error",
+                    severity: "error",
+                });
             })
             .finally(() => setIsLoading(false));
     };
@@ -168,7 +179,7 @@ const Welcome = () => {
 
     return (
         <Box className="welcome-root" sx={{ minHeight: '100vh' }}>
- 
+
             {IsActive.WelcomeHeader && (
                 <WelcomeHeader
                     activeSection={activeSection}
@@ -186,14 +197,14 @@ const Welcome = () => {
                     handleDemoLogin={handleDemoLogin}
                     handleAuthNavigation={handleAuthNavigation}
                 />
-            )} 
+            )}
 
             {IsActive.ContentSections && (
                 <ContentSections
                     pageConstants={pageConstants}
                     findImageForSection={findImageForSection}
                     imageSectionsOrder={imageSectionsOrder} />
-            )} 
+            )}
 
             {IsActive.CTASection && (
                 <CTASection handleDemoLogin={handleDemoLogin} />
@@ -207,11 +218,10 @@ const Welcome = () => {
                 <TrustedBy />
             )}
 
-             {IsActive.WelcomeFooter && (
+            {IsActive.WelcomeFooter && (
                 <WelcomeFooter />
             )}
 
-            
             <ToastMessage
                 open={alertData.open}
                 message={alertData.message}

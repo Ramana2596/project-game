@@ -5,11 +5,11 @@
 import { Typography, Box } from '@mui/material';
 
 export const pageConstants = {
-    // Navigation sections: WelcomeHeader and ContentSections
+    // Navigation sections used by WelcomeHeader and ContentSections
     toolBarSections: [
         {
             key: 'aboutSimulation',
-            title: 'Welcome to Operations Management Training Platform ( O M T P )',
+            title: 'Welcome to Operations Management Training Platform ( OMTP )',
             content: (
                 <>
                     <Typography variant="h6" sx={{ textAlign: 'center', mb: 2 }}>
@@ -35,7 +35,8 @@ export const pageConstants = {
             title: 'OMTP Guided Walkthrough',
             content: (
                 <Typography variant="body1" paragraph>
-                    New to the platform? Explore our 7-step guided walkthrough to understand 
+                    New to the platform?
+                    Explore our 7-step guided walkthrough to understand 
                     how to navigate the simulation, from initial market analysis to 
                     mastering financial statements.
                 </Typography>
@@ -56,7 +57,7 @@ export const pageConstants = {
         },
         {
             key: 'forWhom',
-            title: 'Who can benefit by O M T P',
+            title: 'Who can benefit by OMTP',
             content: (
                 <Typography variant="body1" paragraph>
                     This Training Platform is ideal for students, professionals, entrepreneurs, and industry practitioners looking to sharpen their decision-making skills
