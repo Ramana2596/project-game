@@ -67,7 +67,7 @@ export default function SignIn(props) {
   // Handle sign in with email validation
   const handleSignIn = () => {
     const emailInput = document.getElementById("email");
-    const email = emailInput?.value || "";
+    const email = emailInput?.value?.trim() || "";
 
     // Validate email
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
@@ -87,7 +87,7 @@ export default function SignIn(props) {
     getUserDetails({ gameId: activeGameId, userEmail: email })
       .then((response) => {
         const apiData = response?.data?.data?.[0];
-        if (apiData) {
+        if (response?.data?.success !== false && apiData) {
           // Pass full identity info to login()
           login({
             User_Id: apiData.User_Id,
@@ -95,17 +95,23 @@ export default function SignIn(props) {
             RL_Id: apiData.RL_Id,
             Role: apiData.Role
           });
-          // Pass full game context to setUserInfo()
+          // set User Context to setUserInfo()
           setUserInfo(apiData);
           navigate("/operationGame/homePage");
         } else {
           setEmailError(true);
-          setEmailErrorMessage("User not found. Please check your email.");
+          setEmailErrorMessage(
+            response?.data?.message || "User not found. Please check your email."
+          );
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setEmailError(true);
-        setEmailErrorMessage("Sign in failed. Please try again.");
+        setEmailErrorMessage(
+          typeof err?.response?.data === "string" && err.response.data
+            ? err.response.data
+            : "Sign in failed. Please try again."
+        );
       })
       .finally(() => setIsLoading(false));
   };
