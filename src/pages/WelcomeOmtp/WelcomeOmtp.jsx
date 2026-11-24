@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLoading } from "../../hooks/loadingIndicatorContext.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { getUserDetails } from '../Welcome/services/service.js';
-import { API_STATUS } from '../../utils/statusCodes';
+
 // Change pageStyle -> layoutStyle
 import {
   colors,
@@ -51,19 +51,20 @@ const WelcomeOmtp = () => {
   // Purpose: Navigation and global context access
   const navigate = useNavigate();
   const { setIsLoading } = useLoading();
-  const { login, setUserInfo } = useUser();
+  const { login, setUserInfo, userInfo } = useUser();
 
   // Purpose: Authenticate guest and open demo simulation
   const handleOpenDemo = () => {
     setIsLoading(true);
 
-    getUserDetails({ userEmail: 'guest@guest.com', gameId: 'OpsMgt' })
+    // Read gameId from UserContext
+    const activeGameId = userInfo?.gameId || "OpsMgt";
+
+    getUserDetails({ gameId: activeGameId, userEmail: "guest@guest.com" })
       .then((response) => {
-        const { returnStatus, data } = response.data;
+        const userData = response?.data?.data?.[0];
 
-        if (returnStatus === API_STATUS.SUCCESS && data?.length > 0) {
-          const userData = data[0];
-
+        if (response?.data?.success !== false && userData) {
           login({
             User_Id: userData.User_Id,
             User_Login: userData.User_Login,
@@ -72,16 +73,23 @@ const WelcomeOmtp = () => {
           });
 
           setUserInfo(userData);
-
           navigate("/operationGame/demo");
         } else {
-          console.error("Auth failed:", response.data.message);
+          console.error(
+            "Auth failed:",
+            response?.data?.message || "Demo login failed. User not found."
+          );
         }
       })
-      .catch((err) => console.error("Network Error:", err))
+      .catch((err) => {
+        const errorMsg =
+          typeof err?.response?.data === "string" && err.response.data
+            ? err.response.data
+            : err;
+        console.error("Network Error:", errorMsg);
+      })
       .finally(() => setIsLoading(false));
   };
-
   // Purpose: Navigate back to landing page
   const handleBackToHome = () => {
     navigate("/");
