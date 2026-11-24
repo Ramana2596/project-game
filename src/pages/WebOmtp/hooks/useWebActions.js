@@ -1,9 +1,7 @@
 // ==========================================================
 // Component Name : useWebActions
 // Module         : WebOmtp (Landing)
-// Purpose        : Business logic - demo guest login, sign-in navigation, contact, scroll
-// Author/Version : UXLab V1.3 / v1.0
-// AI Tags        : hook, demo-login, navigation, scroll, landing
+// Purpose        : demo guest login, sign-in navigation, contact, scroll
 // ==========================================================
 
 // Imports
@@ -37,18 +35,30 @@ const useWebActions = () => {
     setIsLoading(true);
     getUserDetails(GUEST)
       .then((response) => {
-        const { returnStatus, data } = response.data;
-        if (returnStatus === API_STATUS.SUCCESS && data?.length > 0) {
+        // response is object
+        const { success, sucValue, message, data } = response.data;
+        if (success && data?.length > 0) {
           const u = data[0];
           login({ User_Id: u.User_Id, User_Login: u.User_Login, RL_Id: u.RL_Id, Role: u.Role });
           setUserInfo(u);
           navigate(DEMO_ROUTE);
         } else {
-          const cfg = API_STATUS_MAP[returnStatus] || {};
-          setAlertData({ open: true, message: response.data.message || cfg.defaultMsg || "Error", severity: cfg.severity || "error" });
+          setAlertData({
+            open: true,
+            message: message || "Error",
+            severity: sucValue === 1 ? "warning" : "error",
+          });
         }
       })
-      .catch(() => setAlertData({ open: true, message: "Network Error", severity: "error" }))
+      .catch((err) =>
+        setAlertData({
+          open: true,
+          message: typeof err.response?.data === "string" && err.response.data
+            ? err.response.data
+            : "Network Error",
+          severity: "error",
+        })
+      )
       .finally(() => setIsLoading(false));
   }, [login, navigate, setIsLoading, setUserInfo]);
 
