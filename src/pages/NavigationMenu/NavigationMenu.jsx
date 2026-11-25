@@ -112,7 +112,6 @@ import StdOperationInput from '../StdOperationInput/StdOperationInput.jsx';
 import OmtpLogo from '../../assets/GreenTree.png';
 import MarketInfoTeam from '../MarketInfoTeam/MarketInfoTeam.jsx';
 import ToastMessage from '../../components/ToastMessage.jsx';
-import AssetCatalogTeam from '../AssetCatalogTeam/AssetCatalogTeam.jsx';
 import AssetCatalogBatch from '../AssetCatalogBatch/AssetCatalogBatch.jsx';
 import EnrollUserDialog from '../RegisterUser/EnrollUserDialog.jsx';
 import BatchMstDetails from '../BatchMaster/BatchMstDetails.jsx';
@@ -550,7 +549,6 @@ export default function MiniDrawer() {
           <Route path='/StdMarketInput' element={<StdMarketInput />} />
           <Route path='/StdOperationInput' element={<StdOperationInput />} />
           <Route path='/MarketInfoTeam' element={<MarketInfoTeam />} />
-          <Route path='/AssetCatalogTeam' element={<AssetCatalogTeam />} />
           <Route path='/AssetCatalogBatch' element={<AssetCatalogBatch />} />
           <Route path='/BatchMgt' element={<BatchMgt />} />
           <Route path='/SimulationPlay' element={<SimulationPlay />} />
