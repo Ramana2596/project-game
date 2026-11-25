@@ -167,7 +167,7 @@ import UserProfileInfo from "../pages/UserProfileInfo/UserProfileInfo.jsx";
 //import StdMarketInput from "../pages/StdMarketInput/StdMarketInput.jsx";
 import StdOperationInput from "../pages/StdOperationInput/StdOperationInput.jsx";
 import MarketInfoTeam from "../pages/MarketInfoTeam/MarketInfoTeam.jsx";
-import AssetCatalogBatch from "../pages/AssetCatalogBatch/AssetCatalogBatch.jsx";
+import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
 import BatchMstDetails from "../pages/BatchMaster/BatchMstDetails.jsx";
 import TeamPlanScreen from "../pages/TeamPlan/TeamPlanScreen.jsx";
 import KeyResultBsInfo from '../pages/KeyResultBsInfo/KeyResultBsInfo.jsx';
@@ -511,9 +511,9 @@ export const componentList = [
         iconPath: partIcon,
         id: "UI 22 010",
         label: "Capital Asset Catalog",
-        path: "/assetCatalogBatch",
-        href: "/operationGame/assetCatalogBatch",
-        routeElement: <AssetCatalogBatch />
+        path: "/assetCatalog",
+        href: "/operationGame/AssetCatalog",
+        routeElement: <AssetCatalog />
       },
       {
         iconPath: productIcon,
