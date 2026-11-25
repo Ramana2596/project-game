@@ -191,8 +191,6 @@ import PlantCapacity from "../pages/PlantCapacity/PlantCapacity";
 import MarketIntel from "../pages/MarketIntel/MarketIntel.jsx";
 import FinAnalysis from "../pages/FinAnalysis/FinAnalysis.jsx";
 
-// import AssetCatalog from "../pages/AssetCatalog/AssetCatalog.jsx";
-
 
 export const componentList = [
   {
