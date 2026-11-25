@@ -1,12 +1,15 @@
+
 export const pageConstants = {
-//  gameBatch: "Batch",
-//  gameTeam: "Team",
-  tableHeading: [
-    "Team",
+  submitBtnLabel: "Submit",
+  gameBatchLabel: "Batch",
+  table: {
+    headers: [
+    "Batch",
     "Asset Description",
     "UOM",
     "Category",
     "Status"
-  ]
-//      hiddenColumns: ["Game_Id","Part_No"],
+    ],
+    hiddenColumns: ["Game_Id","Part_No"],
+  }
 };
