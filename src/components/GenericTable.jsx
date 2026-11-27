@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import { Box } from "@mui/material";
 import Table from "@mui/material/Table";
@@ -17,7 +18,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    padding: "8px 16px", // Adjust the padding to reduce height
+    padding: "8px 16px",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -29,20 +30,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
   "&:last-child td, &:last-child th": {
     border: 0,
   },
 }));
 
 function GenericTable({
-  inputTableHeadings,                 //UI column captions (display order only)
-  inputTableData,                     //Array of row objects (DB field driven rendering)
-  ifNoData,                           //Flag to show error row instead of data
-  isAnEditableTable = false,          //Switch between read-only and checkbox table modes
-  hiddenColumns = [],                 //DB field names to be hidden from rendering
-  highlightRowsByDetail = [],        // row highlight prop
-  highlightColumnsByField = [],      // column highlight by DB field name
+  inputTableHeadings,
+  inputTableData,
+  ifNoData,
+  isAnEditableTable = false,
+  hiddenColumns = [],
+  highlightRowsByDetail = [],
+  highlightColumnsByField = [],
+  dateFormatColumns = [],
 }) {
   // Flat value set (unused elsewhere)
   let tableValueSet = inputTableData?.map((tableDataObj) => {
@@ -116,7 +117,7 @@ function GenericTable({
                           <StyledTableCell
                             align="right"
                             sx={{
-                              fontWeight: highlightColumnsByField.includes(key) ? "bold" : "normal", // ✅ column highlight support
+                              fontWeight: highlightColumnsByField.includes(key) ? "bold" : "normal",
                             }}
                           >
                             {valueSet[key]?.inputType === "checkbox" ? (
@@ -155,27 +156,40 @@ function GenericTable({
             </TableHead>
             <TableBody>
               {inputTableData?.map((valueObj) => {
-                const isVital = highlightRowsByDetail.includes(valueObj["Details"]); // existing row highlight
+                const isVital = highlightRowsByDetail.includes(valueObj["Details"]);
                 return (
                   <StyledTableRow align="right">
                     {Object.keys(valueObj).map((key) => {
                       if (!hiddenColumns.includes(key)) {
+                        // Explicit date configuration takes priority over legacy detection
+                        const dateConfig = dateFormatColumns.find(
+                          (column) =>
+                            column.field.toLowerCase() === key.toLowerCase()
+                        );
+
+                        const isLegacyDate =
+                          dateColumns.some(
+                            (column) =>
+                              column === key.toLowerCase() || column === key
+                          ) || key.toLowerCase().includes("date");
+
+                        const cellValue = dateConfig
+                          ? formatDateWithConfig(valueObj[key], dateConfig.format)
+                          : isLegacyDate
+                            ? formatDate(valueObj[key])
+                            : valueObj[key];
+
                         return (
                           <StyledTableCell
                             align="right"
                             sx={{
                               fontWeight:
-                                isVital || highlightColumnsByField.includes(key) // row OR column highlight
+                                isVital || highlightColumnsByField.includes(key)
                                   ? "bold"
                                   : "normal",
                             }}
                           >
-                            {dateColumns.some(
-                              (column) =>
-                                column === key.toLowerCase() || column === key
-                            ) || key.toLowerCase().includes("date")
-                              ? formatDate(valueObj[key])
-                              : valueObj[key]}
+                            {cellValue}
                           </StyledTableCell>
                         );
                       }
@@ -188,6 +202,32 @@ function GenericTable({
         </TableContainer>
       </Box>
     );
+  }
+}
+
+// Explicit date formatting with legacy fallback
+function formatDateWithConfig(date, format) {
+  if (!date) return "";
+
+  if (format !== "MMM yyyy" && format !== "dd-MMM-yyyy") {
+    return formatDate(date);
+  }
+
+  try {
+    const parsedDate = new Date(date);
+
+    if (isNaN(parsedDate.getTime())) return date;
+
+    const options =
+      format === "MMM yyyy"
+        ? { month: "short", year: "numeric" }
+        : { day: "2-digit", month: "short", year: "numeric" };
+
+    return new Intl.DateTimeFormat("en-US", options)
+      .format(parsedDate)
+      .replace(/(\d{1,2}),/, "$1");
+  } catch {
+    return date;
   }
 }
 
