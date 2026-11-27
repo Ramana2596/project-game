@@ -1,6 +1,6 @@
 export const pageConstants = {
   submitBtnLabel: "Submit",
-  gameBatchLabel: "Game Batch",
+  gameBatchLabel: "Batch",
   table: {
     headers: [
     //"Game_Id",

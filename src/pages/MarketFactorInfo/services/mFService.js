@@ -1,6 +1,6 @@
 import api from "../../../core/interceptor/api-interceptor";
 
-export function getMarketFactorInfo(queryParams) {
+export function getMarketInfo(queryParams) {
   return api.get("/api/getMarketFactorInfo", {
     params: {
       ...queryParams,
@@ -9,7 +9,7 @@ export function getMarketFactorInfo(queryParams) {
   });
 }
 
-export function getGameBatch(queryParams) {
+export function getBatch(queryParams) {
   return api.get("/api/getMarketFactorInfo", {
     params: {
       ...queryParams,
