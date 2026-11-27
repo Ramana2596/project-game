@@ -12,10 +12,15 @@ export const pageConstants = {
     "Currency",
     "Closing Value"
   ],
-    hiddenColumns: [
+  hiddenColumns: [
     "Game_Id",
     "Game_Batch",
     "Game_Team",
+    "Part_No",
     "Stock",
-    ]
+  ],
+  dateFormatColumns: [
+    { field: "Production_Month", format: "MMM yyyy" },
+  ]
+
 };

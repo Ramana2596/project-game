@@ -48,6 +48,7 @@ export default function FgStockInfo({productionMonth}) {  // prop from parent ca
         ifNoData={null}
         highlightColumnsByField={pageConstants.highlightedColumns}
         hiddenColumns={pageConstants.hiddenColumns}
+        dateFormatColumns={pageConstants.dateFormatColumns}
       ></GenericTable>
     </Box>
   );
