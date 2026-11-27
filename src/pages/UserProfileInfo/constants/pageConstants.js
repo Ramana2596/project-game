@@ -1,24 +1,24 @@
 
 export const pageConstants = {
   tableHeading: [
-   // "Game Id",
-  //  "User Id",
-  //  "User Code",
+    // "Game Id",
+    //  "User Id",
+    //  "User Code",
     "User Name",
     "User Email",
-  //  "Password",
-  //  "PF Id",
+    //  "Password",
+    //  "PF Id",
     "Profession",
-    "State",
     "Country",
-  //  "Mobile No",
+    "World Zone",
+    //  "Mobile No",
     "Credential",
-  // "Checked By",
-  //  "Approved By",
+    // "Checked By",
+    //  "Approved By",
     "User Status",
-  //  "Created By",
+    //  "Created By",
     "Joined On",
-  //  "Modified By",
+    //  "Modified By",
     "Amendment On"
   ],
   hiddenColumns: [
@@ -32,5 +32,10 @@ export const pageConstants = {
     "Approved_By",
     "Created_By",
     "Modified_By"
+  ],
+  dateFormatColumns: [
+    { field: "Created_On", format: "MMM yyyy" },
+    { field: "Modified_On", format: "dd-MMM-yyyy" }
   ]
+
 };
