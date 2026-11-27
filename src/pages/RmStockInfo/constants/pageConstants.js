@@ -16,7 +16,10 @@ export const pageConstants = {
     "Game_Id",
     "Game_Batch",
     "Game_Team",
+    "Part_No",
     "Stock",
-
-  ]
+  ],
+  dateFormatColumns: [
+    { field: "Production_Month", format: "MMM yyyy" },
+  ],
 };
