@@ -1,53 +1,48 @@
+// RmStockInfo.jsx
+// Purpose: Display RM closing stock of a team (GET, Type A: response.data is the array)
+
 import { Box } from "@mui/material";
-import Grid from "@mui/material/Grid2";
 import GenericTable from "../../components/GenericTable.jsx";
 import { useUser } from "../../core/access/userContext.jsx";
 import { useEffect, useState } from "react";
 import { getRmStockInfo } from "./services/service.js";
 import { pageConstants } from "./constants/pageConstants.js";
 
-export default function RmStockInfo({ productionMonth }) { //prop from parent call
-  const { userInfo } = useUser();
-  const [tableData, setTableData] = useState([]);
+export default function RmStockInfo({ productionMonth }) { // productionMonth: optional prop from parent (YYYY-MM-DD)
+  const { userInfo } = useUser(); 
+  const [tableData, setTableData] = useState([]);          // rows shown in the table
 
-  let payload = {
-    gameId: userInfo?.gameId,
-    gameBatch: userInfo?.gameBatch,
-    gameTeam: userInfo?.gameTeam,
-    productionMonth: productionMonth // as prop
-  };
+  // Fetch data on load, and again whenever user info or productionMonth changes
   useEffect(() => {
-    if (userInfo?.gameId) {
-      const payLoad = {
-        gameId: userInfo.gameId,
-        gameBatch: userInfo.gameBatch,
-        gameTeam: userInfo.gameTeam,
-        productionMonth: productionMonth || null,   // use injected prop only
-      };
-      getRmStockInfo(payLoad).then((response) => {
-        // response.data is the JSON body { success, code, data }
-        // response.data.data is Array of data [...]
-        if (response?.data?.success && Array.isArray(response.data.data)) {
-          setTableData(response.data.data);
-        } else {
-          setTableData([]);
-        }
+    if (!userInfo?.gameId) return;
+
+    let ignore = false;    // ignore a late response from an older call
+
+    // Query parameters
+    const payLoad = {
+      gameId: userInfo.gameId,
+      gameBatch: userInfo.gameBatch,
+      gameTeam: userInfo.gameTeam,
+      productionMonth: productionMonth || null,
+    };
+
+    getRmStockInfo(payLoad)
+      .then((response) => {
+        // Success: API returns a plain array, so response.data is the rows
+        if (!ignore) setTableData(Array.isArray(response?.data) ? response.data : []);
+      })
+      .catch((err) => {
+        // 400 / 500: log server text and clear the table
+        console.error(err?.response?.data || err);
+        if (!ignore) setTableData([]);
       });
-    }
-  }, []);
+
+    return () => { ignore = true; };  // cleanup when inputs change or page closes
+  }, [userInfo?.gameId, userInfo?.gameBatch, userInfo?.gameTeam, productionMonth]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      {/*}
-      <Grid container spacing={2} margin={3}>
-        <h3 className="standard-title-color">
-          {pageConstants.gameBatch}: {userInfo?.gameBatch}
-        </h3>
-        <h3 className="standard-title-color">
-          {pageConstants.gameTeam}: {userInfo?.gameTeam}
-        </h3>
-      </Grid>
-      */}
+      {/* Stock table: headings, hidden, highlighted and date columns from pageConstants */}
       <GenericTable
         inputTableHeadings={pageConstants.tableHeading}
         inputTableData={tableData}
