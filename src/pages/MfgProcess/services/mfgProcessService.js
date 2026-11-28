@@ -16,7 +16,7 @@ export function getMfgProcess(queryParams) {
 
 // Get FG Stock information
 export function getFgStockInfo(queryParams) {
-    return api.post('/api/getFgStockInfo',
+    return api.get('/api/getFgStockInfo',
         {
             params: { ...queryParams }
         });
@@ -24,7 +24,7 @@ export function getFgStockInfo(queryParams) {
 
 // Get RM Stock information
 export function getRmStockInfo(queryParams) {
-    return api.post('/api/getRmStockInfo',
+    return api.get('/api/getRmStockInfo',
         {
             params: { ...queryParams }
         });
